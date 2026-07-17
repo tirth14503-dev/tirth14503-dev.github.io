@@ -244,6 +244,7 @@ section:nth-child(odd){background:var(--bg);}
 }
 .hero-name em{font-style:italic;color:var(--gold);}
 .hero-name.split{animation:none;opacity:1;}
+.hero-name .hw{display:inline-block;white-space:nowrap;}
 .hero-name .hl{display:inline-block;opacity:0;transform:translateY(65%) rotate(3deg);filter:blur(10px);animation:hlIn .9s var(--ease-out) forwards;}
 @keyframes hlIn{to{opacity:1;transform:translateY(0) rotate(0);filter:blur(0);}}
 @keyframes heroIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -959,8 +960,6 @@ section:nth-child(odd){background:var(--bg);}
   </div>
 </section>
 
-<div class="tk-marquee" aria-hidden="true"><div class="tkm-track"><span>SUPPLY CHAIN &#10038; ANALYTICS &#10038; PROCUREMENT &#10038; FORECASTING &#10038; OPTIMIZATION &#10038; MUMBAI &#8594; CHICAGO &#10038; ERP BUILDER &#10038; DATA-DRIVEN &#10038; </span><span>SUPPLY CHAIN &#10038; ANALYTICS &#10038; PROCUREMENT &#10038; FORECASTING &#10038; OPTIMIZATION &#10038; MUMBAI &#8594; CHICAGO &#10038; ERP BUILDER &#10038; DATA-DRIVEN &#10038; </span></div></div>
-
 <!-- ② ABOUT -->
 <section id="about">
   <div class="sec-eyebrow reveal">About</div>
@@ -1597,8 +1596,6 @@ section:nth-child(odd){background:var(--bg);}
 </section>
 
 <!-- ⑪ CONTACT -->
-<div class="tk-marquee-rev" aria-hidden="true"><div class="tkm-track"><span>LET&#8217;S BUILD RESILIENT SUPPLY CHAINS &#10038; OPEN TO ROLES &#8212; JUNE 2026 &#10038; CHICAGO &#10038; SAY HELLO &#10038; </span><span>LET&#8217;S BUILD RESILIENT SUPPLY CHAINS &#10038; OPEN TO ROLES &#8212; JUNE 2026 &#10038; CHICAGO &#10038; SAY HELLO &#10038; </span></div></div>
-
 <!-- VOICES -->
 <section id="voices" style="display:none">
   <div class="sec-eyebrow reveal">Voices</div>
@@ -5031,13 +5028,6 @@ section{scroll-margin-top:64px;}
 #tk-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:9990;pointer-events:none;background:transparent;}
 #tk-progress i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold3),var(--gold));transform-origin:0 50%;transform:scaleX(0);box-shadow:0 0 12px rgba(184,134,11,.55);}
 
-/* marquee dividers */
-.tk-marquee,.tk-marquee-rev{overflow:hidden;padding:2.2rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface);position:relative;z-index:1;}
-.tkm-track{display:flex;width:max-content;will-change:transform;animation:tkm 30s linear infinite;}
-.tk-marquee-rev .tkm-track{animation-direction:reverse;}
-.tkm-track span{font-family:var(--fc);font-weight:300;font-style:italic;white-space:nowrap;font-size:clamp(1.3rem,2.6vw,2.1rem);letter-spacing:.06em;color:transparent;-webkit-text-stroke:1px rgba(184,134,11,.55);padding-right:.5em;}
-@keyframes tkm{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@media (prefers-reduced-motion:reduce){.tkm-track{animation:none;}}
 
 /* word-mask titles */
 .sec-title .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.13em;margin-bottom:-.13em;}
@@ -5120,11 +5110,16 @@ section{scroll-margin-top:64px;}
           kids.forEach(function(k){
             if(k.nodeType===3){
               var frag=document.createDocumentFragment();
-              k.textContent.split('').forEach(function(ch){
-                if(ch===' '){ frag.appendChild(document.createTextNode(' ')); return; }
-                var s=document.createElement('span'); s.className='hl'; s.textContent=ch;
-                s.style.animationDelay=(0.18+idx*0.045)+'s'; idx++;
-                frag.appendChild(s);
+              k.textContent.split(/(\s+)/).forEach(function(part){
+                if(!part) return;
+                if(/^\s+$/.test(part)){ frag.appendChild(document.createTextNode(' ')); return; }
+                var w=document.createElement('span'); w.className='hw';
+                part.split('').forEach(function(ch){
+                  var s=document.createElement('span'); s.className='hl'; s.textContent=ch;
+                  s.style.animationDelay=(0.18+idx*0.045)+'s'; idx++;
+                  w.appendChild(s);
+                });
+                frag.appendChild(w);
               });
               node.replaceChild(frag,k);
             } else if(k.nodeType===1 && k.tagName!=='BR'){ splitNode(k); }
