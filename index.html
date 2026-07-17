@@ -180,8 +180,8 @@ section:nth-child(odd){background:var(--bg);}
 #about,#experience,#education,#skills,#timeline{background:transparent!important;position:relative;z-index:1;}
 
 /* ── REVEAL ANIMATIONS ── */
-.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s var(--ease-out),transform .7s var(--ease-out);}
-.reveal.up{opacity:1;transform:translateY(0);}
+.reveal{opacity:0;transform:translateY(32px);filter:blur(8px);transition:opacity .8s var(--ease-out),transform .8s var(--ease-out),filter .8s var(--ease-out);}
+.reveal.up{opacity:1;transform:translateY(0);filter:blur(0);}
 .reveal-l{opacity:0;transform:translateX(-32px);transition:opacity .7s .1s var(--ease-out),transform .7s .1s var(--ease-out);}
 .reveal-l.up{opacity:1;transform:translateX(0);}
 .reveal-r{opacity:0;transform:translateX(32px);transition:opacity .7s .15s var(--ease-out),transform .7s .15s var(--ease-out);}
@@ -243,6 +243,9 @@ section:nth-child(odd){background:var(--bg);}
   opacity:0;animation:heroIn 1.1s var(--ease-out) forwards .28s;
 }
 .hero-name em{font-style:italic;color:var(--gold);}
+.hero-name.split{animation:none;opacity:1;}
+.hero-name .hl{display:inline-block;opacity:0;transform:translateY(65%) rotate(3deg);filter:blur(10px);animation:hlIn .9s var(--ease-out) forwards;}
+@keyframes hlIn{to{opacity:1;transform:translateY(0) rotate(0);filter:blur(0);}}
 @keyframes heroIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 .hero-sub{
   font-family:var(--fs);font-size:clamp(1rem,1.9vw,1.25rem);
@@ -956,6 +959,8 @@ section:nth-child(odd){background:var(--bg);}
   </div>
 </section>
 
+<div class="tk-marquee" aria-hidden="true"><div class="tkm-track"><span>SUPPLY CHAIN &#10038; ANALYTICS &#10038; PROCUREMENT &#10038; FORECASTING &#10038; OPTIMIZATION &#10038; MUMBAI &#8594; CHICAGO &#10038; ERP BUILDER &#10038; DATA-DRIVEN &#10038; </span><span>SUPPLY CHAIN &#10038; ANALYTICS &#10038; PROCUREMENT &#10038; FORECASTING &#10038; OPTIMIZATION &#10038; MUMBAI &#8594; CHICAGO &#10038; ERP BUILDER &#10038; DATA-DRIVEN &#10038; </span></div></div>
+
 <!-- ② ABOUT -->
 <section id="about">
   <div class="sec-eyebrow reveal">About</div>
@@ -1191,6 +1196,24 @@ section:nth-child(odd){background:var(--bg);}
       <div class="pj-desc">India&#8217;s first national supply chain index &#8212; I analyzed <strong>1,500+ public companies across 24 sectors</strong> and helped build the ranking methodology blending financial metrics with ESG, resilience and technology factors.</div>
       <div class="pj-tags"><span>R &#183; Tableau</span><span>Research</span><span>Visit &#8599;</span></div>
     </a>
+    <div class="pj-card reveal" data-article="rfp" style="transition-delay:.05s">
+      <span class="pj-badge">Field Notes &#183; Read Here</span>
+      <div class="pj-title">What a Live Truckload RFP Taught Me About Carrier Pricing</div>
+      <div class="pj-desc">The cheapest lane bid is rarely the cheapest lane. Working KeHE&#8217;s real 2024 inbound RFP data, I learned why buyers pay premiums on purpose &#8212; and what a bid sheet doesn&#8217;t tell you.</div>
+      <div class="pj-tags"><span>Transportation</span><span>4 min read</span><span>Open &#8599;</span></div>
+    </div>
+    <div class="pj-card reveal" data-article="index" style="transition-delay:.1s">
+      <span class="pj-badge">Field Notes &#183; Read Here</span>
+      <div class="pj-title">Ranking 1,500 Companies: Building India&#8217;s First Supply Chain Index</div>
+      <div class="pj-desc">How do you compare a pharma cold chain to a cement dispatch network? Behind the methodology of the Top 20 Supply Chain Champions of India &#8212; and what almost broke it.</div>
+      <div class="pj-tags"><span>Research</span><span>5 min read</span><span>Open &#8599;</span></div>
+    </div>
+    <div class="pj-card reveal" data-article="erp" style="transition-delay:.15s">
+      <span class="pj-badge">Field Notes &#183; Read Here</span>
+      <div class="pj-title">I Built an ERP Solo to Understand the Systems I&#8217;ll Manage</div>
+      <div class="pj-desc">Most supply chain people can drive an ERP. I wanted to know what&#8217;s under the hood &#8212; so I built one with Django, Python and SQL, and it changed how I think about every system I&#8217;ll ever use.</div>
+      <div class="pj-tags"><span>Django &#183; SQL</span><span>4 min read</span><span>Open &#8599;</span></div>
+    </div>
   </div>
 </section>
 
@@ -1574,6 +1597,21 @@ section:nth-child(odd){background:var(--bg);}
 </section>
 
 <!-- ⑪ CONTACT -->
+<div class="tk-marquee-rev" aria-hidden="true"><div class="tkm-track"><span>LET&#8217;S BUILD RESILIENT SUPPLY CHAINS &#10038; OPEN TO ROLES &#8212; JUNE 2026 &#10038; CHICAGO &#10038; SAY HELLO &#10038; </span><span>LET&#8217;S BUILD RESILIENT SUPPLY CHAINS &#10038; OPEN TO ROLES &#8212; JUNE 2026 &#10038; CHICAGO &#10038; SAY HELLO &#10038; </span></div></div>
+
+<!-- VOICES -->
+<section id="voices" style="display:none">
+  <div class="sec-eyebrow reveal">Voices</div>
+  <h2 class="sec-title reveal">What people <strong>say.</strong></h2>
+  <div class="sec-rule reveal"></div>
+  <div class="vo-stage reveal">
+    <div class="vo-mark">&#8220;</div>
+    <div class="vo-quote" id="vo-quote"></div>
+    <div class="vo-who"><span id="vo-name"></span><span id="vo-role"></span></div>
+    <div class="vo-dots" id="vo-dots"></div>
+  </div>
+</section>
+
 <section id="contact">
   <div class="sec-eyebrow reveal">Contact</div>
   <h2 class="sec-title reveal" style="transition-delay:.08s">Let's <strong>Connect</strong></h2>
@@ -4986,6 +5024,305 @@ section{scroll-margin-top:64px;}
 #hero.is-night .hero-scroll{color:rgba(245,240,230,.6);}
 @media(max-width:760px){#hero.is-night{background:var(--surface)!important;}#port-daynight{display:none;}}
 </style>
+
+<style>
+/* ============ UPGRADE PACK: MOTION + EDITORIAL ============ */
+/* scroll progress */
+#tk-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:9990;pointer-events:none;background:transparent;}
+#tk-progress i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold3),var(--gold));transform-origin:0 50%;transform:scaleX(0);box-shadow:0 0 12px rgba(184,134,11,.55);}
+
+/* marquee dividers */
+.tk-marquee,.tk-marquee-rev{overflow:hidden;padding:2.2rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface);position:relative;z-index:1;}
+.tkm-track{display:flex;width:max-content;will-change:transform;animation:tkm 30s linear infinite;}
+.tk-marquee-rev .tkm-track{animation-direction:reverse;}
+.tkm-track span{font-family:var(--fc);font-weight:300;font-style:italic;white-space:nowrap;font-size:clamp(1.3rem,2.6vw,2.1rem);letter-spacing:.06em;color:transparent;-webkit-text-stroke:1px rgba(184,134,11,.55);padding-right:.5em;}
+@keyframes tkm{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.tkm-track{animation:none;}}
+
+/* word-mask titles */
+.sec-title .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.13em;margin-bottom:-.13em;}
+.sec-title .wi{display:inline-block;transform:translateY(118%);transition:transform .85s var(--ease-out);}
+.sec-title.up .wi{transform:translateY(0);}
+.sec-title.wsplit{filter:none!important;transform:none!important;}
+
+/* sec-rule draws itself */
+.sec-rule.reveal{width:0;transform:none;transition:width .9s .25s var(--ease-out),opacity .5s var(--ease-out);}
+.sec-rule.reveal.up{width:44px;}
+
+/* tilt glare */
+.pj-card::after,.stat-card::after{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(420px circle at var(--gx,50%) var(--gy,50%),rgba(184,134,11,.12),transparent 62%);opacity:0;transition:opacity .35s;pointer-events:none;z-index:1;}
+.pj-card:hover::after,.stat-card:hover::after{opacity:1;}
+.stat-card{position:relative;}
+
+/* voices */
+.vo-stage{position:relative;max-width:760px;background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:3.2rem 3rem 2.6rem;box-shadow:0 30px 70px rgba(0,0,0,.07);}
+.vo-mark{position:absolute;top:-1.6rem;left:2.2rem;font-family:var(--fc);font-size:6rem;line-height:1;color:var(--gold);opacity:.9;}
+.vo-quote{font-family:var(--fc);font-weight:300;font-size:clamp(1.2rem,2.3vw,1.7rem);line-height:1.55;color:var(--text);min-height:5.2em;transition:opacity .45s var(--ease-out),transform .45s var(--ease-out);}
+.vo-quote.swap{opacity:0;transform:translateY(10px);}
+.vo-who{margin-top:1.6rem;display:flex;flex-direction:column;gap:.15rem;}
+.vo-who span:first-child{font-family:var(--fs);font-weight:600;color:var(--text);font-size:.95rem;}
+.vo-who span:last-child{font-family:var(--fm);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);}
+.vo-dots{display:flex;gap:.5rem;margin-top:1.6rem;}
+.vo-dots i{width:26px;height:3px;border-radius:2px;background:var(--border);cursor:pointer;transition:background .3s;}
+.vo-dots i.on{background:var(--gold);}
+
+/* article modal */
+#art-modal{position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;padding:1.2rem;background:rgba(20,20,15,.55);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);opacity:0;pointer-events:none;transition:opacity .35s var(--ease-out);}
+#art-modal.show{opacity:1;pointer-events:auto;}
+.am-card{background:var(--surface);border-radius:24px;max-width:740px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 40px 110px rgba(0,0,0,.4);transform:translateY(26px) scale(.97);transition:transform .45s var(--spring);position:relative;}
+#art-modal.show .am-card{transform:none;}
+.am-head{padding:2.4rem 2.6rem 1.5rem;border-bottom:1px solid var(--border);}
+.am-kicker{font-family:var(--fm);font-size:.56rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:flex;gap:1rem;}
+.am-title{font-family:var(--fc);font-size:clamp(1.7rem,3.4vw,2.5rem);font-weight:600;line-height:1.08;color:var(--text);}
+.am-x{position:absolute;top:1.5rem;right:1.6rem;background:rgba(0,0,0,.06);border:none;border-radius:50%;width:34px;height:34px;font-size:1.15rem;cursor:pointer;color:var(--text2);transition:all .2s;z-index:3;}
+.am-x:hover{background:rgba(0,0,0,.14);color:var(--text);transform:rotate(90deg);}
+.am-body{padding:2rem 2.6rem 2.8rem;}
+.am-body p{font-family:var(--fs);font-size:.98rem;line-height:1.85;color:var(--text2);margin-bottom:1.25rem;}
+.am-body p strong{color:var(--text);font-weight:600;}
+.am-body p:first-of-type::first-letter{font-family:var(--fc);font-size:3.4em;font-weight:600;float:left;line-height:.78;padding:.06em .12em 0 0;color:var(--gold);}
+.am-pull{font-family:var(--fc);font-style:italic;font-weight:300;font-size:1.35rem;line-height:1.5;color:var(--text);border-left:3px solid var(--gold);padding:.4rem 0 .4rem 1.4rem;margin:1.8rem 0;}
+.am-end{display:flex;align-items:center;gap:.6rem;margin-top:2rem;font-family:var(--fm);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);}
+.am-end::before,.am-end::after{content:'';height:1px;flex:0 0 34px;background:var(--gold);opacity:.5;}
+@media(max-width:640px){.am-head{padding:2rem 1.4rem 1.2rem;}.am-body{padding:1.5rem 1.4rem 2rem;}.vo-stage{padding:2.4rem 1.5rem 2rem;}}
+</style>
+
+
+<script>
+(function upgradePack(){
+  var reduced=false;
+  try{ reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+  var touch=false;
+  try{ touch=window.matchMedia('(hover: none)').matches; }catch(e){}
+
+  /* ── scroll progress bar (rect-based: artifact-safe) ── */
+  try{
+    var pb=document.createElement('div'); pb.id='tk-progress'; pb.innerHTML='<i></i>';
+    document.body.appendChild(pb);
+    var pbi=pb.firstChild, lastP=-1;
+    (function ptick(){
+      var se=document.scrollingElement||document.documentElement;
+      var y=Math.max(-document.body.getBoundingClientRect().top, se.scrollTop||0, window.pageYOffset||0);
+      var total=document.body.scrollHeight-window.innerHeight;
+      var p=total>0?Math.min(1,Math.max(0,y/total)):0;
+      if(Math.abs(p-lastP)>0.001){ pbi.style.transform='scaleX('+p+')'; lastP=p; }
+      requestAnimationFrame(ptick);
+    })();
+  }catch(e){}
+
+  /* ── hero letter choreography ── */
+  try{
+    if(!reduced){
+      var h1=document.querySelector('.hero-name');
+      if(h1){
+        var idx=0;
+        function splitNode(node){
+          var kids=Array.prototype.slice.call(node.childNodes);
+          kids.forEach(function(k){
+            if(k.nodeType===3){
+              var frag=document.createDocumentFragment();
+              k.textContent.split('').forEach(function(ch){
+                if(ch===' '){ frag.appendChild(document.createTextNode(' ')); return; }
+                var s=document.createElement('span'); s.className='hl'; s.textContent=ch;
+                s.style.animationDelay=(0.18+idx*0.045)+'s'; idx++;
+                frag.appendChild(s);
+              });
+              node.replaceChild(frag,k);
+            } else if(k.nodeType===1 && k.tagName!=='BR'){ splitNode(k); }
+          });
+        }
+        splitNode(h1);
+        h1.classList.add('split');
+      }
+    }
+  }catch(e){}
+
+  /* ── word-mask section titles ── */
+  try{
+    if(!reduced){
+      document.querySelectorAll('.sec-title').forEach(function(t){
+        var wi=0;
+        function splitWords(node){
+          var kids=Array.prototype.slice.call(node.childNodes);
+          kids.forEach(function(k){
+            if(k.nodeType===3){
+              var words=k.textContent.split(/\s+/).filter(Boolean);
+              if(!words.length){ return; }
+              var frag=document.createDocumentFragment();
+              words.forEach(function(w,i){
+                var outer=document.createElement('span'); outer.className='w';
+                var inner=document.createElement('span'); inner.className='wi'; inner.textContent=w;
+                inner.style.transitionDelay=(wi*0.07)+'s'; wi++;
+                outer.appendChild(inner); frag.appendChild(outer);
+                frag.appendChild(document.createTextNode(' '));
+              });
+              node.replaceChild(frag,k);
+            } else if(k.nodeType===1 && k.tagName!=='BR'){ splitWords(k); }
+          });
+        }
+        splitWords(t);
+        t.classList.add('wsplit');
+      });
+    }
+  }catch(e){}
+
+  /* ── stat counters ── */
+  try{
+    var ease=function(x){ return 1-Math.pow(1-x,3); };
+    var cio=new IntersectionObserver(function(es){
+      es.forEach(function(en){
+        if(!en.isIntersecting) return;
+        var el=en.target; cio.unobserve(el);
+        var m=(el.textContent||'').match(/^([^0-9]*)([\d,]+)(.*)$/);
+        if(!m) return;
+        var pre=m[1], suf=m[3], hasComma=m[2].indexOf(',')>-1;
+        var n=parseInt(m[2].replace(/,/g,''),10);
+        if(!isFinite(n)||n<=0) return;
+        var t0=null;
+        function step(ts){
+          if(!t0) t0=ts;
+          var p=Math.min(1,(ts-t0)/1500);
+          var v=Math.round(n*ease(p));
+          var txt=hasComma?v.toLocaleString('en-US'):String(v);
+          el.textContent=pre+txt+suf;
+          if(p<1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+    },{threshold:.4});
+    document.querySelectorAll('.stat-n').forEach(function(el){ cio.observe(el); });
+  }catch(e){}
+
+  /* ── 3D tilt with glare ── */
+  try{
+    if(!touch && !reduced){
+      document.querySelectorAll('.pj-card,.stat-card').forEach(function(card){
+        card.addEventListener('mousemove',function(e){
+          var r=card.getBoundingClientRect();
+          var px=(e.clientX-r.left)/r.width-.5, py=(e.clientY-r.top)/r.height-.5;
+          card.style.setProperty('--gx',((px+.5)*100)+'%');
+          card.style.setProperty('--gy',((py+.5)*100)+'%');
+          card.style.transition='transform .14s ease-out';
+          card.style.transform='perspective(950px) rotateX('+(-py*4.5)+'deg) rotateY('+(px*6.5)+'deg) translateY(-3px)';
+        });
+        card.addEventListener('mouseleave',function(){
+          card.style.transition='transform .55s var(--spring)';
+          card.style.transform='';
+        });
+      });
+    }
+  }catch(e){}
+
+  /* ── magnetic buttons ── */
+  try{
+    if(!touch && !reduced){
+      document.querySelectorAll('.btn-gold,.btn-ghost,.nav-cta').forEach(function(b){
+        b.addEventListener('mousemove',function(e){
+          var r=b.getBoundingClientRect();
+          var dx=(e.clientX-(r.left+r.width/2))*.22, dy=(e.clientY-(r.top+r.height/2))*.3;
+          b.style.transition='transform .12s ease-out';
+          b.style.transform='translate('+dx+'px,'+dy+'px)';
+        });
+        b.addEventListener('mouseleave',function(){
+          b.style.transition='transform .5s var(--spring)';
+          b.style.transform='';
+        });
+      });
+    }
+  }catch(e){}
+})();
+</script>
+
+<div id="art-modal"><div class="am-card">
+  <button class="am-x" aria-label="Close">&times;</button>
+  <div class="am-head"><div class="am-kicker"></div><div class="am-title"></div></div>
+  <div class="am-body"></div>
+</div></div>
+
+<script>
+(function fieldNotes(){
+  var ARTICLES={
+    rfp:{kicker:'FIELD NOTES · TRANSPORTATION · 4 MIN', title:'What a Live Truckload RFP Taught Me About Carrier Pricing',
+      body:[
+        "Most transportation case studies are sanitized. The numbers are round, the carriers are fictional, and the answer is whichever column is smallest. Then, in DePaul’s industry practicum, KeHE Distributors handed us their actual 2024 inbound truckload RFP — real lanes, real carrier bids, real money — and the first thing I learned is that the smallest number in the column is almost never the answer.",
+        "A truckload RFP looks simple from the outside: you publish your lanes, carriers bid a rate per lane, you award the business. But the moment I started working the bid sheet lane by lane, the simplicity fell apart. Some carriers bid aggressively low on lanes they clearly didn’t want — fishing for volume they could later reject when the spot market got hot. Others bid high on paper but had years of near-perfect tender acceptance. The spreadsheet treats those two numbers as comparable. A freight buyer cannot.",
+        "<strong>The real cost of a lane is the bid rate plus the cost of every load the carrier fails to cover.</strong> When a carrier rejects a tender, that load doesn’t disappear — it cascades to your second-choice carrier at a higher backup rate, or worse, to the spot market at whatever the day demands. A bid that’s 4% cheaper means nothing if it comes with a 15% rejection rate.",
+        "PULL:The cheapest lane on the bid sheet is rarely the cheapest lane in real life.",
+        "So my award recommendation balanced three things the raw sheet doesn’t show: price, expected coverage, and network fit — whether a lane connects sensibly to where that carrier’s trucks actually want to be. A carrier whose network naturally flows through your lane will fight to keep it. One who bid it opportunistically will drop it the moment a better load appears.",
+        "The practicum ended with a defensible award: not the cheapest possible paper outcome, but the cheapest outcome that would survive contact with an actual freight market. That distinction — between what optimizes the spreadsheet and what survives reality — is the single most useful thing I’ve learned about transportation procurement, and I got it from working real data with real stakes."
+      ]},
+    index:{kicker:'FIELD NOTES · RESEARCH · 5 MIN', title:'Ranking 1,500 Companies: Building India’s First Supply Chain Index',
+      body:[
+        "How do you compare a pharmaceutical cold chain to a cement dispatch network? That question sat at the center of my work at the Institute of Supply Chain Management, where our team built the Top 20 Supply Chain Champions of India — the country’s first national supply chain ranking, drawn from an analysis of over 1,500 public companies across 24 sectors.",
+        "The honest answer is: you can’t compare them directly, and the methodology had to be designed around that impossibility. A cold chain lives or dies by temperature integrity and speed; a cement network by asset utilization and freight cost per tonne. Score them on the same yardstick and you’ve built a ranking of industries, not of supply chain excellence.",
+        "<strong>Our answer was to blend hard financial metrics — inventory turns, working capital efficiency, delivery performance — with factors that don’t show up in a quarterly report: ESG posture, resilience, and technology adoption.</strong> Financial data came from public filings; the rest demanded direct outreach to supply chain leaders, sector by sector. I spent weeks in R and Tableau normalizing metrics within sectors first, so a company was measured against its own industry’s physics before being measured against the nation.",
+        "PULL:Score a cold chain and a cement network on the same yardstick and you’ve ranked industries, not supply chains.",
+        "What almost broke the index was survivorship in the data itself. Companies with sophisticated supply chains publish more detail — which meant the best-documented companies could float upward simply for being well-documented. We had to consciously separate ‘discloses well’ from ‘performs well’, weighting verified operational outcomes over glossy sustainability language.",
+        "The index culminated in the Supply Chain Dialogue Series, where we unveiled the methodology and hosted Chief Supply Chain Officers from the top 20 champion companies. Watching executives debate a ranking I had helped compute was the moment research stopped feeling academic. A methodology is just an opinion with math — until the people it measures take it seriously."
+      ]},
+    erp:{kicker:'FIELD NOTES · BUILD LOG · 4 MIN', title:'I Built an ERP Solo to Understand the Systems I’ll Manage',
+      body:[
+        "Every supply chain job description asks for ERP experience, and nearly everyone answers the same way: they’ve used one. They’ve keyed in purchase orders, run MRP, pulled inventory reports. I could say that too. But using a system tells you what it does — not why it does it, where it will break, or what it costs to change. So I built one.",
+        "My ERP runs live on the web: Django and Python on the backend, SQL underneath, with modules for inventory, orders, shipments, suppliers, and finance. Then I kept going — barcode scanning with camera lookup and label printing, a stock ledger with financial KPIs, and an AI insights layer that forecasts demand, flags anomalies, scores supplier risk, and generates reorder signals.",
+        "<strong>Building it changed how I read every screen in every enterprise system.</strong> When an inventory count is wrong, I no longer think ‘the system is wrong’ — I think about which transaction failed to post, whether the ledger and the snapshot disagree, and which of the five places that quantity lives is stale. That instinct — knowing a number is really the end of a pipeline of smaller numbers — is something no amount of end-user training gave me.",
+        "PULL:Using a system tells you what it does. Building one tells you where it will break.",
+        "The hardest part wasn’t the code — it was the modeling. What is an ‘order’, exactly, when half of it ships today and the rest is backordered? When does inventory stop being ‘available’ — at allocation, at pick, at ship confirm? Every ERP has opinions about these questions baked so deep that users never see them. Deciding them myself, alone, was a crash course in why enterprise implementations take years and why ‘small configuration changes’ never are.",
+        "I don’t expect to be hired as a developer, and that was never the point. The point is that when I sit across from an IT team, a 3PL’s integration engineer, or an SAP consultant, I speak the language of the machine as well as the language of the warehouse. In a field that increasingly runs on systems, I wanted to be the supply chain person who isn’t afraid to open the hood."
+      ]}
+  };
+  var modal=document.getElementById('art-modal');
+  var kick=modal.querySelector('.am-kicker'), title=modal.querySelector('.am-title'), body=modal.querySelector('.am-body');
+  function open(key){
+    var a=ARTICLES[key]; if(!a) return;
+    kick.textContent=a.kicker; title.textContent=a.title;
+    body.innerHTML=a.body.map(function(p){
+      if(p.indexOf('PULL:')===0) return '<div class="am-pull">'+p.slice(5)+'</div>';
+      return '<p>'+p+'</p>';
+    }).join('')+'<div class="am-end">Tirthal Kothari</div>';
+    modal.classList.add('show');
+    modal.querySelector('.am-card').scrollTop=0;
+    document.body.style.overflow='hidden';
+  }
+  function close(){ modal.classList.remove('show'); document.body.style.overflow=''; }
+  document.addEventListener('click',function(e){
+    var card=e.target.closest&&e.target.closest('[data-article]');
+    if(card){ open(card.getAttribute('data-article')); return; }
+    if(e.target===modal||(e.target.closest&&e.target.closest('.am-x'))) close();
+  });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
+})();
+</script>
+
+<script>
+(function voices(){
+  /* Real quotes only. Add entries and the section appears automatically:
+     {q:'Quote text', name:'Full Name', role:'Title, Company'} */
+  var TESTIMONIALS=[];
+  var sec=document.getElementById('voices');
+  if(!sec || !TESTIMONIALS.length) return;
+  sec.style.display='';
+  var qEl=document.getElementById('vo-quote'), nEl=document.getElementById('vo-name'), rEl=document.getElementById('vo-role'), dots=document.getElementById('vo-dots');
+  var i=0, timer=null;
+  TESTIMONIALS.forEach(function(_,k){
+    var d=document.createElement('i');
+    d.addEventListener('click',function(){ show(k); restart(); });
+    dots.appendChild(d);
+  });
+  function show(k){
+    i=k;
+    qEl.classList.add('swap');
+    setTimeout(function(){
+      var t=TESTIMONIALS[i];
+      qEl.textContent=t.q; nEl.textContent=t.name; rEl.textContent=t.role;
+      Array.prototype.forEach.call(dots.children,function(d,j){ d.classList.toggle('on',j===i); });
+      qEl.classList.remove('swap');
+    },450);
+  }
+  function restart(){ clearInterval(timer); timer=setInterval(function(){ show((i+1)%TESTIMONIALS.length); },6500); }
+  qEl.textContent=TESTIMONIALS[0].q; nEl.textContent=TESTIMONIALS[0].name; rEl.textContent=TESTIMONIALS[0].role;
+  dots.children[0].classList.add('on');
+  restart();
+})();
+</script>
 
 
 </body>
