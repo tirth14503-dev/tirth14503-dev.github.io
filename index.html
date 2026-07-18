@@ -948,7 +948,7 @@ section:nth-child(odd){background:var(--bg);}
   <div class="hero-inner">
     <div class="hero-tag">Supply Chain · Analytics · Chicago</div>
     <h1 class="hero-name">Tirthal<br><em>Kothari</em></h1>
-    <p class="hero-sub">Operations consultant, researcher & analytics professional building resilient supply chains — from Mumbai to Chicago.</p>
+    <p class="hero-sub">I learned supply chain the hands-on way, in my family's electronics business in Mumbai. Now I'm finishing my MS at DePaul in Chicago — and building the systems most people only operate.</p>
     <div class="hero-btns">
       <button class="btn-gold" onclick="document.getElementById('experience').scrollIntoView({behavior:'smooth'})">View Work</button>
       <button class="btn-ghost" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Let's Connect →</button>
@@ -974,8 +974,8 @@ section:nth-child(odd){background:var(--bg);}
     </div>
     <div class="about-text reveal-r">
       <h2>From Mumbai<br>to <strong>Chicago</strong></h2>
-      <p>I grew up running supply chains in my family's electronics business in Mumbai — where every procurement call, every shipment, every vendor relationship had real stakes. That hands-on foundation led me to research, academia, and now a graduate degree at DePaul.</p>
-      <p>I sit at the intersection of data and operations: equally comfortable in R or Excel as I am negotiating with suppliers or presenting to C-suite stakeholders.</p>
+      <p>I grew up in my family's electronics business in Mumbai, where supply chain wasn't a subject — it was whether the shipment showed up and whether we got paid. Chasing vendors, negotiating rates, fixing stockouts: that was daily life long before I had textbook words for any of it.</p>
+      <p>The research came later — a year spent ranking 1,500 companies for India's first supply chain index — and then Chicago, for my MS at DePaul. These days I'm as happy writing SQL as I am on the phone with a supplier. I think that mix is the whole point.</p>
       <div class="chip-row">
         <span class="chip">DDMRP</span><span class="chip">Six Sigma Green Belt</span>
         <span class="chip">Tableau</span><span class="chip">Python · R · SQL</span>
@@ -1482,7 +1482,7 @@ section:nth-child(odd){background:var(--bg);}
   <div class="sec-eyebrow reveal">Calculator</div>
   <h2 class="sec-title reveal" style="transition-delay:.08s">Impact <strong>Estimator</strong></h2>
   <div class="sec-rule reveal" style="transition-delay:.12s"></div>
-  <p class="reveal" style="font-family:var(--fs);color:var(--text2);max-width:540px;line-height:1.8;margin-bottom:2.5rem;transition-delay:.16s;font-size:.95rem;">Slide the inputs to see the kind of operational impact my methodologies could generate for your organisation.</p>
+  <p class="reveal" style="font-family:var(--fs);color:var(--text2);max-width:540px;line-height:1.8;margin-bottom:2.5rem;transition-delay:.16s;font-size:.95rem;">Slide the inputs and see roughly what the playbook I ran at Kothari Electronics could mean for your numbers. It's an estimate, not a promise — but it's built from real results.</p>
   <div class="calc-grid">
     <div class="calc-inputs reveal-l">
       <div class="calc-group">
@@ -4941,39 +4941,39 @@ section{scroll-margin-top:64px;}
 (function caseStudies(){
   const CASES={
     forecast:{badge:'MGT 594 · Machine Learning',title:'Retail Demand Forecasting',
-      situation:'A retail chain’s inventory data held the signal for smarter replenishment — but raw, messy, and spread across inventory levels, orders, pricing and promotions. Our team’s job: turn it into a model that predicts what sells.',
+      situation:'Our team got a messy retail dataset — inventory levels, orders, pricing, promotions — and a simple brief: predict what sells. The data didn’t cooperate at first. It rarely does.',
       action:'I ran the <strong>EDA and feature engineering</strong> — cleaning the dataset, encoding categoricals, and building predictive features from price, discount depth, and inventory position. We then trained and compared multiple regression models to forecast units sold and surface replenishment risk.',
-      result:'A working forecasting pipeline that flags which SKUs are likely to run short — the kind of demand signal that drives safety-stock and reorder decisions.',
+      result:'A working forecasting pipeline that flags which SKUs are likely to run short — early enough to actually do something about it.',
       metrics:[['Python','stack'],['5+','features engineered'],['Team','collaboration']],
       tools:['Python','pandas','scikit-learn','seaborn','matplotlib']},
     kehe:{badge:'Industry Practicum · KeHE',title:'Inbound Truckload RFP',
-      situation:'KeHE Distributors ran a real 2024 inbound truckload RFP. In DePaul’s transportation practicum, I worked the live bid data — not a case study, an actual sourcing event.',
+      situation:'KeHE Distributors let our practicum class work their real 2024 inbound truckload RFP. Real lanes, real carrier bids, real money on the table.',
       action:'I analyzed <strong>lane-level carrier bids</strong> across cost, coverage and service, then built an award recommendation that balanced the cheapest rate against reliability and network fit.',
-      result:'A defensible carrier-award recommendation grounded in real bid economics — the exact analysis a transportation buyer runs before signing.',
+      result:'A carrier-award recommendation I could defend line by line — the same analysis a transportation buyer would run before signing.',
       metrics:[['2024','live RFP'],['Lane-level','bid analysis'],['Real','client data']],
       tools:['Excel','Bid Analysis','Carrier Sourcing','Transportation']},
     automation:{badge:'Self-Directed Build',title:'AI-Automated SC Analytics',
-      situation:'I wanted to see how far a modern, AI-assisted analytics stack could go without a data team — so I built one end to end, solo.',
+      situation:'I kept reading about modern data stacks and wondered how far one person could get without a data team. So I found out.',
       action:'I stood up a <strong>Supabase Postgres warehouse</strong>, used Quadratic’s AI spreadsheets for analysis, and wired <strong>n8n workflow automation</strong> to move supply chain datasets and fire automated Gmail alerts on the signals that matter.',
-      result:'A hands-off pipeline: data lands, gets analyzed, and the right people get pinged — the automation layer most SC teams still do by hand.',
+      result:'A pipeline that runs without me: data lands, gets analyzed, and the right people get an email. Most teams still do this part by hand.',
       metrics:[['n8n','automation'],['Postgres','warehouse'],['AI','analysis']],
       tools:['n8n','PostgreSQL','Supabase','Quadratic AI','Gmail API']},
     segmentation:{badge:'Machine Learning',title:'Customer Segmentation',
-      situation:'A retail chain wanted tailored loyalty programs but treated its customers as one undifferentiated mass. The data — income, spending score, channel mix — said otherwise.',
+      situation:'A retail chain wanted loyalty programs but treated every customer the same. The data — income, spending score, channel mix — made it obvious there were very different kinds of customers in there.',
       action:'I applied <strong>K-Means clustering</strong>, validated the cluster count with the elbow method, and profiled each segment into an actionable persona.',
-      result:'Clear customer segments, each with a distinct loyalty play — turning a flat customer list into a targeted marketing strategy.',
+      result:'Clear customer segments with a specific loyalty approach for each — instead of one program for everyone.',
       metrics:[['K-Means','clustering'],['Elbow','validated'],['Personas','actionable']],
       tools:['Python','scikit-learn','K-Means','pandas']},
     churn:{badge:'Machine Learning',title:'Churn Prediction Model',
       situation:'Which customers are about to leave — and why? A subscription dataset held tenure, charges, support calls and contract type; the goal was to predict churn before it happened.',
       action:'I built a <strong>decision-tree classifier</strong>, tuned depth and minimum leaf size to avoid overfitting, then read the tree’s splits to translate them into concrete retention actions.',
-      result:'A model that both predicts at-risk customers and explains the drivers — so the business can act, not just score.',
+      result:'A model that predicts who’s about to leave and shows why — which matters, because the why is the part you can actually fix.',
       metrics:[['Decision','tree'],['Tuned','depth + leaf'],['Explainable','splits']],
       tools:['Python','scikit-learn','Decision Trees','LabelEncoder']},
     optimization:{badge:'Decision Modeling',title:'Optimization in Excel',
       situation:'M&D Chemicals needed to hit production targets at minimum cost under real capacity and demand constraints — a classic linear-programming problem.',
       action:'I formulated the <strong>LP model in Excel Solver</strong> — defining decision variables, constraints and the objective — then read the sensitivity report to understand which constraints actually bound the solution, and ran what-if scenarios on cost and capacity.',
-      result:'An optimal production plan plus the sensitivity insight to defend it — the difference between a number and a decision.',
+      result:'An optimal production plan, plus the sensitivity analysis to show which constraints actually mattered and by how much.',
       metrics:[['LP','model'],['Solver','optimized'],['Sensitivity','analysis']],
       tools:['Excel Solver','Linear Programming','Sensitivity Analysis']}
   };
@@ -5238,12 +5238,12 @@ section{scroll-margin-top:64px;}
   var ARTICLES={
     rfp:{kicker:'FIELD NOTES · TRANSPORTATION · 4 MIN', title:'What a Live Truckload RFP Taught Me About Carrier Pricing',
       body:[
-        "Most transportation case studies are sanitized. The numbers are round, the carriers are fictional, and the answer is whichever column is smallest. Then, in DePaul’s industry practicum, KeHE Distributors handed us their actual 2024 inbound truckload RFP — real lanes, real carrier bids, real money — and the first thing I learned is that the smallest number in the column is almost never the answer.",
+        "In most classes, transportation problems arrive pre-cleaned. The numbers are round, the carriers are fictional, and the answer is whichever column is smallest. Our practicum was different: KeHE Distributors gave us their actual 2024 inbound truckload RFP to work with. Real lanes, real carrier bids, real money. It changed how I think about buying freight.",
         "A truckload RFP looks simple from the outside: you publish your lanes, carriers bid a rate per lane, you award the business. But the moment I started working the bid sheet lane by lane, the simplicity fell apart. Some carriers bid aggressively low on lanes they clearly didn’t want — fishing for volume they could later reject when the spot market got hot. Others bid high on paper but had years of near-perfect tender acceptance. The spreadsheet treats those two numbers as comparable. A freight buyer cannot.",
         "<strong>The real cost of a lane is the bid rate plus the cost of every load the carrier fails to cover.</strong> When a carrier rejects a tender, that load doesn’t disappear — it cascades to your second-choice carrier at a higher backup rate, or worse, to the spot market at whatever the day demands. A bid that’s 4% cheaper means nothing if it comes with a 15% rejection rate.",
         "PULL:The cheapest lane on the bid sheet is rarely the cheapest lane in real life.",
         "So my award recommendation balanced three things the raw sheet doesn’t show: price, expected coverage, and network fit — whether a lane connects sensibly to where that carrier’s trucks actually want to be. A carrier whose network naturally flows through your lane will fight to keep it. One who bid it opportunistically will drop it the moment a better load appears.",
-        "The practicum ended with a defensible award: not the cheapest possible paper outcome, but the cheapest outcome that would survive contact with an actual freight market. That distinction — between what optimizes the spreadsheet and what survives reality — is the single most useful thing I’ve learned about transportation procurement, and I got it from working real data with real stakes."
+        "We ended with an award that wasn’t the cheapest on paper, but was the cheapest that would hold up once real trucks and real rejections entered the picture. That gap between the spreadsheet answer and the real answer is the most useful thing I took from the whole practicum."
       ]},
     index:{kicker:'FIELD NOTES · RESEARCH · 5 MIN', title:'Ranking 1,500 Companies: Building India’s First Supply Chain Index',
       body:[
@@ -5252,16 +5252,16 @@ section{scroll-margin-top:64px;}
         "<strong>Our answer was to blend hard financial metrics — inventory turns, working capital efficiency, delivery performance — with factors that don’t show up in a quarterly report: ESG posture, resilience, and technology adoption.</strong> Financial data came from public filings; the rest demanded direct outreach to supply chain leaders, sector by sector. I spent weeks in R and Tableau normalizing metrics within sectors first, so a company was measured against its own industry’s physics before being measured against the nation.",
         "PULL:Score a cold chain and a cement network on the same yardstick and you’ve ranked industries, not supply chains.",
         "What almost broke the index was survivorship in the data itself. Companies with sophisticated supply chains publish more detail — which meant the best-documented companies could float upward simply for being well-documented. We had to consciously separate ‘discloses well’ from ‘performs well’, weighting verified operational outcomes over glossy sustainability language.",
-        "The index culminated in the Supply Chain Dialogue Series, where we unveiled the methodology and hosted Chief Supply Chain Officers from the top 20 champion companies. Watching executives debate a ranking I had helped compute was the moment research stopped feeling academic. A methodology is just an opinion with math — until the people it measures take it seriously."
+        "The project wrapped with the Supply Chain Dialogue Series, where we presented the methodology and hosted chief supply chain officers from the top 20 companies. Watching executives argue over a ranking I had helped compute was the first time research felt real to me. People take a number seriously in a way they never take a slide deck seriously."
       ]},
     erp:{kicker:'FIELD NOTES · BUILD LOG · 4 MIN', title:'I Built an ERP Solo to Understand the Systems I’ll Manage',
       body:[
         "Every supply chain job description asks for ERP experience, and nearly everyone answers the same way: they’ve used one. They’ve keyed in purchase orders, run MRP, pulled inventory reports. I could say that too. But using a system tells you what it does — not why it does it, where it will break, or what it costs to change. So I built one.",
         "My ERP runs live on the web: Django and Python on the backend, SQL underneath, with modules for inventory, orders, shipments, suppliers, and finance. Then I kept going — barcode scanning with camera lookup and label printing, a stock ledger with financial KPIs, and an AI insights layer that forecasts demand, flags anomalies, scores supplier risk, and generates reorder signals.",
-        "<strong>Building it changed how I read every screen in every enterprise system.</strong> When an inventory count is wrong, I no longer think ‘the system is wrong’ — I think about which transaction failed to post, whether the ledger and the snapshot disagree, and which of the five places that quantity lives is stale. That instinct — knowing a number is really the end of a pipeline of smaller numbers — is something no amount of end-user training gave me.",
+        "<strong>Building it changed how I read every screen in every enterprise system.</strong> Now when an inventory count looks wrong, my first thought isn’t that the system is broken. It’s: which transaction didn’t post, and which of the five places that quantity lives has gone stale? You only get that instinct from having built the pipeline yourself.",
         "PULL:Using a system tells you what it does. Building one tells you where it will break.",
         "The hardest part wasn’t the code — it was the modeling. What is an ‘order’, exactly, when half of it ships today and the rest is backordered? When does inventory stop being ‘available’ — at allocation, at pick, at ship confirm? Every ERP has opinions about these questions baked so deep that users never see them. Deciding them myself, alone, was a crash course in why enterprise implementations take years and why ‘small configuration changes’ never are.",
-        "I don’t expect to be hired as a developer, and that was never the point. The point is that when I sit across from an IT team, a 3PL’s integration engineer, or an SAP consultant, I speak the language of the machine as well as the language of the warehouse. In a field that increasingly runs on systems, I wanted to be the supply chain person who isn’t afraid to open the hood."
+        "I don’t expect to be hired as a developer, and that was never the point. The point is that when I sit across from an IT team, a 3PL’s integration engineer, or an SAP consultant, I can follow the conversation on both sides — the warehouse side and the systems side. In a field that increasingly runs on software, I wanted to be the supply chain person who isn’t afraid to open the hood."
       ]}
   };
   var modal=document.getElementById('art-modal');
