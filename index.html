@@ -1348,7 +1348,7 @@ section{scroll-margin-top:64px;}
   font-size:1.3rem;cursor:pointer;transition:all .2s;
 }
 #vo-close:hover{background:rgba(255,255,255,.15);transform:rotate(90deg);}
-.vo-stage{display:flex;flex-direction:column;align-items:center;gap:1.8rem;max-width:min(560px,86vw);padding:0 1rem;}
+.va-stage{display:flex;flex-direction:column;align-items:center;gap:1.8rem;max-width:min(560px,86vw);padding:0 1rem;}
 .vo-orb{
   position:relative;width:112px;height:112px;border-radius:50%;
   background:linear-gradient(155deg,var(--gold),var(--gold2));
@@ -5595,7 +5595,7 @@ __glReady(function initScmActs(){
 <!-- VOICE ASSISTANT OVERLAY -->
 <div id="voice-overlay" role="dialog" aria-label="Voice assistant">
   <button id="vo-close" aria-label="End voice conversation">&times;</button>
-  <div class="vo-stage">
+  <div class="va-stage">
     <div class="vo-orb" id="vo-orb">
       <span class="vo-ring r1"></span><span class="vo-ring r2"></span><span class="vo-ring r3"></span>
       <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="17" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
