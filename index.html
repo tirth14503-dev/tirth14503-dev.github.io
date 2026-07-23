@@ -948,6 +948,7 @@ section:nth-child(odd){background:var(--bg);}
 <nav id="topnav">
   <div class="nav-logo" onclick="scrollTo({top:0,behavior:'smooth'})">TK</div>
   <div class="nav-links">
+    <span class="nav-pill" id="nav-pill"></span>
     <span class="nav-link" data-sec="about">About</span>
     <span class="nav-link" data-sec="timeline">Journey</span>
     <span class="nav-link" data-sec="experience">Work</span>
@@ -963,6 +964,31 @@ section:nth-child(odd){background:var(--bg);}
 <!-- ① HERO -->
 <section id="hero">
   <canvas id="hero-canvas"></canvas>
+  <div id="hero-mobile-scene" aria-hidden="true">
+    <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice">
+      <defs>
+        <linearGradient id="hmSky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f5f5f7"/>
+          <stop offset="100%" stop-color="#e9e4d8"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="400" height="300" fill="url(#hmSky)"/>
+      <ellipse cx="200" cy="286" rx="220" ry="16" fill="rgba(0,0,0,.05)"/>
+      <g class="hm-crane">
+        <rect x="292" y="70" width="10" height="170" rx="3" fill="#1d1d1f"/>
+        <rect x="230" y="70" width="80" height="9" rx="3" fill="#1d1d1f"/>
+        <line x1="297" y1="79" x2="297" y2="150" stroke="#b8860b" stroke-width="3"/>
+      </g>
+      <g class="hm-box hm-box1"><rect x="120" y="210" width="70" height="32" rx="3" fill="#b8860b"/><line x1="132" y1="210" x2="132" y2="242" stroke="#f5f5f7" stroke-width="2"/><line x1="150" y1="210" x2="150" y2="242" stroke="#f5f5f7" stroke-width="2"/><line x1="168" y1="210" x2="168" y2="242" stroke="#f5f5f7" stroke-width="2"/></g>
+      <g class="hm-box hm-box2"><rect x="195" y="212" width="70" height="30" rx="3" fill="#2e5f8a"/><line x1="207" y1="212" x2="207" y2="242" stroke="#f5f5f7" stroke-width="2"/><line x1="225" y1="212" x2="225" y2="242" stroke="#f5f5f7" stroke-width="2"/><line x1="243" y1="212" x2="243" y2="242" stroke="#f5f5f7" stroke-width="2"/></g>
+      <g class="hm-box hm-box3"><rect x="130" y="178" width="70" height="32" rx="3" fill="#9e3a26"/><line x1="142" y1="178" x2="142" y2="210" stroke="#f5f5f7" stroke-width="2"/><line x1="160" y1="178" x2="160" y2="210" stroke="#f5f5f7" stroke-width="2"/><line x1="178" y1="178" x2="178" y2="210" stroke="#f5f5f7" stroke-width="2"/></g>
+      <g class="hm-plane">
+        <path d="M0 0 L34 0 L40 3 L34 6 L0 6 Z" fill="#1d1d1f"/>
+        <path d="M14 3 L22 -9 L27 -9 L21 3 Z" fill="#1d1d1f"/>
+        <path d="M14 3 L22 13 L27 13 L21 3 Z" fill="#1d1d1f"/>
+      </g>
+    </svg>
+  </div>
   <div class="hero-lane-badge" id="lane-badge"><span class="dot"></span>Live Lane · Mumbai ⇄ Chicago</div>
   <div class="hero-inner">
     <div class="hero-tag">Supply Chain · Analytics · Chicago</div>
@@ -5335,6 +5361,91 @@ section{scroll-margin-top:64px;}
   qEl.textContent=TESTIMONIALS[0].q; nEl.textContent=TESTIMONIALS[0].name; rEl.textContent=TESTIMONIALS[0].role;
   dots.children[0].classList.add('on');
   restart();
+})();
+</script>
+
+<style>
+/* ============ MOBILE HERO FALLBACK ============ */
+#hero-mobile-scene{display:none;}
+@media(max-width:760px){
+  #hero-mobile-scene{
+    display:block;position:absolute;inset:0;width:100%;height:100%;
+    pointer-events:none;overflow:hidden;
+  }
+  #hero-mobile-scene svg{width:100%;height:100%;display:block;}
+  .hm-crane{transform-origin:297px 79px;animation:hmSwing 7s ease-in-out infinite;}
+  .hm-box{animation:hmBob 4s ease-in-out infinite;}
+  .hm-box2{animation-delay:.4s;}
+  .hm-box3{animation-delay:.8s;}
+  .hm-plane{animation:hmFly 16s linear infinite;}
+  @keyframes hmSwing{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-3deg)}}
+  @keyframes hmBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  @keyframes hmFly{0%{transform:translate(-60px,54px)}100%{transform:translate(440px,20px)}}
+  @media(prefers-reduced-motion:reduce){.hm-crane,.hm-box,.hm-plane{animation:none!important;}}
+}
+</style>
+
+
+<style>
+/* ============ FILM GRAIN OVERLAY ============ */
+#tk-grain{
+  position:fixed;inset:0;z-index:9989;pointer-events:none;
+  opacity:.035;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:140px 140px;
+}
+@media(prefers-color-scheme:dark){#hero.is-night ~ #tk-grain,#tk-grain{opacity:.035;}}
+</style>
+
+
+<style>
+/* ============ SLIDING NAV INDICATOR ============ */
+.nav-links{position:relative;}
+.nav-pill{
+  position:absolute;top:50%;left:0;height:28px;border-radius:14px;
+  background:var(--gold-t);pointer-events:none;
+  transform:translate(0,-50%) scaleX(1);opacity:0;
+  transition:transform .45s var(--spring),opacity .3s,width .45s var(--spring),left .45s var(--spring);
+  z-index:0;
+}
+.nav-link{z-index:1;}
+</style>
+
+<script>
+(function visualPackJS(){
+  /* grain layer */
+  try{
+    var g=document.createElement('div'); g.id='tk-grain';
+    document.body.appendChild(g);
+  }catch(e){}
+
+  /* sliding nav pill */
+  try{
+    var wrap=document.querySelector('.nav-links');
+    var pill=document.getElementById('nav-pill');
+    if(wrap&&pill){
+      function place(el){
+        if(!el){ pill.style.opacity='0'; return; }
+        var wr=wrap.getBoundingClientRect(), er=el.getBoundingClientRect();
+        pill.style.left=(er.left-wr.left-14)+'px';
+        pill.style.width=(er.width+28)+'px';
+        pill.style.opacity='1';
+      }
+      var links=Array.prototype.slice.call(document.querySelectorAll('.nav-link'));
+      links.forEach(function(l){
+        l.addEventListener('mouseenter',function(){ place(l); });
+      });
+      wrap.addEventListener('mouseleave',function(){
+        var on=document.querySelector('.nav-link.on');
+        place(on);
+      });
+      var mo=new MutationObserver(function(){
+        var on=document.querySelector('.nav-link.on');
+        if(on && !wrap.matches(':hover')) place(on);
+      });
+      links.forEach(function(l){ mo.observe(l,{attributes:true,attributeFilter:['class']}); });
+    }
+  }catch(e){}
 })();
 </script>
 
