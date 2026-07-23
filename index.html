@@ -1561,9 +1561,7 @@ section:nth-child(odd){background:var(--bg);}
     <div class="matcher-inp-wrap">
       <textarea id="matcher-ta" placeholder="Paste a job description here… e.g. 'Supply Chain Analyst at Amazon — seeking candidates with experience in demand planning, data analytics (SQL, Python), vendor management…'"></textarea>
     </div>
-    <button id="matcher-btn">
-      <span>🎯</span> Analyse My Fit
-    </button>
+    <button id="matcher-btn">Analyse My Fit</button>
     <div id="matcher-out">
       <div id="matcher-typing" class="match-typing" style="display:none">
         <span></span><span></span><span></span> Analysing your role…
@@ -1697,9 +1695,9 @@ section:nth-child(odd){background:var(--bg);}
 
 <!-- CONTROL PANEL -->
 <div id="ctrl-panel">
-  <button class="ctrl-btn" id="btn-hand" aria-label="Toggle hand-gesture cursor control"><span class="ctrl-dot"></span>✋ Hand Control</button>
+  <button class="ctrl-btn" id="btn-hand" aria-label="Toggle hand-gesture cursor control"><span class="ctrl-dot"></span>Hand Control</button>
   <div class="ctrl-sep"></div>
-  <button class="ctrl-btn" id="btn-matcher" aria-label="Open role-match scoring tool"><span class="ctrl-dot"></span>🎯 Match My Role</button>
+  <button class="ctrl-btn" id="btn-matcher" aria-label="Open role-match scoring tool"><span class="ctrl-dot"></span>Match My Role</button>
   <div class="ctrl-sep"></div>
   <button class="ctrl-btn" id="btn-ai" aria-label="Open AI chat with Tirthal Kothari" aria-haspopup="dialog"><span class="ctrl-dot"></span>Ask Tirthal AI</button>
 </div>
@@ -2759,7 +2757,7 @@ __glReady(function initHeroPort(){
   });
 
   /* ══════════ container factory — corrugated, weathered, coded ══════════ */
-  const LINER_COLORS = [0x9e3a26, 0x2e5f8a, 0x3f7051, 0xb8860b, 0x5c6068, 0x8a5a2e];
+  const LINER_COLORS = [0x733a2f, 0x334f67, 0x405b4a, 0xa47e1f, 0x515357, 0x6c5138];
   const containerGeo = new THREE.BoxGeometry(1.16, 0.62, 0.78);
   const containerMats = LINER_COLORS.map((hex, i) => {
     const side = new THREE.MeshStandardMaterial({ map: texSide(hex, 'TKHU 2610' + (26 + i) + '-' + i), roughness: 0.68, metalness: 0.25 });
@@ -3964,7 +3962,7 @@ __glReady(function initScmActs(){
   const warmWin = new THREE.MeshBasicMaterial({ color: 0xffc478 });
 
   /* ══════════ containers ══════════ */
-  const LINER_COLORS = [0x9e3a26, 0x2e5f8a, 0x3f7051, 0xb8860b, 0x5c6068];
+  const LINER_COLORS = [0x733a2f, 0x334f67, 0x405b4a, 0xa47e1f, 0x515357];
   const containerGeo = new THREE.BoxGeometry(1.16, 0.62, 0.78);
   const containerMats = LINER_COLORS.map((hex, i) => {
     const side = new THREE.MeshStandardMaterial({ map: texSide(hex, 'TKHU 2610' + (30 + i)), roughness: 0.68, metalness: 0.25 });
