@@ -932,18 +932,19 @@ section:nth-child(odd){background:var(--bg);}
 </div>
 
 <!-- TOP NAV -->
+<a href="#about" class="skip-link">Skip to content</a>
 <nav id="topnav">
   <div class="nav-logo" onclick="scrollTo({top:0,behavior:'smooth'})">TK</div>
-  <div class="nav-links">
+  <div class="nav-links" role="navigation" aria-label="Section navigation">
     <span class="nav-pill" id="nav-pill"></span>
-    <span class="nav-link" data-sec="about">About</span>
-    <span class="nav-link" data-sec="timeline">Journey</span>
-    <span class="nav-link" data-sec="experience">Work</span>
-    <span class="nav-link" data-sec="projects">Projects</span>
-    <span class="nav-link" data-sec="education">Education</span>
-    <span class="nav-link" data-sec="skills">Skills</span>
-    <span class="nav-link" data-sec="impact">Impact</span>
-    <span class="nav-link" data-sec="contact">Contact</span>
+    <span class="nav-link" data-sec="about" role="link" tabindex="0">About</span>
+    <span class="nav-link" data-sec="timeline" role="link" tabindex="0">Journey</span>
+    <span class="nav-link" data-sec="experience" role="link" tabindex="0">Work</span>
+    <span class="nav-link" data-sec="projects" role="link" tabindex="0">Projects</span>
+    <span class="nav-link" data-sec="education" role="link" tabindex="0">Education</span>
+    <span class="nav-link" data-sec="skills" role="link" tabindex="0">Skills</span>
+    <span class="nav-link" data-sec="impact" role="link" tabindex="0">Impact</span>
+    <span class="nav-link" data-sec="contact" role="link" tabindex="0">Contact</span>
   </div>
   <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get in Touch</button>
 </nav>
@@ -951,6 +952,7 @@ section:nth-child(odd){background:var(--bg);}
 <!-- ① HERO -->
 <section id="hero">
   <canvas id="hero-canvas"></canvas>
+  <div id="hero-loading" aria-hidden="true"><div class="hl-bar"></div></div>
   <div id="hero-mobile-scene" aria-hidden="true">
     <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice">
       <defs>
@@ -1667,13 +1669,39 @@ section:nth-child(odd){background:var(--bg);}
   </div>
 </section>
 
+<!-- FOOTER -->
+<footer id="site-footer">
+  <div class="ft-top">
+    <div class="ft-brand">
+      <div class="ft-logo">TK</div>
+      <p>Supply chain &amp; analytics, built from Mumbai to Chicago.</p>
+    </div>
+    <nav class="ft-links" aria-label="Footer navigation">
+      <a href="#about">About</a>
+      <a href="#experience">Work</a>
+      <a href="#projects">Projects</a>
+      <a href="#writing">Writing</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="ft-socials">
+      <a href="mailto:tirth14503@gmail.com" aria-label="Email Tirthal Kothari">Email</a>
+      <a href="https://linkedin.com/in/tirthalkothari" target="_blank" rel="noopener" aria-label="Tirthal Kothari on LinkedIn">LinkedIn</a>
+      <a href="https://tirthalkothari.pythonanywhere.com" target="_blank" rel="noopener" aria-label="Live ERP system built by Tirthal Kothari">Live ERP</a>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <span>&copy; 2026 Tirthal Kothari &middot; Chicago, IL</span>
+    <span>Site last updated July 2026</span>
+  </div>
+</footer>
+
 <!-- CONTROL PANEL -->
 <div id="ctrl-panel">
-  <button class="ctrl-btn" id="btn-hand"><span class="ctrl-dot"></span>✋ Hand Control</button>
+  <button class="ctrl-btn" id="btn-hand" aria-label="Toggle hand-gesture cursor control"><span class="ctrl-dot"></span>✋ Hand Control</button>
   <div class="ctrl-sep"></div>
-  <button class="ctrl-btn" id="btn-matcher"><span class="ctrl-dot"></span>🎯 Match My Role</button>
+  <button class="ctrl-btn" id="btn-matcher" aria-label="Open role-match scoring tool"><span class="ctrl-dot"></span>🎯 Match My Role</button>
   <div class="ctrl-sep"></div>
-  <button class="ctrl-btn" id="btn-ai"><span class="ctrl-dot"></span>Ask Tirthal AI</button>
+  <button class="ctrl-btn" id="btn-ai" aria-label="Open AI chat with Tirthal Kothari" aria-haspopup="dialog"><span class="ctrl-dot"></span>Ask Tirthal AI</button>
 </div>
 
 <!-- HAND TRACKING -->
@@ -1689,13 +1717,13 @@ section:nth-child(odd){background:var(--bg);}
 <div id="hand-vcur"></div>
 
 <!-- AI CHAT -->
-<div id="ai-panel">
+<div id="ai-panel" role="dialog" aria-label="Chat with Tirthal AI" aria-modal="false">
   <div class="aip-head">
     <div class="aip-left">
       <div class="aip-av">TK</div>
       <div><div class="aip-name">Tirthal Kothari</div><div class="aip-status"><span class="aip-dot"></span>AI · Available</div></div>
     </div>
-    <button class="aip-x" id="aip-x">✕</button>
+    <button class="aip-x" id="aip-x" aria-label="Close chat">✕</button>
   </div>
   <div class="aip-msgs" id="aip-msgs"></div>
   <div class="aip-chips" id="aip-chips">
@@ -1707,7 +1735,7 @@ section:nth-child(odd){background:var(--bg);}
     <span class="aip-chip">Technical skills?</span>
   </div>
   <div class="aip-row">
-    <input id="aip-in" placeholder="Ask me anything…" type="text" autocomplete="off">
+    <input id="aip-in" placeholder="Ask me anything…" type="text" autocomplete="off" aria-label="Type a message to Tirthal AI">
     <button id="aip-send">Send →</button>
   </div>
 </div>
@@ -1771,6 +1799,7 @@ const secIO=new IntersectionObserver(entries=>{
 },{threshold:.4});
 document.querySelectorAll('section[id]').forEach(s=>secIO.observe(s));
 document.querySelectorAll('.nav-link').forEach(n=>n.addEventListener('click',()=>document.getElementById(n.dataset.sec)?.scrollIntoView({behavior:'smooth'})));
+document.querySelectorAll('.nav-link').forEach(n=>n.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();document.getElementById(n.dataset.sec)?.scrollIntoView({behavior:'smooth'});}}));
 
 /* ═══════════════════════════════════
    EXPERIENCE ACCORDION
@@ -2546,7 +2575,7 @@ UNIQUE VALUE PROPOSITION:
      hero card. Built entirely from primitives — no external
      3D assets to fetch, so it works offline / from file://.
 ═══════════════════════════════════ -->
-<script>window.__glReady=function(cb){var tries=0;(function t(){var ok=false;try{var c=document.createElement("canvas");var r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});r.dispose();ok=true;}catch(e){}if(ok){cb();setTimeout(function(){window.dispatchEvent(new Event("resize"));},350);setTimeout(function(){window.dispatchEvent(new Event("resize"));},1500);}else if(++tries<60){setTimeout(t,tries<10?500:1000);}})();};</script>
+<script>window.__glReady=function(cb){var tries=0;(function t(){var ok=false;try{var c=document.createElement("canvas");var r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});r.dispose();ok=true;}catch(e){}if(ok){window.dispatchEvent(new Event("tk:gl-ready"));cb();setTimeout(function(){window.dispatchEvent(new Event("resize"));},350);setTimeout(function(){window.dispatchEvent(new Event("resize"));},1500);}else if(++tries<60){setTimeout(t,tries<10?500:1000);}})();};</script>
 <script>
 /**
  * @license
@@ -5430,6 +5459,71 @@ section{scroll-margin-top:64px;}
       links.forEach(function(l){ mo.observe(l,{attributes:true,attributeFilter:['class']}); });
     }
   }catch(e){}
+})();
+</script>
+
+<style>
+/* ============ ACCESSIBILITY ============ */
+.skip-link{
+  position:fixed;top:-60px;left:1rem;z-index:99999;
+  background:var(--text);color:var(--surface);
+  font-family:var(--fs);font-size:.85rem;font-weight:600;
+  padding:.8rem 1.4rem;border-radius:10px;text-decoration:none;
+  transition:top .25s var(--ease-out);
+}
+.skip-link:focus{top:1rem;}
+.nav-link[role="link"]:focus-visible{outline:2px solid var(--gold);outline-offset:4px;border-radius:4px;}
+
+/* ============ HERO LOADING SHIMMER ============ */
+#hero-loading{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(100deg,var(--bg) 30%,#eee6d2 50%,var(--bg) 70%);
+  background-size:200% 100%;
+  animation:hlSweep 1.6s ease-in-out infinite;
+  opacity:1;transition:opacity .6s var(--ease-out);
+}
+#hero-loading.hl-done{opacity:0;}
+@keyframes hlSweep{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@media(max-width:760px){#hero-loading{display:none;}}
+@media(prefers-reduced-motion:reduce){#hero-loading{animation:none;}}
+
+/* ============ FOOTER ============ */
+#site-footer{
+  background:var(--bg2);border-top:1px solid var(--border);
+  padding:3.4rem max(2rem,6vw) 1.6rem;
+}
+.ft-top{
+  display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:2.5rem;
+  max-width:1200px;margin:0 auto;padding-bottom:2.4rem;
+  border-bottom:1px solid var(--border);
+}
+.ft-brand .ft-logo{font-family:var(--fc);font-style:italic;font-weight:600;font-size:1.4rem;color:var(--gold);margin-bottom:.7rem;}
+.ft-brand p{font-family:var(--fs);font-size:.85rem;color:var(--text2);line-height:1.6;max-width:280px;}
+.ft-links,.ft-socials{display:flex;flex-direction:column;gap:.7rem;}
+.ft-links a,.ft-socials a{
+  font-family:var(--fs);font-size:.85rem;color:var(--text2);text-decoration:none;
+  transition:color .2s;width:fit-content;
+}
+.ft-links a:hover,.ft-socials a:hover{color:var(--gold);}
+.ft-bottom{
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;
+  max-width:1200px;margin:0 auto;padding-top:1.6rem;
+  font-family:var(--fm);font-size:.62rem;letter-spacing:.08em;color:var(--text3);
+}
+@media(max-width:700px){
+  .ft-top{grid-template-columns:1fr;gap:1.8rem;}
+  .ft-bottom{flex-direction:column;}
+}
+</style>
+
+<script>
+(function heroShimmer(){
+  var el=document.getElementById('hero-loading');
+  if(!el) return;
+  var done=false;
+  function finish(){ if(done) return; done=true; el.classList.add('hl-done'); }
+  window.addEventListener('tk:gl-ready', finish, {once:true});
+  setTimeout(finish, 3400); // safety net: never block the hero indefinitely
 })();
 </script>
 
