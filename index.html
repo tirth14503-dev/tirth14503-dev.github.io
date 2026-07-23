@@ -760,33 +760,7 @@ section:nth-child(odd){background:var(--bg);}
 /* ══════════════════════════════
    HAND TRACKING
 ══════════════════════════════ */
-#hand-box{
-  position:fixed;bottom:5.2rem;right:2rem;z-index:390;
-  width:210px;background:rgba(255,255,255,.97);
-  border:1px solid var(--border);border-radius:var(--radius);
-  box-shadow:var(--shadow2);overflow:hidden;display:none;
-}
-#hand-box.show{display:block;}
-.hand-header{
-  padding:.65rem .9rem;border-bottom:1px solid var(--border);
-  font-family:var(--fm);font-size:.46rem;letter-spacing:.2em;
-  color:var(--text2);text-transform:uppercase;
-  display:flex;align-items:center;justify-content:space-between;
-}
-#hand-video{width:100%;display:block;transform:scaleX(-1);}
-#hand-canvas-ov{position:absolute;top:28px;left:0;width:100%;pointer-events:none;}
-#hand-gest{padding:.42rem .9rem;font-family:var(--fm);font-size:.48rem;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;border-top:1px solid var(--border);}
-.hand-guide{padding:.5rem .9rem;font-family:var(--fm);font-size:.42rem;letter-spacing:.1em;color:var(--text3);line-height:2.1;border-top:1px solid var(--border);}
-.hand-guide em{color:var(--text2);font-style:normal;}
-#hand-vcur{
-  position:fixed;pointer-events:none;z-index:9986;
-  width:22px;height:22px;border-radius:50%;
-  border:1.5px solid rgba(184,134,11,.85);
-  background:rgba(184,134,11,.15);
-  transform:translate(-50%,-50%);display:none;
-  transition:width .15s var(--spring),height .15s var(--spring);
-}
-#hand-vcur.pinch{width:11px;height:11px;background:rgba(184,134,11,.75);}
+
 
 /* ══════════════════════════════
    AI CHAT — polished
@@ -946,8 +920,6 @@ section{scroll-margin-top:64px;}
 .cal-time{font-size:.52rem;}
 .aip-status{font-size:.48rem;}
 .hand-header{font-size:.5rem;}
-#hand-gest{font-size:.52rem;}
-.hand-guide{font-size:.46rem;}
 /* aligned digits wherever numbers stack */
 .stat-n,.calc-big-num,.calc-sub-n,.scf-met-n,.calc-val{font-variant-numeric:tabular-nums;}
 /* global reading-progress hairline */
@@ -1313,7 +1285,7 @@ section{scroll-margin-top:64px;}
 /* ============ PRINT ============ */
 @media print{
   #topnav,#hero-canvas,#hero-mobile-scene,#hero-loading,.hero-lane-badge,#port-daynight,
-  #tk-progress,#tk-grain,#ctrl-panel,#hand-box,#hand-vcur,#ai-panel,#case-modal,#art-modal,
+  #tk-progress,#tk-grain,#ctrl-panel,#voice-overlay,#ai-panel,#case-modal,#art-modal,
   #cmdk-overlay,.cmdk-hint,#game,#changelog,.skip-link,#nav-pill,.tk-marquee,.tk-marquee-rev,
   .hero-scroll,#voices{ display:none !important; }
   * { animation:none !important; transition:none !important; box-shadow:none !important; filter:none !important; }
@@ -1361,6 +1333,49 @@ section{scroll-margin-top:64px;}
 #aip-mic.listening .aip-mic-ring{animation:aipPulse 1.3s ease-out infinite;}
 @keyframes aipPulse{0%{opacity:.65;transform:scale(1);}100%{opacity:0;transform:scale(1.55);}}
 @media(prefers-reduced-motion:reduce){#aip-mic.listening .aip-mic-ring{animation:none;opacity:.4;}}
+
+
+/* ============ VOICE ASSISTANT OVERLAY ============ */
+#voice-overlay{
+  position:fixed;inset:0;z-index:99998;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(120% 120% at 50% 20%,#1c1a14 0%,#0e0d0a 70%);
+  opacity:0;pointer-events:none;transition:opacity .35s var(--ease-out);
+}
+#voice-overlay.show{opacity:1;pointer-events:auto;}
+#vo-close{
+  position:absolute;top:1.6rem;right:1.8rem;width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#f0ece0;
+  font-size:1.3rem;cursor:pointer;transition:all .2s;
+}
+#vo-close:hover{background:rgba(255,255,255,.15);transform:rotate(90deg);}
+.vo-stage{display:flex;flex-direction:column;align-items:center;gap:1.8rem;max-width:min(560px,86vw);padding:0 1rem;}
+.vo-orb{
+  position:relative;width:112px;height:112px;border-radius:50%;
+  background:linear-gradient(155deg,var(--gold),var(--gold2));
+  display:flex;align-items:center;justify-content:center;color:#fff;
+  box-shadow:0 0 60px rgba(184,134,11,.35);
+  transition:transform .3s var(--spring);
+}
+.vo-ring{position:absolute;inset:0;border-radius:50%;border:2px solid var(--gold3);opacity:0;}
+#voice-overlay.listening .vo-orb{transform:scale(1.05);}
+#voice-overlay.listening .vo-ring{animation:voRing 1.8s ease-out infinite;}
+.vo-ring.r2{animation-delay:.5s !important;}
+.vo-ring.r3{animation-delay:1s !important;}
+@keyframes voRing{0%{opacity:.55;transform:scale(1);}100%{opacity:0;transform:scale(1.9);}}
+#voice-overlay.thinking .vo-orb{animation:voThink 1.1s ease-in-out infinite;}
+@keyframes voThink{0%,100%{transform:scale(1);}50%{transform:scale(.9);}}
+#voice-overlay.speaking .vo-orb{animation:voSpeak 1.4s ease-in-out infinite;}
+@keyframes voSpeak{0%,100%{transform:scale(1);}50%{transform:scale(1.09);}}
+@media(prefers-reduced-motion:reduce){.vo-ring,#voice-overlay.thinking .vo-orb,#voice-overlay.speaking .vo-orb{animation:none;}}
+.vo-status{font-family:var(--fs);font-size:1rem;color:rgba(245,240,230,.75);text-align:center;min-height:1.4em;}
+.vo-caption{
+  font-family:var(--fc);font-weight:300;font-size:clamp(1.1rem,2.6vw,1.5rem);line-height:1.5;
+  color:#f5f0e6;text-align:center;min-height:2.6em;
+}
+.vo-caption .vo-you{color:var(--gold3);font-style:italic;}
+.vo-foot{position:absolute;bottom:2rem;left:0;right:0;text-align:center;}
+.vo-unsupported{font-family:var(--fs);font-size:.82rem;color:rgba(245,240,230,.6);}
+#btn-voice.on{background:var(--gold);color:#fff;}
 </style>
 
 
@@ -2174,24 +2189,12 @@ section{scroll-margin-top:64px;}
 
 <!-- CONTROL PANEL -->
 <div id="ctrl-panel">
-  <button class="ctrl-btn" id="btn-hand" aria-label="Toggle hand-gesture cursor control"><span class="ctrl-dot"></span>Hand Control</button>
+  <button class="ctrl-btn" id="btn-voice" aria-label="Open voice assistant"><span class="ctrl-dot"></span>&#127908; Talk to Tirthal</button>
   <div class="ctrl-sep"></div>
   <button class="ctrl-btn" id="btn-matcher" aria-label="Open role-match scoring tool"><span class="ctrl-dot"></span>Match My Role</button>
   <div class="ctrl-sep"></div>
   <button class="ctrl-btn" id="btn-ai" aria-label="Open AI chat with Tirthal Kothari" aria-haspopup="dialog"><span class="ctrl-dot"></span>Ask Tirthal AI</button>
 </div>
-
-<!-- HAND TRACKING -->
-<div id="hand-box">
-  <div class="hand-header">Hand Tracking <span id="hand-close" style="cursor:pointer;color:var(--text3)">✕</span></div>
-  <div style="position:relative">
-    <video id="hand-video" playsinline muted></video>
-    <canvas id="hand-canvas-ov"></canvas>
-  </div>
-  <div id="hand-gest">Show your hand…</div>
-  <div class="hand-guide"><em>☝ Point</em> = move cursor &nbsp; <em>🤏 Pinch</em> = click<br><em>✊ Fist</em> = scroll up &nbsp; <em>🖐 Open</em> = scroll down</div>
-</div>
-<div id="hand-vcur"></div>
 
 <!-- AI CHAT -->
 <div id="ai-panel" role="dialog" aria-label="Chat with Tirthal AI" aria-modal="false">
@@ -2961,97 +2964,6 @@ UNIQUE VALUE PROPOSITION:
   renderGrid();renderTimes();
 })();
 
-/* ═══════════════════════════════════
-   HAND TRACKING (MediaPipe)
-═══════════════════════════════════ */
-(()=>{
-  const btn=document.getElementById('btn-hand');
-  const box=document.getElementById('hand-box');
-  const gest=document.getElementById('hand-gest');
-  const vcur=document.getElementById('hand-vcur');
-  const closeBtn=document.getElementById('hand-close');
-  let handOn=false,handsModel=null,hCamera=null,pinchCooldown=0,scrollCooldown=0;
-
-  function loadHands(cb){
-    const s1=document.createElement('script');
-    s1.src='https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/hands.js';
-    s1.onload=()=>{
-      const s2=document.createElement('script');
-      s2.src='https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1640029074/camera_utils.js';
-      s2.onload=cb; document.head.appendChild(s2);
-    };
-    document.head.appendChild(s1);
-  }
-
-  function initHands(){
-    const vid=document.getElementById('hand-video');
-    handsModel=new Hands({locateFile:f=>`https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/${f}`});
-    handsModel.setOptions({maxNumHands:1,modelComplexity:0,minDetectionConfidence:.65,minTrackingConfidence:.5});
-    handsModel.onResults(onResults);
-    hCamera=new Camera(vid,{onFrame:async()=>{await handsModel.send({image:vid});},width:200,height:150});
-    hCamera.start();
-  }
-
-  function onResults(r){
-    const canvas=document.getElementById('hand-canvas-ov');
-    const ctx=canvas.getContext('2d');
-    canvas.width=200;canvas.height=150;
-    ctx.clearRect(0,0,200,150);
-    if(!r.multiHandLandmarks?.length){
-      gest.textContent='Show your hand…';
-      vcur.style.display='none';
-      if(pinchCooldown>0)pinchCooldown--;
-      if(scrollCooldown>0)scrollCooldown--;
-      return;
-    }
-    const lm=r.multiHandLandmarks[0].map(p=>({...p,x:1-p.x}));
-    [[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[0,17],[17,18],[18,19],[19,20]].forEach(([a,b])=>{
-      ctx.beginPath();ctx.moveTo(lm[a].x*200,lm[a].y*150);ctx.lineTo(lm[b].x*200,lm[b].y*150);
-      ctx.strokeStyle='rgba(184,134,11,.55)';ctx.lineWidth=1.5;ctx.stroke();
-    });
-    lm.forEach(p=>{ctx.beginPath();ctx.arc(p.x*200,p.y*150,3,0,Math.PI*2);ctx.fillStyle='rgba(184,134,11,.9)';ctx.fill();});
-    const g=detectGesture(lm);
-    gest.textContent=g||'Detecting…';
-    const vx=lm[8].x*window.innerWidth,vy=lm[8].y*window.innerHeight;
-    vcur.style.display='block';vcur.style.left=vx+'px';vcur.style.top=vy+'px';
-    vcur.classList.toggle('pinch',g==='PINCH');
-    if(pinchCooldown>0){pinchCooldown--;}
-    else if(g==='PINCH'){
-      pinchCooldown=30;
-      const el=document.elementFromPoint(vx,vy);
-      if(el){el.click();el.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));}
-    }
-    if(scrollCooldown>0){scrollCooldown--;}
-    else{
-      if(g==='FIST'){scrollCooldown=18;window.scrollBy({top:-200,behavior:'smooth'});}
-      if(g==='OPEN'){scrollCooldown=18;window.scrollBy({top:200,behavior:'smooth'});}
-    }
-  }
-
-  function detectGesture(lm){
-    const th=lm[4],ix=lm[8];
-    if(Math.hypot(th.x-ix.x,th.y-ix.y)<.055)return'PINCH';
-    const tips=[8,12,16,20],pips=[6,10,14,18];
-    const ext=tips.map((t,i)=>lm[t].y<lm[pips[i]].y);
-    if(!ext.some(Boolean))return'FIST';
-    if(ext.filter(Boolean).length>=3)return'OPEN';
-    if(ext[0]&&!ext[1]&&!ext[2]&&!ext[3])return'POINT';
-    return null;
-  }
-
-  btn.addEventListener('click',()=>{
-    if(!handOn){
-      handOn=true; btn.classList.add('on'); box.classList.add('show');
-      if(!handsModel) loadHands(initHands); else hCamera?.start();
-    } else {
-      handOn=false; btn.classList.remove('on'); box.classList.remove('show');
-      vcur.style.display='none'; hCamera?.stop();
-    }
-  });
-  closeBtn.addEventListener('click',()=>{
-    handOn=false; btn.classList.remove('on'); box.classList.remove('show'); vcur.style.display='none'; hCamera?.stop();
-  });
-})();
 </script>
 
 <!-- ═══════════════════════════════════
@@ -5679,6 +5591,23 @@ __glReady(function initScmActs(){
 })();
 </script>
 
+
+<!-- VOICE ASSISTANT OVERLAY -->
+<div id="voice-overlay" role="dialog" aria-label="Voice assistant">
+  <button id="vo-close" aria-label="End voice conversation">&times;</button>
+  <div class="vo-stage">
+    <div class="vo-orb" id="vo-orb">
+      <span class="vo-ring r1"></span><span class="vo-ring r2"></span><span class="vo-ring r3"></span>
+      <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="17" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+    </div>
+    <div class="vo-status" id="vo-status">Say &ldquo;Hey Tirthal&rdquo; or just ask a question</div>
+    <div class="vo-caption" id="vo-caption"></div>
+  </div>
+  <div class="vo-foot">
+    <div class="vo-unsupported" id="vo-unsupported" hidden>Voice isn&rsquo;t supported in this browser &mdash; try Chrome, Edge, or Safari.</div>
+  </div>
+</div>
+
 <!-- COMMAND PALETTE -->
 <div id="cmdk-overlay">
   <div id="cmdk-box" role="dialog" aria-label="Quick search">
@@ -5877,6 +5806,167 @@ __glReady(function initScmActs(){
     });
   });
   mo.observe(msgs,{childList:true});
+})();
+</script>
+
+<script>
+(function fullVoiceAssistant(){
+  var launchBtn=document.getElementById('btn-voice');
+  var overlay=document.getElementById('voice-overlay');
+  var closeBtn=document.getElementById('vo-close');
+  var statusEl=document.getElementById('vo-status');
+  var captionEl=document.getElementById('vo-caption');
+  var unsupportedEl=document.getElementById('vo-unsupported');
+  var orb=document.getElementById('vo-orb');
+  var hiddenInput=document.getElementById('aip-in');
+  var hiddenSend=document.getElementById('aip-send');
+  var msgs=document.getElementById('aip-msgs');
+  if(!launchBtn||!overlay||!hiddenInput||!hiddenSend||!msgs) return;
+
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  var synth=window.speechSynthesis;
+  if(!SR || !synth || typeof SpeechSynthesisUtterance==='undefined'){
+    launchBtn.addEventListener('click',function(){
+      overlay.classList.add('show');
+      unsupportedEl.hidden=false;
+      statusEl.textContent='';
+    });
+    closeBtn.addEventListener('click',function(){ overlay.classList.remove('show'); });
+    return;
+  }
+
+  var bestVoice=null;
+  function pickVoice(){
+    var voices=synth.getVoices();
+    if(!voices||!voices.length) return;
+    var scored=voices.map(function(v){
+      var s=0;
+      if(/^en-US/i.test(v.lang)) s+=3; else if(/^en/i.test(v.lang)) s+=1; else s-=5;
+      if(/natural|neural|premium|enhanced|online/i.test(v.name)) s+=5;
+      if(/samantha|aria|jenny|guy|zira online|google us english/i.test(v.name)) s+=4;
+      if(v.localService) s+=1;
+      return {v:v,s:s};
+    });
+    scored.sort(function(a,b){ return b.s-a.s; });
+    bestVoice=scored[0]&&scored[0].v;
+  }
+  pickVoice();
+  if('onvoiceschanged' in synth) synth.addEventListener('voiceschanged',pickVoice);
+
+  var recog=new SR();
+  recog.lang='en-US'; recog.continuous=false; recog.interimResults=false; recog.maxAlternatives=1;
+
+  var active=false;      // voice-mode session is open
+  var wantListening=false; // should auto-restart after this recognition ends
+  var awaitingReply=false;
+
+  function setState(s){
+    overlay.classList.remove('listening','thinking','speaking');
+    if(s) overlay.classList.add(s);
+  }
+
+  function startListening(){
+    if(!active) return;
+    wantListening=true;
+    try{ recog.start(); }catch(e){ /* already running */ }
+  }
+  function stopListeningLoop(){
+    wantListening=false;
+    try{ recog.stop(); }catch(e){}
+  }
+
+  recog.addEventListener('start',function(){
+    setState('listening');
+    statusEl.textContent='Listening…';
+  });
+  recog.addEventListener('end',function(){
+    if(active && wantListening && !awaitingReply){
+      setTimeout(function(){ if(active&&wantListening) startListening(); },250);
+    }
+  });
+  recog.addEventListener('error',function(e){
+    if(e.error==='not-allowed'||e.error==='service-not-allowed'){
+      statusEl.textContent='Microphone access was blocked — allow it in your browser to talk.';
+      wantListening=false;
+    }
+  });
+  recog.addEventListener('result',function(e){
+    var transcript=(e.results[0][0].transcript||'').trim();
+    if(!transcript) return;
+    var stripped=transcript.replace(/^\s*(hey|hi|ok|okay)\s+tirthal[,.\s]*/i,'').trim();
+    if(!stripped){
+      captionEl.innerHTML='<span class="vo-you">"'+transcript+'"</span>';
+      statusEl.textContent='I’m listening — go ahead and ask.';
+      return;
+    }
+    askViaChat(stripped, transcript);
+  });
+
+  function askViaChat(question, rawHeard){
+    awaitingReply=true;
+    setState('thinking');
+    statusEl.textContent='Thinking…';
+    captionEl.innerHTML='<span class="vo-you">"'+rawHeard+'"</span>';
+
+    var before=msgs.querySelectorAll('.ai-m.b').length;
+    hiddenInput.value=question;
+    hiddenSend.click();
+
+    var tries=0;
+    (function poll(){
+      var botEls=msgs.querySelectorAll('.ai-m.b');
+      var latest=botEls[botEls.length-1];
+      var isNew=botEls.length>before && latest && latest.id!=='ai-typ';
+      if(isNew){
+        var bubble=latest.querySelector('.ai-mb');
+        var text=bubble?bubble.textContent.trim():'';
+        awaitingReply=false;
+        if(text){ speakReply(text); }
+        else if(++tries<40){ setTimeout(poll,150); }
+        else { awaitingReply=false; if(active) startListening(); }
+        return;
+      }
+      if(++tries<60){ setTimeout(poll,150); }
+      else { awaitingReply=false; statusEl.textContent='Didn’t catch a reply — try again.'; if(active) startListening(); }
+    })();
+  }
+
+  function speakReply(text){
+    setState('speaking');
+    captionEl.textContent=text;
+    statusEl.textContent='';
+    var clean=text.replace(/<[^>]+>/g,'').replace(/\*\*/g,'');
+    synth.cancel();
+    var u=new SpeechSynthesisUtterance(clean);
+    if(bestVoice) u.voice=bestVoice;
+    u.rate=1.02; u.pitch=1;
+    u.onend=function(){ if(active) startListening(); };
+    u.onerror=function(){ if(active) startListening(); };
+    synth.speak(u);
+  }
+
+  function openOverlay(){
+    active=true;
+    overlay.classList.add('show');
+    unsupportedEl.hidden=true;
+    statusEl.textContent='Say “Hey Tirthal” or just ask a question';
+    captionEl.textContent='';
+    setState(null);
+    startListening();
+  }
+  function closeOverlay(){
+    active=false; wantListening=false; awaitingReply=false;
+    synth.cancel();
+    try{ recog.stop(); }catch(e){}
+    overlay.classList.remove('show');
+    setState(null);
+  }
+
+  launchBtn.addEventListener('click',openOverlay);
+  closeBtn.addEventListener('click',closeOverlay);
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape' && overlay.classList.contains('show')) closeOverlay();
+  });
 })();
 </script>
 
