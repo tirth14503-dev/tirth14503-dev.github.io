@@ -1376,6 +1376,61 @@ section{scroll-margin-top:64px;}
 .vo-foot{position:absolute;bottom:2rem;left:0;right:0;text-align:center;}
 .vo-unsupported{font-family:var(--fs);font-size:.82rem;color:rgba(245,240,230,.6);}
 #btn-voice.on{background:var(--gold);color:#fff;}
+
+
+/* ============ TL;DR NAV HINT ============ */
+.tldr-hint{
+  font-family:var(--fm);font-size:.6rem;letter-spacing:.1em;color:var(--text2);
+  background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:.42rem .7rem;cursor:pointer;margin-right:.6rem;transition:all .2s;
+}
+.tldr-hint:hover{border-color:rgba(184,134,11,.4);color:var(--gold);}
+@media(max-width:700px){.tldr-hint{display:none;}}
+
+/* ============ RECRUITER TL;DR OVERLAY ============ */
+#tldr-overlay{
+  position:fixed;inset:0;z-index:99997;display:flex;align-items:center;justify-content:center;
+  padding:1.2rem;background:rgba(20,20,15,.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  opacity:0;pointer-events:none;transition:opacity .3s var(--ease-out);
+}
+#tldr-overlay.show{opacity:1;pointer-events:auto;}
+.tldr-card{
+  position:relative;width:100%;max-width:620px;max-height:88vh;overflow-y:auto;
+  background:var(--surface);border-radius:24px;padding:2.6rem 2.6rem 2.2rem;
+  box-shadow:0 40px 100px rgba(0,0,0,.35);
+  transform:translateY(20px) scale(.97);transition:transform .35s var(--spring);
+}
+#tldr-overlay.show .tldr-card{transform:none;}
+#tldr-close{
+  position:absolute;top:1.4rem;right:1.5rem;width:34px;height:34px;border-radius:50%;
+  background:rgba(0,0,0,.06);border:none;color:var(--text2);font-size:1.2rem;cursor:pointer;transition:all .2s;
+}
+#tldr-close:hover{background:rgba(0,0,0,.12);transform:rotate(90deg);}
+.tldr-eyebrow{font-family:var(--fm);font-size:.52rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem;}
+.tldr-name{font-family:var(--fc);font-weight:300;font-size:clamp(1.8rem,4vw,2.4rem);color:var(--text);line-height:1;margin-bottom:.9rem;}
+.tldr-name em{font-style:italic;font-weight:600;color:var(--gold);}
+.tldr-pitch{font-family:var(--fs);font-size:.92rem;line-height:1.65;color:var(--text2);margin-bottom:1.5rem;max-width:52ch;}
+.tldr-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:1.8rem;}
+.tldr-stats div{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:.8rem .4rem;text-align:center;}
+.tldr-stats b{display:block;font-family:var(--fc);font-size:1.15rem;color:var(--gold);font-weight:600;}
+.tldr-stats span{display:block;font-family:var(--fm);font-size:.48rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-top:.3rem;line-height:1.4;}
+.tldr-sec-h{font-family:var(--fm);font-size:.54rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem;}
+.tldr-projects{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.6rem;}
+.tldr-proj{
+  display:flex;flex-direction:column;gap:.15rem;text-align:left;
+  background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:.75rem .9rem;
+  cursor:pointer;transition:all .18s;font-family:var(--fs);
+}
+.tldr-proj:hover{border-color:rgba(184,134,11,.4);background:var(--gold-t2);}
+.tldr-proj b{font-size:.85rem;color:var(--text);font-weight:600;}
+.tldr-proj span{font-size:.74rem;color:var(--text2);}
+.tldr-erp{font-family:var(--fs);font-size:.85rem;line-height:1.6;color:var(--text2);margin-bottom:1.7rem;}
+.tldr-contact{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);}
+.tldr-contact a{font-family:var(--fs);font-size:.82rem;color:var(--text2);text-decoration:none;transition:color .2s;}
+.tldr-contact a:hover{color:var(--gold);}
+.tldr-cta{display:flex;gap:.8rem;flex-wrap:wrap;}
+.tldr-cta button{font-size:.82rem;padding:.7rem 1.3rem;}
+@media(max-width:560px){.tldr-stats{grid-template-columns:repeat(2,1fr);}.tldr-card{padding:2.2rem 1.4rem 1.8rem;}}
 </style>
 
 
@@ -1420,6 +1475,7 @@ section{scroll-margin-top:64px;}
     <span class="nav-link" data-sec="impact" role="link" tabindex="0">Impact</span>
     <span class="nav-link" data-sec="contact" role="link" tabindex="0">Contact</span>
   </div>
+  <button class="tldr-hint" id="tldr-open" aria-label="Open recruiter quick-summary view">TL;DR</button>
   <button class="cmdk-hint" id="cmdk-open" aria-label="Open quick search (Ctrl K)"><span>&#8984;K</span></button>
   <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get in Touch</button>
 </nav>
@@ -5608,6 +5664,40 @@ __glReady(function initScmActs(){
   </div>
 </div>
 
+
+<!-- RECRUITER TL;DR OVERLAY -->
+<div id="tldr-overlay" role="dialog" aria-label="Quick summary">
+  <div class="tldr-card">
+    <button id="tldr-close" aria-label="Close quick summary">&times;</button>
+    <div class="tldr-eyebrow">Quick Summary</div>
+    <h2 class="tldr-name">Tirthal <em>Kothari</em></h2>
+    <p class="tldr-pitch">Supply chain &amp; analytics professional finishing an MS at DePaul, Chicago. Ran real operations in Mumbai, built a national supply-chain index, and coded a full ERP system solo.</p>
+    <div class="tldr-stats">
+      <div><b>&#8377;200K</b><span>FY24 savings</span></div>
+      <div><b>1,500+</b><span>companies analysed</span></div>
+      <div><b>6</b><span>roles &middot; 2 countries</span></div>
+      <div><b>2026</b><span>MS graduation</span></div>
+    </div>
+    <div class="tldr-sec-h">Top projects</div>
+    <div class="tldr-projects">
+      <button class="tldr-proj" data-case="kehe"><b>Inbound Truckload RFP</b><span>Real 2024 KeHE Distributors sourcing event</span></button>
+      <button class="tldr-proj" data-case="forecast"><b>Retail Demand Forecasting</b><span>ML pipeline flagging replenishment risk</span></button>
+      <button class="tldr-proj" data-case="automation"><b>AI-Automated SC Analytics</b><span>Self-built n8n + Postgres + AI stack</span></button>
+    </div>
+    <div class="tldr-sec-h">Also built</div>
+    <p class="tldr-erp">A full ERP system, solo &mdash; Django, Python, SQL, live at tirthalkothari.pythonanywhere.com, with barcode scanning and AI-driven demand forecasting.</p>
+    <div class="tldr-contact">
+      <a href="mailto:tirth14503@gmail.com">tirth14503@gmail.com</a>
+      <a href="tel:+17736548682">(773) 654-8682</a>
+      <a href="https://linkedin.com/in/tirthalkothari" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="tldr-cta">
+      <button class="btn-gold" id="tldr-resume">Download Resume &#8595;</button>
+      <button class="btn-ghost" id="tldr-full">See Full Site &rarr;</button>
+    </div>
+  </div>
+</div>
+
 <!-- COMMAND PALETTE -->
 <div id="cmdk-overlay">
   <div id="cmdk-box" role="dialog" aria-label="Quick search">
@@ -5966,6 +6056,49 @@ __glReady(function initScmActs(){
   closeBtn.addEventListener('click',closeOverlay);
   document.addEventListener('keydown',function(e){
     if(e.key==='Escape' && overlay.classList.contains('show')) closeOverlay();
+  });
+})();
+</script>
+
+<script>
+(function tldrMode(){
+  var openBtn=document.getElementById('tldr-open');
+  var overlay=document.getElementById('tldr-overlay');
+  var closeBtn=document.getElementById('tldr-close');
+  var fullBtn=document.getElementById('tldr-full');
+  var resumeBtn=document.getElementById('tldr-resume');
+  if(!openBtn||!overlay||!closeBtn) return;
+
+  function open(){
+    overlay.classList.add('show');
+    document.body.style.overflow='hidden';
+  }
+  function close(){
+    overlay.classList.remove('show');
+    document.body.style.overflow='';
+  }
+  openBtn.addEventListener('click',open);
+  closeBtn.addEventListener('click',close);
+  overlay.addEventListener('click',function(e){ if(e.target===overlay) close(); });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape' && overlay.classList.contains('show')) close();
+  });
+
+  document.querySelectorAll('.tldr-proj').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var key=btn.getAttribute('data-case');
+      close();
+      setTimeout(function(){
+        var card=document.querySelector('.pj-card[data-case="'+key+'"]');
+        if(card){ card.scrollIntoView({behavior:'smooth',block:'center'}); setTimeout(function(){ card.click(); },400); }
+      },350);
+    });
+  });
+
+  if(fullBtn) fullBtn.addEventListener('click',close);
+  if(resumeBtn) resumeBtn.addEventListener('click',function(){
+    var link=document.querySelector('a[download="Tirthal_Kothari_Resume.pdf"]');
+    if(link) link.click();
   });
 })();
 </script>
