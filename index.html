@@ -1431,6 +1431,65 @@ section{scroll-margin-top:64px;}
 .tldr-cta{display:flex;gap:.8rem;flex-wrap:wrap;}
 .tldr-cta button{font-size:.82rem;padding:.7rem 1.3rem;}
 @media(max-width:560px){.tldr-stats{grid-template-columns:repeat(2,1fr);}.tldr-card{padding:2.2rem 1.4rem 1.8rem;}}
+
+
+/* ============ JOURNEY MAP ============ */
+#journeymap{position:relative;z-index:1;}
+.jm-wrap{max-width:1000px;}
+.jm-svg{width:100%;height:auto;display:block;}
+.jm-label{font-family:var(--fm);font-size:13px;letter-spacing:.18em;fill:var(--text);font-weight:600;}
+.jm-sub{font-family:var(--fs);font-size:12px;fill:var(--text2);font-style:italic;}
+.jm-node{cursor:pointer;outline:none;}
+.jm-node circle:first-child{transition:fill .25s,stroke-width .25s;}
+.jm-node:hover circle:first-child,.jm-node.active circle:first-child{fill:var(--gold-t2);}
+.jm-node:focus-visible circle:first-child{stroke-width:3;}
+.jm-pulse{transform-origin:center;transform-box:fill-box;opacity:0;}
+.jm-node.active .jm-pulse{animation:jmPulse 1.8s ease-out infinite;}
+@keyframes jmPulse{0%{opacity:.5;transform:scale(1);}100%{opacity:0;transform:scale(1.6);}}
+#jm-plane{transition:opacity .4s;}
+.jm-detail{
+  margin-top:1.6rem;background:var(--surface);border:1px solid var(--border);border-radius:18px;
+  padding:1.8rem 2rem;max-width:640px;box-shadow:var(--shadow);
+  transition:opacity .35s var(--ease-out),transform .35s var(--ease-out);
+}
+.jm-detail.swap{opacity:0;transform:translateY(10px);}
+.jm-detail-badge{font-family:var(--fm);font-size:.56rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);background:var(--gold-t2);border:1px solid rgba(28,58,94,.2);padding:.28rem .8rem;border-radius:22px;display:inline-block;margin-bottom:1rem;}
+.jm-detail-title{font-family:var(--fc);font-size:clamp(1.3rem,2.6vw,1.7rem);font-weight:600;color:var(--text);line-height:1.15;margin-bottom:1rem;}
+.jm-detail-body p{font-family:var(--fs);font-size:.92rem;line-height:1.75;color:var(--text2);margin-bottom:.7rem;}
+.jm-detail-body p:last-child{margin-bottom:0;}
+.jm-detail-body strong{color:var(--text);font-weight:600;}
+@media(prefers-reduced-motion:reduce){.jm-node.active .jm-pulse{animation:none;}}
+
+
+/* ============ MATCH SHARE CARD ============ */
+#ms-overlay{
+  position:fixed;inset:0;z-index:99998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;
+  padding:1.2rem;background:rgba(20,20,15,.55);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+  opacity:0;pointer-events:none;transition:opacity .3s var(--ease-out);
+}
+#ms-overlay.show{opacity:1;pointer-events:auto;}
+.ms-card{
+  position:relative;width:100%;max-width:420px;background:var(--surface);
+  border-radius:24px;padding:2.4rem 2.2rem 1.8rem;text-align:center;
+  box-shadow:0 40px 100px rgba(0,0,0,.35);
+  transform:translateY(18px) scale(.97);transition:transform .35s var(--spring);
+  border:1px solid var(--border);
+}
+#ms-overlay.show .ms-card{transform:none;}
+#ms-close{position:absolute;top:1rem;right:1.2rem;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.06);border:none;color:var(--text2);font-size:1.1rem;cursor:pointer;transition:all .2s;}
+#ms-close:hover{background:rgba(0,0,0,.12);transform:rotate(90deg);}
+.ms-brand{font-family:var(--fm);font-size:.56rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:1.4rem;}
+.ms-ring-wrap{position:relative;width:120px;height:120px;margin:0 auto 1.2rem;}
+#ms-arc{transition:stroke-dashoffset 1s var(--ease-out);}
+.ms-score{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fc);font-size:2rem;font-weight:600;color:var(--text);}
+.ms-role{font-family:var(--fs);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:.5rem;}
+.ms-headline{font-family:var(--fc);font-size:1.5rem;font-weight:600;color:var(--text);line-height:1.15;margin-bottom:1.3rem;}
+.ms-strengths{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.6rem;text-align:left;}
+.ms-strengths div{font-family:var(--fs);font-size:.85rem;color:var(--text2);padding-left:1.3rem;position:relative;line-height:1.5;}
+.ms-strengths div::before{content:'';position:absolute;left:0;top:.5em;width:7px;height:7px;border-radius:50%;background:var(--gold);}
+.ms-foot{font-family:var(--fs);font-size:.75rem;color:var(--text3);border-top:1px solid var(--border);padding-top:1.1rem;}
+.ms-foot strong{color:var(--gold);font-weight:600;}
+.ms-hint{font-family:var(--fm);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,240,230,.6);}
 </style>
 
 
@@ -1545,6 +1604,47 @@ section{scroll-margin-top:64px;}
         <span class="chip">Tableau</span><span class="chip">Python · R · SQL</span>
         <span class="chip">Anylogistix</span><span class="chip">DePaul · Kellstadt</span>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY MAP -->
+<section id="journeymap">
+  <div class="sec-eyebrow reveal">The Route</div>
+  <h2 class="sec-title reveal">Mumbai <em>to</em> Chicago.</h2>
+  <div class="sec-rule reveal"></div>
+  <p class="reveal" style="font-family:var(--fs);color:var(--text2);max-width:560px;line-height:1.8;margin-bottom:2.4rem;font-size:.95rem;">Two cities, one throughline. Tap a stop to see what happened there.</p>
+  <div class="jm-wrap reveal">
+    <svg class="jm-svg" viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" aria-label="Journey from Mumbai to Chicago">
+      <defs>
+        <pattern id="jm-dots" width="22" height="22" patternUnits="userSpaceOnUse">
+          <circle cx="1.5" cy="1.5" r="1.5" fill="rgba(28,58,94,.09)"/>
+        </pattern>
+      </defs>
+      <rect x="0" y="0" width="900" height="340" fill="url(#jm-dots)"/>
+      <path id="jm-arc" d="M 165 232 Q 450 40 735 150" fill="none" stroke="rgba(28,58,94,.35)" stroke-width="2" stroke-dasharray="6 7"/>
+      <g id="jm-plane" style="opacity:0">
+        <path d="M -13 0 L 11 0 L 15 2 L 11 4 L -13 4 Z M 3 2 L 9 -7 L 12 -7 L 8 2 Z M 3 2 L 9 11 L 12 11 L 8 2 Z" fill="#1c3a5e" transform="translate(0,-2)"/>
+      </g>
+      <g class="jm-node" data-city="mumbai" tabindex="0" role="button" aria-label="Mumbai">
+        <circle cx="165" cy="232" r="30" fill="#fff" stroke="#1c3a5e" stroke-width="2"/>
+        <circle class="jm-pulse" cx="165" cy="232" r="30" fill="none" stroke="#1c3a5e" stroke-width="2"/>
+        <circle cx="165" cy="232" r="7" fill="#1c3a5e"/>
+        <text x="165" y="292" text-anchor="middle" class="jm-label">MUMBAI</text>
+        <text x="165" y="308" text-anchor="middle" class="jm-sub">where it began</text>
+      </g>
+      <g class="jm-node" data-city="chicago" tabindex="0" role="button" aria-label="Chicago">
+        <circle cx="735" cy="150" r="30" fill="#fff" stroke="#1c3a5e" stroke-width="2"/>
+        <circle class="jm-pulse" cx="735" cy="150" r="30" fill="none" stroke="#1c3a5e" stroke-width="2"/>
+        <circle cx="735" cy="150" r="7" fill="#1c3a5e"/>
+        <text x="735" y="110" text-anchor="middle" class="jm-label">CHICAGO</text>
+        <text x="735" y="94" text-anchor="middle" class="jm-sub">where I am now</text>
+      </g>
+    </svg>
+    <div class="jm-detail" id="jm-detail">
+      <div class="jm-detail-badge" id="jm-badge">Mumbai, India</div>
+      <div class="jm-detail-title" id="jm-title">Where the instincts came from</div>
+      <div class="jm-detail-body" id="jm-body"></div>
     </div>
   </div>
 </section>
@@ -2917,6 +3017,18 @@ UNIQUE VALUE PROPOSITION:
       +(data.gaps||[]).map(g=>'<li class="gap">'+g+'</li>').join('')+'</ul>'
       +((data.keywords&&data.keywords.length)?'<div style="margin-top:.8rem;display:flex;flex-wrap:wrap;gap:.3rem;">'+data.keywords.map(k=>'<span style="font-family:var(--fm);font-size:.5rem;padding:.2rem .6rem;background:var(--gold-t2);border:1px solid rgba(28,58,94,.2);color:var(--gold);border-radius:12px;text-transform:uppercase;letter-spacing:.1em">'+k+'</span>').join('')+'</div>':'')
       +'</div>';
+    /* expose result + a share affordance (score-card overlay) */
+    window.__matchData=data;
+    window.__matchRole=(window.__extractRole?window.__extractRole(ta.value):'');
+    var shareBtn=document.getElementById('match-share-btn');
+    if(!shareBtn){
+      shareBtn=document.createElement('button');
+      shareBtn.id='match-share-btn'; shareBtn.className='btn-ghost';
+      shareBtn.style.cssText='margin-top:1.4rem;font-size:.8rem;';
+      shareBtn.textContent='Share this result →';
+      shareBtn.addEventListener('click',function(){ if(window.openMatchShare) window.openMatchShare(); });
+      sections.parentNode.appendChild(shareBtn);
+    }
   }
 
   btn.addEventListener('click',doMatch);
@@ -5702,6 +5814,27 @@ __glReady(function initScmActs(){
   </div>
 </div>
 
+
+<!-- MATCH SHARE CARD -->
+<div id="ms-overlay" role="dialog" aria-label="Shareable match result">
+  <div class="ms-card" id="ms-card">
+    <button id="ms-close" aria-label="Close">&times;</button>
+    <div class="ms-brand">Tirthal Kothari &middot; Role Fit</div>
+    <div class="ms-ring-wrap">
+      <svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
+        <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(28,58,94,.12)" stroke-width="9"/>
+        <circle id="ms-arc" cx="60" cy="60" r="52" fill="none" stroke="#1c3a5e" stroke-width="9" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7" transform="rotate(-90 60 60)"/>
+      </svg>
+      <div class="ms-score" id="ms-score">0%</div>
+    </div>
+    <div class="ms-role" id="ms-role"></div>
+    <div class="ms-headline" id="ms-headline"></div>
+    <div class="ms-strengths" id="ms-strengths"></div>
+    <div class="ms-foot">Full analysis &amp; portfolio at <strong>tirthalkothari.com</strong></div>
+  </div>
+  <div class="ms-hint">Screenshot this card to share &middot; press Esc to close</div>
+</div>
+
 <!-- COMMAND PALETTE -->
 <div id="cmdk-overlay">
   <div id="cmdk-box" role="dialog" aria-label="Quick search">
@@ -6104,6 +6237,121 @@ __glReady(function initScmActs(){
     var link=document.querySelector('a[download="Tirthal_Kothari_Resume.pdf"]');
     if(link) link.click();
   });
+})();
+</script>
+
+<script>
+(function journeyMap(){
+  var svg=document.querySelector('.jm-svg');
+  var detail=document.getElementById('jm-detail');
+  var badge=document.getElementById('jm-badge');
+  var title=document.getElementById('jm-title');
+  var body=document.getElementById('jm-body');
+  var plane=document.getElementById('jm-plane');
+  var arc=document.getElementById('jm-arc');
+  if(!svg||!detail) return;
+
+  var DATA={
+    mumbai:{badge:'Mumbai, India', title:'Where the instincts came from',
+      body:'<p>I grew up inside my family’s electronics business, running <strong>procurement, quality control, inventory, and distribution</strong> for three years. Renegotiated vendor terms for ₹200K in FY24 savings and salvaged defective PVC wire for another ₹90K a year.</p>'
+        +'<p>Then <strong>national-level research at ISCM</strong> — building India’s first supply chain index across 1,500+ companies, and hosting CSCOs from the country’s biggest firms.</p>'},
+    chicago:{badge:'Chicago, Illinois', title:'Where the analytics came in',
+      body:'<p>An <strong>MS in Supply Chain Management at DePaul’s Kellstadt Graduate School</strong>, graduating June 2026 — predictive analytics, procurement strategy, inventory optimization.</p>'
+        +'<p>Alongside it, two campus roles and a full <strong>ERP system I built solo</strong>. The operational instincts came from Mumbai; Chicago is where I paired them with the tools.</p>'}
+  };
+
+  var current=null;
+  function show(city){
+    var d=DATA[city]; if(!d||city===current) return;
+    current=city;
+    document.querySelectorAll('.jm-node').forEach(function(n){ n.classList.toggle('active', n.getAttribute('data-city')===city); });
+    detail.classList.add('swap');
+    setTimeout(function(){
+      badge.textContent=d.badge; title.textContent=d.title; body.innerHTML=d.body;
+      detail.classList.remove('swap');
+    },220);
+  }
+
+  document.querySelectorAll('.jm-node').forEach(function(n){
+    var city=n.getAttribute('data-city');
+    n.addEventListener('click',function(){ show(city); });
+    n.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); show(city); } });
+  });
+
+  /* animate the plane along the arc once the section scrolls into view */
+  var planeDone=false;
+  function flyPlane(){
+    if(planeDone||!arc.getTotalLength) return;
+    planeDone=true;
+    var len=arc.getTotalLength();
+    plane.style.opacity='1';
+    var t0=null, dur=2600;
+    function step(ts){
+      if(!t0) t0=ts;
+      var p=Math.min(1,(ts-t0)/dur);
+      var ease=1-Math.pow(1-p,2);
+      var pt=arc.getPointAtLength(len*ease);
+      var pt2=arc.getPointAtLength(Math.min(len,len*ease+1));
+      var ang=Math.atan2(pt2.y-pt.y, pt2.x-pt.x)*180/Math.PI;
+      plane.setAttribute('transform','translate('+pt.x+','+pt.y+') rotate('+ang+')');
+      if(p<1) requestAnimationFrame(step);
+      else plane.style.opacity='0';
+    }
+    requestAnimationFrame(step);
+  }
+
+  try{
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ flyPlane(); io.disconnect(); } });
+    },{threshold:.35});
+    io.observe(document.getElementById('journeymap'));
+  }catch(e){ flyPlane(); }
+
+  show('mumbai');
+})();
+</script>
+
+<script>
+(function matchShare(){
+  var overlay=document.getElementById('ms-overlay');
+  var closeBtn=document.getElementById('ms-close');
+  if(!overlay) return;
+
+  window.__extractRole=function(jd){
+    if(!jd) return '';
+    var m=jd.match(/\b((?:senior |lead |junior |associate |staff )?(?:supply chain|procurement|operations|logistics|demand planning|inventory|data|business|analytics|sourcing)[a-z ]*?(?:analyst|manager|planner|specialist|consultant|coordinator|associate|lead|engineer|director))\b/i);
+    if(m) return m[1].replace(/\s+/g,' ').trim();
+    var first=jd.split(/[\n.]/)[0].trim();
+    return first.length>3&&first.length<48?first:'This Role';
+  };
+
+  window.openMatchShare=function(){
+    var d=window.__matchData; if(!d) return;
+    document.getElementById('ms-role').textContent='Fit for '+(window.__matchRole||'this role');
+    document.getElementById('ms-headline').textContent=d.headline||'Strong Match';
+    var str=document.getElementById('ms-strengths');
+    str.innerHTML=(d.strengths||[]).slice(0,3).map(function(s){ return '<div>'+s+'</div>'; }).join('');
+    overlay.classList.add('show');
+    document.body.style.overflow='hidden';
+    var arc=document.getElementById('ms-arc'), scoreEl=document.getElementById('ms-score');
+    var circ=326.7;
+    setTimeout(function(){ arc.style.strokeDashoffset=circ*(1-d.score/100); },80);
+    /* count up, with a setTimeout safety net so the final number always
+       shows even if requestAnimationFrame is throttled/suspended */
+    var t0=null;
+    requestAnimationFrame(function tick(ts){
+      if(t0===null) t0=ts;
+      var p=Math.min(1,(ts-t0)/900);
+      scoreEl.textContent=Math.round(d.score*(1-Math.pow(1-p,3)))+'%';
+      if(p<1) requestAnimationFrame(tick);
+    });
+    setTimeout(function(){ scoreEl.textContent=d.score+'%'; },1000);
+  };
+
+  function close(){ overlay.classList.remove('show'); document.body.style.overflow=''; }
+  closeBtn.addEventListener('click',close);
+  overlay.addEventListener('click',function(e){ if(e.target===overlay) close(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&overlay.classList.contains('show')) close(); });
 })();
 </script>
 
