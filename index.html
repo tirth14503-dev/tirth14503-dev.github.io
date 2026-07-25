@@ -2955,33 +2955,64 @@ UNIQUE VALUE PROPOSITION:
     [['operations'],89],[['data'],87],[['consultant'],85],[['coordinator','specialist'],90],[['planner'],93]
   ];
 
+  /* CORE = the domain areas that genuinely signal a supply-chain / operations /
+     analytics role. Generic overlaps (communication, risk, project coordination,
+     Excel, etc.) are deliberately NOT core, so a random corporate JD full of
+     buzzwords can't fake a high score. */
+  const CORE=new Set(['Demand Planning','Procurement & Sourcing','Supplier Management','Inventory Management','MRP / Materials Planning','Logistics & Transportation','Warehouse / Distribution','Data Analytics','SQL','Python','R','Tableau / BI','ERP Systems','Machine Learning','Optimization / Modeling','DDMRP','Lean / Six Sigma','Planning suites (Kinaxis/o9/BY)','SAP hands-on']);
+
+  /* word-boundary term match, so 'lean' doesn't match "clean", 'r' doesn't
+     match random letters, etc. Naive includes() caused false positives. */
+  function hasTerm(l,a){
+    a=a.trim();
+    var esc=a.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    return new RegExp('(^|[^a-z0-9])'+esc+'([^a-z0-9]|$)').test(l);
+  }
+
   function analyse(jd){
     const l=(' '+jd.toLowerCase().replace(/\s+/g,' ')+' ');
     const matched=[],gaps=[];
-    let wHave=0,wFound=0;
+    let wHave=0,wFound=0,coreMatched=0;
     TAXO.forEach(t=>{
-      if(t[1].some(a=>l.includes(a))){
+      if(t[1].some(a=>hasTerm(l,a))){
         wFound+=t[2];
+        if(CORE.has(t[0]))coreMatched++;
         if(t[3]){wHave+=t[2];matched.push(t);}else{gaps.push(t);}
       }
     });
-    const skillPct=wFound?Math.round(100*wHave/wFound):72;
-    let expFit=78;
-    for(const rt of ROLE_TYPES){ if(rt[0].some(a=>l.includes(a))){expFit=rt[1];break;} }
+    const skillPct=wFound?Math.round(100*wHave/wFound):40;
+    let expFit=52,roleHit=false; /* default LOW; only a real role signal lifts it */
+    for(const rt of ROLE_TYPES){ if(rt[0].some(a=>hasTerm(l,a))){expFit=rt[1];roleHit=true;break;} }
     const wantsMasters=l.includes('master')||l.includes(' ms ')||l.includes('m.s');
     const wantsBachelor=l.includes('bachelor')||l.includes(' bs ')||l.includes('b.s');
-    const eduFit=wantsMasters?100:(wantsBachelor?100:88);
+    const eduFit=wantsMasters?100:(wantsBachelor?95:82);
     const seniorReq=/(?:^|[^0-9])(?:[7-9]|1[0-9])\s*\+?\s*years/.test(l)||/\b(director|vice president|vp|head of|principal|senior manager)\b/.test(l);
     let score=Math.round(skillPct*0.55+expFit*0.30+eduFit*0.15);
+
+    /* DOMAIN-RELEVANCE GATE: without genuine supply-chain / analytics content,
+       the score is capped hard. Real SCM roles clear these easily. */
+    let offTopic=false;
+    if(coreMatched===0&&!roleHit){ score=Math.min(score,36); offTopic=true; }
+    else if(coreMatched===0){ score=Math.min(score,50); }
+    else if(coreMatched===1){ score=Math.min(score,64); }
+    else if(coreMatched===2){ score=Math.min(score,80); }
     if(seniorReq)score=Math.min(score,74);
-    score=Math.max(35,Math.min(97,score));
-    const headline=score>=88?'Excellent Fit':score>=78?'Strong Match':score>=65?'Good Match':score>=50?'Partial Match':'Stretch Role';
+    score=Math.max(22,Math.min(97,score));
+
+    const headline=offTopic?'Outside My Field'
+      :score>=88?'Excellent Fit'
+      :score>=78?'Strong Match'
+      :score>=64?'Good Match'
+      :score>=50?'Partial / Adjacent'
+      :'Not a Fit';
     matched.sort((a,b)=>b[2]-a[2]);
     const strengths=matched.slice(0,4).map(t=>t[0]+' - '+t[4]);
     const gapList=gaps.slice(0,3).map(t=>t[0]+' (not yet hands-on - fast learner with adjacent experience)');
     if(seniorReq)gapList.unshift('Role signals senior-level tenure; Tirthal is early-career (strong for analyst/associate scope)');
-    if(!gapList.length)gapList.push('No major gaps detected against the requirements stated in this JD');
-    const summary='Detected '+(matched.length+gaps.length)+' requirement areas in this JD; Tirthal has verified, evidence-backed experience in '+matched.length+' of them. Scored deterministically against his skills matrix - no black box.';
+    if(!gapList.length)gapList.push(offTopic?'This role sits outside his supply chain / analytics focus':'No major gaps against the requirements stated in this JD');
+    const summary=offTopic
+      ?'This doesn\'t read like a supply chain, operations, or analytics role - only generic overlaps were found, not genuine domain fit. Honest scoring, not a black box: paste an SCM, procurement, logistics, or analytics JD for a real read.'
+      :'Detected '+(matched.length+gaps.length)+' requirement areas, '+coreMatched+' of them core supply-chain / analytics domains. Tirthal has verified, evidence-backed experience in '+matched.length+'. Scored deterministically against his skills matrix - no black box.';
     return {score,headline,summary,strengths,gaps:gapList,keywords:matched.slice(0,8).map(t=>t[0]),skillPct,expFit,eduFit};
   }
 
