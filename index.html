@@ -1589,20 +1589,17 @@ section{scroll-margin-top:64px;}
   <div class="sec-eyebrow reveal">The Route</div>
   <h2 class="sec-title reveal">Mumbai <em>to</em> Chicago.</h2>
   <div class="sec-rule reveal"></div>
-  <p class="reveal" style="font-family:var(--fs);color:var(--text2);max-width:560px;line-height:1.8;margin-bottom:2.4rem;font-size:.95rem;">Two cities. One 14-hour flight. Scroll to fly the Emirates route — click a stop for the story.</p>
+  <p class="reveal" style="font-family:var(--fs);color:var(--text2);max-width:560px;line-height:1.8;margin-bottom:2.4rem;font-size:.95rem;">Two cities. One great-circle flight. Scroll to fly the route — click a city for the story.</p>
   <div class="jm-wrap reveal">
     <div class="jm-globe-outer">
       <canvas id="jm-globe" aria-label="3D globe: Emirates flight route Mumbai to Chicago"></canvas>
       <div id="jm-lbl-mumbai" class="jm-city-lbl">MUMBAI</div>
-      <div id="jm-lbl-dubai" class="jm-city-lbl">DUBAI</div>
       <div id="jm-lbl-chicago" class="jm-city-lbl">CHICAGO</div>
       <div class="jm-scroll-hint" id="jm-scroll-hint">&#8595; Scroll to fly</div>
     </div>
     <div class="jm-city-row">
       <button class="jm-city-btn jm-city-active" data-city="mumbai"><span class="jm-city-dot" style="background:#d4a017;"></span>MUMBAI</button>
-      <span class="jm-city-arrow">&#8594; EK 500 &#8594;</span>
-      <button class="jm-city-btn" data-city="dubai"><span class="jm-city-dot" style="background:#d4a017;"></span>DUBAI</button>
-      <span class="jm-city-arrow">&#8594; EK 236 &#8594;</span>
+      <span class="jm-city-arrow">&#8594;&nbsp;&#8594;&nbsp;&#8594;</span>
       <button class="jm-city-btn" data-city="chicago"><span class="jm-city-dot" style="background:#5588ff;"></span>CHICAGO</button>
     </div>
     <div class="jm-detail" id="jm-detail">
@@ -6245,12 +6242,7 @@ __glReady(function initScmActs(){
       body:'<p>I grew up inside my family’s electronics business, running <strong>procurement, quality control, inventory, and distribution</strong> for three years. Renegotiated vendor terms for ₹200K in FY24 savings and salvaged defective PVC wire for another ₹90K a year.</p>'
           +'<p>Then <strong>national-level research at ISCM</strong> — building India’s first supply chain index across 1,500+ companies, and hosting CSCOs from the country’s biggest firms.</p>'
     },
-    dubai:{
-      badge:'Dubai, UAE · Transit Hub',
-      title:'The Emirates connection',
-      body:'<p>Dubai International is the world’s busiest international airport — and EK 500 + EK 236 is the Emirates tag-pair that connects Mumbai and Chicago, with a layover at DXB. 7h 35m then 14h 15m.</p>'
-          +'<p>A fitting waypoint: Dubai sits at the crossroads of global supply chains, handling over —40M tonnes of cargo annually through DP World’s Jebel Ali — the largest port in the Middle East.</p>'
-    },
+
     chicago:{
       badge:'Chicago, Illinois',
       title:'Where the analytics came in',
@@ -6337,45 +6329,124 @@ __glReady(function initScmActs(){
 
   /* ocean sphere — canvas texture with subtle continental shading */
   (function buildEarth(){
-    var tc=document.createElement('canvas'); tc.width=1024; tc.height=512;
+    var tc=document.createElement('canvas'); tc.width=2048; tc.height=1024;
     var ctx=tc.getContext('2d');
     /* ocean gradient */
     var grd=ctx.createLinearGradient(0,0,0,512);
     grd.addColorStop(0,'#061225'); grd.addColorStop(0.5,'#0a1e3d'); grd.addColorStop(1,'#061225');
-    ctx.fillStyle=grd; ctx.fillRect(0,0,1024,512);
+    ctx.fillStyle=grd; ctx.fillRect(0,0,2048,1024);
 
     /* rough continent fills — equirectangular [lon,lat] -> [x,y] */
-    function ll2xy(lon,lat){ return [(lon+180)/360*1024,(90-lat)/180*512]; }
+    function ll2xy(lon,lat){ return [(lon+180)/360*2048,(90-lat)/180*1024]; }
     function poly(pts,fill){
       ctx.beginPath();
       var p0=ll2xy(pts[0][0],pts[0][1]); ctx.moveTo(p0[0],p0[1]);
       for(var i=1;i<pts.length;i++){var p=ll2xy(pts[i][0],pts[i][1]);ctx.lineTo(p[0],p[1]);}
       ctx.closePath(); ctx.fillStyle=fill; ctx.fill();
     }
-    var land='#162d1a';
+    var land='#1b3522', land2='#162d1e';
 
-    /* North America */
-    poly([[-168,72],[-100,72],[-75,65],[-55,48],[-70,45],[-75,35],[-80,25],[-90,15],[-85,10],[-78,8],[-77,5],[-60,10],[-50,5],[-50,3],[-55,-2],[-55,3],[-60,8],[-62,12],[-68,12],[-80,10],[-88,12],[-90,15],[-100,20],[-105,20],[-110,22],[-90,12],[-80,12],[-80,8],[-78,8],[-85,10],[-90,14],[-100,20],[-106,22],[-110,25],[-112,28],[-116,32],[-120,35],[-125,38],[-124,37],[-128,50],[-132,55],[-140,60],[-148,62],[-158,65],[-165,66],[-168,72]],land);
-    /* South America */
-    poly([[-80,12],[-65,12],[-55,12],[-52,5],[-50,0],[-48,-5],[-50,-10],[-52,-18],[-60,-20],[-62,-22],[-65,-25],[-68,-30],[-70,-35],[-72,-40],[-68,-45],[-65,-52],[-68,-56],[-65,-55],[-60,-55],[-55,-52],[-52,-48],[-50,-40],[-50,-30],[-50,-22],[-48,-15],[-46,-10],[-43,-5],[-38,0],[-35,5],[-38,8],[-42,10],[-48,12],[-60,12],[-68,10],[-73,8],[-76,5],[-80,0],[-80,5],[-80,12]],land);
-    /* Europe */
-    poly([[-10,36],[0,36],[5,38],[10,38],[15,37],[18,40],[25,38],[28,36],[30,35],[32,37],[35,37],[38,38],[40,38],[42,42],[38,45],[35,48],[30,50],[25,52],[20,54],[15,55],[10,55],[5,53],[0,50],[-5,48],[-8,44],[-10,40],[-10,36]],land);
-    /* Africa */
-    poly([[-18,15],[0,15],[5,14],[10,12],[15,10],[20,8],[25,8],[30,5],[35,0],[38,-5],[40,-10],[38,-18],[35,-25],[30,-30],[25,-34],[20,-34],[18,-30],[15,-25],[12,-18],[10,-10],[8,-5],[5,0],[0,5],[-5,10],[-10,12],[-15,12],[-18,15]],land);
-    /* Arabia + Middle East */
-    poly([[26,12],[30,8],[35,5],[38,0],[42,0],[44,5],[50,10],[55,14],[58,20],[60,23],[60,27],[57,28],[52,26],[48,22],[44,18],[42,12],[38,10],[35,12],[30,14],[28,14],[26,12]],land);
-    /* Indian subcontinent */
-    poly([[62,22],[65,20],[68,18],[72,18],[75,15],[78,12],[80,8],[76,8],[74,10],[70,12],[66,14],[64,18],[62,22]],land);
-    /* Russia / Siberia */
-    poly([[30,50],[40,50],[60,52],[80,54],[100,55],[120,58],[140,60],[160,64],[168,65],[170,65],[168,60],[165,58],[160,55],[155,52],[150,50],[140,47],[130,45],[120,42],[110,40],[100,40],[90,42],[80,46],[70,48],[60,50],[50,50],[40,50],[30,50]],land);
-    /* China / East Asia */
-    poly([[75,35],[88,36],[98,36],[100,30],[105,25],[108,20],[112,18],[115,18],[118,20],[122,25],[128,30],[132,35],[128,40],[122,42],[118,46],[112,50],[105,50],[100,48],[95,45],[88,40],[80,35],[75,35]],land);
-    /* Southeast Asia */
-    poly([[95,22],[100,20],[105,15],[108,18],[112,18],[115,18],[118,20],[120,22],[120,25],[115,22],[110,20],[105,20],[100,22],[95,22]],land);
-    /* Australia */
-    poly([[115,-35],[120,-35],[125,-32],[130,-30],[135,-28],[140,-30],[145,-30],[148,-28],[150,-25],[152,-22],[150,-18],[148,-14],[143,-11],[138,-12],[132,-12],[126,-14],[120,-22],[114,-26],[114,-32],[115,-35]],land);
-    /* Greenland */
-    poly([[-70,76],[-45,78],[-20,76],[-15,70],[-20,65],[-30,62],[-45,60],[-58,62],[-68,66],[-70,72],[-70,76]],land);
+    /* ── North America ── (outer coast CCW: Pacific south, Gulf east, Atlantic north, Arctic west) */
+    poly([
+      [-168,70],[-152,58],[-133,54],[-126,48],[-124,46],[-124,37],[-118,34],
+      [-115,30],[-110,24],[-105,20],[-92,16],[-85,10],[-77,8],  // Pacific & Cntrl Am.
+      [-76,9],[-75,11],[-75,20],[-80,23],         // Caribbean coast N
+      [-80,25],[-82,29],[-81,31],                  // Florida
+      [-80,32],[-75,35],[-72,41],[-66,44],[-60,46],[-53,46],  // E coast
+      [-56,52],[-60,60],[-64,63],[-78,65],         // Labrador
+      [-85,66],[-92,72],[-105,72],[-120,72],[-140,68],[-155,60],[-168,70]  // Arctic
+    ], land);
+
+    /* ── South America ── (outer coast CCW) */
+    poly([
+      [-78,8],[-77,4],[-76,0],[-75,-4],[-78,-8],  // Colombia/Ecuador
+      [-80,-2],[-81,-5],[-80,-10],                 // Peru coast
+      [-77,-14],[-75,-15],[-72,-17],[-70,-18],     // Peru/Bolivia border
+      [-68,-22],[-67,-24],[-68,-30],[-70,-32],
+      [-71,-36],[-72,-40],[-65,-46],[-66,-52],
+      [-68,-55],[-66,-55],[-63,-53],[-60,-53],     // Tierra del Fuego
+      [-56,-50],[-52,-46],[-50,-38],[-48,-28],
+      [-48,-16],[-45,-12],[-44,-8],[-40,-2],[-35,5],  // E coast N
+      [-38,8],[-42,10],[-50,12],[-60,12],
+      [-68,10],[-73,8],[-76,5],[-78,8]             // Back to Panama/Colombia
+    ], land);
+
+    /* ── Europe + UK ── */
+    poly([
+      [-9,37],[-8,44],[-9,48],[-5,48],[0,50],[2,51],[4,53],[8,55],[10,58],
+      [5,62],[6,62],[15,70],[20,70],[28,72],[30,70],[28,65],[24,62],
+      [28,60],[30,60],[28,56],[22,54],[18,54],[15,55],[10,55],[8,58],
+      [5,55],[5,50],[7,44],[10,44],[14,42],[16,38],[14,38],[12,36],
+      [5,37],[0,37],[-6,37],[-9,37]
+    ], land);
+
+    /* ── Africa ── (outer coast CCW: W Atlantic, S Indian, E Red Sea, N Mediterranean) */
+    poly([
+      [-5,36],[-6,33],[-8,29],[-12,23],[-17,20],[-16,14],[-14,10],[-10,8],
+      [-5,5],[0,5],[3,5],[5,4],[8,5],[9,3],[9,2],
+      [10,-2],[11,-6],[10,-14],[12,-18],[14,-23],[16,-28],[18,-30],[20,-35],
+      [26,-34],[28,-32],[32,-28],[36,-22],[40,-12],[40,-8],[40,2],[42,11],
+      [50,11],[43,14],[38,16],[37,20],[34,27],[32,31],  // Horn + Red Sea
+      [24,31],[12,30],[9,37],[3,37],[-5,36]             // N coast Mediterranean
+    ], land);
+
+    /* ── Arabian Peninsula ── */
+    poly([
+      [33,30],[37,22],[38,16],[42,14],[44,11],[48,14],[50,14],
+      [54,16],[56,18],[58,22],[60,25],[58,28],[55,28],
+      [52,26],[48,22],[44,18],[42,14],[38,16],[36,22],[34,28],[33,30]
+    ], land);
+
+    /* ── Indian Subcontinent ── */
+    poly([
+      [67,23],[68,22],[70,21],[72,20],[73,17],[75,14],[77,9],[77,8],
+      [78,8],[80,9],[80,13],[82,15],[82,18],[84,20],[87,21],[88,22],
+      [90,22],[91,23],[92,22],[97,28],[95,27],[90,27],[87,27],
+      [80,28],[77,32],[75,34],[73,33],[71,28],[68,24],[67,23]
+    ], land);
+
+    /* ── Russia / Northern Asia ── */
+    poly([
+      [30,50],[25,55],[20,58],[22,65],[28,70],[35,72],[50,73],[70,73],
+      [90,73],[110,72],[130,70],[150,68],[160,65],[168,65],
+      [170,60],[165,58],[155,52],[150,48],[140,46],[132,44],
+      [122,40],[115,38],[112,40],[105,50],[100,50],[90,50],[80,50],
+      [70,52],[60,52],[50,50],[40,50],[30,50]
+    ], land);
+
+    /* ── China / East Asia ── */
+    poly([
+      [73,35],[80,32],[85,28],[90,26],[95,22],[100,18],[105,20],
+      [108,20],[110,18],[114,18],[118,22],[122,24],[120,26],[124,28],
+      [128,30],[130,34],[128,40],[122,42],[120,40],[115,40],[110,42],
+      [105,45],[100,48],[96,50],[90,47],[85,44],[80,40],[75,38],[73,35]
+    ], land);
+
+    /* ── Southeast Asia (mainland + peninsula) ── */
+    poly([
+      [92,22],[95,20],[98,18],[100,14],[100,8],[102,4],[104,2],
+      [103,2],[100,4],[100,6],[103,8],[104,10],[102,14],[100,18],
+      [98,18],[96,20],[92,22]
+    ], land);
+
+    /* ── Australia ── */
+    poly([
+      [114,-22],[114,-26],[114,-34],[118,-34],[122,-34],[125,-32],
+      [128,-34],[132,-32],[134,-32],[136,-32],[138,-32],[140,-30],
+      [142,-38],[144,-38],[146,-38],[148,-38],[150,-36],[152,-30],
+      [153,-26],[153,-22],[150,-18],[148,-14],[144,-12],[138,-12],
+      [132,-14],[128,-18],[124,-20],[120,-22],[117,-20],[114,-22]
+    ], land);
+
+    /* ── Greenland ── */
+    poly([
+      [-68,76],[-50,78],[-24,78],[-18,72],[-22,68],[-28,64],
+      [-42,60],[-52,62],[-62,65],[-68,72],[-68,76]
+    ], land);
+
+    /* ── Japan (simplified) ── */
+    poly([[130,30],[132,32],[134,34],[136,36],[138,38],[140,40],[142,42],
+          [140,44],[136,44],[132,40],[130,38],[128,34],[130,30]], land);
 
     var tex=new THREE.CanvasTexture(tc);
     var earth=new THREE.Mesh(
@@ -6410,16 +6481,14 @@ __glReady(function initScmActs(){
     }
   })();
 
-  /* route: Mumbai -> Dubai -> Chicago */
-  var MUM=[18.97,72.87], DXB=[25.20,55.36], ORD=[41.88,-87.63];
-  var leg1=greatCircle(MUM,DXB,25,1.028);
-  var leg2=greatCircle(DXB,ORD,60,1.028);
-  routePts=leg1.concat(leg2.slice(1));
+  /* route: Mumbai -> Chicago great-circle */
+  var MUM=[18.97,72.87], ORD=[41.88,-87.63];
+  routePts=greatCircle(MUM,ORD,90,1.003);
 
   /* route tube */
   var curve=new THREE.CatmullRomCurve3(routePts);
   var tube=new THREE.Mesh(
-    new THREE.TubeGeometry(curve,200,0.005,6,false),
+    new THREE.TubeGeometry(curve,300,0.004,6,false),
     new THREE.MeshPhongMaterial({color:0xd4a017,emissive:0x7a4d00,shininess:80})
   );
   globeGroup.add(tube);
@@ -6436,7 +6505,6 @@ __glReady(function initScmActs(){
     halo.position.copy(pos); globeGroup.add(halo);
   }
   cityDot(MUM[0],MUM[1],0xd4a017);
-  cityDot(DXB[0],DXB[1],0xd4a017,0.016);
   cityDot(ORD[0],ORD[1],0x4488ff);
 
   /* plane model */
@@ -6461,7 +6529,6 @@ __glReady(function initScmActs(){
 
   /* city label DOM elements (positioned over canvas in rAF) */
   var lblMum=document.getElementById('jm-lbl-mumbai');
-  var lblDxb=document.getElementById('jm-lbl-dubai');
   var lblOrd=document.getElementById('jm-lbl-chicago');
 
   function projectLabel(lbl,lat,lon){
@@ -6533,7 +6600,6 @@ __glReady(function initScmActs(){
     globeGroup.updateMatrixWorld(true);
     camera.updateMatrixWorld(true);
     projectLabel(lblMum,MUM[0],MUM[1]);
-    projectLabel(lblDxb,DXB[0],DXB[1]);
     projectLabel(lblOrd,ORD[0],ORD[1]);
 
     /* hide scroll hint once user starts scrolling */
