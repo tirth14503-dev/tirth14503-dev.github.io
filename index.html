@@ -6314,7 +6314,7 @@ __glReady(function initScmActs(){
   }catch(e){ return; }
 
   scene=new THREE.Scene();
-  camera=new THREE.PerspectiveCamera(40,W/H,0.1,100);
+  camera=new THREE.PerspectiveCamera(46,W/H,0.05,100);
   camera.position.set(0,0.95,2.45);
   camera.lookAt(0,0.08,0);
 
@@ -6542,7 +6542,7 @@ __glReady(function initScmActs(){
   var glow=new THREE.Mesh(new THREE.SphereGeometry(0.065,12,12),glowMat);
   planeGroup.add(glow);
   planeGroup.visible=false;
-  globeGroup.add(planeGroup);
+  scene.add(planeGroup); /* world space — flies toward camera */
 
   /* initial globe orientation: Mumbai facing camera.
      With camera at +Z, a point at lon λ faces forward when globeGroup.rotation.y = -π/2 - λ.
@@ -6607,17 +6607,51 @@ __glReady(function initScmActs(){
     /* rotate globe to follow flight path */
     globeGroup.rotation.y=Y_START+(Y_END-Y_START)*progress;
 
-    /* plane + live trail */
+    /* Update matrices NOW so plane can read current globe world-space positions */
+    globeGroup.updateMatrixWorld(true);
+    camera.updateMatrixWorld(true);
+
+    /* ─── CINEMATIC PLANE: flies from globe surface straight toward viewer ─── */
     if(progress>0.015){
       planeGroup.visible=true;
-      var pos=getRoutePt(progress);
-      planeGroup.position.copy(pos);
-      var fwd=getRouteTangent(progress);
-      var up=pos.clone().normalize();
-      var right=fwd.clone().cross(up).normalize();
-      var trueUp=right.clone().cross(fwd).normalize();
-      planeGroup.setRotationFromMatrix(new THREE.Matrix4().makeBasis(fwd,trueUp,right.negate()));
-      /* update trail geometry to current progress */
+
+      /* 1. Route position in globe LOCAL space → world space */
+      var localPos=getRoutePt(progress);
+      var worldPos=localPos.clone().applyMatrix4(globeGroup.matrixWorld);
+
+      /* 2. Fly-toward-camera curve: starts gentle, accelerates to end
+            flyP=0 → on globe surface  flyP=1 → just in front of camera */
+      var flyP=Math.pow(Math.max(0,(progress-0.08)/0.92),2.6);
+      flyP=Math.min(1,flyP);
+
+      /* 3. Target: 0.40 units directly in front of camera (along its view axis)  */
+      var camFwd=new THREE.Vector3(); camera.getWorldDirection(camFwd);
+      var targetPos=camera.position.clone().addScaledVector(camFwd,0.40);
+
+      /* 4. Blend: globe surface → in-front-of-camera */
+      var finalPos=worldPos.clone().lerp(targetPos,flyP);
+      planeGroup.position.copy(finalPos);
+
+      /* 5. Orientation: route tangent → nose-toward-camera (breaks the 4th wall) */
+      var localFwd=getRouteTangent(progress);
+      var worldFwd=localFwd.clone().transformDirection(globeGroup.matrixWorld);
+      var towardCam=camera.position.clone().sub(finalPos).normalize();
+      /* blend forward: route tangent → pointing at camera */
+      var blendedFwd=worldFwd.clone().lerp(towardCam,Math.pow(flyP,0.55)).normalize();
+      /* blend up: globe radial → world Y (wings level when flying at viewer) */
+      var radialUp=worldPos.clone().normalize();
+      var blendedUp=radialUp.clone().lerp(new THREE.Vector3(0,1,0),flyP).normalize();
+      var right=blendedFwd.clone().cross(blendedUp).normalize();
+      var trueUp=right.clone().cross(blendedFwd).normalize();
+      planeGroup.setRotationFromMatrix(
+        new THREE.Matrix4().makeBasis(blendedFwd,trueUp,right.negate())
+      );
+
+      /* 6. Scale up as plane approaches (extra cinematic depth on top of perspective) */
+      var extraScale=1+flyP*1.6;
+      planeGroup.scale.setScalar(extraScale);
+
+      /* 7. Trail stays on globe surface (local space, child handled by globeGroup) */
       var trailEnd=Math.max(1,Math.floor(progress*(routePts.length-1))+1);
       var trailSlice=routePts.slice(0,trailEnd);
       trailGeo.dispose();
@@ -6625,11 +6659,10 @@ __glReady(function initScmActs(){
       trailLine.geometry=trailGeo;
     } else {
       planeGroup.visible=false;
+      planeGroup.scale.setScalar(1);
     }
 
     /* city labels */
-    globeGroup.updateMatrixWorld(true);
-    camera.updateMatrixWorld(true);
     projectLabel(lblMum,MUM[0],MUM[1]);
     projectLabel(lblOrd,ORD[0],ORD[1]);
 
