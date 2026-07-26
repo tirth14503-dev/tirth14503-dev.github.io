@@ -6514,33 +6514,96 @@ __glReady(function initScmActs(){
   cityDot(MUM[0],MUM[1],0xd4a017);
   cityDot(ORD[0],ORD[1],0x4488ff);
 
-  /* plane model — 4× larger, bright white glow */
+  /* ──── PLANE MODEL: commercial airliner silhouette ──── */
   planeGroup=new THREE.Group();
-  var pm=new THREE.MeshPhongMaterial({color:0xffffff,emissive:0xffffff,emissiveIntensity:0.55,shininess:90});
-  /* fuselage */
-  var body=new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.018,0.24,8),pm);
-  body.rotation.z=Math.PI/2; planeGroup.add(body);
-  /* nose cone */
-  var nose=new THREE.Mesh(new THREE.ConeGeometry(0.012,0.06,8),pm);
-  nose.rotation.z=-Math.PI/2; nose.position.set(0.15,0,0); planeGroup.add(nose);
-  /* main wings */
-  var wing=new THREE.Mesh(new THREE.BoxGeometry(0.30,0.007,0.07),pm);
-  planeGroup.add(wing);
-  /* swept-back tip taper */
-  var wingL=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.005,0.025),pm);
-  wingL.position.set(0.03,0,-0.062); wingL.rotation.y=0.3; planeGroup.add(wingL);
-  var wingR=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.005,0.025),pm);
-  wingR.position.set(0.03,0,0.062); wingR.rotation.y=-0.3; planeGroup.add(wingR);
-  /* vertical tail */
-  var vtail=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.055,0.005),pm);
-  vtail.position.set(-0.11,0.025,0); planeGroup.add(vtail);
-  /* horizontal stabiliser */
-  var htail=new THREE.Mesh(new THREE.BoxGeometry(0.07,0.005,0.055),pm);
-  htail.position.set(-0.11,0,0); planeGroup.add(htail);
-  /* glow halo so plane is visible against dark globe */
-  var glowMat=new THREE.MeshBasicMaterial({color:0xffd080,transparent:true,opacity:0.35});
-  var glow=new THREE.Mesh(new THREE.SphereGeometry(0.065,12,12),glowMat);
-  planeGroup.add(glow);
+
+  /* DoubleSide so swept wing is visible from above & below */
+  var pm=new THREE.MeshPhongMaterial({
+    color:0xe8e8e8,emissive:0xffffff,emissiveIntensity:0.48,
+    shininess:65,side:THREE.DoubleSide
+  });
+  var engMat=new THREE.MeshPhongMaterial({
+    color:0x999999,emissive:0x444444,emissiveIntensity:0.30,shininess:25
+  });
+
+  /* Fuselage: uniform cylinder (nose=+X) */
+  var body=new THREE.Mesh(new THREE.CylinderGeometry(0.018,0.018,0.21,16),pm);
+  body.rotation.z=Math.PI/2;
+
+  /* Nose cone */
+  var nose=new THREE.Mesh(new THREE.ConeGeometry(0.018,0.075,16),pm);
+  nose.rotation.z=-Math.PI/2; nose.position.set(0.143,0,0);
+
+  /* Tail cone */
+  var tailCone=new THREE.Mesh(new THREE.ConeGeometry(0.018,0.045,16),pm);
+  tailCone.rotation.z=Math.PI/2; tailCone.position.set(-0.128,0,0);
+
+  /* ── Main wings: swept trapezoid via BufferGeometry ──
+     Nose = +X axis. Wings span ±Z. Root chord=0.09, tip chord=0.056, half-span=0.155
+     Right wing: normal faces +Y with index [0,1,2, 1,3,2]
+     Left wing:  normal faces +Y with index [0,2,1, 1,2,3]           */
+  var wRGeo=new THREE.BufferGeometry();
+  wRGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array([
+     0.036,0,0,       /* 0 root leading edge  */
+    -0.054,0,0,       /* 1 root trailing edge */
+    -0.012,0, 0.155,  /* 2 tip leading edge (swept back ~18°) */
+    -0.068,0, 0.155   /* 3 tip trailing edge  */
+  ]),3));
+  wRGeo.setIndex([0,1,2,1,3,2]); wRGeo.computeVertexNormals();
+  var wingR=new THREE.Mesh(wRGeo,pm);
+  wingR.position.y=-0.012; wingR.rotation.x=0.085; /* dihedral: tips rise */
+
+  var wLGeo=new THREE.BufferGeometry();
+  wLGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array([
+     0.036,0, 0,
+    -0.054,0, 0,
+    -0.012,0,-0.155,
+    -0.068,0,-0.155
+  ]),3));
+  wLGeo.setIndex([0,2,1,1,2,3]); wLGeo.computeVertexNormals();
+  var wingL=new THREE.Mesh(wLGeo,pm);
+  wingL.position.y=-0.012; wingL.rotation.x=-0.085;
+
+  /* Engine nacelles at ~50% span, below wings */
+  var engGeo=new THREE.CylinderGeometry(0.012,0.012,0.065,10);
+  var engR=new THREE.Mesh(engGeo,engMat);
+  engR.rotation.z=Math.PI/2; engR.position.set(0.008,-0.026,0.078);
+  var engL=new THREE.Mesh(engGeo,engMat);
+  engL.rotation.z=Math.PI/2; engL.position.set(0.008,-0.026,-0.078);
+
+  /* Vertical tail: triangular fin — two explicit triangles for both faces */
+  var vtGeo=new THREE.BufferGeometry();
+  vtGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array([
+    -0.082,0.018,0,  /* base front  */
+    -0.122,0.018,0,  /* base rear   */
+    -0.100,0.082,0,  /* apex        */
+    -0.082,0.018,0,  /* back face (same points, reversed winding) */
+    -0.100,0.082,0,
+    -0.122,0.018,0
+  ]),3));
+  vtGeo.computeVertexNormals();
+  var vtail=new THREE.Mesh(vtGeo,pm);
+
+  /* Horizontal stabilizers: small swept surfaces at tail */
+  var htRGeo=new THREE.BufferGeometry();
+  htRGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array([
+    -0.092,0,0, -0.116,0,0, -0.100,0, 0.075, -0.124,0, 0.075
+  ]),3));
+  htRGeo.setIndex([0,1,2,1,3,2]); htRGeo.computeVertexNormals();
+  var htailR=new THREE.Mesh(htRGeo,pm);
+
+  var htLGeo=new THREE.BufferGeometry();
+  htLGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array([
+    -0.092,0,0, -0.116,0,0, -0.100,0,-0.075, -0.124,0,-0.075
+  ]),3));
+  htLGeo.setIndex([0,2,1,1,2,3]); htLGeo.computeVertexNormals();
+  var htailL=new THREE.Mesh(htLGeo,pm);
+
+  /* Glow halo */
+  var glow=new THREE.Mesh(new THREE.SphereGeometry(0.075,12,12),
+    new THREE.MeshBasicMaterial({color:0xffd080,transparent:true,opacity:0.28}));
+
+  planeGroup.add(body,nose,tailCone,wingR,wingL,engR,engL,vtail,htailR,htailL,glow);
   planeGroup.visible=false;
   scene.add(planeGroup); /* world space — flies toward camera */
 
