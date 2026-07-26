@@ -6514,98 +6514,185 @@ __glReady(function initScmActs(){
   cityDot(MUM[0],MUM[1],0xd4a017);
   cityDot(ORD[0],ORD[1],0x4488ff);
 
-  /* ──── PLANE MODEL: commercial airliner silhouette ──── */
-  planeGroup=new THREE.Group();
+  /* ════════════════════════════════════════════════════════════
+     AIRCRAFT MODEL  —  Boeing 737-800 proportions
+     Reference ratios (to fuselage length L=0.285):
+       nose length   = 13% L  → 0.037
+       body radius   =  6% L  → 0.017
+       half-span     = 47% L  → 0.134
+       root chord    = 21% L  → 0.060
+       tip chord     =  7% L  → 0.020
+       vtail height  = 23% L  → 0.066
+       htail span    = 19% L  → 0.054
+     Coordinate system: nose = +X, span = ±Z, up = +Y
+     ════════════════════════════════════════════════════════════ */
+  planeGroup = new THREE.Group();
 
-  /* DoubleSide so swept wing is visible from above & below */
-  var pm=new THREE.MeshPhongMaterial({
-    color:0xe8e8e8,emissive:0xffffff,emissiveIntensity:0.48,
-    shininess:65,side:THREE.DoubleSide
+  /* ── Materials ── */
+  var pm = new THREE.MeshPhongMaterial({
+    color:0xdde4ea, emissive:0xffffff, emissiveIntensity:0.42,
+    shininess:80, side:THREE.DoubleSide
   });
-  var engMat=new THREE.MeshPhongMaterial({
-    color:0x999999,emissive:0x444444,emissiveIntensity:0.30,shininess:25
+  var engBodyMat = new THREE.MeshPhongMaterial({
+    color:0x808080, emissive:0x303030, emissiveIntensity:0.25, shininess:50
   });
+  var engInletMat = new THREE.MeshBasicMaterial({ color:0x202020 });
 
-  /* Fuselage: uniform cylinder (nose=+X) */
-  var body=new THREE.Mesh(new THREE.CylinderGeometry(0.018,0.018,0.21,16),pm);
-  body.rotation.z=Math.PI/2;
+  /* ── FUSELAGE via LatheGeometry (revolution solid, much better nose shape) ──
+     Profile: (radius, y_along_axis) from nose-tip (y=0) to tail-tip (y=0.285)
+     After mesh.rotation.z = π/2 and mesh.position.x = 0.143:
+       nose  → world X = +0.143
+       tail  → world X = -0.143
+     (rotation Z=π/2 maps local y_along → world -x, then +0.143 offset centres it) */
+  var fusePts = [
+    new THREE.Vector2(0.000, 0.000),   /* nose tip                      */
+    new THREE.Vector2(0.005, 0.008),   /* nose starts curving outward   */
+    new THREE.Vector2(0.011, 0.020),   /* nose profile                  */
+    new THREE.Vector2(0.015, 0.032),   /* nose blending into body       */
+    new THREE.Vector2(0.017, 0.042),   /* body begins                   */
+    new THREE.Vector2(0.017, 0.050),   /* constant fuselage radius      */
+    new THREE.Vector2(0.017, 0.195),   /* constant fuselage body        */
+    new THREE.Vector2(0.017, 0.225),   /* tail taper starts             */
+    new THREE.Vector2(0.013, 0.255),   /* tail narrows                  */
+    new THREE.Vector2(0.006, 0.275),   /* tail cone                     */
+    new THREE.Vector2(0.000, 0.285)    /* tail tip                      */
+  ];
+  var fuselageGeo = new THREE.LatheGeometry(fusePts, 24);
+  var fuselage    = new THREE.Mesh(fuselageGeo, pm);
+  fuselage.rotation.z   = Math.PI / 2;  /* axis now points along X       */
+  fuselage.position.x   = 0.143;        /* nose at +0.143, tail at -0.143 */
 
-  /* Nose cone */
-  var nose=new THREE.Mesh(new THREE.ConeGeometry(0.018,0.075,16),pm);
-  nose.rotation.z=-Math.PI/2; nose.position.set(0.143,0,0);
+  /* ── MAIN WINGS ──
+     Swept trapezoid, 20° leading-edge sweep, 3:1 taper.
+     Root chord 0.060, tip chord 0.020, half-span 0.134.
+     Vertices raised slightly at root so wings catch side-light.
+     Wing sits below fuselage (position.y=-0.015), dihedral 4° (rotation.x=±0.07).
 
-  /* Tail cone */
-  var tailCone=new THREE.Mesh(new THREE.ConeGeometry(0.018,0.045,16),pm);
-  tailCone.rotation.z=Math.PI/2; tailCone.position.set(-0.128,0,0);
+     Winding convention: normal points +Y (upward) for correct lighting from above.
+       Right wing (Z>0):  index [0,1,2, 1,3,2]
+       Left wing  (Z<0):  index [0,2,1, 1,2,3]   */
+  var RSPAN = 0.134;  /* half-span */
+  var wRGeo = new THREE.BufferGeometry();
+  wRGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
+    /* x,          y,     z       */
+     0.060,  0.004,  0.000,   /* 0  root LE (slightly raised for side-light) */
+     0.000,  0.002,  0.000,   /* 1  root TE                                  */
+     0.011,  0.002,  RSPAN,   /* 2  tip  LE  (swept back ~20°)               */
+    -0.009,  0.000,  RSPAN    /* 3  tip  TE                                  */
+  ]), 3));
+  wRGeo.setIndex([0,1,2, 1,3,2]);
+  wRGeo.computeVertexNormals();
+  var wingR = new THREE.Mesh(wRGeo, pm);
+  wingR.position.y = -0.015;
+  wingR.rotation.x =  0.07;   /* dihedral */
 
-  /* ── Main wings: swept trapezoid via BufferGeometry ──
-     Nose = +X axis. Wings span ±Z. Root chord=0.09, tip chord=0.056, half-span=0.155
-     Right wing: normal faces +Y with index [0,1,2, 1,3,2]
-     Left wing:  normal faces +Y with index [0,2,1, 1,2,3]           */
-  var wRGeo=new THREE.BufferGeometry();
-  wRGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array([
-     0.036,0,0,       /* 0 root leading edge  */
-    -0.054,0,0,       /* 1 root trailing edge */
-    -0.012,0, 0.155,  /* 2 tip leading edge (swept back ~18°) */
-    -0.068,0, 0.155   /* 3 tip trailing edge  */
-  ]),3));
-  wRGeo.setIndex([0,1,2,1,3,2]); wRGeo.computeVertexNormals();
-  var wingR=new THREE.Mesh(wRGeo,pm);
-  wingR.position.y=-0.012; wingR.rotation.x=0.085; /* dihedral: tips rise */
+  var wLGeo = new THREE.BufferGeometry();
+  wLGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
+     0.060,  0.004,  0.000,
+     0.000,  0.002,  0.000,
+     0.011,  0.002, -RSPAN,
+    -0.009,  0.000, -RSPAN
+  ]), 3));
+  wLGeo.setIndex([0,2,1, 1,2,3]);
+  wLGeo.computeVertexNormals();
+  var wingL = new THREE.Mesh(wLGeo, pm);
+  wingL.position.y = -0.015;
+  wingL.rotation.x = -0.07;
 
-  var wLGeo=new THREE.BufferGeometry();
-  wLGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array([
-     0.036,0, 0,
-    -0.054,0, 0,
-    -0.012,0,-0.155,
-    -0.068,0,-0.155
-  ]),3));
-  wLGeo.setIndex([0,2,1,1,2,3]); wLGeo.computeVertexNormals();
-  var wingL=new THREE.Mesh(wLGeo,pm);
-  wingL.position.y=-0.012; wingL.rotation.x=-0.085;
+  /* ── WING TIP WINGLETS (vertical fences at tip, like 737-800) ── */
+  var mkWinglet = function(sign) {
+    var g = new THREE.BufferGeometry();
+    var sp = sign * RSPAN;
+    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
+      /* angled outward/upward at tip */
+       0.011, 0.000, sp,           /* 0  root bottom (at tip LE) */
+      -0.009, 0.000, sp,           /* 1  root bottom (at tip TE) */
+       0.004, 0.018, sp+sign*0.01, /* 2  top LE                  */
+      -0.007, 0.018, sp+sign*0.01  /* 3  top TE                  */
+    ]), 3));
+    g.setIndex(sign>0 ? [0,1,2,1,3,2, 0,2,1,1,2,3] : [0,2,1,1,2,3, 0,1,2,1,3,2]);
+    g.computeVertexNormals();
+    return g;
+  };
+  var wingletR = new THREE.Mesh(mkWinglet( 1), pm);
+  var wingletL = new THREE.Mesh(mkWinglet(-1), pm);
+  wingletR.position.y = -0.015;
+  wingletL.position.y = -0.015;
 
-  /* Engine nacelles at ~50% span, below wings */
-  var engGeo=new THREE.CylinderGeometry(0.012,0.012,0.065,10);
-  var engR=new THREE.Mesh(engGeo,engMat);
-  engR.rotation.z=Math.PI/2; engR.position.set(0.008,-0.026,0.078);
-  var engL=new THREE.Mesh(engGeo,engMat);
-  engL.rotation.z=Math.PI/2; engL.position.set(0.008,-0.026,-0.078);
+  /* ── ENGINE NACELLES (CFM56 style: large fan, slightly forward of wing LE) ──
+     Two pods at 33% half-span (z=±0.044), below and slightly ahead of wing. */
+  var EZ = 0.044;
+  var engTubGeo = new THREE.CylinderGeometry(0.014, 0.013, 0.068, 12);
+  var engFanGeo = new THREE.CylinderGeometry(0.016, 0.014, 0.008, 12);  /* inlet fan ring */
+  var engNozzGeo= new THREE.CylinderGeometry(0.009, 0.011, 0.010, 12);  /* nozzle */
 
-  /* Vertical tail: triangular fin — two explicit triangles for both faces */
-  var vtGeo=new THREE.BufferGeometry();
-  vtGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array([
-    -0.082,0.018,0,  /* base front  */
-    -0.122,0.018,0,  /* base rear   */
-    -0.100,0.082,0,  /* apex        */
-    -0.082,0.018,0,  /* back face (same points, reversed winding) */
-    -0.100,0.082,0,
-    -0.122,0.018,0
-  ]),3));
+  var mkEng = function(zSign) {
+    var g = new THREE.Group();
+    var tube = new THREE.Mesh(engTubGeo,  engBodyMat);
+    var fan  = new THREE.Mesh(engFanGeo,  engBodyMat);
+    var nozz = new THREE.Mesh(engNozzGeo, engBodyMat);
+    var inlet= new THREE.Mesh(
+      new THREE.CircleGeometry(0.014, 12), engInletMat); /* dark inlet face */
+    tube.rotation.z = Math.PI/2;
+    fan.rotation.z  = Math.PI/2; fan.position.x  =  0.038;  /* front of tube */
+    nozz.rotation.z = Math.PI/2; nozz.position.x = -0.038; /* rear  of tube */
+    inlet.rotation.y = Math.PI/2; inlet.position.x = 0.042; /* inlet face    */
+    g.add(tube, fan, nozz, inlet);
+    g.position.set(0.046, -0.028, zSign * EZ);
+    return g;
+  };
+  var engR = mkEng( 1);
+  var engL = mkEng(-1);
+
+  /* ── VERTICAL TAIL (triangular swept fin) ── */
+  var vtGeo = new THREE.BufferGeometry();
+  vtGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
+    /* Front face */
+    -0.075,  0.017,  0.001,   /* 0  base front (at fuselage top) */
+    -0.128,  0.017,  0.001,   /* 1  base rear                    */
+    -0.098,  0.083,  0.001,   /* 2  apex                         */
+    /* Back face (reversed winding for double-sided without DoubleSide overhead) */
+    -0.075,  0.017, -0.001,
+    -0.098,  0.083, -0.001,
+    -0.128,  0.017, -0.001
+  ]), 3));
+  vtGeo.setIndex([0,1,2, 3,4,5]);
   vtGeo.computeVertexNormals();
-  var vtail=new THREE.Mesh(vtGeo,pm);
+  var vtail = new THREE.Mesh(vtGeo, pm);
 
-  /* Horizontal stabilizers: small swept surfaces at tail */
-  var htRGeo=new THREE.BufferGeometry();
-  htRGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array([
-    -0.092,0,0, -0.116,0,0, -0.100,0, 0.075, -0.124,0, 0.075
-  ]),3));
-  htRGeo.setIndex([0,1,2,1,3,2]); htRGeo.computeVertexNormals();
-  var htailR=new THREE.Mesh(htRGeo,pm);
+  /* ── HORIZONTAL STABILIZERS (at tail, behind vtail) ── */
+  var HSPAN = 0.054;
+  var mkHStab = function(sign) {
+    var g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
+      -0.102,  0.017,  0.000,         /* root LE (at fuselage, above centreline) */
+      -0.125,  0.017,  0.000,         /* root TE                                 */
+      -0.108,  0.017,  sign * HSPAN,  /* tip LE (slight sweep)                   */
+      -0.128,  0.017,  sign * HSPAN   /* tip TE                                  */
+    ]), 3));
+    g.setIndex(sign>0 ? [0,1,2,1,3,2] : [0,2,1,1,2,3]);
+    g.computeVertexNormals();
+    return g;
+  };
+  var htailR = new THREE.Mesh(mkHStab( 1), pm);
+  var htailL = new THREE.Mesh(mkHStab(-1), pm);
 
-  var htLGeo=new THREE.BufferGeometry();
-  htLGeo.setAttribute('position',new THREE.BufferAttribute(new Float32Array([
-    -0.092,0,0, -0.116,0,0, -0.100,0,-0.075, -0.124,0,-0.075
-  ]),3));
-  htLGeo.setIndex([0,2,1,1,2,3]); htLGeo.computeVertexNormals();
-  var htailL=new THREE.Mesh(htLGeo,pm);
+  /* ── GLOW HALO (amber, centred on fuselage) ── */
+  var glow = new THREE.Mesh(
+    new THREE.SphereGeometry(0.072, 12, 12),
+    new THREE.MeshBasicMaterial({ color:0xffd080, transparent:true, opacity:0.22 })
+  );
 
-  /* Glow halo */
-  var glow=new THREE.Mesh(new THREE.SphereGeometry(0.075,12,12),
-    new THREE.MeshBasicMaterial({color:0xffd080,transparent:true,opacity:0.28}));
-
-  planeGroup.add(body,nose,tailCone,wingR,wingL,engR,engL,vtail,htailR,htailL,glow);
-  planeGroup.visible=false;
-  scene.add(planeGroup); /* world space — flies toward camera */
+  /* ── Assemble ── */
+  planeGroup.add(
+    fuselage,
+    wingR, wingL, wingletR, wingletL,
+    engR, engL,
+    vtail, htailR, htailL,
+    glow
+  );
+  planeGroup.visible = false;
+  scene.add(planeGroup); /* world space — cinematic fly-toward-camera */
 
   /* initial globe orientation: Mumbai facing camera.
      With camera at +Z, a point at lon λ faces forward when globeGroup.rotation.y = -π/2 - λ.
@@ -6711,7 +6798,7 @@ __glReady(function initScmActs(){
       );
 
       /* 6. Scale up as plane approaches (extra cinematic depth on top of perspective) */
-      var extraScale=1+flyP*1.6;
+      var extraScale=1+flyP*0.35; /* perspective handles most depth; small boost only */
       planeGroup.scale.setScalar(extraScale);
 
       /* 7. Trail stays on globe surface (local space, child handled by globeGroup) */
