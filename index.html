@@ -6315,8 +6315,8 @@ __glReady(function initScmActs(){
 
   scene=new THREE.Scene();
   camera=new THREE.PerspectiveCamera(40,W/H,0.1,100);
-  camera.position.set(0,0.28,2.9);
-  camera.lookAt(0,0,0);
+  camera.position.set(0,0.95,2.45);
+  camera.lookAt(0,0.08,0);
 
   /* lighting */
   scene.add(new THREE.AmbientLight(0x99aacc,0.55));
@@ -6485,13 +6485,20 @@ __glReady(function initScmActs(){
   var MUM=[18.97,72.87], ORD=[41.88,-87.63];
   routePts=greatCircle(MUM,ORD,90,1.003);
 
-  /* route tube */
+  /* route tube — ghost track (full path, dim) */
   var curve=new THREE.CatmullRomCurve3(routePts);
   var tube=new THREE.Mesh(
-    new THREE.TubeGeometry(curve,300,0.004,6,false),
-    new THREE.MeshPhongMaterial({color:0xd4a017,emissive:0x7a4d00,shininess:80})
+    new THREE.TubeGeometry(curve,300,0.0025,5,false),
+    new THREE.MeshBasicMaterial({color:0x8b6914,transparent:true,opacity:0.45})
   );
   globeGroup.add(tube);
+
+  /* live trail — bright gold line that grows from Mumbai to plane */
+  var trailGeo=new THREE.BufferGeometry().setFromPoints([routePts[0],routePts[0]]);
+  var trailLine=new THREE.Line(trailGeo,
+    new THREE.LineBasicMaterial({color:0xffd060,linewidth:2})
+  );
+  globeGroup.add(trailLine);
 
   /* dashed progress indicator (thin black tube, masked by progress) */
 
@@ -6507,15 +6514,33 @@ __glReady(function initScmActs(){
   cityDot(MUM[0],MUM[1],0xd4a017);
   cityDot(ORD[0],ORD[1],0x4488ff);
 
-  /* plane model */
+  /* plane model — 4× larger, bright white glow */
   planeGroup=new THREE.Group();
-  var pm=new THREE.MeshPhongMaterial({color:0xffffff,emissive:0x888888,emissiveIntensity:0.18});
-  var body=new THREE.Mesh(new THREE.CylinderGeometry(0.0045,0.0075,0.085,6),pm);
+  var pm=new THREE.MeshPhongMaterial({color:0xffffff,emissive:0xffffff,emissiveIntensity:0.55,shininess:90});
+  /* fuselage */
+  var body=new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.018,0.24,8),pm);
   body.rotation.z=Math.PI/2; planeGroup.add(body);
-  var wing=new THREE.Mesh(new THREE.BoxGeometry(0.11,0.003,0.02),pm);
+  /* nose cone */
+  var nose=new THREE.Mesh(new THREE.ConeGeometry(0.012,0.06,8),pm);
+  nose.rotation.z=-Math.PI/2; nose.position.set(0.15,0,0); planeGroup.add(nose);
+  /* main wings */
+  var wing=new THREE.Mesh(new THREE.BoxGeometry(0.30,0.007,0.07),pm);
   planeGroup.add(wing);
-  var tail=new THREE.Mesh(new THREE.BoxGeometry(0.033,0.003,0.017),pm);
-  tail.position.set(-0.04,0.004,0); planeGroup.add(tail);
+  /* swept-back tip taper */
+  var wingL=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.005,0.025),pm);
+  wingL.position.set(0.03,0,-0.062); wingL.rotation.y=0.3; planeGroup.add(wingL);
+  var wingR=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.005,0.025),pm);
+  wingR.position.set(0.03,0,0.062); wingR.rotation.y=-0.3; planeGroup.add(wingR);
+  /* vertical tail */
+  var vtail=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.055,0.005),pm);
+  vtail.position.set(-0.11,0.025,0); planeGroup.add(vtail);
+  /* horizontal stabiliser */
+  var htail=new THREE.Mesh(new THREE.BoxGeometry(0.07,0.005,0.055),pm);
+  htail.position.set(-0.11,0,0); planeGroup.add(htail);
+  /* glow halo so plane is visible against dark globe */
+  var glowMat=new THREE.MeshBasicMaterial({color:0xffd080,transparent:true,opacity:0.35});
+  var glow=new THREE.Mesh(new THREE.SphereGeometry(0.065,12,12),glowMat);
+  planeGroup.add(glow);
   planeGroup.visible=false;
   globeGroup.add(planeGroup);
 
@@ -6525,7 +6550,7 @@ __glReady(function initScmActs(){
      Chicago λ=-87.63° -> y_end = -π/2 - (-1.529) = -0.042  */
   var Y_START=-2.843, Y_END=-0.042;
   globeGroup.rotation.y=Y_START;
-  globeGroup.rotation.x=-0.08; /* slight tilt toward Northern Hemisphere */
+  globeGroup.rotation.x=-0.22; /* tilt Northern Hemisphere toward camera — both cities are ~20-42°N */
 
   /* city label DOM elements (positioned over canvas in rAF) */
   var lblMum=document.getElementById('jm-lbl-mumbai');
@@ -6582,7 +6607,7 @@ __glReady(function initScmActs(){
     /* rotate globe to follow flight path */
     globeGroup.rotation.y=Y_START+(Y_END-Y_START)*progress;
 
-    /* plane */
+    /* plane + live trail */
     if(progress>0.015){
       planeGroup.visible=true;
       var pos=getRoutePt(progress);
@@ -6592,6 +6617,12 @@ __glReady(function initScmActs(){
       var right=fwd.clone().cross(up).normalize();
       var trueUp=right.clone().cross(fwd).normalize();
       planeGroup.setRotationFromMatrix(new THREE.Matrix4().makeBasis(fwd,trueUp,right.negate()));
+      /* update trail geometry to current progress */
+      var trailEnd=Math.max(1,Math.floor(progress*(routePts.length-1))+1);
+      var trailSlice=routePts.slice(0,trailEnd);
+      trailGeo.dispose();
+      trailGeo=new THREE.BufferGeometry().setFromPoints(trailSlice);
+      trailLine.geometry=trailGeo;
     } else {
       planeGroup.visible=false;
     }
