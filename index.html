@@ -44,13 +44,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--fs);overflow-x:hid
 
 /* ── APPLE SPRING CURSOR ── */
 #cur{
-  width:8px;height:8px;border-radius:50%;
-  background:var(--gold);
+  width:28px;height:28px;border-radius:0;
+  background:transparent;
   position:fixed;pointer-events:none;z-index:9999;
   transform:translate(-50%,-50%);
-  transition:width .15s var(--spring),height .15s var(--spring),background .2s;
-  mix-blend-mode:multiply;
+  transition:opacity .2s;
+  mix-blend-mode:normal;
 }
+#cur svg{display:block;width:100%;height:100%;filter:drop-shadow(0 0 5px rgba(212,168,64,.9));}
 #cur-r{
   width:28px;height:28px;border-radius:50%;
   border:1.5px solid rgba(28,58,94,.5);
@@ -2361,10 +2362,20 @@ document.getElementById('ctrl-panel').classList.add('vis');
 ═══════════════════════════════════ */
 const cur=document.getElementById('cur');
 const curR=document.getElementById('cur-r');
-let cx=0,cy=0,rx=0,ry=0;
+let cx=0,cy=0,rx=0,ry=0,curAngle=0;
+/* Plane cursor: top-down 737 silhouette, nose always facing direction of travel.
+   SVG nose points up (y=0); CSS rotate(0rad)=up, rotate(π/2)=right → atan2(dx,-dy) */
+cur.innerHTML=`<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="14" cy="14" rx="2.4" ry="9.5" fill="#d4a840"/>
+  <ellipse cx="14" cy="5"  rx="2.4" ry="2.8" fill="#e8bc50"/>
+  <polygon points="14,10 2,18 14,16 26,18" fill="#c89828"/>
+  <polygon points="14,21 8,26 14,24 20,26" fill="#b08820"/>
+</svg>`;
 document.addEventListener('mousemove',e=>{
+  var dx=e.clientX-cx, dy=e.clientY-cy;
+  if(dx*dx+dy*dy>9) curAngle=Math.atan2(dx,-dy); /* nose=up at 0rad */
   cx=e.clientX; cy=e.clientY;
-  cur.style.transform=`translate(${cx}px,${cy}px) translate(-50%,-50%)`;
+  cur.style.transform=`translate(${cx}px,${cy}px) translate(-50%,-50%) rotate(${curAngle}rad)`;
 });
 document.addEventListener('mousedown',()=>curR.classList.add('click'));
 document.addEventListener('mouseup',()=>curR.classList.remove('click'));
@@ -6305,6 +6316,7 @@ __glReady(function initScmActs(){
   canvas.width=W; canvas.height=H;
 
   var renderer,scene,camera,globeGroup,planeGroup,planeSprite,routePts,animating=true;
+  var sparkPos,sparkColors,sparkLife,sparkVel,spkGeo,spkMat,spkPoints,spkEmitN=0,spkNextIdx=0,MAX_SPARKS=100;
   try{
     renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
     renderer.setSize(W,H);
@@ -6650,6 +6662,49 @@ __glReady(function initScmActs(){
     scene.add(planeSprite);
   })();
 
+  /* ═══════════════════════════════════════════════════════════════
+     SPARKLE TRAIL — golden particles stream off the plane
+     Uses THREE.Points with vertex colors + AdditiveBlending.
+     Particles are emitted at plane world position each frame, drift
+     backward along flight direction, and fade gold→invisible in ~35 frames.
+     ═══════════════════════════════════════════════════════════════ */
+  (function initSparkles(){
+    for(var _i=0;_i<MAX_SPARKS;_i++){
+      sparkLife.push ? (sparkLife=[]) : 0; /* reset if needed */
+    }
+    sparkPos=new Float32Array(MAX_SPARKS*3);
+    sparkColors=new Float32Array(MAX_SPARKS*3);
+    sparkLife=new Float32Array(MAX_SPARKS);
+    sparkVel=[];
+    for(var _i=0;_i<MAX_SPARKS;_i++){
+      sparkPos[_i*3]=sparkPos[_i*3+1]=sparkPos[_i*3+2]=9999; /* off-screen until alive */
+      sparkColors[_i*3]=sparkColors[_i*3+1]=sparkColors[_i*3+2]=0;
+      sparkLife[_i]=0;
+      sparkVel.push(new THREE.Vector3());
+    }
+    /* Star texture: bright center, warm amber fade */
+    var _sc=document.createElement('canvas'); _sc.width=_sc.height=32;
+    var _sg=_sc.getContext('2d');
+    var _gr=_sg.createRadialGradient(16,16,0,16,16,14);
+    _gr.addColorStop(0,'rgba(255,248,200,1)');
+    _gr.addColorStop(0.25,'rgba(255,210,80,0.9)');
+    _gr.addColorStop(0.6,'rgba(255,160,20,0.5)');
+    _gr.addColorStop(1,'rgba(255,120,0,0)');
+    _sg.beginPath(); _sg.arc(16,16,14,0,Math.PI*2);
+    _sg.fillStyle=_gr; _sg.fill();
+    spkGeo=new THREE.BufferGeometry();
+    spkGeo.setAttribute('position',new THREE.BufferAttribute(sparkPos,3));
+    spkGeo.setAttribute('color',new THREE.BufferAttribute(sparkColors,3));
+    spkMat=new THREE.PointsMaterial({
+      map:new THREE.CanvasTexture(_sc),
+      size:0.07, transparent:true, depthWrite:false,
+      sizeAttenuation:true, vertexColors:true,
+      blending:THREE.AdditiveBlending
+    });
+    spkPoints=new THREE.Points(spkGeo,spkMat);
+    scene.add(spkPoints);
+  })();
+
   /* initial globe orientation: Mumbai facing camera.
      With camera at +Z, a point at lon λ faces forward when globeGroup.rotation.y = -π/2 - λ.
      Mumbai λ=72.87° -> y_start = -π/2 - 1.272 = -2.843
@@ -6763,8 +6818,56 @@ __glReady(function initScmActs(){
       trailGeo.dispose();
       trailGeo=new THREE.BufferGeometry().setFromPoints(trailSlice);
       trailLine.geometry=trailGeo;
+
+      /* ── Sparkle emit: 2 new particles every other frame ── */
+      if(spkGeo){
+        spkEmitN++;
+        if(spkEmitN%2===0){
+          for(var _e=0;_e<2;_e++){
+            var _si=spkNextIdx%MAX_SPARKS; spkNextIdx++;
+            sparkPos[_si*3  ]=finalPos.x+(Math.random()-.5)*0.012;
+            sparkPos[_si*3+1]=finalPos.y+(Math.random()-.5)*0.012;
+            sparkPos[_si*3+2]=finalPos.z+(Math.random()-.5)*0.012;
+            var _bk=blendFwd.clone().negate().multiplyScalar(0.003+Math.random()*0.005);
+            sparkVel[_si].set(
+              _bk.x+(Math.random()-.5)*0.003,
+              _bk.y+(Math.random()-.5)*0.003,
+              _bk.z+(Math.random()-.5)*0.003
+            );
+            sparkLife[_si]=1.0;
+          }
+        }
+        /* ── Update positions + colors for all particles ── */
+        for(var _s=0;_s<MAX_SPARKS;_s++){
+          if(sparkLife[_s]<=0){
+            sparkPos[_s*3]=sparkPos[_s*3+1]=sparkPos[_s*3+2]=9999;
+            sparkColors[_s*3]=sparkColors[_s*3+1]=sparkColors[_s*3+2]=0;
+            continue;
+          }
+          sparkLife[_s]-=0.026;
+          var _a=sparkLife[_s]*sparkLife[_s]; /* quadratic fade */
+          sparkColors[_s*3  ]=_a;             /* R: full for warm gold */
+          sparkColors[_s*3+1]=_a*0.70;        /* G */
+          sparkColors[_s*3+2]=_a*0.06;        /* B: very little */
+          sparkPos[_s*3  ]+=sparkVel[_s].x;
+          sparkPos[_s*3+1]+=sparkVel[_s].y;
+          sparkPos[_s*3+2]+=sparkVel[_s].z;
+        }
+        spkGeo.attributes.position.needsUpdate=true;
+        spkGeo.attributes.color.needsUpdate=true;
+      }
     } else {
       if(planeSprite) planeSprite.visible=false;
+      /* Kill all sparkles when plane is hidden */
+      if(spkGeo){
+        for(var _s=0;_s<MAX_SPARKS;_s++){
+          sparkLife[_s]=0;
+          sparkPos[_s*3]=sparkPos[_s*3+1]=sparkPos[_s*3+2]=9999;
+          sparkColors[_s*3]=sparkColors[_s*3+1]=sparkColors[_s*3+2]=0;
+        }
+        spkGeo.attributes.position.needsUpdate=true;
+        spkGeo.attributes.color.needsUpdate=true;
+      }
     }
 
     /* city labels */
