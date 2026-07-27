@@ -6737,9 +6737,6 @@ __glReady(function initScmActs(){
      backward along flight direction, and fade gold→invisible in ~35 frames.
      ═══════════════════════════════════════════════════════════════ */
   (function initSparkles(){
-    for(var _i=0;_i<MAX_SPARKS;_i++){
-      sparkLife.push ? (sparkLife=[]) : 0; /* reset if needed */
-    }
     sparkPos=new Float32Array(MAX_SPARKS*3);
     sparkColors=new Float32Array(MAX_SPARKS*3);
     sparkLife=new Float32Array(MAX_SPARKS);
