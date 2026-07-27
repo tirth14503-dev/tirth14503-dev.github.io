@@ -4215,119 +4215,169 @@ __glReady(function initConnectiveWorld(){
     return new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat);
   }
 
-  /* ── ZONE 1 — SOURCE: professional hub — expertise network ── */
+  /* ── ZONE 1 — SOURCE: supply chain flow diagram ── */
   function buildSource(scene){
-    /* Add a warm point light at the hub for ambient glow (supplements the scene lights) */
-    const hubLight=new THREE.PointLight(0xd4a840, 1.4, 6.0);
-    hubLight.position.set(0,0.5,0);
-    scene.add(hubLight);
+    /* node config: label, hex colour, box dims */
+    var CFG=[
+      {id:'SUPPLIER',   color:0x1e4a80, ew:0.44,eh:0.44,ed:0.44},
+      {id:'FACTORY',    color:0xb87820, ew:0.38,eh:0.56,ed:0.38},
+      {id:'WAREHOUSE',  color:0x1c3d70, ew:0.68,eh:0.32,ed:0.44},
+      {id:'DISTRIBUTE', color:0x1e4a80, ew:0.44,eh:0.44,ed:0.44},
+      {id:'CUSTOMER',   color:0x246040, ew:0.44,eh:0.44,ed:0.44}
+    ];
+    var SPACING=1.7, Y=0.5;
 
-    /* ── Central hub: polished gold sphere ── */
-    const hubMat=new THREE.MeshStandardMaterial({
-      color:0xd4a840, roughness:0.06, metalness:0.96,
-      emissive:0xc89020, emissiveIntensity:0.55
-    });
-    const hub=new THREE.Mesh(new THREE.SphereGeometry(0.48,32,32),hubMat);
-    hub.position.set(0,0.5,0);
-    scene.add(hub);
+    /* canvas-text sprite helper */
+    function makeLabel(text){
+      var lc=document.createElement('canvas'); lc.width=256; lc.height=52;
+      var lx=lc.getContext('2d');
+      lx.fillStyle='rgba(160,200,255,0.78)';
+      lx.font='bold 19px "Instrument Sans",sans-serif';
+      lx.textAlign='center'; lx.textBaseline='middle';
+      lx.fillText(text,128,26);
+      var sp=new THREE.Sprite(new THREE.SpriteMaterial({
+        map:new THREE.CanvasTexture(lc),transparent:true,opacity:0.80,depthWrite:false
+      }));
+      sp.scale.set(1.45,0.30,1);
+      return sp;
+    }
 
-    /* Soft glow sprites layered around hub */
-    const hubGlowA=glowSprite(0xd4a840,4.4); hubGlowA.position.set(0,0.5,0); scene.add(hubGlowA);
-    const hubGlowB=glowSprite(0xfff0cc,1.6); hubGlowB.position.set(0,0.5,0); scene.add(hubGlowB);
+    /* ambient blue point light */
+    var flowLight=new THREE.PointLight(0x4488dd,1.0,9);
+    flowLight.position.set(0,2.0,1.2); scene.add(flowLight);
 
-    /* ── Orbital ring: tilted so it reads as a circle in perspective, not a planet ring ──
-       rotation.x = PI*0.36 means it's tilted ~65deg from horizontal — reads as an
-       ellipse you'd draw around a hub on a whiteboard, not a Saturn ring */
-    const ringMat=new THREE.MeshStandardMaterial({
-      color:0xd4a840, roughness:0.04, metalness:0.96,
-      emissive:0xd4a840, emissiveIntensity:0.22,
-      transparent:true, opacity:0.52
-    });
-    const ring=new THREE.Mesh(new THREE.TorusGeometry(2.1,0.018,8,90),ringMat);
-    ring.rotation.x=Math.PI*0.36;
-    ring.position.set(0,0.5,0);
-    scene.add(ring);
-
-    /* ── 6 orbiting nodes: expertise / career roles ── */
-    const N=6, R=2.1;
-    const NODE_COLORS=[0x2f5a85, 0xd4a840, 0x4a8a6a, 0x885088, 0x3a8aaa, 0xa84848];
-    const NODE_SIZES =[0.15, 0.18, 0.14, 0.13, 0.16, 0.14];
-
-    const nodes=Array.from({length:N},(_,i)=>{
-      const angle=(i/N)*Math.PI*2;
-      const mat=new THREE.MeshStandardMaterial({
-        color:NODE_COLORS[i], roughness:0.10, metalness:0.92,
-        emissive:NODE_COLORS[i], emissiveIntensity:0.42
+    /* build nodes */
+    var nodeObjs=CFG.map(function(c,i){
+      var x=(i-(CFG.length-1)/2)*SPACING;
+      var mat=new THREE.MeshStandardMaterial({
+        color:c.color, roughness:0.14, metalness:0.88,
+        emissive:c.color, emissiveIntensity:0.32
       });
-      const mesh=new THREE.Mesh(new THREE.SphereGeometry(NODE_SIZES[i],16,16),mat);
-      const x=Math.cos(angle)*R, z=Math.sin(angle)*R;
-      mesh.position.set(x,0.5,z);
-      scene.add(mesh);
-      /* Glow sprite per node */
-      const gw=glowSprite(NODE_COLORS[i],NODE_SIZES[i]*9);
-      gw.position.copy(mesh.position);
-      scene.add(gw);
-      return {mesh,gw,mat,angle};
+      var mesh=new THREE.Mesh(new THREE.BoxGeometry(c.ew,c.eh,c.ed),mat);
+      mesh.position.set(x,Y,0); scene.add(mesh);
+      /* soft glow halo */
+      var gw=glowSprite(c.color,2.0); gw.position.set(x,Y,0); scene.add(gw);
+      /* label sprite below box */
+      var lbl=makeLabel(c.id); lbl.position.set(x,Y-0.50,0); scene.add(lbl);
+      return {mesh:mesh,glow:gw,mat:mat,x:x,hw:c.ew/2};
     });
 
-    /* ── Connection lines: hub -> each node (LineSegments, updated each frame) ── */
-    const linePts=new Float32Array(N*6); /* N pairs of (start,end), 3 floats each */
-    const lineGeo=new THREE.BufferGeometry();
+    /* connector lines between adjacent nodes */
+    var SEG=CFG.length-1;
+    var linePts=new Float32Array(SEG*6);
+    var lineGeo=new THREE.BufferGeometry();
     lineGeo.setAttribute('position',new THREE.BufferAttribute(linePts,3));
-    const lineMat=new THREE.LineBasicMaterial({color:0xd4a840,transparent:true,opacity:0.18});
+    var lineMat=new THREE.LineBasicMaterial({color:0x4488cc,transparent:true,opacity:0.30});
     scene.add(new THREE.LineSegments(lineGeo,lineMat));
 
-    /* ── Streaming particles: radiate OUTWARD hub -> nodes ── */
-    const parts=nodes.map((_,i)=>{
-      const mesh=new THREE.Mesh(
-        new THREE.SphereGeometry(0.038,8,8),
-        new THREE.MeshBasicMaterial({color:NODE_COLORS[i],transparent:true})
+    /* small arrow cones pointing right between each pair */
+    for(var ai=0;ai<SEG;ai++){
+      var ax=(nodeObjs[ai].x+nodeObjs[ai+1].x)/2;
+      var coneMesh=new THREE.Mesh(
+        new THREE.ConeGeometry(0.052,0.14,6),
+        new THREE.MeshStandardMaterial({color:0x5599dd,roughness:0.25,metalness:0.75,
+          emissive:0x336699,emissiveIntensity:0.55})
       );
-      scene.add(mesh);
-      return {t:i/N, speed:0.22+Math.random()*0.10, mesh};
-    });
+      coneMesh.position.set(ax,Y,0);
+      coneMesh.rotation.z=-Math.PI/2; /* tip points +X = right */
+      scene.add(coneMesh);
+    }
 
-    const HUB=new THREE.Vector3(0,0.5,0);
+    /* build static line pts (gap of 0.06 on each side of box face) */
+    for(var s=0;s<SEG;s++){
+      var x1=nodeObjs[s].x  +nodeObjs[s].hw  +0.06;
+      var x2=nodeObjs[s+1].x-nodeObjs[s+1].hw-0.06;
+      linePts[s*6]=x1; linePts[s*6+1]=Y; linePts[s*6+2]=0;
+      linePts[s*6+3]=x2;linePts[s*6+4]=Y; linePts[s*6+5]=0;
+    }
+    lineGeo.attributes.position.needsUpdate=true;
+
+    /* particle system: flows left -> right */
+    var MAX_PT=96;
+    var ptPos=new Float32Array(MAX_PT*3);
+    var ptCol=new Float32Array(MAX_PT*3);
+    var ptLife=new Float32Array(MAX_PT);
+    var ptSeg =new Float32Array(MAX_PT);
+    var ptT   =new Float32Array(MAX_PT);
+    var ptSpd =new Float32Array(MAX_PT);
+    for(var j=0;j<MAX_PT;j++){
+      ptPos[j*3]=ptPos[j*3+1]=ptPos[j*3+2]=9999;
+      ptLife[j]=0;
+    }
+
+    /* warm blue-white star texture */
+    var ptCv=document.createElement('canvas'); ptCv.width=ptCv.height=32;
+    var ptg=ptCv.getContext('2d');
+    var ptGr=ptg.createRadialGradient(16,16,0,16,16,14);
+    ptGr.addColorStop(0,'rgba(230,245,255,1)');
+    ptGr.addColorStop(0.30,'rgba(110,190,255,0.9)');
+    ptGr.addColorStop(0.70,'rgba(40,110,220,0.35)');
+    ptGr.addColorStop(1,'rgba(20,60,180,0)');
+    ptg.beginPath(); ptg.arc(16,16,14,0,Math.PI*2);
+    ptg.fillStyle=ptGr; ptg.fill();
+
+    var ptGeo=new THREE.BufferGeometry();
+    ptGeo.setAttribute('position',new THREE.BufferAttribute(ptPos,3));
+    ptGeo.setAttribute('color',new THREE.BufferAttribute(ptCol,3));
+    var ptMat=new THREE.PointsMaterial({
+      map:new THREE.CanvasTexture(ptCv),
+      size:0.095, transparent:true, depthWrite:false,
+      sizeAttenuation:true, vertexColors:true,
+      blending:THREE.AdditiveBlending
+    });
+    scene.add(new THREE.Points(ptGeo,ptMat));
+
+    var spawnTimer=0, nextPt=0, spawnPhase=0;
 
     return {
-      camStart:new THREE.Vector3(5.0,2.8,5.6), camStartTarget:new THREE.Vector3(0,0.5,0),
-      camEnd:new THREE.Vector3(2.1,1.3,2.6), camEndTarget:new THREE.Vector3(0,0.5,0),
-      update(dt,clock){
-        /* Pulse hub glow */
-        hubMat.emissiveIntensity=0.45+Math.sin(clock*1.6)*0.14;
-        hubGlowA.material.opacity=0.26+Math.sin(clock*1.6)*0.08;
-        hubGlowB.material.opacity=0.62+Math.sin(clock*1.6+1)*0.14;
-        hubLight.intensity=1.2+Math.sin(clock*1.6)*0.25;
-
-        /* Rotate ring slowly */
-        ring.rotation.y+=dt*0.16;
-
-        /* Orbit nodes, update line endpoints */
-        nodes.forEach((n,i)=>{
-          const a=n.angle+clock*0.20;
-          const x=Math.cos(a)*R, z=Math.sin(a)*R;
-          const y=0.5+Math.sin(clock*1.1+i*1.05)*0.14;
-          n.mesh.position.set(x,y,z);
-          n.gw.position.copy(n.mesh.position);
-          n.mat.emissiveIntensity=0.30+Math.sin(clock*1.3+i)*0.14;
-
-          /* connection line: hub(0,0.5,0) -> node */
-          linePts[i*6  ]=0;   linePts[i*6+1]=0.5; linePts[i*6+2]=0;
-          linePts[i*6+3]=x;   linePts[i*6+4]=y;   linePts[i*6+5]=z;
+      camStart:new THREE.Vector3(-0.2,3.0,6.2), camStartTarget:new THREE.Vector3(0,Y,0),
+      camEnd:new THREE.Vector3(-0.2,1.3,3.1),   camEndTarget:new THREE.Vector3(0,Y,0),
+      update:function(dt,clock){
+        /* breathe nodes */
+        nodeObjs.forEach(function(n,i){
+          n.mesh.rotation.y+=dt*0.30;
+          n.mat.emissiveIntensity=0.26+Math.sin(clock*1.35+i*1.25)*0.12;
+          n.glow.material.opacity=0.16+Math.sin(clock*1.35+i*1.25)*0.06;
         });
-        lineGeo.attributes.position.needsUpdate=true;
-        lineMat.opacity=0.13+Math.sin(clock*0.7)*0.05;
+        flowLight.intensity=0.88+Math.sin(clock*0.75)*0.14;
+        lineMat.opacity=0.22+Math.sin(clock*0.6)*0.07;
 
-        /* Stream particles outward: hub -> node (not inward) */
-        parts.forEach((p,i)=>{
-          p.t+=dt*p.speed;
-          if(p.t>1) p.t-=1;
-          const npos=nodes[i].mesh.position;
-          const pos=HUB.clone().lerp(npos,p.t);
-          pos.y+=Math.sin(p.t*Math.PI)*0.22;
-          p.mesh.position.copy(pos);
-          p.mesh.material.opacity=p.t<0.08 ? p.t/0.08 : p.t>0.86 ? (1-p.t)/0.14 : 0.88;
-        });
+        /* spawn one particle per segment in round-robin */
+        spawnTimer+=dt;
+        if(spawnTimer>0.055){
+          spawnTimer=0;
+          var seg=spawnPhase%SEG; spawnPhase++;
+          for(var k=0;k<MAX_PT;k++){
+            var idx=(nextPt+k)%MAX_PT;
+            if(ptLife[idx]<=0){
+              ptLife[idx]=1; ptSeg[idx]=seg; ptT[idx]=0;
+              ptSpd[idx]=0.11+Math.random()*0.15;
+              nextPt=(idx+1)%MAX_PT; break;
+            }
+          }
+        }
+
+        /* update every particle */
+        for(var p=0;p<MAX_PT;p++){
+          if(ptLife[p]<=0){
+            ptPos[p*3]=ptPos[p*3+1]=ptPos[p*3+2]=9999;
+            ptCol[p*3]=ptCol[p*3+1]=ptCol[p*3+2]=0;
+            continue;
+          }
+          ptT[p]+=dt*ptSpd[p];
+          if(ptT[p]>=1){ ptLife[p]=0; continue; }
+          var sg=ptSeg[p];
+          var lx1=nodeObjs[sg].x  +nodeObjs[sg].hw  +0.06;
+          var lx2=nodeObjs[sg+1].x-nodeObjs[sg+1].hw-0.06;
+          var px=lx1+(lx2-lx1)*ptT[p];
+          var py=Y+Math.sin(ptT[p]*Math.PI)*0.07; /* gentle arc */
+          ptPos[p*3]=px; ptPos[p*3+1]=py; ptPos[p*3+2]=0;
+          var a=Math.sin(ptT[p]*Math.PI);
+          /* R:0.45 G:0.72 B:1.0 — blue-white */
+          ptCol[p*3]=0.45*a; ptCol[p*3+1]=0.72*a; ptCol[p*3+2]=a;
+        }
+        ptGeo.attributes.position.needsUpdate=true;
+        ptGeo.attributes.color.needsUpdate=true;
       }
     };
   }
