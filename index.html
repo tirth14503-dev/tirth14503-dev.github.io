@@ -13,9 +13,6 @@
 <meta name="twitter:description" content="Supply chain analyst and MS candidate at DePaul University. ERP, analytics, global logistics.">
 <meta name="twitter:image" content="https://tirthalkothari.com/og.jpg">
 <link rel="canonical" href="https://tirthalkothari.com">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Tirthal Kothari","url":"https://tirthalkothari.com","jobTitle":"Supply Chain Analyst","alumniOf":[{"@type":"CollegeOrUniversity","name":"DePaul University"},{"@type":"CollegeOrUniversity","name":"University of Mumbai"}],"knowsAbout":["Supply Chain Management","Logistics Analytics","ERP Systems","Demand Forecasting","Procurement","Inventory Optimization"],"sameAs":["https://linkedin.com/in/tirthalkothari"]}</script>
 <style>
 /* ── NEW FEATURES CSS ── */
@@ -178,6 +175,132 @@
 }
 @media(max-width:480px){
   .tl-scroll-wrap{cursor:default;}
+}
+</style>
+
+<style>
+/* ═══════════════════════════════════════════════════
+   GLASSMORPHISM + EXPERIENCE TIMELINE UPGRADE
+   ═══════════════════════════════════════════════════ */
+
+/* 1. Tinted section backgrounds so the glass blur is visible */
+#experience {
+  background: linear-gradient(155deg, #e8f0f9 0%, #f5f5f7 44%, #edf3f9 100%);
+}
+#projects {
+  background: linear-gradient(140deg, #f0f5fa 0%, #f5f5f7 55%, #e8f0f9 100%);
+}
+#writing {
+  background: linear-gradient(155deg, #f5f5f7 0%, #eef4fa 100%);
+}
+
+/* 2. project cards – true frosted glass */
+.pj-card {
+  background: rgba(255,255,255,0.46) !important;
+  backdrop-filter: blur(26px) saturate(210%) brightness(1.06) !important;
+  -webkit-backdrop-filter: blur(26px) saturate(210%) brightness(1.06) !important;
+  border: 1px solid rgba(255,255,255,0.92) !important;
+  box-shadow:
+    0 4px 24px rgba(28,58,94,.07),
+    inset 0 1px 0 rgba(255,255,255,.96) !important;
+}
+.pj-card:hover {
+  background: rgba(255,255,255,0.66) !important;
+  border-color: rgba(28,58,94,.28) !important;
+  box-shadow:
+    0 18px 52px rgba(28,58,94,.17),
+    0 0 0 1.5px rgba(28,58,94,.20),
+    inset 0 1px 0 rgba(255,255,255,.96) !important;
+  transform: translateY(-7px) !important;
+}
+
+/* 3. experience items – matching frosted glass */
+.exp-item {
+  background: rgba(255,255,255,0.46) !important;
+  backdrop-filter: blur(26px) saturate(210%) brightness(1.06) !important;
+  -webkit-backdrop-filter: blur(26px) saturate(210%) brightness(1.06) !important;
+  border: 1px solid rgba(255,255,255,0.92) !important;
+  box-shadow:
+    0 2px 18px rgba(28,58,94,.06),
+    inset 0 1px 0 rgba(255,255,255,.96) !important;
+}
+.exp-item:hover {
+  box-shadow:
+    0 8px 34px rgba(28,58,94,.13),
+    0 0 0 1px rgba(28,58,94,.17),
+    inset 0 1px 0 rgba(255,255,255,.96) !important;
+  border-color: rgba(28,58,94,.20) !important;
+}
+.exp-item.open {
+  background: rgba(255,255,255,0.68) !important;
+  border-color: rgba(28,58,94,.32) !important;
+  box-shadow:
+    0 14px 44px rgba(28,58,94,.15),
+    0 0 0 1.5px rgba(28,58,94,.26),
+    inset 0 1px 0 rgba(255,255,255,.96) !important;
+}
+
+/* 4. ── EXPERIENCE TIMELINE ── */
+
+/* Container: make room on the left for the timeline */
+#experience .exp-list {
+  position: relative;
+  padding-left: 86px;
+}
+
+/* Vertical line: gold fading to transparent */
+#experience .exp-list::before {
+  content: '';
+  position: absolute;
+  left: 33px;
+  top: 28px;
+  bottom: 28px;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to bottom,
+    #1c3a5e 0%,
+    rgba(28,58,94,.50) 55%,
+    rgba(28,58,94,.08) 100%
+  );
+}
+
+/* Each item needs position:relative so the badge can be anchored */
+#experience .exp-item {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+/* Badge becomes the circular timeline dot */
+#experience .exp-num-badge {
+  position: absolute !important;
+  left: -69px;
+  top: 1.55rem;
+  border-radius: 50% !important;
+  width: 44px !important;
+  height: 44px !important;
+  background: #fff !important;
+  border: 2px solid #1c3a5e !important;
+  /* white "gap" ring between dot and line */
+  box-shadow: 0 0 0 5px rgba(237,243,249,0.9) !important;
+  z-index: 2;
+  transform: none !important;
+}
+
+/* Open state: filled gold dot */
+#experience .exp-item.open .exp-num-badge {
+  background: #1c3a5e !important;
+  color: #fff !important;
+  border-color: #1c3a5e !important;
+  box-shadow:
+    0 0 0 5px rgba(237,243,249,0.9),
+    0 0 14px rgba(28,58,94,.30) !important;
+  transform: scale(1.10) !important;
+}
+
+/* Remove the first 56px grid column since badge is now out of flow */
+#experience .exp-header {
+  grid-template-columns: 1fr auto 28px !important;
 }
 </style>
 <title>Tirthal Kothari · Supply Chain & Analytics</title>
