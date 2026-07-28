@@ -8223,8 +8223,8 @@ __glReady(function initScmActs(){
      ═══════════════════════════════════════════════════════ -->
 <script>
 (function cmsLoad(){
-  var API = 'https://api.github.com/repos/tirth14503-dev/tirth14503-dev.github.io/contents/content.json';
-  fetch(API, {headers:{Accept:'application/vnd.github.v3.raw', 'X-GitHub-Api-Version':'2022-11-28'}})
+  var RAW = 'https://raw.githubusercontent.com/tirth14503-dev/tirth14503-dev.github.io/main/content.json?v=' + Date.now();
+  fetch(RAW, {cache:'no-store'})
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(d){ if(d) applyContent(d); })
     .catch(function(){/* silently fallback to hardcoded content */});
