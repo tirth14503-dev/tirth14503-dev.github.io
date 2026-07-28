@@ -2227,6 +2227,203 @@ section{scroll-margin-top:64px;}
 </section>
 
 <!-- ⑤ SKILLS -->
+<!-- ── SUPPLY CHAIN DISRUPTION SIMULATOR ───────────────────────── -->
+<style>
+#simulator{padding:5rem clamp(1.2rem,6vw,3rem);background:linear-gradient(155deg,#ecf3fb 0%,#f5f5f7 55%,#e8f0f9 100%);}
+.sim-panel{background:linear-gradient(160deg,#0d1f3c 0%,#081627 100%);border-radius:20px;padding:2rem 2rem 1.8rem;box-shadow:0 32px 90px rgba(0,0,0,.30),0 0 0 1px rgba(255,255,255,.055);max-width:860px;margin:0 auto;}
+.sim-top{margin-bottom:1.5rem;}
+#sim-svg{width:100%;height:auto;display:block;}
+.sim-bottom{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;align-items:start;}
+@media(max-width:600px){.sim-bottom{grid-template-columns:1fr;}}
+.sim-ctrl-group{display:flex;flex-direction:column;gap:1.25rem;}
+.sim-ctrl{display:flex;flex-direction:column;}
+.sim-ctrl-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.42rem;}
+.sim-ctrl-top span:first-child{font-size:.72rem;font-weight:700;color:#5a87b0;letter-spacing:.08em;text-transform:uppercase;font-family:var(--fs,system-ui);}
+.sim-ctrl-top span.sim-val{font-size:.82rem;font-weight:700;color:#e8c060;font-family:var(--fs,system-ui);}
+.sim-range{-webkit-appearance:none;appearance:none;width:100%;height:4px;background:rgba(255,255,255,.1);border-radius:2px;outline:none;cursor:pointer;}
+.sim-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#e8c060,#b8860b);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.35);}
+.sim-range::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#e8c060,#b8860b);cursor:pointer;border:none;box-shadow:0 2px 10px rgba(0,0,0,.35);}
+.sim-response{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:1.25rem 1.4rem;display:flex;flex-direction:column;gap:.75rem;min-height:160px;justify-content:center;}
+.sim-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.28rem .9rem;border-radius:99px;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;width:fit-content;font-family:var(--fs,system-ui);transition:background .4s,color .4s;}
+.sim-badge.green{background:rgba(34,197,94,.18);color:#4ade80;}
+.sim-badge.yellow{background:rgba(251,191,36,.18);color:#fbbf24;}
+.sim-badge.red{background:rgba(248,113,113,.18);color:#f87171;}
+.sim-rtext{font-size:.82rem;color:#8aadca;line-height:1.68;font-family:var(--fs,system-ui);}
+.sim-raction{font-size:.76rem;color:#e8c060;font-weight:500;line-height:1.55;font-family:var(--fs,system-ui);}
+/* SVG text */
+.snl{font-family:system-ui,-apple-system,sans-serif;font-size:9px;font-weight:700;fill:#3a6485;text-anchor:middle;letter-spacing:.07em;}
+.sns{font-family:system-ui,-apple-system,sans-serif;font-size:8px;fill:#2a4f6e;text-anchor:middle;letter-spacing:.02em;}
+.snp{font-family:system-ui,-apple-system,sans-serif;font-size:12px;font-weight:700;text-anchor:middle;transition:fill .35s;}
+/* Flow arrows */
+.sarr{stroke-dasharray:9 4;stroke-linecap:round;animation:simFlow 1.4s linear infinite;transition:stroke .35s,opacity .35s;}
+.sarr.slow{animation-duration:2.8s;}
+.sarr.fast{animation-duration:.7s;}
+.sarr.blocked{stroke-dasharray:3 9;opacity:.3;animation:none;}
+@keyframes simFlow{to{stroke-dashoffset:-26}}
+</style>
+<section id="simulator">
+  <div class="sec-eyebrow reveal">DDMRP &bull; Interactive</div>
+  <h2 class="sec-title reveal" style="transition-delay:.08s">Think in <strong>Systems</strong></h2>
+  <div class="sec-rule reveal" style="transition-delay:.12s"></div>
+  <p class="reveal" style="max-width:580px;color:var(--text2,#4a5568);line-height:1.75;margin-bottom:2.4rem;font-size:.95rem;transition-delay:.18s;">
+    Stress-test a supply chain in real time. Demand spike, supplier disruption, buffer drawdown &mdash; watch DDMRP buffer-zone logic respond across each node.
+  </p>
+  <div class="sim-panel reveal" style="transition-delay:.26s">
+    <div class="sim-top">
+      <svg id="sim-svg" viewBox="0 0 740 178" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <clipPath id="sc-s"><rect x="7" y="22" width="136" height="134" rx="8"/></clipPath>
+          <clipPath id="sc-f"><rect x="192" y="22" width="126" height="134" rx="8"/></clipPath>
+          <clipPath id="sc-d"><rect x="367" y="22" width="126" height="134" rx="8"/></clipPath>
+          <clipPath id="sc-r"><rect x="547" y="22" width="186" height="134" rx="8"/></clipPath>
+        </defs>
+        <!-- Flow arrows -->
+        <line id="sarr1" class="sarr" x1="145" y1="89" x2="189" y2="89" stroke="#2e5f8a" stroke-width="2.5"/>
+        <polygon id="sah1" points="187,83 197,89 187,95" fill="#2e5f8a" style="transition:fill .35s;"/>
+        <line id="sarr2" class="sarr" x1="320" y1="89" x2="364" y2="89" stroke="#2e5f8a" stroke-width="2.5"/>
+        <polygon id="sah2" points="362,83 372,89 362,95" fill="#2e5f8a" style="transition:fill .35s;"/>
+        <line id="sarr3" class="sarr" x1="495" y1="89" x2="544" y2="89" stroke="#2e5f8a" stroke-width="2.5"/>
+        <polygon id="sah3" points="542,83 552,89 542,95" fill="#2e5f8a" style="transition:fill .35s;"/>
+        <!-- Node: Supplier -->
+        <rect id="sbox-s" x="5" y="20" width="140" height="138" rx="10" fill="#0e1e38" stroke="#22c55e" stroke-width="1.8" style="transition:stroke .35s;"/>
+        <rect id="sfill-s" x="7" y="156" width="136" height="0" clip-path="url(#sc-s)" fill="rgba(34,197,94,.22)" style="transition:y .5s ease,height .5s ease,fill .35s;"/>
+        <text class="snl" x="75" y="50">SUPPLIER</text>
+        <text class="sns" x="75" y="64">Raw Materials</text>
+        <text class="snp" id="spct-s" x="75" y="140" fill="#4ade80">100%</text>
+        <!-- Node: Factory -->
+        <rect id="sbox-f" x="190" y="20" width="130" height="138" rx="10" fill="#0e1e38" stroke="#22c55e" stroke-width="1.8" style="transition:stroke .35s;"/>
+        <rect id="sfill-f" x="192" y="156" width="126" height="0" clip-path="url(#sc-f)" fill="rgba(34,197,94,.22)" style="transition:y .5s ease,height .5s ease,fill .35s;"/>
+        <text class="snl" x="255" y="50">FACTORY</text>
+        <text class="sns" x="255" y="64">Production</text>
+        <text class="snp" id="spct-f" x="255" y="140" fill="#4ade80">100%</text>
+        <!-- Node: Dist. Center -->
+        <rect id="sbox-d" x="365" y="20" width="130" height="138" rx="10" fill="#0e1e38" stroke="#22c55e" stroke-width="1.8" style="transition:stroke .35s;"/>
+        <rect id="sfill-d" x="367" y="156" width="126" height="0" clip-path="url(#sc-d)" fill="rgba(34,197,94,.22)" style="transition:y .5s ease,height .5s ease,fill .35s;"/>
+        <text class="snl" x="430" y="50">DIST. CENTER</text>
+        <text class="sns" x="430" y="64">Buffer Stock</text>
+        <text class="snp" id="spct-d" x="430" y="140" fill="#4ade80">100%</text>
+        <!-- Node: Retail/Customer -->
+        <rect id="sbox-r" x="545" y="20" width="190" height="138" rx="10" fill="#0e1e38" stroke="#22c55e" stroke-width="1.8" style="transition:stroke .35s;"/>
+        <rect id="sfill-r" x="547" y="156" width="186" height="0" clip-path="url(#sc-r)" fill="rgba(34,197,94,.22)" style="transition:y .5s ease,height .5s ease,fill .35s;"/>
+        <text class="snl" x="640" y="50">RETAIL</text>
+        <text class="sns" x="640" y="64">Service Level</text>
+        <text class="snp" id="spct-r" x="640" y="140" fill="#4ade80">100%</text>
+      </svg>
+    </div>
+    <div class="sim-bottom">
+      <div class="sim-ctrl-group">
+        <div class="sim-ctrl">
+          <div class="sim-ctrl-top">
+            <span>Demand Spike</span>
+            <span class="sim-val" id="sv-demand">+0%</span>
+          </div>
+          <input type="range" class="sim-range" id="sr-demand" min="0" max="100" value="0" step="5">
+        </div>
+        <div class="sim-ctrl">
+          <div class="sim-ctrl-top">
+            <span>Supplier Delay</span>
+            <span class="sim-val" id="sv-delay">0 days</span>
+          </div>
+          <input type="range" class="sim-range" id="sr-delay" min="0" max="14" value="0" step="1">
+        </div>
+        <div class="sim-ctrl">
+          <div class="sim-ctrl-top">
+            <span>Buffer Stock</span>
+            <span class="sim-val" id="sv-buffer">4 weeks</span>
+          </div>
+          <input type="range" class="sim-range" id="sr-buffer" min="1" max="8" value="4" step="1">
+        </div>
+      </div>
+      <div class="sim-response">
+        <div id="sbadge" class="sim-badge green">&#9679; System Stable</div>
+        <div class="sim-rtext" id="srtext">All nodes operating in the green zone. Buffer healthy across the network.</div>
+        <div class="sim-raction" id="sraction">No action required. DDMRP buffer is correctly positioned.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  var srD=document.getElementById('sr-demand');
+  var srDl=document.getElementById('sr-delay');
+  var srB=document.getElementById('sr-buffer');
+  if(!srD) return;
+  var COLORS={
+    green:{stroke:'#22c55e',fill:'rgba(34,197,94,.22)',text:'#4ade80',arrow:'#22c55e'},
+    yellow:{stroke:'#eab308',fill:'rgba(234,179,8,.18)',text:'#fbbf24',arrow:'#eab308'},
+    red:{stroke:'#ef4444',fill:'rgba(239,68,68,.18)',text:'#f87171',arrow:'#ef4444'}
+  };
+  function zone(pct){ return pct>64?'green':pct>32?'yellow':'red'; }
+  function setNode(id,pct){
+    var h=134*Math.max(0,Math.min(100,pct))/100;
+    var y=156-h;
+    var z=zone(pct); var c=COLORS[z];
+    var fill=document.getElementById('sfill-'+id);
+    var box=document.getElementById('sbox-'+id);
+    var txt=document.getElementById('spct-'+id);
+    if(fill){fill.setAttribute('y',y);fill.setAttribute('height',h);fill.style.fill=c.fill;}
+    if(box) box.style.stroke=c.stroke;
+    if(txt){txt.textContent=Math.round(pct)+'%';txt.style.fill=c.text;}
+  }
+  function setArrow(n,state){
+    var arr=document.getElementById('sarr'+n);
+    var ah=document.getElementById('sah'+n);
+    var clr=state==='blocked'?'#3a3a4a':state==='fast'?'#22c55e':state==='slow'?'#eab308':'#2e5f8a';
+    if(arr){arr.style.stroke=clr;arr.className.baseVal='sarr '+(state==='slow'?'slow':state==='fast'?'fast':state==='blocked'?'blocked':'');}
+    if(ah) ah.style.fill=clr;
+  }
+  function update(){
+    var d=parseInt(srD.value);
+    var dl=parseInt(srDl.value);
+    var bw=parseInt(srB.value);
+    document.getElementById('sv-demand').textContent='+'+d+'%';
+    document.getElementById('sv-delay').textContent=dl+' day'+(dl===1?'':'s');
+    document.getElementById('sv-buffer').textContent=bw+' week'+(bw===1?'':'s');
+    // DDMRP buffer calculation
+    var bufDays=bw*5;
+    var dFactor=1+d/100;
+    var consumed=dl*dFactor;
+    var dcPct=Math.max(0,Math.min(100,(bufDays-consumed)/bufDays*100));
+    // Bullwhip amplification upstream
+    var retailPct=Math.max(0,dcPct*0.9-d*0.1);
+    var factoryPct=Math.max(0,dcPct*1.05-d*0.25);
+    var supplierPct=Math.max(0,100-(dl/14)*80-d*0.35);
+    setNode('s',supplierPct);
+    setNode('f',factoryPct);
+    setNode('d',dcPct);
+    setNode('r',retailPct);
+    setArrow(1,dl>8?'blocked':dl>4?'slow':'normal');
+    setArrow(2,d>60?'fast':d>30?'normal':'normal');
+    setArrow(3,dcPct<33?'slow':dcPct<10?'blocked':'fast');
+    var badge=document.getElementById('sbadge');
+    var rtext=document.getElementById('srtext');
+    var raction=document.getElementById('sraction');
+    var shortfall=consumed>bufDays;
+    var z=zone(dcPct);
+    badge.className='sim-badge '+z;
+    if(shortfall||dcPct<8){
+      badge.textContent='\u26a1 Stockout Risk';
+      rtext.textContent='Buffer depleted at DC. Estimated shortfall: '+(Math.ceil(consumed-bufDays))+' days of stock. Bullwhip effect amplifying upstream \u2014 supplier capacity also stressed.';
+      raction.textContent='Action: Expedite open POs. Activate emergency reorder. Qualify alternate supplier. Consider demand rationing.';
+    } else if(z==='red'){
+      badge.textContent='\u26a0 Red Zone Penetration';
+      rtext.textContent='DC buffer at '+Math.round(dcPct)+'% \u2014 in the DDMRP red zone. At current demand (+'+d+'%) and delay ('+dl+' days), network will face stock pressure.';
+      raction.textContent='Action: Pull Qualified Replenishment Order (QRO) now. Alert supplier for expedited lead time.';
+    } else if(z==='yellow'){
+      badge.textContent='\u25ce Yellow Zone Caution';
+      rtext.textContent='Buffer at '+Math.round(dcPct)+'% \u2014 yellow zone. Demand spike of +'+d+'% combined with '+dl+'-day supplier delay is consuming buffer faster than normal.';
+      raction.textContent='Action: Issue QRO if buffer approaches 33%. Review demand forecast accuracy.';
+    } else {
+      badge.textContent='\u25cf System Stable';
+      rtext.textContent='All nodes in green zone. DC buffer at '+Math.round(dcPct)+'%. Supplier and factory throughput within acceptable range.';
+      raction.textContent='No action required. DDMRP buffer positioned correctly.';
+    }
+  }
+  [srD,srDl,srB].forEach(function(s){s.addEventListener('input',update);});
+  update();
+})();
+</script>
+
 <section id="skills">
   <div class="sec-eyebrow reveal">Toolkit</div>
   <h2 class="sec-title reveal" style="transition-delay:.08s">Skills &amp; <strong>Certifications</strong></h2>
@@ -2775,6 +2972,7 @@ var SECT={
   voices:'voices',testimonials:'voices',recommendations:'voices',
   stats:'stats',numbers:'stats',achievements:'stats',metrics:'stats',
   matcher:'matcher','job match':'matcher',
+  simulator:'simulator',ddmrp:'simulator',disruption:'simulator','supply chain sim':'simulator',
 };
 
 /* ── ACTION EXECUTORS ────────────────────────────────── */
@@ -2851,6 +3049,7 @@ var NAV_LABELS={
   game:'the Ship Game',
   stats:'the Stats section',
   matcher:'the Job Matcher',
+  simulator:'the SC Disruption Simulator',
 };
 
 function detectIntent(q){
@@ -2901,6 +3100,9 @@ function detectIntent(q){
 
   /* easter eggs */
   if(/surprise\s+(me|tirthal)|random\s+fact/i.test(ql)) return {type:'surprise'};
+  /* cover letter / JD detection */
+  if(/cover.?letter|write.*(?:a|my|the)?\s*letter|generate.*letter|letter.*for/i.test(ql)) return {type:'coverletter',rawText:q,explicit:true};
+  if(q.length>120 && /(?:years?\s+of\s+exp|bachelor|master|degree|required|preferred|responsibilities|qualifications|supply chain|logistics|procurement|analyst|planner|coordinator|specialist|manager)/i.test(q)) return {type:'coverletter',rawText:q,explicit:false};
   if(/hire\s+(tirthal|you|him)|want\s+to\s+hire|make\s+you\s+an\s+offer/i.test(ql)) return {type:'hire'};
   if(/what\s+can\s+you\s+do|your\s+capabilities|list\s+commands|^help\s*$/i.test(ql)) return {type:'help'};
 
@@ -3165,6 +3367,7 @@ var SECTION_CHIPS={
   stats:      ['Tell me about the Rs 200K savings','Tell me about the SC index','What makes you unique?'],
   matcher:    ['Technical skills?','Open to opportunities?','What makes you unique?'],
   game:       ['Take me to Projects','Tell me about yourself','Surprise me'],
+  simulator:  ['What is DDMRP?','Tell me about demand planning','Tell me about the ERP project','Technical skills?'],
 };
 
 /* ── CHIP MANAGEMENT ──────────────────────────────────────── */
@@ -3365,6 +3568,42 @@ async function doSend(){
         break;
       }
 
+      case 'coverletter':{
+        var jd=intent.rawText||'';
+        var explicit=intent.explicit;
+        if(!explicit && jd.length<120){ var r2=buildReply(jd); await streamInto(r2.text,bubble); setChips(r2.chips); break; }
+        var roleRx=/(supply chain|logistics|procurement|operations|sourcing|planning|analyst|coordinator|specialist|planner|manager|director|intern)\s*\w*/gi;
+        var roleM=jd.match(roleRx); var role=(roleM&&roleM[0]?roleM[0].trim():'Supply Chain Analyst');
+        var coM=jd.match(/(?:at|with|join(?:ing)?|for)\s+([A-Z][A-Za-z0-9\s&,\.]{2,30?})(?:\s+(?:is|are|we|the|our|–|-|,|\.|!|\n))/);
+        var company=coM&&coM[1]?coM[1].trim():'your organization';
+        var hasDDMRP=/ddmrp|demand.driven/i.test(jd);
+        var hasERP=/erp|sap|netsuite|oracle|dynamics/i.test(jd);
+        var hasPy=/python|sql|tableau|analytics|data\s+analysis/i.test(jd);
+        var hasProc=/procurement|sourcing|purchasing|vendor|supplier|strategic\s+sourcing/i.test(jd);
+        var hasOps=/operations|warehouse|distribution|logistics|3pl/i.test(jd);
+        var detected=!explicit?'**Looks like a job description — generating your tailored cover letter:**\n\n':'';
+        var cl=detected+
+          'Dear '+company+' Hiring Team,\n\n'+
+          'I am writing to express my strong interest in the **'+role+'** role. As an MS Supply Chain Management candidate at DePaul University (graduating June 2026) with three years of hands-on experience in manufacturing procurement and operations, I bring both academic foundation and real-world P&L accountability that most early-career candidates cannot.\n\n'+
+          (hasProc||hasOps?'**Procurement impact you can verify:** At Kothari Electronics, I renegotiated vendor terms and redesigned a PVC wire reprocessing workflow, delivering **₹200,000 in documented FY24 savings** — not projected, not estimated, actual finance-team-confirmed numbers.\n\n':'')+
+          (hasERP?'**Built a live ERP from scratch:** Django, Python, SQL — multi-user authentication, inventory management, financial KPIs, AI demand forecasting, barcode scanner with camera. Running now at tirthalkothari.pythonanywhere.com. I built it to understand what I\'d eventually manage, not to pad a resume.\n\n':'')+
+          (hasPy?'**Analytical depth:** I built India\'s first national supply chain index analyzing **1,500+ public companies** across 24 sectors in R, Excel, and Tableau — improving efficiency methodology by 40% over prior frameworks. The results were published as the Top 20 Supply Chain Champions of India report.\n\n':'')+
+          (hasDDMRP?'**DDMRP Certified:** I hold a Demand Driven Planner certification and apply DDMRP buffer logic in both academic and research contexts.\n\n':'')+
+          'I would welcome the opportunity to discuss how this background maps to '+company+'\'s needs.\n\n'+
+          '**Tirthal Kothari** | tirth14503@gmail.com | Chicago, IL\n'+
+          'tirthalkothari.pythonanywhere.com (live ERP · login available)';
+        await streamInto(cl,bubble);
+        var copyBtn=document.createElement('button');
+        copyBtn.textContent='Copy cover letter';
+        copyBtn.style.cssText='margin-top:14px;padding:7px 18px;background:rgba(28,58,94,.9);color:#e0eeff;border:none;border-radius:20px;font-size:.78rem;cursor:pointer;font-weight:600;transition:opacity .2s;display:block;';
+        copyBtn.onclick=function(){
+          var txt=bubble.innerText.replace('Copy cover letter','').replace('Copied! ✓','').trim();
+          navigator.clipboard.writeText(txt).then(function(){copyBtn.textContent='Copied! \u2713';setTimeout(function(){copyBtn.textContent='Copy cover letter';},2500);});
+        };
+        bubble.appendChild(copyBtn);
+        setChips(['Customise for another role','Make it shorter','Add more DDMRP focus','Tell me about Kothari Electronics']);
+        break;
+      }
       case 'hire':{
         var hmsg='**Excellent decision.** 🎯\n\nEmail **tirth14503@gmail.com** — I’ll respond within 24 hours with my resume and availability for a call.\n\nLinkedIn also works: **linkedin.com/in/tirthalkothari**';
         await streamInto(hmsg,bubble);
@@ -7850,5 +8089,130 @@ __glReady(function initScmActs(){
 
   /* Observe first stat card */
   if(cards[0]) observer.observe(cards[0]);
+})();
+</script>
+
+<!-- GSAP scroll animations -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+(function(){
+  if(typeof gsap==='undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+  var reduced=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(reduced) return;
+
+  /* 1 — Hero parallax (scroll-scrubbed depth) */
+  try{
+    gsap.timeline({
+      scrollTrigger:{trigger:'#hero',start:'top top',end:'+=65%',scrub:0.55}
+    })
+    .to('.hero-inner',{y:-90,opacity:0,scale:0.88,ease:'none'},0)
+    .to('.hero-scroll',{opacity:0,y:-20,ease:'none'},0);
+  }catch(e){}
+
+  /* 2 — Section heading enhanced entrance */
+  try{
+    gsap.utils.toArray('.sec-title').forEach(function(el){
+      gsap.from(el,{y:36,opacity:0,scale:0.93,duration:0.9,ease:'power3.out',
+        scrollTrigger:{trigger:el,start:'top 87%',once:true}});
+    });
+    gsap.utils.toArray('.sec-eyebrow').forEach(function(el){
+      gsap.from(el,{x:-28,opacity:0,duration:0.65,ease:'power2.out',
+        scrollTrigger:{trigger:el,start:'top 89%',once:true}});
+    });
+  }catch(e){}
+
+  /* 3 — Stat cards pop entrance */
+  try{
+    gsap.utils.toArray('.stat-card').forEach(function(card,i){
+      gsap.fromTo(card,
+        {y:28,opacity:0,scale:0.91},
+        {y:0,opacity:1,scale:1,duration:0.65,delay:i*0.08,ease:'back.out(1.5)',
+         scrollTrigger:{trigger:card,start:'top 88%',once:true}}
+      );
+    });
+  }catch(e){}
+
+  /* 4 — Project cards stagger */
+  try{
+    ['#projects','#writing'].forEach(function(sec){
+      var s=document.querySelector(sec); if(!s) return;
+      var cards=Array.from(s.querySelectorAll('.pj-card'));
+      if(!cards.length) return;
+      gsap.fromTo(cards,
+        {y:48,opacity:0,scale:0.94},
+        {y:0,opacity:1,scale:1,duration:0.72,stagger:0.065,ease:'power2.out',
+         scrollTrigger:{trigger:s,start:'top 78%',once:true}}
+      );
+    });
+  }catch(e){}
+
+  /* 5 — Simulator panel entrance */
+  try{
+    var sp=document.querySelector('.sim-panel');
+    if(sp){
+      gsap.fromTo(sp,
+        {y:50,opacity:0},
+        {y:0,opacity:1,duration:1.1,ease:'power2.out',
+         scrollTrigger:{trigger:sp,start:'top 80%',once:true}}
+      );
+    }
+  }catch(e){}
+
+  ScrollTrigger.refresh();
+})();
+</script>
+
+<!-- Confetti on contact CTAs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.2/confetti.browser.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+(function(){
+  function fireConfetti(x,y){
+    if(typeof confetti==='undefined') return;
+    var cx=(x||window.innerWidth/2)/window.innerWidth;
+    var cy=(y||window.innerHeight*0.6)/window.innerHeight;
+    confetti({particleCount:130,spread:80,origin:{x:cx,y:cy},
+      colors:['#1c3a5e','#b8860b','#e8c060','#f0f5f7','#2e5f8a','#4ade80'],
+      gravity:0.85,scalar:1.1,drift:0.15,decay:0.92});
+  }
+  function showToast(msg){
+    var t=document.createElement('div');
+    t.innerHTML=msg;
+    t.style.cssText='position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(24px);background:linear-gradient(135deg,#0d1f3c,#1c3a5e);color:#e0eeff;padding:13px 28px;border-radius:28px;font-family:var(--fs,system-ui);font-size:.88rem;font-weight:500;z-index:9999;opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 10px 40px rgba(0,0,0,.32),0 0 0 1px rgba(255,255,255,.12);pointer-events:none;white-space:nowrap;';
+    document.body.appendChild(t);
+    requestAnimationFrame(function(){t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';});
+    setTimeout(function(){
+      t.style.opacity='0';t.style.transform='translateX(-50%) translateY(24px)';
+      setTimeout(function(){t.remove();},420);
+    },3400);
+  }
+
+  window.addEventListener('load',function(){
+    /* nav Get in Touch */
+    document.querySelectorAll('.nav-cta').forEach(function(btn){
+      btn.addEventListener('click',function(e){
+        fireConfetti(e.clientX,e.clientY);
+        showToast('Great choice &mdash; Tirthal replies within 24h.');
+      });
+    });
+    /* hero Let\'s Connect + game Let\'s Talk */
+    document.querySelectorAll('.btn-ghost,.btn-gold').forEach(function(btn){
+      var t=btn.textContent||'';
+      if(/connect|talk/i.test(t)){
+        btn.addEventListener('click',function(e){
+          fireConfetti(e.clientX,e.clientY);
+          showToast('Connecting you with Tirthal \u2014 watch your inbox.');
+        });
+      }
+    });
+    /* email links */
+    document.querySelectorAll('a[href^="mailto"]').forEach(function(a){
+      a.addEventListener('click',function(e){
+        fireConfetti(e.clientX,e.clientY);
+        showToast('Email client opening \u2014 great move!');
+      });
+    });
+  });
 })();
 </script>
