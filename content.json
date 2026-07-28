@@ -1,0 +1,191 @@
+{
+  "_version": 1,
+  "_updated": "2026-07-27",
+  "hero": {
+    "tag": "Supply Chain · Analytics · Chicago",
+    "bio": "I learned supply chain the hands-on way, in my family's electronics business in Mumbai. Now I'm finishing my MS at DePaul in Chicago, building the systems most people only operate."
+  },
+  "stats": [
+    { "n": "₹200K", "l": "FY24 Cost Savings" },
+    { "n": "1,500+", "l": "Companies Analysed" },
+    { "n": "5", "l": "Roles · 2 Countries" },
+    { "n": "2026", "l": "MS Graduation" }
+  ],
+  "about": {
+    "p1": "I grew up in my family's electronics business in Mumbai, where supply chain wasn't a subject. It was whether the shipment showed up and whether we got paid. Chasing vendors, negotiating rates, fixing stockouts: that was daily life long before I had textbook words for any of it.",
+    "p2": "The research came later: a year spent ranking 1,500 companies for India's first supply chain index. Then Chicago, for my MS at DePaul. These days I'm as happy writing SQL as I am on the phone with a supplier. I think that mix is the whole point.",
+    "chips": ["DDMRP", "Six Sigma Green Belt", "Tableau", "Python · R · SQL", "Anylogistix", "DePaul · Kellstadt"]
+  },
+  "experience": [
+    {
+      "n": "01",
+      "role": "LPC Office Assistant",
+      "org": "College of Communication · DePaul University",
+      "date": "Sep 2025 – Jun 2026",
+      "loc": "Chicago, IL",
+      "bullets": [
+        "Manage <span class=\"hl\">office operations</span>: printing, scanning, communications, and call handling",
+        "Coordinate <span class=\"hl\">faculty requests</span> and maintain organized workflows across multiple projects",
+        "Provide timely, responsive support to <span class=\"hl\">visitors, students, and faculty</span>"
+      ]
+    },
+    {
+      "n": "02",
+      "role": "Student Ambassador",
+      "org": "Kellstadt School of Business · DePaul University",
+      "date": "Feb 2025 – Present",
+      "loc": "Chicago, IL",
+      "bullets": [
+        "Led <span class=\"hl\">7+ recruitment events</span> using CRM (Slate) to manage prospective student pipelines",
+        "Advised <span class=\"hl\">100+ prospective students</span> on SCM, analytics and logistics curricula and career paths",
+        "Maintained a <span class=\"hl\">24-hour SLA</span> for all applicant communication to support enrollment goals",
+        "Engaged <span class=\"hl\">150+ students</span> through live sessions, panels, and digital platforms"
+      ]
+    },
+    {
+      "n": "03",
+      "role": "Operations & SC Consultant",
+      "org": "Kothari Electronics · Family Business",
+      "date": "Jun 2021 – Jul 2024",
+      "loc": "Mumbai, India",
+      "bullets": [
+        "Managed end-to-end operations: procurement, manufacturing oversight, QC, inventory and distribution",
+        "Strategic sourcing initiatives achieved <span class=\"hl\">₹200,000 in FY24 cost savings</span> through vendor renegotiation",
+        "Reduced defect-related waste by salvaging and reprocessing PVC wire, generating <span class=\"hl\">₹90,000 annual savings</span>",
+        "Improved demand planning workflows to enhance on-time delivery performance across product lines"
+      ]
+    },
+    {
+      "n": "04",
+      "role": "Research Analyst",
+      "org": "Institute of Supply Chain Management (ISCM)",
+      "date": "Jul 2023 – Jul 2024",
+      "loc": "Mumbai, India",
+      "bullets": [
+        "Analysed <span class=\"hl\">1,500+ companies across 24 sectors</span> using R, Excel and Tableau to benchmark SC performance",
+        "Built India's first national supply chain index, enhanced methodology by <span class=\"hl\">40%</span> over prior frameworks",
+        "Authored <em>\"Top 20 Supply Chain Champions of India\"</em>, flagship industry report",
+        "Led <em>Supply Chain Dialogue Series</em> with CSCO-level speakers from Fortune 500 companies"
+      ]
+    },
+    {
+      "n": "05",
+      "role": "Content & Social Media Intern",
+      "org": "Career Launcher",
+      "date": "Feb 2023 – Apr 2023",
+      "loc": "Mumbai, India",
+      "bullets": [
+        "SEO-optimised content strategy raised website traffic by <span class=\"hl\">25%</span> and session time by <span class=\"hl\">40%</span>",
+        "Grew Instagram account organically by <span class=\"hl\">10,000+ followers</span> through targeted campaigns",
+        "Developed high-performing content scripts and social media themes for student audiences"
+      ]
+    },
+    {
+      "n": "06",
+      "role": "Supply Chain Intern",
+      "org": "Mentone Concretes",
+      "date": "May 2022 – Jul 2022",
+      "loc": "Mumbai, India",
+      "bullets": [
+        "Evaluated supplier performance with scorecards; removed 2 underperforming vendors from approved list",
+        "Applied MRP to prevent stockouts, material availability improved by <span class=\"hl\">30%</span>",
+        "Scheduled outbound logistics and tracked <span class=\"hl\">20+ weekly shipments</span> ensuring on-time delivery"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "forecast",
+      "badge": "MGT 594 · Machine Learning",
+      "title": "Retail Demand Forecasting",
+      "desc": "Team ML project on retail store inventory data: EDA and feature engineering across <strong>inventory levels, orders, pricing and discounts</strong>, then trained and compared models to forecast units sold and flag replenishment risk.",
+      "tags": ["Python", "pandas", "scikit-learn", "seaborn"]
+    },
+    {
+      "id": "kehe",
+      "badge": "Industry Project · KeHE",
+      "title": "Inbound Truckload RFP",
+      "desc": "Worked a <strong>real 2024 inbound TL RFP for KeHE Distributors</strong> in DePaul's transportation practicum, analyzed lane-level carrier bids and built an award recommendation balancing cost, coverage and service.",
+      "tags": ["Transportation", "Procurement", "Bid Analysis"]
+    },
+    {
+      "id": "automation",
+      "badge": "Self-Directed",
+      "title": "AI-Automated SC Analytics",
+      "desc": "End-to-end analytics stack built solo: a <strong>Supabase Postgres warehouse</strong>, Quadratic AI spreadsheets for analysis, and <strong>n8n workflow automation</strong> wiring supply chain datasets to automated Gmail alerts.",
+      "tags": ["n8n", "PostgreSQL", "Quadratic AI", "Automation"]
+    },
+    {
+      "id": "segmentation",
+      "badge": "Machine Learning",
+      "title": "Customer Segmentation",
+      "desc": "K-Means clustering over <strong>income, spending score and channel mix</strong> to carve a retail customer base into actionable segments, elbow-method validation and a tailored loyalty-program play per cluster.",
+      "tags": ["Python", "K-Means", "Segmentation"]
+    },
+    {
+      "id": "churn",
+      "badge": "Machine Learning",
+      "title": "Churn Prediction Model",
+      "desc": "Decision-tree classifier on <strong>tenure, charges, support calls and contract type</strong>, tuned depth and leaf size, then translated the tree's splits into concrete retention actions for at-risk customers.",
+      "tags": ["scikit-learn", "Decision Trees", "Classification"]
+    },
+    {
+      "id": "optimization",
+      "badge": "Decision Modeling",
+      "title": "Optimization in Excel",
+      "desc": "Linear-programming production models (<strong>M&amp;D Chemicals</strong>) and decision-analysis labs in Excel Solver: formulating constraints, reading sensitivity reports and running what-if scenarios on cost and capacity.",
+      "tags": ["Excel Solver", "Linear Programming", "Sensitivity"]
+    }
+  ],
+  "writing": [
+    {
+      "id": "depaul",
+      "badge": "DePaul · Inside Kellstadt Blog",
+      "title": "A Day in the Life of an MS in Supply Chain Management Student",
+      "desc": "My published piece on the Kellstadt blog — the train commute to the Loop Campus, collaborative study sessions, evening classes, and the transportation optimization model I built integrating demand, capacity uncertainty and cost-risk tradeoffs.",
+      "tags": ["Student Voice", "Chicago", "Read ↗"],
+      "link": "https://blogs.depaul.edu/inside-kellstadt/project_category/international-student-experience/",
+      "external": true
+    },
+    {
+      "id": "iscm",
+      "badge": "ISCM · National Publication",
+      "title": "Top 20 Supply Chain Champions of India",
+      "desc": "India's first national supply chain index — I analyzed 1,500+ public companies across 24 sectors and helped build the ranking methodology blending financial metrics with ESG, resilience and technology factors.",
+      "tags": ["R · Tableau", "Research", "Visit ↗"],
+      "link": "https://supplychainchampions.com/",
+      "external": true
+    },
+    {
+      "id": "rfp",
+      "badge": "Field Notes · Read Here",
+      "title": "What a Live Truckload RFP Taught Me About Carrier Pricing",
+      "desc": "The cheapest lane bid is rarely the cheapest lane. Working KeHE's real 2024 inbound RFP data, I learned why buyers pay premiums on purpose, and what a bid sheet doesn't tell you.",
+      "tags": ["Transportation", "4 min read", "Open ↗"],
+      "external": false
+    },
+    {
+      "id": "index",
+      "badge": "Field Notes · Read Here",
+      "title": "Ranking 1,500 Companies: Building India's First Supply Chain Index",
+      "desc": "How do you compare a pharma cold chain to a cement dispatch network? Behind the methodology of the Top 20 Supply Chain Champions of India, and what almost broke it.",
+      "tags": ["Research", "5 min read", "Open ↗"],
+      "external": false
+    },
+    {
+      "id": "erp",
+      "badge": "Field Notes · Read Here",
+      "title": "I Built an ERP Solo to Understand the Systems I'll Manage",
+      "desc": "Most supply chain people can drive an ERP. I wanted to know what's under the hood, so I built one with Django, Python and SQL, and it changed how I think about every system I'll ever use.",
+      "tags": ["Django · SQL", "4 min read", "Open ↗"],
+      "external": false
+    }
+  ],
+  "contact": {
+    "email": "tirth14503@gmail.com",
+    "linkedin": "https://linkedin.com/in/tirthalkothari",
+    "erp": "https://tirthalkothari.pythonanywhere.com",
+    "phone": "(773) 654-8682",
+    "location": "Chicago, IL"
+  }
+}

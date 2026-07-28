@@ -1929,7 +1929,7 @@ section{scroll-margin-top:64px;}
   <div class="sec-eyebrow reveal">Work</div>
   <h2 class="sec-title reveal" style="transition-delay:.08s">Work <strong>Experience</strong></h2>
   <div class="sec-rule reveal" style="transition-delay:.12s"></div>
-  <div class="exp-list">
+  <div class="exp-list" id="exp-list">
     <div class="exp-item reveal" style="transition-delay:.06s">
       <div class="exp-header">
         <div class="exp-num-badge">01</div>
@@ -2068,7 +2068,7 @@ section{scroll-margin-top:64px;}
   <div class="sec-eyebrow reveal">Projects</div>
   <h2 class="sec-title reveal">Built, modeled,<br /><strong>shipped.</strong></h2>
   <div class="sec-rule reveal"></div>
-  <div class="pj-grid">
+  <div class="pj-grid" id="proj-grid">
 
     <div class="pj-card reveal" style="transition-delay:.05s" data-case="forecast">
       <span class="pj-badge">MGT 594 · Machine Learning</span>
@@ -2121,7 +2121,7 @@ section{scroll-margin-top:64px;}
   <div class="sec-eyebrow reveal">Writing</div>
   <h2 class="sec-title reveal">Published <strong>thinking.</strong></h2>
   <div class="sec-rule reveal"></div>
-  <div class="pj-grid" style="grid-template-columns:repeat(2,1fr);max-width:1000px;">
+  <div class="pj-grid" id="writing-grid" style="grid-template-columns:repeat(2,1fr);max-width:1000px;">
     <a class="pj-card reveal" style="text-decoration:none;transition-delay:.05s" href="https://blogs.depaul.edu/inside-kellstadt/project_category/international-student-experience/" target="_blank" rel="noopener">
       <span class="pj-badge">DePaul &#183; Inside Kellstadt Blog</span>
       <div class="pj-title">A Day in the Life of an MS in Supply Chain Management Student</div>
@@ -8214,5 +8214,151 @@ __glReady(function initScmActs(){
       });
     });
   });
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CMS CONTENT LOADER — fetches content.json from GitHub
+     Updates all editable sections without a full page rebuild
+     ═══════════════════════════════════════════════════════ -->
+<script>
+(function cmsLoad(){
+  var API = 'https://api.github.com/repos/tirth14503-dev/tirth14503-dev.github.io/contents/content.json';
+  fetch(API, {headers:{Accept:'application/vnd.github.v3.raw', 'X-GitHub-Api-Version':'2022-11-28'}})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){ if(d) applyContent(d); })
+    .catch(function(){/* silently fallback to hardcoded content */});
+
+  function applyContent(d){
+    try {
+      // Hero
+      if(d.hero){
+        qi('.hero-tag', d.hero.tag);
+        qi('.hero-sub', d.hero.bio);
+      }
+      // Stats
+      if(d.stats && d.stats.length){
+        var sc = document.querySelectorAll('.stat-card');
+        d.stats.forEach(function(s,i){
+          if(sc[i]){
+            var n=sc[i].querySelector('.stat-n'), l=sc[i].querySelector('.stat-l');
+            if(n && s.n) n.textContent=s.n;
+            if(l && s.l) l.textContent=s.l;
+          }
+        });
+      }
+      // About text
+      if(d.about){
+        var ps=document.querySelectorAll('.about-text p');
+        if(ps[0] && d.about.p1) ps[0].textContent=d.about.p1;
+        if(ps[1] && d.about.p2) ps[1].textContent=d.about.p2;
+        if(d.about.chips){
+          var cr=document.querySelector('.chip-row');
+          if(cr) cr.innerHTML=d.about.chips.map(function(c){ return '<span class="chip">'+esc(c)+'</span>'; }).join('');
+        }
+      }
+      // Experience
+      if(d.experience && d.experience.length){
+        var el=document.getElementById('exp-list');
+        if(el){ el.innerHTML=renderExp(d.experience); rewireExp(el); }
+      }
+      // Projects
+      if(d.projects && d.projects.length){
+        var pg=document.getElementById('proj-grid');
+        if(pg) pg.innerHTML=renderProj(d.projects);
+      }
+      // Writing
+      if(d.writing && d.writing.length){
+        var wg=document.getElementById('writing-grid');
+        if(wg) wg.innerHTML=renderWriting(d.writing);
+      }
+      // Contact links
+      if(d.contact){
+        if(d.contact.email){
+          document.querySelectorAll('a[href^="mailto:"]').forEach(function(a){
+            a.href='mailto:'+d.contact.email;
+          });
+        }
+        if(d.contact.linkedin){
+          document.querySelectorAll('a[href*="linkedin.com/in/"]').forEach(function(a){
+            a.href=d.contact.linkedin;
+          });
+        }
+        if(d.contact.erp){
+          document.querySelectorAll('a[href*="pythonanywhere.com"]').forEach(function(a){
+            a.href=d.contact.erp;
+          });
+        }
+      }
+    } catch(e){}
+  }
+
+  function renderExp(exps){
+    var delays=[.06,.1,.17,.24,.31,.38];
+    return exps.map(function(e,i){
+      var d=delays[i]!==undefined?delays[i]:(.06+i*.07);
+      return '<div class="exp-item reveal" style="transition-delay:'+d+'s">'+
+        '<div class="exp-header">'+
+        '<div class="exp-num-badge">'+esc(e.n)+'</div>'+
+        '<div class="exp-meta"><div class="exp-role">'+esc(e.role)+'</div><div class="exp-org">'+esc(e.org)+'</div></div>'+
+        '<div class="exp-right"><div class="exp-date">'+esc(e.date)+'</div><div class="exp-loc-pill">'+esc(e.loc)+'</div></div>'+
+        '<div class="exp-toggle-icon">+</div>'+
+        '</div>'+
+        '<div class="exp-body"><ul class="exp-bullets">'+
+        (e.bullets||[]).map(function(b){ return '<li>'+b+'</li>'; }).join('')+
+        '</ul></div></div>';
+    }).join('');
+  }
+
+  function renderProj(projs){
+    var delays=[.05,.12,.19,.05,.12,.19];
+    return projs.map(function(p,i){
+      var d=delays[i]!==undefined?delays[i]:.05;
+      return '<div class="pj-card reveal" style="transition-delay:'+d+'s" data-case="'+esc(p.id)+'">'+
+        '<span class="pj-badge">'+esc(p.badge)+'</span>'+
+        '<div class="pj-title">'+esc(p.title)+'</div>'+
+        '<div class="pj-desc">'+p.desc+'</div>'+
+        '<div class="pj-tags">'+(p.tags||[]).map(function(t){ return '<span>'+esc(t)+'</span>'; }).join('')+'</div>'+
+        '</div>';
+    }).join('');
+  }
+
+  function renderWriting(arts){
+    var delays=[.05,.12,.05,.1,.15];
+    return arts.map(function(a,i){
+      var d=delays[i]!==undefined?delays[i]:.05;
+      var inner='<span class="pj-badge">'+esc(a.badge)+'</span>'+
+        '<div class="pj-title">'+esc(a.title)+'</div>'+
+        '<div class="pj-desc">'+a.desc+'</div>'+
+        '<div class="pj-tags">'+(a.tags||[]).map(function(t){ return '<span>'+esc(t)+'</span>'; }).join('')+'</div>';
+      if(a.external && a.link){
+        return '<a class="pj-card reveal" style="text-decoration:none;transition-delay:'+d+'s" href="'+esc(a.link)+'" target="_blank" rel="noopener">'+inner+'</a>';
+      }
+      return '<div class="pj-card reveal" data-article="'+esc(a.id)+'" style="transition-delay:'+d+'s">'+inner+'</div>';
+    }).join('');
+  }
+
+  function rewireExp(container){
+    container.addEventListener('click', function(e){
+      var hdr=e.target.closest('.exp-header');
+      if(!hdr) return;
+      var item=hdr.closest('.exp-item');
+      if(!item) return;
+      var isOpen=item.classList.contains('open');
+      container.querySelectorAll('.exp-item.open').forEach(function(x){
+        x.classList.remove('open');
+        var icon=x.querySelector('.exp-toggle-icon');
+        if(icon) icon.textContent='+';
+      });
+      if(!isOpen){
+        item.classList.add('open');
+        var icon=item.querySelector('.exp-toggle-icon');
+        if(icon) icon.textContent='−';
+      }
+    });
+  }
+
+  function qi(sel,val){ var el=document.querySelector(sel); if(el&&val!==undefined&&val!==null) el.textContent=val; }
+  function esc(s){ return String(s||'').replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]; }); }
 })();
 </script>

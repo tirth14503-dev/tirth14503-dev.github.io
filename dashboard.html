@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TK Content Manager</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#060e1c;--sidebar:#0b1a2e;--panel:#0f2040;--card:#132744;
+  --border:rgba(50,90,140,.35);--border2:rgba(50,90,140,.6);
+  --gold:#d4a017;--gold2:#b8860b;--text:#d0e4ff;--text2:#7a99bc;--text3:#3f5f85;
+  --green:#22c55e;--red:#ef4444;--blue:#3b82f6;
+  --h:56px;--sw:240px;--r:10px;
+  --fs:Georgia,'Times New Roman',serif;--ui:'Segoe UI',system-ui,sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--ui);min-height:100vh;overflow-x:hidden;}
+
+/* ── LOCK SCREEN ── */
+#lock{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .4s;}
+#lock.hidden{opacity:0;pointer-events:none;}
+.lock-card{width:360px;text-align:center;padding:3rem 2.5rem;background:var(--panel);border:1px solid var(--border2);border-radius:16px;}
+.lock-logo{font-family:var(--fs);font-size:2.4rem;color:var(--gold);margin-bottom:.3rem;letter-spacing:.04em;}
+.lock-sub{color:var(--text2);font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2rem;}
+.lock-input{width:100%;padding:.85rem 1rem;background:rgba(10,25,50,.9);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:1rem;font-family:var(--ui);outline:none;transition:border .2s;text-align:center;letter-spacing:.2em;}
+.lock-input:focus{border-color:var(--gold);}
+.lock-btn{width:100%;margin-top:1rem;padding:.9rem;background:var(--gold);border:none;border-radius:8px;color:#0a0600;font-weight:700;font-size:.95rem;cursor:pointer;transition:background .2s,transform .1s;}
+.lock-btn:hover{background:var(--gold2);}
+.lock-btn:active{transform:scale(.98);}
+.lock-err{color:var(--red);font-size:.83rem;margin-top:.7rem;min-height:1.2rem;}
+.lock-hint{color:var(--text3);font-size:.75rem;margin-top:1.4rem;}
+
+/* ── APP SHELL ── */
+#app{display:none;min-height:100vh;}
+#app.visible{display:block;}
+
+/* HEADER */
+header{position:fixed;top:0;left:0;right:0;height:var(--h);background:rgba(6,14,28,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1.5rem;gap:1rem;z-index:100;}
+.h-brand{font-family:var(--fs);font-size:1.1rem;color:var(--gold);letter-spacing:.04em;white-space:nowrap;}
+.h-brand span{color:var(--text2);font-size:.75rem;font-family:var(--ui);letter-spacing:.06em;margin-left:.5rem;}
+.h-sep{flex:1;}
+.h-status{font-size:.75rem;color:var(--text2);white-space:nowrap;}
+.h-status b{color:var(--text);}
+.h-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:.4rem;box-shadow:0 0 8px rgba(34,197,94,.6);}
+.h-dirty{background:rgba(212,160,23,.15);border:1px solid rgba(212,160,23,.4);color:var(--gold);font-size:.72rem;padding:.3rem .8rem;border-radius:20px;}
+.h-dirty.hidden{display:none;}
+.pub-btn{padding:.55rem 1.4rem;background:var(--gold);border:none;border-radius:8px;color:#0a0600;font-weight:700;font-size:.85rem;cursor:pointer;transition:background .2s,transform .1s;white-space:nowrap;}
+.pub-btn:hover:not(:disabled){background:var(--gold2);}
+.pub-btn:disabled{opacity:.5;cursor:not-allowed;}
+
+/* SIDEBAR */
+aside{position:fixed;top:var(--h);left:0;bottom:0;width:var(--sw);background:var(--sidebar);border-right:1px solid var(--border);overflow-y:auto;padding:1.2rem 0;}
+.nav-group-label{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);padding:.5rem 1.2rem;margin-top:.6rem;}
+.nav-item{display:flex;align-items:center;gap:.7rem;padding:.62rem 1.2rem;cursor:pointer;transition:background .15s,color .15s;font-size:.88rem;color:var(--text2);border-left:3px solid transparent;}
+.nav-item:hover{background:rgba(20,50,90,.4);color:var(--text);}
+.nav-item.active{background:rgba(20,50,90,.7);color:var(--gold);border-left-color:var(--gold);}
+.nav-icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0;}
+.nav-badge{margin-left:auto;font-size:.68rem;background:rgba(212,160,23,.2);color:var(--gold);padding:.15rem .5rem;border-radius:10px;}
+
+/* MAIN */
+main{margin-left:var(--sw);padding-top:var(--h);}
+.section-page{display:none;padding:2.2rem 2.5rem;max-width:900px;}
+.section-page.active{display:block;}
+.pg-head{margin-bottom:2rem;}
+.pg-title{font-family:var(--fs);font-size:1.8rem;color:var(--text);margin-bottom:.3rem;}
+.pg-sub{color:var(--text2);font-size:.88rem;line-height:1.6;}
+
+/* FORM ELEMENTS */
+.field-group{margin-bottom:1.5rem;}
+.field-label{display:block;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);margin-bottom:.45rem;}
+.field-input,.field-textarea,.field-select{width:100%;padding:.75rem 1rem;background:rgba(10,25,50,.8);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:.93rem;font-family:var(--ui);outline:none;transition:border .2s,box-shadow .2s;resize:vertical;}
+.field-input:focus,.field-textarea:focus,.field-select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,160,23,.15);}
+.field-textarea{min-height:80px;line-height:1.6;}
+.field-hint{font-size:.73rem;color:var(--text3);margin-top:.35rem;}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem 1.6rem;margin-bottom:1rem;}
+.card-head{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;cursor:pointer;}
+.card-num{background:rgba(212,160,23,.15);color:var(--gold);font-size:.75rem;font-weight:700;padding:.25rem .7rem;border-radius:6px;font-family:monospace;}
+.card-role-label{font-size:.95rem;color:var(--text);font-weight:500;flex:1;}
+.card-org-label{font-size:.78rem;color:var(--text2);}
+.card-toggle{color:var(--text3);font-size:.85rem;transition:transform .2s;}
+.card-body{display:none;}
+.card.open .card-body{display:block;}
+.card.open .card-toggle{transform:rotate(180deg);}
+.card-actions{display:flex;gap:.5rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);}
+.btn-del{padding:.45rem .9rem;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);border-radius:6px;color:var(--red);font-size:.78rem;cursor:pointer;transition:background .15s;}
+.btn-del:hover{background:rgba(239,68,68,.25);}
+.btn-add{width:100%;padding:.75rem;background:rgba(212,160,23,.08);border:1px dashed rgba(212,160,23,.35);border-radius:8px;color:var(--gold);font-size:.85rem;cursor:pointer;transition:background .15s;margin-top:.5rem;}
+.btn-add:hover{background:rgba(212,160,23,.15);}
+.btn-move{padding:.4rem .7rem;background:rgba(50,90,140,.2);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-size:.75rem;cursor:pointer;transition:background .15s;}
+.btn-move:hover{background:rgba(50,90,140,.4);}
+
+/* BULLETS EDITOR */
+.bullets-wrap{display:flex;flex-direction:column;gap:.4rem;}
+.bullet-row{display:flex;gap:.4rem;align-items:flex-start;}
+.bullet-input{flex:1;padding:.55rem .8rem;background:rgba(10,25,50,.8);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:.85rem;font-family:var(--ui);outline:none;transition:border .2s;resize:none;}
+.bullet-input:focus{border-color:var(--gold);}
+.btn-rm-bullet{padding:.5rem .6rem;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:5px;color:rgba(239,68,68,.7);font-size:.8rem;cursor:pointer;flex-shrink:0;transition:background .15s;}
+.btn-rm-bullet:hover{background:rgba(239,68,68,.2);}
+.btn-add-bullet{padding:.4rem .8rem;background:transparent;border:1px dashed var(--text3);border-radius:5px;color:var(--text3);font-size:.75rem;cursor:pointer;margin-top:.2rem;transition:border-color .15s,color .15s;}
+.btn-add-bullet:hover{border-color:var(--gold);color:var(--gold);}
+
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.stat-edit-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;}
+.stat-preview{text-align:center;margin-bottom:1rem;}
+.stat-preview-n{font-family:var(--fs);font-size:2rem;color:var(--gold);}
+.stat-preview-l{font-size:.72rem;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-top:.2rem;}
+
+/* TAGS EDITOR */
+.tags-wrap{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;}
+.tag-chip{display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .65rem;background:rgba(20,50,90,.6);border:1px solid var(--border2);border-radius:20px;font-size:.78rem;color:var(--text2);}
+.tag-chip button{background:none;border:none;color:rgba(239,68,68,.7);cursor:pointer;font-size:.75rem;padding:0;line-height:1;}
+.tag-input-inline{padding:.28rem .6rem;background:rgba(10,25,50,.8);border:1px dashed var(--border2);border-radius:20px;color:var(--text);font-size:.78rem;font-family:var(--ui);outline:none;width:110px;}
+.tag-input-inline::placeholder{color:var(--text3);}
+
+/* TOAST */
+#toast{position:fixed;bottom:2rem;right:2rem;z-index:9000;display:flex;flex-direction:column;gap:.5rem;}
+.toast-item{padding:.9rem 1.3rem;border-radius:10px;font-size:.85rem;font-weight:600;animation:toastIn .3s ease;display:flex;align-items:center;gap:.6rem;max-width:360px;box-shadow:0 8px 32px rgba(0,0,0,.4);}
+.toast-item.success{background:rgba(22,101,52,.9);border:1px solid rgba(34,197,94,.4);color:#bbf7d0;}
+.toast-item.error{background:rgba(127,29,29,.9);border:1px solid rgba(239,68,68,.4);color:#fecaca;}
+.toast-item.info{background:rgba(30,58,138,.9);border:1px solid rgba(59,130,246,.4);color:#bfdbfe;}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* SETTINGS */
+.settings-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1.2rem;}
+.settings-card h3{font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:1rem;letter-spacing:.04em;}
+.pat-reveal{display:flex;gap:.5rem;}
+.pat-reveal .field-input{flex:1;}
+.pat-reveal-btn{padding:.75rem 1rem;background:rgba(50,90,140,.2);border:1px solid var(--border2);border-radius:8px;color:var(--text2);font-size:.82rem;cursor:pointer;white-space:nowrap;transition:background .15s;}
+.pat-reveal-btn:hover{background:rgba(50,90,140,.4);}
+.btn-save-settings{padding:.7rem 1.8rem;background:var(--gold);border:none;border-radius:8px;color:#0a0600;font-weight:700;font-size:.85rem;cursor:pointer;transition:background .2s;}
+.btn-save-settings:hover{background:var(--gold2);}
+.info-box{background:rgba(30,58,138,.15);border:1px solid rgba(59,130,246,.3);border-radius:8px;padding:1rem 1.2rem;margin-top:.8rem;}
+.info-box a{color:var(--blue);text-decoration:none;}
+.info-box a:hover{text-decoration:underline;}
+
+/* OVERVIEW */
+.ov-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
+.ov-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;}
+.ov-label{font-size:.72rem;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem;}
+.ov-value{font-size:1.6rem;font-family:var(--fs);color:var(--gold);}
+.ov-sub{font-size:.75rem;color:var(--text3);margin-top:.2rem;}
+.ov-btn-row{display:flex;flex-wrap:wrap;gap:.6rem;}
+.ov-nav-btn{padding:.6rem 1.1rem;background:rgba(50,90,140,.2);border:1px solid var(--border2);border-radius:8px;color:var(--text2);font-size:.82rem;cursor:pointer;transition:background .15s;}
+.ov-nav-btn:hover{background:rgba(50,90,140,.4);color:var(--text);}
+.pub-big-btn{padding:1rem 2.5rem;background:var(--gold);border:none;border-radius:10px;color:#0a0600;font-weight:700;font-size:1rem;cursor:pointer;transition:background .2s,transform .1s;width:100%;margin-top:1.5rem;}
+.pub-big-btn:hover:not(:disabled){background:var(--gold2);}
+.pub-big-btn:disabled{opacity:.5;cursor:not-allowed;}
+.progress-bar{height:3px;background:rgba(50,90,140,.3);border-radius:2px;margin-top:1rem;overflow:hidden;display:none;}
+.progress-bar.active{display:block;}
+.progress-fill{height:100%;background:var(--gold);width:0%;transition:width .4s ease;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(50,90,140,.4);border-radius:3px;}
+</style>
+</head>
+<body>
+
+<!-- ── LOCK SCREEN ── -->
+<div id="lock">
+  <div class="lock-card">
+    <div class="lock-logo">TK</div>
+    <div class="lock-sub">Content Manager · Private</div>
+    <input type="password" id="lock-input" class="lock-input" placeholder="Password" autocomplete="current-password">
+    <button class="lock-btn" id="lock-btn">Access Dashboard</button>
+    <div class="lock-err" id="lock-err"></div>
+    <div class="lock-hint">This page is not indexed by search engines.</div>
+  </div>
+</div>
+
+<!-- ── APP ── -->
+<div id="app">
+  <!-- Header -->
+  <header>
+    <div class="h-brand">TK <span>Content Manager</span></div>
+    <div class="h-sep"></div>
+    <div class="h-status"><span class="h-dot"></span>GitHub Pages · <b id="h-last">Loading…</b></div>
+    <div class="h-dirty hidden" id="h-dirty">Unsaved</div>
+    <button class="pub-btn" id="pub-btn-hdr" onclick="publishNow()">Publish →</button>
+  </header>
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="nav-group-label">Overview</div>
+    <div class="nav-item active" data-page="overview"><span class="nav-icon">◉</span>Dashboard</div>
+
+    <div class="nav-group-label">Content</div>
+    <div class="nav-item" data-page="hero"><span class="nav-icon">⬡</span>Hero</div>
+    <div class="nav-item" data-page="stats"><span class="nav-icon">◆</span>Stats</div>
+    <div class="nav-item" data-page="about"><span class="nav-icon">◈</span>About</div>
+
+    <div class="nav-group-label">Sections</div>
+    <div class="nav-item" data-page="experience"><span class="nav-icon">⊕</span>Experience <span class="nav-badge" id="exp-badge">6</span></div>
+    <div class="nav-item" data-page="projects"><span class="nav-icon">⊞</span>Projects <span class="nav-badge" id="proj-badge">6</span></div>
+    <div class="nav-item" data-page="writing"><span class="nav-icon">⊟</span>Writing <span class="nav-badge" id="writing-badge">5</span></div>
+
+    <div class="nav-group-label">Details</div>
+    <div class="nav-item" data-page="contact"><span class="nav-icon">⊛</span>Contact</div>
+
+    <div class="nav-group-label">System</div>
+    <div class="nav-item" data-page="settings"><span class="nav-icon">⊙</span>Settings</div>
+  </aside>
+
+  <!-- Main -->
+  <main>
+
+    <!-- OVERVIEW -->
+    <div class="section-page active" id="page-overview">
+      <div class="pg-head">
+        <div class="pg-title">Dashboard</div>
+        <div class="pg-sub">Everything you can update. Hit Publish when ready — changes go live within ~60 seconds.</div>
+      </div>
+      <div class="ov-grid">
+        <div class="ov-card"><div class="ov-label">Experience Roles</div><div class="ov-value" id="ov-exp">—</div><div class="ov-sub">entries</div></div>
+        <div class="ov-card"><div class="ov-label">Projects</div><div class="ov-value" id="ov-proj">—</div><div class="ov-sub">cards</div></div>
+        <div class="ov-card"><div class="ov-label">Writing</div><div class="ov-value" id="ov-write">—</div><div class="ov-sub">articles</div></div>
+      </div>
+      <div class="card">
+        <div class="pg-sub" style="margin-bottom:1rem;">Jump to a section to start editing:</div>
+        <div class="ov-btn-row">
+          <button class="ov-nav-btn" onclick="goPage('hero')">Hero text</button>
+          <button class="ov-nav-btn" onclick="goPage('stats')">Stats &amp; numbers</button>
+          <button class="ov-nav-btn" onclick="goPage('about')">About bio</button>
+          <button class="ov-nav-btn" onclick="goPage('experience')">Work experience</button>
+          <button class="ov-nav-btn" onclick="goPage('projects')">Projects</button>
+          <button class="ov-nav-btn" onclick="goPage('writing')">Writing</button>
+          <button class="ov-nav-btn" onclick="goPage('contact')">Contact info</button>
+          <button class="ov-nav-btn" onclick="goPage('settings')">Settings &amp; PAT</button>
+        </div>
+        <button class="pub-big-btn" id="pub-btn-main" onclick="publishNow()">Publish to GitHub →</button>
+        <div class="progress-bar" id="prog-bar"><div class="progress-fill" id="prog-fill"></div></div>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="section-page" id="page-hero">
+      <div class="pg-head"><div class="pg-title">Hero</div><div class="pg-sub">The first thing visitors see — tagline, name, and bio.</div></div>
+      <div class="field-group">
+        <label class="field-label">Tagline <span style="font-style:italic;font-weight:400;letter-spacing:0;text-transform:none;color:var(--text3)">(below your name)</span></label>
+        <input type="text" class="field-input" id="hero-tag" oninput="dirty()">
+        <div class="field-hint">Short descriptor line. Example: Supply Chain · Analytics · Chicago</div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Bio Paragraph</label>
+        <textarea class="field-textarea" id="hero-bio" rows="4" oninput="dirty()"></textarea>
+        <div class="field-hint">Plain text. Appears under your name in the hero section.</div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="section-page" id="page-stats">
+      <div class="pg-head"><div class="pg-title">Stats</div><div class="pg-sub">The four key numbers that appear in the About section.</div></div>
+      <div class="stat-grid" id="stats-grid"></div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="section-page" id="page-about">
+      <div class="pg-head"><div class="pg-title">About</div><div class="pg-sub">The two-paragraph bio block and skill chips in the About section.</div></div>
+      <div class="field-group">
+        <label class="field-label">Paragraph 1</label>
+        <textarea class="field-textarea" id="about-p1" rows="4" oninput="dirty()"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Paragraph 2</label>
+        <textarea class="field-textarea" id="about-p2" rows="4" oninput="dirty()"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Skill Chips</label>
+        <div class="tags-wrap" id="about-chips-wrap"></div>
+        <div class="field-hint">Click × to remove. Type and press Enter to add.</div>
+      </div>
+    </div>
+
+    <!-- EXPERIENCE -->
+    <div class="section-page" id="page-experience">
+      <div class="pg-head"><div class="pg-title">Work Experience</div><div class="pg-sub">Edit, reorder, add, or remove experience entries. Bullets support &lt;span class="hl"&gt;...&lt;/span&gt; for highlights.</div></div>
+      <div id="exp-editor"></div>
+      <button class="btn-add" onclick="addExp()">+ Add Experience</button>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="section-page" id="page-projects">
+      <div class="pg-head"><div class="pg-title">Projects</div><div class="pg-sub">Project cards on the portfolio. Descriptions support &lt;strong&gt; for bold text.</div></div>
+      <div id="proj-editor"></div>
+      <button class="btn-add" onclick="addProj()">+ Add Project</button>
+    </div>
+
+    <!-- WRITING -->
+    <div class="section-page" id="page-writing">
+      <div class="pg-head"><div class="pg-title">Writing</div><div class="pg-sub">Published articles and field notes. Toggle "External link" for articles hosted elsewhere.</div></div>
+      <div id="writing-editor"></div>
+      <button class="btn-add" onclick="addArticle()">+ Add Article</button>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="section-page" id="page-contact">
+      <div class="pg-head"><div class="pg-title">Contact</div><div class="pg-sub">Contact details used throughout the portfolio.</div></div>
+      <div class="row-2">
+        <div class="field-group">
+          <label class="field-label">Email</label>
+          <input type="email" class="field-input" id="contact-email" oninput="dirty()">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Phone</label>
+          <input type="text" class="field-input" id="contact-phone" oninput="dirty()">
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">LinkedIn URL</label>
+        <input type="url" class="field-input" id="contact-linkedin" oninput="dirty()">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Live ERP URL</label>
+        <input type="url" class="field-input" id="contact-erp" oninput="dirty()">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Location</label>
+        <input type="text" class="field-input" id="contact-location" oninput="dirty()">
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="section-page" id="page-settings">
+      <div class="pg-head"><div class="pg-title">Settings</div><div class="pg-sub">GitHub credentials for publishing. Stored only in your browser, never sent anywhere except GitHub.</div></div>
+
+      <div class="settings-card">
+        <h3>GitHub Repository</h3>
+        <div class="row-2">
+          <div class="field-group">
+            <label class="field-label">Owner (username)</label>
+            <input type="text" class="field-input" id="set-owner" placeholder="tirth14503-dev">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Repository</label>
+            <input type="text" class="field-input" id="set-repo" placeholder="tirth14503-dev.github.io">
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <h3>Personal Access Token (PAT)</h3>
+        <div class="pat-reveal">
+          <input type="password" class="field-input" id="set-pat" placeholder="ghp_…">
+          <button class="pat-reveal-btn" onclick="togglePAT()">Show</button>
+        </div>
+        <div class="info-box" style="margin-top:.8rem;">
+          <p style="font-size:.8rem;color:var(--text2);line-height:1.7;">
+            Need a token? Go to
+            <a href="https://github.com/settings/tokens/new" target="_blank" rel="noopener">github.com/settings/tokens/new</a>,
+            select <strong>repo</strong> scope, and paste the token above.<br>
+            Your token is stored in <code style="font-size:.75rem;color:var(--text)">localStorage</code> — it never leaves your browser except to call GitHub's API.
+          </p>
+        </div>
+      </div>
+
+      <button class="btn-save-settings" onclick="saveSettings()">Save Settings</button>
+
+      <div class="settings-card" style="margin-top:1.5rem;">
+        <h3>Danger Zone</h3>
+        <button class="btn-del" onclick="clearAll()" style="margin-top:.2rem;">Clear all saved data &amp; log out</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Toast container -->
+<div id="toast"></div>
+
+<script>
+// ════════════════════════════════════════════════════════════════════
+//  CONSTANTS
+// ════════════════════════════════════════════════════════════════════
+var PASS_HASH = 'a9302168'; // simple check — real security is the PAT
+var CONTENT_URL = 'https://api.github.com/repos/{owner}/{repo}/contents/content.json';
+
+// Verify password by djb2 hash (not crypto, just friction)
+function djb2(s){ var h=5381; for(var i=0;i<s.length;i++) h=(((h<<5)+h)+s.charCodeAt(i))|0; return (h>>>0).toString(16).slice(0,8); }
+var PASS = 'kothari2026'; // Change this if you want, rebuild hash with djb2()
+
+// ════════════════════════════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════════════════════════════
+var state = {
+  hero:{tag:'',bio:''},
+  stats:[],
+  about:{p1:'',p2:'',chips:[]},
+  experience:[],
+  projects:[],
+  writing:[],
+  contact:{email:'',linkedin:'',erp:'',phone:'',location:''}
+};
+var currentSha = null;
+var isDirty = false;
+
+// ════════════════════════════════════════════════════════════════════
+//  AUTH
+// ════════════════════════════════════════════════════════════════════
+(function initAuth(){
+  if(localStorage.getItem('cms_unlocked')==='1') unlock(true);
+  document.getElementById('lock-btn').addEventListener('click', tryUnlock);
+  document.getElementById('lock-input').addEventListener('keydown', function(e){ if(e.key==='Enter') tryUnlock(); });
+})();
+
+function tryUnlock(){
+  var v = document.getElementById('lock-input').value;
+  if(v === PASS){
+    localStorage.setItem('cms_unlocked','1');
+    unlock(false);
+  } else {
+    document.getElementById('lock-err').textContent = 'Incorrect password.';
+  }
+}
+
+function unlock(instant){
+  var lock = document.getElementById('lock');
+  var app = document.getElementById('app');
+  if(instant){ lock.style.display='none'; app.classList.add('visible'); initApp(); return; }
+  lock.classList.add('hidden');
+  setTimeout(function(){ lock.style.display='none'; app.classList.add('visible'); initApp(); }, 400);
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  INIT APP
+// ════════════════════════════════════════════════════════════════════
+function initApp(){
+  loadSettings();
+  loadContent();
+  bindNav();
+}
+
+function loadSettings(){
+  var owner = localStorage.getItem('cms_owner') || 'tirth14503-dev';
+  var repo = localStorage.getItem('cms_repo') || 'tirth14503-dev.github.io';
+  var pat = localStorage.getItem('cms_pat') || '';
+  document.getElementById('set-owner').value = owner;
+  document.getElementById('set-repo').value = repo;
+  document.getElementById('set-pat').value = pat;
+}
+
+function saveSettings(){
+  var owner = document.getElementById('set-owner').value.trim();
+  var repo = document.getElementById('set-repo').value.trim();
+  var pat = document.getElementById('set-pat').value.trim();
+  if(!owner || !repo){ toast('error','Owner and repo are required.'); return; }
+  localStorage.setItem('cms_owner', owner);
+  localStorage.setItem('cms_repo', repo);
+  if(pat) localStorage.setItem('cms_pat', pat);
+  toast('success','Settings saved.');
+}
+
+function togglePAT(){
+  var inp = document.getElementById('set-pat');
+  var btn = inp.nextElementSibling;
+  if(inp.type==='password'){ inp.type='text'; btn.textContent='Hide'; }
+  else { inp.type='password'; btn.textContent='Show'; }
+}
+
+function clearAll(){
+  if(!confirm('This will clear all saved settings and log you out. Continue?')) return;
+  localStorage.removeItem('cms_unlocked');
+  localStorage.removeItem('cms_owner');
+  localStorage.removeItem('cms_repo');
+  localStorage.removeItem('cms_pat');
+  localStorage.removeItem('cms_last_pub');
+  location.reload();
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  FETCH CONTENT FROM GITHUB
+// ════════════════════════════════════════════════════════════════════
+function apiURL(){
+  var o = localStorage.getItem('cms_owner') || 'tirth14503-dev';
+  var r = localStorage.getItem('cms_repo') || 'tirth14503-dev.github.io';
+  return 'https://api.github.com/repos/'+o+'/'+r+'/contents/content.json';
+}
+
+function loadContent(){
+  var h = document.getElementById('h-last');
+  h.textContent = 'Fetching…';
+  var pat = localStorage.getItem('cms_pat') || '';
+  var headers = {'Accept':'application/vnd.github.v3+json', 'X-GitHub-Api-Version':'2022-11-28'};
+  if(pat) headers['Authorization'] = 'token '+pat;
+
+  fetch(apiURL(), {headers:headers})
+    .then(function(r){
+      if(r.status===404){ return null; }
+      if(!r.ok){ throw new Error('HTTP '+r.status); }
+      return r.json();
+    })
+    .then(function(data){
+      if(!data){
+        h.textContent = 'content.json not found — publish to create it';
+        renderAll();
+        return;
+      }
+      currentSha = data.sha;
+      var decoded = decodeUTF8Base64(data.content.replace(/\n/g,''));
+      state = JSON.parse(decoded);
+      var lastPub = localStorage.getItem('cms_last_pub');
+      h.textContent = lastPub ? 'Last published '+fmtDate(lastPub) : 'Loaded from GitHub';
+      renderAll();
+    })
+    .catch(function(e){
+      h.textContent = 'Load error: '+e.message;
+      renderAll();
+      toast('error','Could not fetch content.json — working offline.');
+    });
+}
+
+function decodeUTF8Base64(b64){
+  var raw = atob(b64);
+  var bytes = new Uint8Array(raw.length);
+  for(var i=0;i<raw.length;i++) bytes[i]=raw.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+function encodeUTF8Base64(str){
+  var bytes = new TextEncoder().encode(str);
+  var binary = '';
+  for(var i=0;i<bytes.length;i++) binary+=String.fromCharCode(bytes[i]);
+  return btoa(binary);
+}
+
+function fmtDate(iso){ try{ return new Date(iso).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}); }catch(e){ return iso; } }
+
+// ════════════════════════════════════════════════════════════════════
+//  PUBLISH TO GITHUB
+// ════════════════════════════════════════════════════════════════════
+async function publishNow(){
+  var pat = localStorage.getItem('cms_pat');
+  if(!pat){ toast('error','No GitHub token — go to Settings first.'); goPage('settings'); return; }
+
+  collectState();
+
+  var btns = document.querySelectorAll('.pub-btn, #pub-btn-main');
+  btns.forEach(function(b){ b.disabled=true; b.textContent='Publishing…'; });
+
+  var pb = document.getElementById('prog-bar');
+  var pf = document.getElementById('prog-fill');
+  if(pb){ pb.classList.add('active'); pf.style.width='20%'; }
+
+  try {
+    // Step 1: get current SHA (in case it changed)
+    var headers = {
+      'Accept':'application/vnd.github.v3+json',
+      'Authorization':'token '+pat,
+      'X-GitHub-Api-Version':'2022-11-28'
+    };
+    var metaRes = await fetch(apiURL(), {headers:headers});
+    if(metaRes.ok){
+      var meta = await metaRes.json();
+      currentSha = meta.sha;
+    }
+    if(pf) pf.style.width='50%';
+
+    // Step 2: build payload
+    state._updated = new Date().toISOString().slice(0,10);
+    var content = encodeUTF8Base64(JSON.stringify(state, null, 2));
+    var payload = {
+      message: 'Update portfolio content via CMS ['+new Date().toISOString().slice(0,10)+']',
+      content: content
+    };
+    if(currentSha) payload.sha = currentSha;
+
+    // Step 3: PUT
+    var putHeaders = Object.assign({}, headers, {'Content-Type':'application/json'});
+    var putRes = await fetch(apiURL(), {
+      method:'PUT',
+      headers:putHeaders,
+      body:JSON.stringify(payload)
+    });
+    if(pf) pf.style.width='90%';
+
+    if(putRes.ok){
+      var putData = await putRes.json();
+      currentSha = putData.content && putData.content.sha;
+      isDirty = false;
+      document.getElementById('h-dirty').classList.add('hidden');
+      var now = new Date().toISOString();
+      localStorage.setItem('cms_last_pub', now);
+      document.getElementById('h-last').textContent = 'Published '+fmtDate(now);
+      toast('success','✓ Published! Site updates in ~60 seconds.');
+    } else {
+      var err = await putRes.json().catch(function(){ return {}; });
+      toast('error','Publish failed: '+(err.message||'HTTP '+putRes.status));
+    }
+  } catch(e){
+    toast('error','Publish error: '+e.message);
+  } finally {
+    if(pf){ pf.style.width='100%'; setTimeout(function(){ pb.classList.remove('active'); pf.style.width='0%'; },600); }
+    btns.forEach(function(b){ b.disabled=false; b.textContent='Publish →'; });
+    if(document.getElementById('pub-btn-main')) document.getElementById('pub-btn-main').textContent='Publish to GitHub →';
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  COLLECT STATE FROM DOM
+// ════════════════════════════════════════════════════════════════════
+function collectState(){
+  // Hero
+  state.hero = {
+    tag: v('hero-tag'),
+    bio: v('hero-bio')
+  };
+  // Stats
+  state.stats = [];
+  document.querySelectorAll('.stat-edit-card').forEach(function(card){
+    state.stats.push({
+      n: card.querySelector('.stat-n-input').value,
+      l: card.querySelector('.stat-l-input').value
+    });
+  });
+  // About
+  state.about = {
+    p1: v('about-p1'),
+    p2: v('about-p2'),
+    chips: collectChips('about-chips-wrap')
+  };
+  // Experience
+  state.experience = [];
+  document.querySelectorAll('#exp-editor .exp-edit-card').forEach(function(card){
+    var bullets = [];
+    card.querySelectorAll('.bullet-input').forEach(function(inp){ if(inp.value.trim()) bullets.push(inp.value); });
+    state.experience.push({
+      n: card.querySelector('.f-num').value,
+      role: card.querySelector('.f-role').value,
+      org: card.querySelector('.f-org').value,
+      date: card.querySelector('.f-date').value,
+      loc: card.querySelector('.f-loc').value,
+      bullets: bullets
+    });
+  });
+  // Projects
+  state.projects = [];
+  document.querySelectorAll('#proj-editor .proj-edit-card').forEach(function(card){
+    state.projects.push({
+      id: card.querySelector('.f-id').value,
+      badge: card.querySelector('.f-badge').value,
+      title: card.querySelector('.f-title').value,
+      desc: card.querySelector('.f-desc').value,
+      tags: collectChips(card.querySelector('.f-tags-wrap'))
+    });
+  });
+  // Writing
+  state.writing = [];
+  document.querySelectorAll('#writing-editor .writing-edit-card').forEach(function(card){
+    var ext = card.querySelector('.f-external').checked;
+    state.writing.push({
+      id: card.querySelector('.f-id').value,
+      badge: card.querySelector('.f-badge').value,
+      title: card.querySelector('.f-title').value,
+      desc: card.querySelector('.f-desc').value,
+      tags: collectChips(card.querySelector('.f-tags-wrap')),
+      external: ext,
+      link: ext ? card.querySelector('.f-link').value : undefined
+    });
+  });
+  // Contact
+  state.contact = {
+    email: v('contact-email'),
+    linkedin: v('contact-linkedin'),
+    erp: v('contact-erp'),
+    phone: v('contact-phone'),
+    location: v('contact-location')
+  };
+}
+
+function v(id){ var el=document.getElementById(id); return el ? el.value : ''; }
+function collectChips(wrap){
+  var el = typeof wrap==='string' ? document.getElementById(wrap) : wrap;
+  if(!el) return [];
+  return Array.prototype.slice.call(el.querySelectorAll('.tag-chip')).map(function(c){
+    return c.querySelector('.chip-text').textContent;
+  });
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  RENDER ALL SECTIONS
+// ════════════════════════════════════════════════════════════════════
+function renderAll(){
+  renderHero();
+  renderStats();
+  renderAbout();
+  renderExp();
+  renderProj();
+  renderWriting();
+  renderContact();
+  updateCounts();
+}
+
+function renderHero(){
+  var h = state.hero || {};
+  document.getElementById('hero-tag').value = h.tag || '';
+  document.getElementById('hero-bio').value = h.bio || '';
+}
+
+function renderStats(){
+  var grid = document.getElementById('stats-grid');
+  var stats = state.stats && state.stats.length ? state.stats : [{n:'',l:''},{n:'',l:''},{n:'',l:''},{n:'',l:''}];
+  grid.innerHTML = stats.map(function(s,i){
+    return '<div class="stat-edit-card">'+
+      '<div class="stat-preview">'+
+        '<div class="stat-preview-n" id="prev-n-'+i+'">'+esc(s.n||'—')+'</div>'+
+        '<div class="stat-preview-l" id="prev-l-'+i+'">'+esc(s.l||'Label')+'</div>'+
+      '</div>'+
+      '<div class="field-group" style="margin-bottom:.7rem;">'+
+        '<label class="field-label">Value</label>'+
+        '<input type="text" class="field-input stat-n-input" value="'+esc(s.n||'')+'" oninput="dirty();this.closest(\'.stat-edit-card\').querySelector(\'.stat-preview-n\').textContent=this.value||\'—\'">'+
+      '</div>'+
+      '<div class="field-group" style="margin-bottom:0;">'+
+        '<label class="field-label">Label</label>'+
+        '<input type="text" class="field-input stat-l-input" value="'+esc(s.l||'')+'" oninput="dirty();this.closest(\'.stat-edit-card\').querySelector(\'.stat-preview-l\').textContent=this.value||\'Label\'">'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function renderAbout(){
+  var a = state.about || {};
+  document.getElementById('about-p1').value = a.p1 || '';
+  document.getElementById('about-p2').value = a.p2 || '';
+  renderChips('about-chips-wrap', a.chips || []);
+}
+
+function renderChips(wrapId, chips){
+  var wrap = typeof wrapId==='string' ? document.getElementById(wrapId) : wrapId;
+  if(!wrap) return;
+  wrap.innerHTML = chips.map(function(c,i){
+    return '<span class="tag-chip"><span class="chip-text">'+esc(c)+'</span><button onclick="removeChip(this)" title="Remove">×</button></span>';
+  }).join('');
+  // add input
+  var inp = document.createElement('input');
+  inp.className = 'tag-input-inline';
+  inp.placeholder = '+ Add…';
+  inp.addEventListener('keydown', function(e){
+    if(e.key==='Enter' && inp.value.trim()){
+      addChipToWrap(wrap, inp.value.trim());
+      inp.value='';
+      dirty();
+    }
+  });
+  wrap.appendChild(inp);
+}
+
+function addChipToWrap(wrap, text){
+  var chip = document.createElement('span');
+  chip.className = 'tag-chip';
+  chip.innerHTML = '<span class="chip-text">'+esc(text)+'</span><button onclick="removeChip(this)" title="Remove">×</button>';
+  wrap.insertBefore(chip, wrap.lastElementChild);
+}
+
+function removeChip(btn){ btn.parentElement.remove(); dirty(); }
+
+function renderExp(){
+  var exps = state.experience || [];
+  var container = document.getElementById('exp-editor');
+  container.innerHTML = exps.map(function(e,i){ return expCard(e,i); }).join('');
+  document.getElementById('exp-badge').textContent = exps.length;
+}
+
+function expCard(e,i){
+  var bullets = (e.bullets||[]).map(function(b){
+    return '<div class="bullet-row">'+
+      '<textarea class="bullet-input" rows="2" oninput="dirty()">'+escAttr(b)+'</textarea>'+
+      '<button class="btn-rm-bullet" onclick="rmBullet(this)" title="Remove">×</button>'+
+    '</div>';
+  }).join('');
+  return '<div class="card exp-edit-card" id="exp-card-'+i+'">'+
+    '<div class="card-head" onclick="toggleCard(this)">'+
+      '<div class="card-num">'+esc(e.n||String(i+1).padStart(2,'0'))+'</div>'+
+      '<div><div class="card-role-label">'+esc(e.role||'New Role')+'</div><div class="card-org-label">'+esc(e.org||'Organization')+'</div></div>'+
+      '<div class="card-toggle">▾</div>'+
+    '</div>'+
+    '<div class="card-body">'+
+      '<div class="row-3" style="margin-bottom:1rem;">'+
+        '<div class="field-group" style="margin-bottom:0;"><label class="field-label">Number</label><input type="text" class="field-input f-num" value="'+esc(e.n||'')+'" oninput="dirty();syncCardNum(this)"></div>'+
+        '<div class="field-group" style="margin-bottom:0;grid-column:span 2;"><label class="field-label">Role Title</label><input type="text" class="field-input f-role" value="'+esc(e.role||'')+'" oninput="dirty();syncCardRole(this)"></div>'+
+      '</div>'+
+      '<div class="field-group">'+
+        '<label class="field-label">Organization</label>'+
+        '<input type="text" class="field-input f-org" value="'+esc(e.org||'')+'" oninput="dirty();syncCardOrg(this)">'+
+      '</div>'+
+      '<div class="row-2">'+
+        '<div class="field-group"><label class="field-label">Date Range</label><input type="text" class="field-input f-date" value="'+esc(e.date||'')+'" oninput="dirty()"></div>'+
+        '<div class="field-group"><label class="field-label">Location</label><input type="text" class="field-input f-loc" value="'+esc(e.loc||'')+'" oninput="dirty()"></div>'+
+      '</div>'+
+      '<div class="field-group">'+
+        '<label class="field-label">Bullets <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">(one per line, HTML ok)</span></label>'+
+        '<div class="bullets-wrap">'+bullets+'</div>'+
+        '<button class="btn-add-bullet" onclick="addBullet(this)">+ Add bullet</button>'+
+      '</div>'+
+      '<div class="card-actions">'+
+        '<button class="btn-move" onclick="moveCard(this,-1)">↑ Up</button>'+
+        '<button class="btn-move" onclick="moveCard(this,1)">↓ Down</button>'+
+        '<button class="btn-del" onclick="delCard(this)">Delete entry</button>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+
+function renderProj(){
+  var projs = state.projects || [];
+  var container = document.getElementById('proj-editor');
+  container.innerHTML = projs.map(function(p,i){ return projCard(p,i); }).join('');
+  document.getElementById('proj-badge').textContent = projs.length;
+}
+
+function projCard(p,i){
+  return '<div class="card proj-edit-card">'+
+    '<div class="card-head" onclick="toggleCard(this)">'+
+      '<div class="card-num">P'+(i+1)+'</div>'+
+      '<div><div class="card-role-label">'+esc(p.title||'New Project')+'</div><div class="card-org-label">'+esc(p.badge||'')+'</div></div>'+
+      '<div class="card-toggle">▾</div>'+
+    '</div>'+
+    '<div class="card-body">'+
+      '<div class="row-2">'+
+        '<div class="field-group"><label class="field-label">ID (slug)</label><input type="text" class="field-input f-id" value="'+esc(p.id||'')+'" oninput="dirty()"><div class="field-hint">Used for AI chip links, e.g. "forecast"</div></div>'+
+        '<div class="field-group"><label class="field-label">Badge</label><input type="text" class="field-input f-badge" value="'+esc(p.badge||'')+'" oninput="dirty()"></div>'+
+      '</div>'+
+      '<div class="field-group"><label class="field-label">Title</label><input type="text" class="field-input f-title" value="'+esc(p.title||'')+'" oninput="dirty()"></div>'+
+      '<div class="field-group"><label class="field-label">Description <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">(&lt;strong&gt; ok)</span></label><textarea class="field-textarea f-desc" rows="3" oninput="dirty()">'+escAttr(p.desc||'')+'</textarea></div>'+
+      '<div class="field-group">'+
+        '<label class="field-label">Tags</label>'+
+        '<div class="tags-wrap f-tags-wrap">'+
+          (p.tags||[]).map(function(t){ return '<span class="tag-chip"><span class="chip-text">'+esc(t)+'</span><button onclick="removeChip(this)" title="Remove">×</button></span>'; }).join('')+
+          '<input class="tag-input-inline" placeholder="+ Add…" onkeydown="tagKeydown(event,this)">'+
+        '</div>'+
+      '</div>'+
+      '<div class="card-actions">'+
+        '<button class="btn-move" onclick="moveCard(this,-1)">↑ Up</button>'+
+        '<button class="btn-move" onclick="moveCard(this,1)">↓ Down</button>'+
+        '<button class="btn-del" onclick="delCard(this)">Delete project</button>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+
+function renderWriting(){
+  var arts = state.writing || [];
+  var container = document.getElementById('writing-editor');
+  container.innerHTML = arts.map(function(a,i){ return writingCard(a,i); }).join('');
+  document.getElementById('writing-badge').textContent = arts.length;
+}
+
+function writingCard(a,i){
+  var extChecked = a.external ? 'checked' : '';
+  return '<div class="card writing-edit-card">'+
+    '<div class="card-head" onclick="toggleCard(this)">'+
+      '<div class="card-num">A'+(i+1)+'</div>'+
+      '<div><div class="card-role-label">'+esc(a.title||'New Article')+'</div><div class="card-org-label">'+esc(a.badge||'')+'</div></div>'+
+      '<div class="card-toggle">▾</div>'+
+    '</div>'+
+    '<div class="card-body">'+
+      '<div class="row-2">'+
+        '<div class="field-group"><label class="field-label">ID (slug)</label><input type="text" class="field-input f-id" value="'+esc(a.id||'')+'" oninput="dirty()"></div>'+
+        '<div class="field-group"><label class="field-label">Badge</label><input type="text" class="field-input f-badge" value="'+esc(a.badge||'')+'" oninput="dirty()"></div>'+
+      '</div>'+
+      '<div class="field-group"><label class="field-label">Title</label><input type="text" class="field-input f-title" value="'+esc(a.title||'')+'" oninput="dirty()"></div>'+
+      '<div class="field-group"><label class="field-label">Description</label><textarea class="field-textarea f-desc" rows="3" oninput="dirty()">'+escAttr(a.desc||'')+'</textarea></div>'+
+      '<div class="field-group">'+
+        '<label class="field-label">Tags</label>'+
+        '<div class="tags-wrap f-tags-wrap">'+
+          (a.tags||[]).map(function(t){ return '<span class="tag-chip"><span class="chip-text">'+esc(t)+'</span><button onclick="removeChip(this)" title="Remove">×</button></span>'; }).join('')+
+          '<input class="tag-input-inline" placeholder="+ Add…" onkeydown="tagKeydown(event,this)">'+
+        '</div>'+
+      '</div>'+
+      '<div class="field-group" style="display:flex;align-items:center;gap:.8rem;">'+
+        '<input type="checkbox" class="f-external" id="ext-'+i+'" '+extChecked+' onchange="dirty();toggleLinkField(this)">'+
+        '<label for="ext-'+i+'" style="font-size:.85rem;color:var(--text2);cursor:pointer;">External link (hosted elsewhere)</label>'+
+      '</div>'+
+      '<div class="field-group f-link-group" style="'+(a.external?'':'display:none')+'">'+
+        '<label class="field-label">External URL</label>'+
+        '<input type="url" class="field-input f-link" value="'+esc(a.link||'')+'" oninput="dirty()">'+
+      '</div>'+
+      '<div class="card-actions">'+
+        '<button class="btn-move" onclick="moveCard(this,-1)">↑ Up</button>'+
+        '<button class="btn-move" onclick="moveCard(this,1)">↓ Down</button>'+
+        '<button class="btn-del" onclick="delCard(this)">Delete article</button>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+
+function renderContact(){
+  var c = state.contact || {};
+  document.getElementById('contact-email').value = c.email || '';
+  document.getElementById('contact-linkedin').value = c.linkedin || '';
+  document.getElementById('contact-erp').value = c.erp || '';
+  document.getElementById('contact-phone').value = c.phone || '';
+  document.getElementById('contact-location').value = c.location || '';
+}
+
+function updateCounts(){
+  document.getElementById('ov-exp').textContent = (state.experience||[]).length;
+  document.getElementById('ov-proj').textContent = (state.projects||[]).length;
+  document.getElementById('ov-write').textContent = (state.writing||[]).length;
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  CARD INTERACTIONS
+// ════════════════════════════════════════════════════════════════════
+function toggleCard(head){
+  var card = head.closest('.card');
+  card.classList.toggle('open');
+}
+
+function syncCardNum(inp){ var h=inp.closest('.card').querySelector('.card-num'); if(h) h.textContent=inp.value; }
+function syncCardRole(inp){ var h=inp.closest('.card').querySelector('.card-role-label'); if(h) h.textContent=inp.value||'New Role'; }
+function syncCardOrg(inp){ var h=inp.closest('.card').querySelector('.card-org-label'); if(h) h.textContent=inp.value; }
+
+function addBullet(btn){
+  var wrap = btn.previousElementSibling;
+  var row = document.createElement('div');
+  row.className = 'bullet-row';
+  row.innerHTML = '<textarea class="bullet-input" rows="2" oninput="dirty()"></textarea>'+
+    '<button class="btn-rm-bullet" onclick="rmBullet(this)" title="Remove">×</button>';
+  wrap.appendChild(row);
+  row.querySelector('textarea').focus();
+  dirty();
+}
+
+function rmBullet(btn){ btn.parentElement.remove(); dirty(); }
+
+function addExp(){
+  var n = (state.experience||[]).length;
+  var newEntry = {n:String(n+1).padStart(2,'0'),role:'',org:'',date:'',loc:'',bullets:[]};
+  state.experience = state.experience||[];
+  state.experience.push(newEntry);
+  var container = document.getElementById('exp-editor');
+  var div = document.createElement('div');
+  div.innerHTML = expCard(newEntry, n);
+  container.appendChild(div.firstElementChild);
+  var card = container.lastElementChild;
+  card.classList.add('open');
+  document.getElementById('exp-badge').textContent = state.experience.length;
+  dirty();
+}
+
+function addProj(){
+  var newP = {id:'',badge:'',title:'',desc:'',tags:[]};
+  state.projects = state.projects||[];
+  state.projects.push(newP);
+  var n = state.projects.length-1;
+  var container = document.getElementById('proj-editor');
+  var div = document.createElement('div');
+  div.innerHTML = projCard(newP,n);
+  container.appendChild(div.firstElementChild);
+  container.lastElementChild.classList.add('open');
+  document.getElementById('proj-badge').textContent = state.projects.length;
+  dirty();
+}
+
+function addArticle(){
+  var newA = {id:'',badge:'',title:'',desc:'',tags:[],external:false};
+  state.writing = state.writing||[];
+  state.writing.push(newA);
+  var n = state.writing.length-1;
+  var container = document.getElementById('writing-editor');
+  var div = document.createElement('div');
+  div.innerHTML = writingCard(newA,n);
+  container.appendChild(div.firstElementChild);
+  container.lastElementChild.classList.add('open');
+  document.getElementById('writing-badge').textContent = state.writing.length;
+  dirty();
+}
+
+function delCard(btn){
+  if(!confirm('Delete this entry?')) return;
+  btn.closest('.card').remove();
+  dirty();
+}
+
+function moveCard(btn, dir){
+  var card = btn.closest('.card');
+  var parent = card.parentElement;
+  var cards = Array.prototype.slice.call(parent.children);
+  var idx = cards.indexOf(card);
+  var target = idx + dir;
+  if(target<0 || target>=cards.length) return;
+  if(dir===-1) parent.insertBefore(card, cards[target]);
+  else parent.insertBefore(cards[target], card);
+  dirty();
+}
+
+function toggleLinkField(chk){
+  var grp = chk.closest('.card-body').querySelector('.f-link-group');
+  if(grp) grp.style.display = chk.checked ? '' : 'none';
+}
+
+function tagKeydown(e, inp){
+  if(e.key==='Enter' && inp.value.trim()){
+    addChipToWrap(inp.parentElement, inp.value.trim());
+    inp.value='';
+    dirty();
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  NAV
+// ════════════════════════════════════════════════════════════════════
+function bindNav(){
+  document.querySelectorAll('.nav-item').forEach(function(item){
+    item.addEventListener('click', function(){ goPage(item.dataset.page); });
+  });
+}
+
+function goPage(name){
+  document.querySelectorAll('.nav-item').forEach(function(i){ i.classList.remove('active'); });
+  document.querySelectorAll('.section-page').forEach(function(p){ p.classList.remove('active'); });
+  var navEl = document.querySelector('[data-page="'+name+'"]');
+  var pageEl = document.getElementById('page-'+name);
+  if(navEl) navEl.classList.add('active');
+  if(pageEl) pageEl.classList.add('active');
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  DIRTY FLAG
+// ════════════════════════════════════════════════════════════════════
+function dirty(){
+  if(!isDirty){
+    isDirty = true;
+    document.getElementById('h-dirty').classList.remove('hidden');
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  TOAST
+// ════════════════════════════════════════════════════════════════════
+function toast(type, msg){
+  var container = document.getElementById('toast');
+  var el = document.createElement('div');
+  el.className = 'toast-item '+type;
+  el.textContent = msg;
+  container.appendChild(el);
+  setTimeout(function(){ el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(function(){ el.remove(); },300); }, 4000);
+}
+
+// ════════════════════════════════════════════════════════════════════
+//  HELPERS
+// ════════════════════════════════════════════════════════════════════
+function esc(s){ return String(s||'').replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c];}); }
+function escAttr(s){ return String(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+</script>
+</body>
+</html>
