@@ -8294,10 +8294,8 @@ __glReady(function initScmActs(){
   }
 
   function renderExp(exps){
-    var delays=[.06,.1,.17,.24,.31,.38];
     return exps.map(function(e,i){
-      var d=delays[i]!==undefined?delays[i]:(.06+i*.07);
-      return '<div class="exp-item reveal" style="transition-delay:'+d+'s">'+
+      return '<div class="exp-item">'+
         '<div class="exp-header">'+
         '<div class="exp-num-badge">'+esc(e.n)+'</div>'+
         '<div class="exp-meta"><div class="exp-role">'+esc(e.role)+'</div><div class="exp-org">'+esc(e.org)+'</div></div>'+
@@ -8311,10 +8309,8 @@ __glReady(function initScmActs(){
   }
 
   function renderProj(projs){
-    var delays=[.05,.12,.19,.05,.12,.19];
     return projs.map(function(p,i){
-      var d=delays[i]!==undefined?delays[i]:.05;
-      return '<div class="pj-card reveal" style="transition-delay:'+d+'s" data-case="'+esc(p.id)+'">'+
+      return '<div class="pj-card" data-case="'+esc(p.id)+'">'+
         '<span class="pj-badge">'+esc(p.badge)+'</span>'+
         '<div class="pj-title">'+esc(p.title)+'</div>'+
         '<div class="pj-desc">'+p.desc+'</div>'+
@@ -8324,17 +8320,15 @@ __glReady(function initScmActs(){
   }
 
   function renderWriting(arts){
-    var delays=[.05,.12,.05,.1,.15];
-    return arts.map(function(a,i){
-      var d=delays[i]!==undefined?delays[i]:.05;
+    return arts.map(function(a){
       var inner='<span class="pj-badge">'+esc(a.badge)+'</span>'+
         '<div class="pj-title">'+esc(a.title)+'</div>'+
         '<div class="pj-desc">'+a.desc+'</div>'+
         '<div class="pj-tags">'+(a.tags||[]).map(function(t){ return '<span>'+esc(t)+'</span>'; }).join('')+'</div>';
       if(a.external && a.link){
-        return '<a class="pj-card reveal" style="text-decoration:none;transition-delay:'+d+'s" href="'+esc(a.link)+'" target="_blank" rel="noopener">'+inner+'</a>';
+        return '<a class="pj-card" style="text-decoration:none;" href="'+esc(a.link)+'" target="_blank" rel="noopener">'+inner+'</a>';
       }
-      return '<div class="pj-card reveal" data-article="'+esc(a.id)+'" style="transition-delay:'+d+'s">'+inner+'</div>';
+      return '<div class="pj-card" data-article="'+esc(a.id)+'">'+inner+'</div>';
     }).join('');
   }
 
