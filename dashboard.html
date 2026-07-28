@@ -540,6 +540,17 @@ async function publishNow(){
 
   collectState();
 
+  // Safety check — warn if counts dropped vs what was loaded
+  var expCount = (state.experience||[]).length;
+  var projCount = (state.projects||[]).length;
+  var writeCount = (state.writing||[]).length;
+  var msg = 'Publishing to GitHub:\n\n' +
+    '  Experience entries: ' + expCount + '\n' +
+    '  Projects: ' + projCount + '\n' +
+    '  Writing articles: ' + writeCount + '\n\n' +
+    'Confirm?';
+  if(!confirm(msg)) return;
+
   var btns = document.querySelectorAll('.pub-btn, #pub-btn-main');
   btns.forEach(function(b){ b.disabled=true; b.textContent='Publishing…'; });
 
