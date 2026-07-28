@@ -3035,14 +3035,29 @@ var KB=[
    r:"**Certifications:**\n• **GE Aerospace Supply Chain Job Simulation** (Forage)\n• **Tata Group Data Visualisation Programme** (Forage)\n• **Six Sigma Green Belt** (Lean Six Sigma)\n• **DDMRP Certification** (Demand Driven Institute / DD Brix Factory)\n\nCurrent coursework: Machine Learning for Business, Transportation & Logistics, Global Sourcing & Procurement, Decision Making for Managers.",
    chips:['What is DDMRP?','Technical skills?','Tell me about yourself']},
 
+  {k:['erp live','is it live','running','deployed','pythonanywhere','can i try it'],
+   r:"Yes, it's live right now at **tirthalkothari.pythonanywhere.com** — you can log in and explore it.\n\nFeatures: multi-user auth with RBAC, stock ledger, financial KPIs (revenue, COGS, gross margin), AI demand forecasting, supplier risk scoring, anomaly detection, barcode scanner with camera integration.\n\nBuilt solo in Django, Python, SQL. No tutorials, no boilerplate kit — started from scratch.",
+   chips:['Tell me about the ERP project','Technical skills?','Show me Projects']},
+  {k:['professors','professor','recommendation','what do they say','testimonial','endorsement','what professors'],
+   r:"Three recommendations that I think represent the full picture:\n\n**Aaron Krupp** (DePaul, College of Communication): _'Strong organizational skills, maturity, integrity, and professionalism in every interaction.'_\n\n**Sina Ansari** (Decision Making for Managers): _'His ability to translate data into clear, actionable insights... combining quantitative analysis with practical business intuition.'_\n\n**Mike Ozmeral** (Global Sourcing & Procurement): _'One of my best students... the intellectual curiosity, passion and work ethic to be very successful in the Procurement and Supply Chain field.'_",
+   chips:['Take me to Voices','Why supply chain?','What makes you unique?']},
+  {k:['200k','200000','savings','cost savings','procurement savings','rs 200','rupees'],
+   r:"The Rs 200K figure is FY24 documented savings at **Kothari Electronics**, achieved through two main levers:\n\n**1. Strategic vendor renegotiation** — I analyzed our top suppliers by spend and lead time, identified where we had leverage, and renegotiated terms. Some vendors we dropped entirely after scorecarding.\n\n**2. PVC wire reprocessing** — We were scrapping defective PVC wire as waste. I identified that 60%+ of it could be reprocessed and reused. That alone was Rs 90K/year.\n\nThe rest came from better demand planning, which reduced emergency buys at premium prices.",
+   chips:['Tell me about Kothari Electronics','Open experience 3','What was your biggest impact?']},
   {k:['hobby','interest','personal','outside work','fun','free time'],
    r:"Outside of work I still end up reading about how systems work — logistics networks, operations theory, but also how any complex system (cities, markets, ecosystems) adapts to disruption.\n\nIn Chicago: still finding the city. The food is great. The winters are not.",
    chips:['Why supply chain?','Tell me about yourself','Surprise me']},
 
+  {k:['work experience','experience section','your career','all your jobs','career history','all your roles','your roles','your background'],
+   r:"Here's a quick overview of my **6 roles across 2 countries**:\n\n**01** LPC Office Assistant · DePaul (Sep 2025–Jun 2026, Chicago)\n**02** Student Ambassador · DePaul Kellstadt (Feb 2025–Present, Chicago)\n**03** Operations & SC Consultant · Kothari Electronics (Jun 2021–Jul 2024, Mumbai)\n**04** Research Analyst · ISCM (Jul 2023–Jul 2024, Mumbai)\n**05** Content & Social Media Intern · Career Launcher (Feb–Apr 2023, Mumbai)\n**06** Supply Chain Intern · Mentone Concretes (May–Jul 2022, Mumbai)\n\nThe highest-impact role is **#03** — three years, end-to-end manufacturing ops, over Rs 200K in documented savings.",
+   chips:['Open experience 3 (Kothari Electronics)','Open experience 4 (ISCM)','Open experience 6 (Mentone)','What was your biggest impact?']},
   {k:['hello','hi','hey','howdy','greetings'],
    r:"Hey! I'm **Tirthal** — supply chain & analytics, finishing my MS at DePaul in Chicago in June 2026.\n\nI can answer questions about my background **and** navigate this portfolio for you. Try _\"take me to Projects\"_, _\"open experience 3\"_, _\"show me the ERP project\"_, or _\"surprise me\"_.\n\nWhat do you want to explore?",
    chips:['Tell me about yourself','Show me Projects','Take me to Experience','What can you do?']},
 
+  {k:['biggest impact','biggest achievement','most proud','best result','top achievement','biggest win'],
+   r:"Three I come back to:\n\n**1. Rs 200K+ in documented savings** at Kothari Electronics through vendor renegotiation and process redesign — not a classroom projection, actual FY24 numbers.\n\n**2. India's first national supply chain index** — 1,500+ companies, published, 40% methodology improvement over prior attempts. Built from scratch.\n\n**3. A live ERP system** — Django, Python, SQL — running at tirthalkothari.pythonanywhere.com. Built solo because I wanted to understand what I'd manage, not just operate.",
+   chips:['Tell me about Kothari Electronics','Tell me about the SC index','Tell me about the ERP project']},
   {k:['thank','thanks','appreciate','great answer'],
    r:"Thanks. If you want to keep the conversation going, email **tirth14503@gmail.com** or find me on LinkedIn at **linkedin.com/in/tirthalkothari**.",
    chips:['Copy email address','Take me to Contact','Open to opportunities?']},
@@ -3135,7 +3150,22 @@ var input=document.getElementById('aip-in');
 var send=document.getElementById('aip-send');
 var chips=document.getElementById('aip-chips');
 var btn=document.getElementById('btn-ai');
-var isOpen=false,isStreaming=false;
+var isOpen=false,isStreaming=false,lastSection=null;
+
+/* ── SECTION-SPECIFIC FOLLOW-UP CHIPS ────────────────────────────────────── */
+var SECTION_CHIPS={
+  hero:       ['Tell me about yourself','Why supply chain?','Show me Projects','What can you do?'],
+  about:      ['Tell me about yourself','Why supply chain?','Where are you from?','What makes you unique?'],
+  experience: ['Tell me about your work experience','Tell me about Kothari Electronics','Open experience 4 (ISCM)','What was your biggest impact?'],
+  projects:   ['Tell me about the ERP project','Open KeHE project','Open demand forecasting','Technical skills?'],
+  skills:     ['What are your technical skills?','What is DDMRP?','What certifications do you have?','Machine learning projects?'],
+  contact:    ['Copy email address','Open to opportunities?','What makes you unique?','Tell me about yourself'],
+  writing:    ['Tell me about the SC index','Tell me about the KeHE article','Show me Projects','Take me to Experience'],
+  voices:     ['What do your professors say about you?','Why supply chain?','Take me to Projects'],
+  stats:      ['Tell me about the Rs 200K savings','Tell me about the SC index','What makes you unique?'],
+  matcher:    ['Technical skills?','Open to opportunities?','What makes you unique?'],
+  game:       ['Take me to Projects','Tell me about yourself','Surprise me'],
+};
 
 /* ── CHIP MANAGEMENT ──────────────────────────────────────── */
 var DEFAULT_CHIPS=['Tell me about yourself','Show me Projects','Take me to Experience','What can you do?'];
@@ -3274,11 +3304,12 @@ async function doSend(){
     switch(intent.type){
 
       case 'nav':{
+        lastSection=intent.id;
         var label=NAV_LABELS[intent.id]||intent.kw||intent.id;
         var navMsg='Navigating to **'+label+'**…';
         await streamInto(navMsg,bubble);
         gotoSection(intent.id);
-        setChips(['Tell me about this section','What else is here?','Go somewhere else','Surprise me']);
+        setChips(SECTION_CHIPS[intent.id]||['Tell me about yourself','Show me Projects','Surprise me']);
         break;
       }
 
@@ -3289,7 +3320,15 @@ async function doSend(){
         await streamInto(emsg,bubble);
         speak(emsg.replace(/\*\*/g,''));
         openExpItem(intent.n);
-        setChips(['Tell me about this role','Other experiences?','Take me to Projects','Surprise me']);
+        var EXP_ROLE_CHIPS=[
+              ['Tell me about your work experience','Tell me about Student Ambassador role','Take me to Projects','When do you graduate?'],
+              ['Tell me about Student Ambassador role','Tell me about Kothari Electronics','DePaul coursework?','Take me to Projects'],
+              ['Tell me about Kothari Electronics','What were the Rs 200K savings?','Operations skills?','Tell me about ISCM'],
+              ['Tell me about the SC index','Tell me about Kothari Electronics','What certifications do you have?','Take me to Projects'],
+              ['Tell me about your work experience','Show me Projects','Technical skills?'],
+              ['Tell me about Mentone Concretes','What is DDMRP?','Take me to Experience','Take me to Projects'],
+            ];
+            setChips(EXP_ROLE_CHIPS[intent.n-1]||['Tell me about your work experience','Other experiences?','Take me to Projects']);
         break;
       }
 
@@ -3299,7 +3338,15 @@ async function doSend(){
         await streamInto(pmsg,bubble);
         speak(pmsg.replace(/\*\*/g,''));
         openProject(intent.id);
-        setChips(['Tell me more about this','Other projects?','Technical skills?','Surprise me']);
+        var PROJ_ROLE_CHIPS={
+              forecast:['What ML tools did you use?','Tell me about the ERP project','Open KeHE project','Technical skills?'],
+              kehe:['Tell me about the KeHE article','What transportation tools?','Open demand forecasting','Take me to Writing'],
+              automation:['Tell me about the ERP project','Is the ERP live?','Technical skills?','Open demand forecasting'],
+              segmentation:['Tell me about machine learning','Open churn prediction','Technical skills?'],
+              churn:['Tell me about machine learning','Open demand forecasting','Technical skills?'],
+              optimization:['What tools for optimization?','Open KeHE project','Technical skills?'],
+            };
+            setChips(PROJ_ROLE_CHIPS[intent.id]||['Technical skills?','Other projects?','Take me to Experience']);
         break;
       }
 
