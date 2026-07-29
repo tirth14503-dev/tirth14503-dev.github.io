@@ -3128,6 +3128,21 @@ var SURPRISE=[
 
 /* ── KNOWLEDGE BASE ────────────────────────────────────── */
 var KB=[
+  /* Self-introduction. 'Tell me about yourself' is the default chip shown on
+     open and in most SECTION_CHIPS, but no KB entry matched it: 'tell' and
+     'about' are stop-words, leaving only 'yourself', which appears in no FACTS
+     string. The flagship suggested question therefore hit the generic
+     "I'm not certain" fallback. */
+  {k:['tell me about yourself','about yourself','yourself','who are you','who is tirthal','introduce','elevator pitch','tell me about you'],
+   r:"Short version: I learned supply chain before I had textbook words for it.
+
+I grew up in my family’s electronics business in **Mumbai**, where supply chain wasn’t a subject — it was whether the shipment showed up and whether we got paid. I ran procurement, QC, inventory and distribution there, and strategic sourcing delivered **₹200,000 in FY24 cost savings**.
+
+The research side came later: a year at ISCM analyzing **1,500+ companies across 24 sectors** to build India’s first national supply chain index.
+
+Now I’m finishing my **MS in Supply Chain Management at DePaul’s Kellstadt School** in Chicago, graduating **June 2026**. Six roles, two countries. These days I’m as happy writing SQL as I am on the phone with a supplier — I think that mix is the whole point.",
+   chips:['Why supply chain?','Show me Projects','Take me to Experience','Open to opportunities?']},
+
   {k:['kehe','truckload','rfp','carrier bid','practicum','industry project','transportation project'],
    r:"In DePaul's transportation practicum I worked a **real 2024 inbound truckload RFP for KeHE Distributors** — not a simulation, an actual carrier bid across major US corridors.\n\nI evaluated bids across rate, service reliability, and capacity, then built a recommendation framework. The key insight: **the cheapest lane bid is rarely the cheapest lane** once you factor in detention risk, carrier reliability scores, and fuel-surcharge volatility. I wrote that up in a Field Notes piece too.",
    chips:['Open KeHE project','Take me to Writing','What transportation tools?']},
