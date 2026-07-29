@@ -8403,3 +8403,36 @@ __glReady(function initScmActs(){
   function esc(s){ return String(s||'').replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]; }); }
 })();
 </script>
+
+<!-- Mobile fix: experience cards forced horizontal page scroll on phones.
+     The desktop layout uses an 86px timeline rail with an absolutely
+     positioned number badge, a 4-column header, and a non-wrapping date.
+     None of it had a mobile override, so the card overflowed a 375px
+     viewport by ~67px and the whole page scrolled sideways. -->
+<style>
+@media (max-width:700px){
+  #experience .exp-list{ padding-left:0 !important; }
+  #experience .exp-list::before{ display:none !important; }
+  #experience .exp-num-badge{ display:none !important; }
+  .exp-header,
+  #experience .exp-header{
+    grid-template-columns:1fr 24px !important;
+    grid-template-areas:"meta toggle" "right right" !important;
+    gap:.55rem .7rem !important;
+    padding:1.15rem 1.1rem !important;
+    align-items:start !important;
+  }
+  .exp-meta{ grid-area:meta; min-width:0; }
+  .exp-right{
+    grid-area:right;
+    flex-direction:row !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+    flex-wrap:wrap;
+    gap:.45rem !important;
+  }
+  .exp-toggle-icon{ grid-area:toggle; }
+  .exp-date{ white-space:normal !important; }
+  .exp-role,.exp-org{ overflow-wrap:anywhere; }
+}
+</style>
