@@ -1878,7 +1878,7 @@ section{scroll-margin-top:64px;}
       <div class="stat-card reveal"><div class="stat-n">₹200K</div><div class="stat-l">FY24 Cost Savings</div></div>
       <div class="stat-card reveal" style="transition-delay:.1s"><div class="stat-n">1,500+</div><div class="stat-l">Companies Analysed</div></div>
       <div class="stat-card reveal" style="transition-delay:.2s"><div class="stat-n">5</div><div class="stat-l">Roles · 2 Countries</div></div>
-      <div class="stat-card reveal" style="transition-delay:.3s"><div class="stat-n">2026</div><div class="stat-l">MS Graduation</div></div>
+      <div class="stat-card reveal" style="transition-delay:.3s"><div class="stat-n" data-nocount>Jun 2026</div><div class="stat-l">MS Graduation</div></div>
     </div>
     <div class="about-text reveal-r">
       <h2>From Mumbai<br>to <strong>Chicago</strong></h2>
@@ -6572,7 +6572,11 @@ __glReady(function initScmActs(){
         requestAnimationFrame(step);
       });
     },{threshold:.4});
-    document.querySelectorAll('.stat-n').forEach(function(el){ cio.observe(el); });
+    /* [data-nocount] opts a stat out of the count-up. Dates must never animate:
+       counting a year up from 0 reads as a glitch, and the rAF loop rewrites
+       textContent every frame, which would clobber a CMS value applied mid-flight
+       (e.g. "Jun 2026" silently reverting to a bare "2026"). */
+    document.querySelectorAll('.stat-n:not([data-nocount])').forEach(function(el){ cio.observe(el); });
   }catch(e){}
 
   /* ── 3D tilt with glare ── */
