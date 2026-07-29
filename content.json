@@ -12,10 +12,10 @@
     },
     {
       "n": "1,500+",
-      "l": "Companies Analysed"
+      "l": "Companies Analyzed"
     },
     {
-      "n": "5",
+      "n": "6",
       "l": "Roles · 2 Countries"
     },
     {
@@ -81,7 +81,7 @@
       "date": "Jul 2023 – Jul 2024",
       "loc": "Mumbai, India",
       "bullets": [
-        "Analysed <span class=\"hl\">1,500+ companies across 24 sectors</span> using R, Excel and Tableau to benchmark SC performance",
+        "Analyzed <span class=\"hl\">1,500+ companies across 24 sectors</span> using R, Excel and Tableau to benchmark SC performance",
         "Built India’s first national supply chain index, enhanced methodology by <span class=\"hl\">40%</span> over prior frameworks",
         "Authored <em>\"Top 20 Supply Chain Champions of India\"</em>, flagship industry report",
         "Led <em>Supply Chain Dialogue Series</em> with CSCO-level speakers from Fortune 500 companies"
@@ -94,7 +94,7 @@
       "date": "Feb 2023 – Apr 2023",
       "loc": "Mumbai, India",
       "bullets": [
-        "SEO-optimised content strategy raised website traffic by <span class=\"hl\">25%</span> and session time by <span class=\"hl\">40%</span>",
+        "SEO-optimized content strategy raised website traffic by <span class=\"hl\">25%</span> and session time by <span class=\"hl\">40%</span>",
         "Grew Instagram account organically by <span class=\"hl\">10,000+ followers</span> through targeted campaigns",
         "Developed high-performing content scripts and social media themes for student audiences"
       ]
