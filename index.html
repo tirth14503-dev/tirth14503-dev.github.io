@@ -8114,13 +8114,21 @@ __glReady(function initScmActs(){
 
   /* 2 — Section heading enhanced entrance */
   try{
+    /* NOTE: must be fromTo, not from. These elements also carry .reveal,
+       whose CSS is opacity:0 until .up is added, so gsap.from() would capture
+       0 as its destination and animate 0 -> 0, leaving them invisible forever.
+       onEnter adds .up so the .sec-title word-mask (.wi) unclips in step. */
     gsap.utils.toArray('.sec-title').forEach(function(el){
-      gsap.from(el,{y:36,opacity:0,scale:0.93,duration:0.9,ease:'power3.out',
-        scrollTrigger:{trigger:el,start:'top 87%',once:true}});
+      gsap.fromTo(el,{y:36,opacity:0,scale:0.93},
+        {y:0,opacity:1,scale:1,duration:0.9,ease:'power3.out',
+        scrollTrigger:{trigger:el,start:'top 87%',once:true,
+          onEnter:function(){ el.classList.add('up'); }}});
     });
     gsap.utils.toArray('.sec-eyebrow').forEach(function(el){
-      gsap.from(el,{x:-28,opacity:0,duration:0.65,ease:'power2.out',
-        scrollTrigger:{trigger:el,start:'top 89%',once:true}});
+      gsap.fromTo(el,{x:-28,opacity:0},
+        {x:0,opacity:1,duration:0.65,ease:'power2.out',
+        scrollTrigger:{trigger:el,start:'top 89%',once:true,
+          onEnter:function(){ el.classList.add('up'); }}});
     });
   }catch(e){}
 
