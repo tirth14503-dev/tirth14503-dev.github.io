@@ -8260,18 +8260,23 @@ __glReady(function initScmActs(){
       // Experience
       if(d.experience && d.experience.length){
         var el=document.getElementById('exp-list');
-        if(el){ el.innerHTML=renderExp(d.experience); rewireExp(el); revealSec(el); }
+        if(el){ el.innerHTML=renderExp(d.experience); rewireExp(el); }
       }
       // Projects
       if(d.projects && d.projects.length){
         var pg=document.getElementById('proj-grid');
-        if(pg){ pg.innerHTML=renderProj(d.projects); revealSec(pg); }
+        if(pg) pg.innerHTML=renderProj(d.projects);
       }
       // Writing
       if(d.writing && d.writing.length){
         var wg=document.getElementById('writing-grid');
-        if(wg){ wg.innerHTML=renderWriting(d.writing); revealSec(wg); }
+        if(wg) wg.innerHTML=renderWriting(d.writing);
       }
+      // After all content replaced: refresh GSAP scroll positions so section
+      // headings (sec-title, sec-eyebrow) animate in correctly after layout shift
+      setTimeout(function(){
+        if(typeof ScrollTrigger!=='undefined') ScrollTrigger.refresh();
+      }, 100);
       // Contact links
       if(d.contact){
         if(d.contact.email){
@@ -8352,11 +8357,6 @@ __glReady(function initScmActs(){
     });
   }
 
-  function revealSec(el){
-    var sec=el.closest?el.closest('section'):null;
-    var root=sec||el;
-    root.querySelectorAll('.reveal,.reveal-l,.reveal-r,.reveal-scale').forEach(function(x){ x.classList.add('up'); });
-  }
   function qi(sel,val){ var el=document.querySelector(sel); if(el&&val!==undefined&&val!==null) el.textContent=val; }
   function esc(s){ return String(s||'').replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]; }); }
 })();
