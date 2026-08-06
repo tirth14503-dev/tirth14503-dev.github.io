@@ -398,6 +398,21 @@ var state = {
   contact:{email:'',linkedin:'',erp:'',phone:'',location:''}
 };
 var currentSha = null;
+// Publish safety: `state` starts as empty arrays. If the initial load fails,
+// publishing that default would erase every section of the live site. We only
+// allow publishing once the remote content has actually been read, and we keep
+// a baseline of the loaded counts so deletions can be detected.
+var loadedOK = false;
+var baseline = null;
+function snapshotBaseline(){
+  baseline = {
+    exp:     (state.experience||[]).length,
+    proj:    (state.projects||[]).length,
+    writing: (state.writing||[]).length,
+    stats:   (state.stats||[]).length
+  };
+  loadedOK = true;
+}
 var isDirty = false;
 
 // ════════════════════════════════════════════════════════════════════
@@ -497,6 +512,8 @@ function loadContent(){
     })
     .then(function(data){
       if(!data){
+        loadedOK = true; // no remote file yet - first publish is legitimate
+        baseline = {exp:0,proj:0,writing:0,stats:0};
         h.textContent = 'content.json not found — publish to create it';
         renderAll();
         return;
@@ -504,6 +521,7 @@ function loadContent(){
       currentSha = data.sha;
       var decoded = decodeUTF8Base64(data.content.replace(/\n/g,''));
       state = JSON.parse(decoded);
+      snapshotBaseline();
       var lastPub = localStorage.getItem('cms_last_pub');
       h.textContent = lastPub ? 'Last published '+fmtDate(lastPub) : 'Loaded from GitHub';
       renderAll();
@@ -541,9 +559,28 @@ async function publishNow(){
   collectState();
 
   // Safety check — warn if counts dropped vs what was loaded
+  // Never publish unverified state - this would overwrite the live content.
+  if(!loadedOK){
+    toast('error','Content was never loaded from GitHub, so publishing now would erase the live site. Reload the page and let it load first.');
+    return;
+  }
+
   var expCount = (state.experience||[]).length;
   var projCount = (state.projects||[]).length;
   var writeCount = (state.writing||[]).length;
+
+  // Real drop detection against what was actually loaded (previously this was
+  // only a display of current counts, so an accidental deletion published silently).
+  var drops = [];
+  if(baseline){
+    if(expCount   < baseline.exp)     drops.push('Experience: '+baseline.exp+' -> '+expCount);
+    if(projCount  < baseline.proj)    drops.push('Projects: '+baseline.proj+' -> '+projCount);
+    if(writeCount < baseline.writing) drops.push('Writing: '+baseline.writing+' -> '+writeCount);
+    if((state.stats||[]).length < baseline.stats) drops.push('Stats: '+baseline.stats+' -> '+(state.stats||[]).length);
+  }
+  if(drops.length){
+    if(!confirm('WARNING - this publish DELETES content:\n\n  '+drops.join('\n  ')+'\n\nIf you did not mean to delete these, click Cancel.\n\nDelete them anyway?')) return;
+  }
   var msg = 'Publishing to GitHub:\n\n' +
     '  Experience entries: ' + expCount + '\n' +
     '  Projects: ' + projCount + '\n' +
