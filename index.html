@@ -2814,7 +2814,7 @@ section{scroll-margin-top:64px;}
   </div>
   <div class="ft-bottom">
     <span>&copy; 2026 Tirthal Kothari &middot; Chicago, IL</span>
-    <span>Site last updated July 2026</span>
+    <span id="site-updated">Site last updated August 2026</span>
   </div>
 </footer>
 
@@ -3128,6 +3128,12 @@ var SURPRISE=[
 
 /* ── KNOWLEDGE BASE ────────────────────────────────────── */
 var KB=[
+  /* No KB entry answered contact questions - 'How do I contact you?' is an
+     offered chip and hit the generic fallback. */
+  {k:['how do i contact','how to contact','contact you','get in touch','reach you','how can i reach','best way to reach','contact details'],
+   r:"Easiest is email: **tirth14503@gmail.com** \u2014 I reply within a day.\n\nYou can also find me on LinkedIn at **linkedin.com/in/tirthalkothari**, and the Contact section has a QR code and my phone number.\n\nI\u2019m in **Chicago** and graduate in **June 2026**, so I\u2019m actively speaking with teams now.",
+   chips:['Copy email address','Take me to Contact','Open to opportunities?']},
+
   /* Self-introduction. 'Tell me about yourself' is the default chip shown on
      open and in most SECTION_CHIPS, but no KB entry matched it: 'tell' and
      'about' are stop-words, leaving only 'yourself', which appears in no FACTS
@@ -3155,11 +3161,11 @@ Now I’m finishing my **MS in Supply Chain Management at DePaul’s Kellstadt S
    r:"I've published in two places:\n\n• **DePaul Inside Kellstadt** — 'A Day in the Life of an MS in Supply Chain Management Student.' Covers the Loop campus commute, collaborative study culture, what the coursework really involves.\n\n• **Supply Chain Champions** — co-authored India's first national SC ranking report (1,500+ companies, national press coverage).\n\nAlso three **Field Notes** essays here on the portfolio: the KeHE RFP, the SC index methodology, and why I built my own ERP.",
    chips:['Take me to Writing','Tell me about the index','Show me KeHE project']},
 
-  {k:['erp','system','built','django','pythonanywhere','app','software'],
+  {k:['erp','about erp','erp project','tell me about erp','the erp','system','built','django','pythonanywhere','app','software'],
    r:"I built a **full-stack ERP entirely solo** — Django, Python, SQL — because I wanted to understand what I'd be managing in supply chain roles, not just how to operate it.\n\n**Features:** multi-user auth with RBAC, stock ledger, financial KPIs (revenue, COGS, gross margin), AI demand forecasting, supplier risk scoring, anomaly detection, a barcode scanner with camera integration.\n\nLive at **tirthalkothari.pythonanywhere.com**. Most supply chain people can drive an ERP. I know what's under the hood.",
    chips:['Open that project','Take me to Projects','Technical skills?']},
 
-  {k:['iscm','research analyst','supply chain index','india supply chain','1500','champions'],
+  {k:['iscm','about iscm','tell me about iscm','sc index','the index','national index','research analyst','supply chain index','india supply chain','1500','champions'],
    r:"At ISCM I built **India's first national supply chain index** — analyzing 1,500+ public companies across 24 sectors in R, Excel, and Tableau. No standardized methodology existed before this to compare pharma cold chains against cement dispatch networks.\n\nI improved the methodology by **40%**, authored the flagship industry report ('Top 20 Supply Chain Champions of India'), and led the **Supply Chain Dialogue Series** — hosting CSCOs from Fortune 500 companies.",
    chips:['Open ISCM experience','Take me to Projects','Take me to Writing']},
 
@@ -3243,7 +3249,7 @@ Now I’m finishing my **MS in Supply Chain Management at DePaul’s Kellstadt S
    r:"Based in Chicago right now — DePaul's Loop Campus is my main campus. Happy to commute downtown for on-site interviews or roles.\n\nLong-term: **open to relocating anywhere in the US**. The right role matters more than the city.",
    chips:['Open to opportunities?','How do I contact you?','Take me to Contact']},
 
-  {k:['strength','best at','good at','excel at'],
+  {k:['strength','strong','makes you strong','what makes you strong','best at','good at','excel at'],
    r:"I can **build the model and explain it to a supplier** who doesn't care about the model — that combination is rarer than it sounds.\n\n• Translating data into operational decisions\n• Communicating at both executive and factory-floor level\n• Starting from scratch on ambiguous problems (built the index, the ERP, from zero)\n• Cross-cultural, cross-organizational contexts",
    chips:['Why supply chain?','What makes you unique?','Technical skills?']},
 
@@ -3268,7 +3274,7 @@ Now I’m finishing my **MS in Supply Chain Management at DePaul’s Kellstadt S
    r:"Outside of work I still end up reading about how systems work — logistics networks, operations theory, but also how any complex system (cities, markets, ecosystems) adapts to disruption.\n\nIn Chicago: still finding the city. The food is great. The winters are not.",
    chips:['Why supply chain?','Tell me about yourself','Surprise me']},
 
-  {k:['work experience','experience section','your career','all your jobs','career history','all your roles','your roles','your background'],
+  {k:['work experience','experience section','that experience','open that experience','your career','all your jobs','career history','all your roles','your roles','your background'],
    r:"Here's a quick overview of my **6 roles across 2 countries**:\n\n**01** LPC Office Assistant · DePaul (Sep 2025–Jun 2026, Chicago)\n**02** Student Ambassador · DePaul Kellstadt (Feb 2025–Present, Chicago)\n**03** Operations & SC Consultant · Kothari Electronics (Jun 2021–Jul 2024, Mumbai)\n**04** Research Analyst · ISCM (Jul 2023–Jul 2024, Mumbai)\n**05** Content & Social Media Intern · Career Launcher (Feb–Apr 2023, Mumbai)\n**06** Supply Chain Intern · Mentone Concretes (May–Jul 2022, Mumbai)\n\nThe highest-impact role is **#03** — three years, end-to-end manufacturing ops, over Rs 200K in documented savings.",
    chips:['Open experience 3 (Kothari Electronics)','Open experience 4 (ISCM)','Open experience 6 (Mentone)','What was your biggest impact?']},
   {k:['hello','hi','hey','howdy','greetings'],
@@ -3282,7 +3288,7 @@ Now I’m finishing my **MS in Supply Chain Management at DePaul’s Kellstadt S
    r:"Thanks. If you want to keep the conversation going, email **tirth14503@gmail.com** or find me on LinkedIn at **linkedin.com/in/tirthalkothari**.",
    chips:['Copy email address','Take me to Contact','Open to opportunities?']},
 
-  {k:['what can you do','commands','capabilities','features','help'],
+  {k:['what can you do','tell me more','more please','commands','capabilities','features','help'],
    r:"I can do a lot more than answer questions:\n\n**Navigate the site:**\n• _\"Take me to Experience\"_\n• _\"Show me Projects\"_\n• _\"Go to Contact\"_ / _\"Writing\"_ / _\"Voices\"_\n\n**Open specific content:**\n• _\"Open experience 3\"_ (Kothari Electronics)\n• _\"Show me the ERP project\"_\n• _\"Open the KeHE RFP\"_\n\n**Actions:**\n• _\"Copy email address\"_\n• _\"Open the job matcher\"_\n• _\"Surprise me\"_ (random fact about Tirthal)\n• _\"Hire Tirthal\"_ 😉",
    chips:['Take me to Experience','Show me Projects','Copy email address','Surprise me']},
 ];
@@ -8323,6 +8329,20 @@ __glReady(function initScmActs(){
           document.querySelectorAll('a[href*="pythonanywhere.com"]').forEach(function(a){
             a.href=d.contact.erp;
           });
+        }
+      }
+      // Footer "last updated" is driven by content.json._updated, which the
+      // dashboard stamps on every publish. Previously it was a hardcoded month
+      // that silently went stale (it still read "July 2026" in August).
+      if(d._updated){
+        var su=document.getElementById('site-updated');
+        if(su){
+          var dt=new Date(d._updated+'T00:00:00');
+          if(!isNaN(dt.getTime())){
+            var MON=['January','February','March','April','May','June','July',
+                     'August','September','October','November','December'];
+            su.textContent='Site last updated '+MON[dt.getMonth()]+' '+dt.getFullYear();
+          }
         }
       }
     } catch(e){}
