@@ -1,9 +1,9 @@
 {
   "_version": 1,
-  "_updated": "2026-08-06",
+  "_updated": "2026-08-30",
   "hero": {
-    "tag": "Supply Chain · Analytics · Chicago",
-    "bio": "I learned supply chain the hands-on way, in my family’s electronics business in Mumbai. Now I’m finishing my MS at DePaul in Chicago, building the systems most people only operate."
+    "tag": "Supply Chain Analyst · Procurement · Analytics",
+    "bio": "I combine hands-on operations experience with Python, SQL, forecasting, and procurement analytics to reduce cost, improve availability, and make complex supply chain decisions clearer."
   },
   "stats": [
     {
@@ -15,12 +15,12 @@
       "l": "Companies Analyzed"
     },
     {
-      "n": "6",
-      "l": "Roles · 2 Countries"
+      "n": "30%",
+      "l": "Material Availability Improved"
     },
     {
-      "n": "Jun 2026",
-      "l": "MS Graduation"
+      "n": "₹90K",
+      "l": "Annual Waste Savings"
     }
   ],
   "about": {
