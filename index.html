@@ -1785,17 +1785,42 @@ section{scroll-margin-top:64px;}
 .ms-hint{font-family:var(--fm);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,240,230,.6);}
 
 
-/* ============ GLOBE (replaces flat SVG journey map) ============ */
-.jm-globe-outer{position:relative;width:100%;max-width:900px;border-radius:22px;overflow:hidden;background:radial-gradient(ellipse at 40% 45%,#0e2244,#06101e 80%);box-shadow:0 30px 80px rgba(0,0,0,.3),0 0 0 1px rgba(255,255,255,.04);}
-#jm-globe{display:block;width:100%;height:auto;min-height:320px;max-height:480px;}
+/* ============ REAL-WORLD JOURNEY ============ */
+#journeymap{min-height:auto;background:#f1f2f4!important;}
+#journeymap .jm-wrap{width:100%;max-width:1680px;margin:0 auto;}
+.jm-stage{display:grid;grid-template-columns:minmax(0,1.48fr) minmax(340px,.72fr);gap:1.35rem;align-items:stretch;}
+.jm-globe-outer{position:relative;width:100%;min-height:520px;border-radius:28px;overflow:hidden;background:radial-gradient(ellipse at 45% 40%,#152e4b,#020712 76%);box-shadow:0 30px 80px rgba(6,17,31,.28),0 0 0 1px rgba(255,255,255,.08);}
+#jm-globe{display:block;width:100%;height:100%;min-height:520px;}
 .jm-scroll-hint{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-family:var(--fm);font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,220,255,.55);pointer-events:none;transition:opacity .8s;white-space:nowrap;}
 .jm-scroll-hint.hide{opacity:0;}
 .jm-city-lbl{position:absolute;font-family:var(--fm);font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(220,200,130,.9);pointer-events:none;transform:translate(-50%,-130%);white-space:nowrap;text-shadow:0 1px 6px rgba(0,0,0,.8);}
-.jm-city-row{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin:1.4rem 0 1.2rem;font-family:var(--fs);}
+.jm-earth-credit{position:absolute;right:16px;bottom:14px;z-index:4;font-family:var(--fm);font-size:.43rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(225,235,245,.58);}
+.jm-earth-credit a{color:inherit;text-decoration:none;}
+.jm-place-panel{min-width:0;background:rgba(255,255,255,.9);border:1px solid rgba(0,0,0,.06);border-radius:28px;overflow:hidden;box-shadow:0 24px 65px rgba(20,28,40,.12);display:flex;flex-direction:column;}
+.jm-place-visual{position:relative;min-height:245px;overflow:hidden;background:#162331;}
+.jm-place-visual img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;transition:opacity .32s ease,transform 1.2s var(--ease-out);}
+.jm-place-panel:hover .jm-place-visual img{transform:scale(1.025);}
+.jm-place-visual.swap img{opacity:.25;}
+.jm-place-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,10,18,.06) 18%,rgba(3,10,18,.82) 100%);}
+.jm-place-caption{position:absolute;left:1.6rem;right:1.6rem;bottom:1.35rem;color:#fff;display:flex;flex-direction:column;gap:.18rem;text-shadow:0 2px 18px rgba(0,0,0,.45);}
+.jm-place-coords{font-family:var(--fm);font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.72);}
+.jm-place-city{font-family:var(--fc);font-size:clamp(2rem,3vw,3.4rem);line-height:.95;font-weight:500;}
+.jm-place-landmark{font-family:var(--fs);font-size:.75rem;color:rgba(255,255,255,.82);margin-top:.28rem;}
+.jm-place-copy{padding:1.5rem 1.6rem 1.35rem;display:flex;flex-direction:column;flex:1;}
+.jm-city-row{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;margin:0 0 1.1rem;font-family:var(--fs);}
 .jm-city-btn{display:flex;align-items:center;gap:.45rem;font-family:var(--fm);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;padding:.45rem 1rem;border-radius:22px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;transition:all .2s;}
 .jm-city-btn:hover,.jm-city-btn.jm-city-active{background:var(--gold-t2);color:var(--text);border-color:rgba(28,58,94,.3);}
 .jm-city-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0;}
 .jm-city-arrow{font-family:var(--fs);font-size:.72rem;color:var(--text3);}
+.jm-place-panel .jm-detail{margin:0;padding:0;background:transparent;border:0;border-radius:0;box-shadow:none;max-width:none;}
+.jm-place-panel .jm-detail-title{font-size:clamp(1.45rem,2.2vw,2rem);}
+.jm-place-panel .jm-detail-body p{font-size:.86rem;line-height:1.68;}
+.jm-map-link{display:inline-flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:auto;padding-top:1.1rem;border-top:1px solid var(--border);font-family:var(--fm);font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);text-decoration:none;}
+.jm-map-link::after{content:'↗';font-family:var(--fs);font-size:.9rem;}
+.jm-photo-credit{font-family:var(--fs);font-size:.54rem;color:var(--text3);line-height:1.45;margin-top:.7rem;}
+.jm-photo-credit a{color:inherit;}
+@media(max-width:1100px){.jm-stage{grid-template-columns:1fr;}.jm-globe-outer,#jm-globe{min-height:460px;}.jm-place-visual{min-height:310px;}}
+@media(max-width:600px){.jm-globe-outer,#jm-globe{min-height:300px;}.jm-globe-outer,.jm-place-panel{border-radius:20px;}.jm-place-visual{min-height:235px;}.jm-place-copy{padding:1.25rem;}.jm-earth-credit{display:none;}}
 </style>
 
 
@@ -1920,29 +1945,47 @@ section{scroll-margin-top:64px;}
   <div class="sec-rule reveal"></div>
   <p class="reveal" style="font-family:var(--fs);color:var(--text2);max-width:560px;line-height:1.8;margin-bottom:2.4rem;font-size:.95rem;">Two cities. One great-circle flight. Scroll to fly the route — click a city for the story.</p>
   <div class="jm-wrap reveal">
-    <div class="jm-globe-outer">
-      <canvas id="jm-globe" aria-label="3D globe: Emirates flight route Mumbai to Chicago"></canvas>
-      <div id="jm-lbl-mumbai" class="jm-city-lbl">MUMBAI</div>
-      <div id="jm-lbl-chicago" class="jm-city-lbl">CHICAGO</div>
-      <div class="jm-scroll-hint" id="jm-scroll-hint">&#8595; Scroll to fly</div>
-      <div id="jm-hud" class="jm-hud" aria-live="polite" aria-label="Flight data">
-        <div class="hud-row"><span class="hud-lbl">ALT</span><span id="hud-alt" class="hud-val">--</span><span class="hud-unit">ft</span></div>
-        <div class="hud-row"><span class="hud-lbl">SPD</span><span id="hud-spd" class="hud-val">--</span><span class="hud-unit">kts</span></div>
-        <div class="hud-row"><span class="hud-lbl">ETA</span><span id="hud-eta" class="hud-val">--</span></div>
-        <hr class="hud-divider">
-        <div class="hud-route">MUM &#9654; ORD</div>
-        <div class="hud-bar"><div id="hud-bar-fill" class="hud-bar-fill"></div></div>
+    <div class="jm-stage">
+      <div class="jm-globe-outer">
+        <canvas id="jm-globe" aria-label="Satellite-textured 3D Earth showing the flight route from Mumbai to Chicago"></canvas>
+        <div id="jm-lbl-mumbai" class="jm-city-lbl">MUMBAI</div>
+        <div id="jm-lbl-chicago" class="jm-city-lbl">CHICAGO</div>
+        <div class="jm-scroll-hint" id="jm-scroll-hint">&#8595; Scroll to fly</div>
+        <div class="jm-earth-credit">Earth imagery: <a href="https://commons.wikimedia.org/wiki/File:Blue_Marble_2002.png" target="_blank" rel="noopener">NASA Blue Marble</a></div>
+        <div id="jm-hud" class="jm-hud" aria-live="polite" aria-label="Flight data">
+          <div class="hud-row"><span class="hud-lbl">ALT</span><span id="hud-alt" class="hud-val">--</span><span class="hud-unit">ft</span></div>
+          <div class="hud-row"><span class="hud-lbl">SPD</span><span id="hud-spd" class="hud-val">--</span><span class="hud-unit">kts</span></div>
+          <div class="hud-row"><span class="hud-lbl">ETA</span><span id="hud-eta" class="hud-val">--</span></div>
+          <hr class="hud-divider">
+          <div class="hud-route">MUM &#9654; ORD</div>
+          <div class="hud-bar"><div id="hud-bar-fill" class="hud-bar-fill"></div></div>
+        </div>
       </div>
-    </div>
-    <div class="jm-city-row">
-      <button class="jm-city-btn jm-city-active" data-city="mumbai"><span class="jm-city-dot" style="background:#d4a017;"></span>MUMBAI</button>
-      <span class="jm-city-arrow">&#8594;&nbsp;&#8594;&nbsp;&#8594;</span>
-      <button class="jm-city-btn" data-city="chicago"><span class="jm-city-dot" style="background:#5588ff;"></span>CHICAGO</button>
-    </div>
-    <div class="jm-detail" id="jm-detail">
-      <div class="jm-detail-badge" id="jm-badge">Mumbai, India</div>
-      <div class="jm-detail-title" id="jm-title">Where the instincts came from</div>
-      <div class="jm-detail-body" id="jm-body"></div>
+      <aside class="jm-place-panel" aria-label="Journey location details">
+        <div class="jm-place-visual" id="jm-place-visual">
+          <img id="jm-place-image" src="assets/journey/mumbai-gateway.jpg" alt="Gateway of India and Mumbai waterfront viewed from the Arabian Sea">
+          <div class="jm-place-shade"></div>
+          <div class="jm-place-caption">
+            <span class="jm-place-coords" id="jm-place-coords">18.9228° N · 72.8343° E</span>
+            <strong class="jm-place-city" id="jm-place-city">Mumbai</strong>
+            <span class="jm-place-landmark" id="jm-place-landmark">Gateway of India · Arabian Sea</span>
+          </div>
+        </div>
+        <div class="jm-place-copy">
+          <div class="jm-city-row" aria-label="Choose a city">
+            <button class="jm-city-btn jm-city-active" data-city="mumbai"><span class="jm-city-dot" style="background:#d4a017;"></span>MUMBAI</button>
+            <span class="jm-city-arrow">&#8594;</span>
+            <button class="jm-city-btn" data-city="chicago"><span class="jm-city-dot" style="background:#5588ff;"></span>CHICAGO</button>
+          </div>
+          <div class="jm-detail" id="jm-detail">
+            <div class="jm-detail-badge" id="jm-badge">Mumbai, India</div>
+            <div class="jm-detail-title" id="jm-title">Where the instincts came from</div>
+            <div class="jm-detail-body" id="jm-body"></div>
+          </div>
+          <a class="jm-map-link" id="jm-map-link" href="https://www.openstreetmap.org/?mlat=18.9228&amp;mlon=72.8343#map=15/18.9228/72.8343" target="_blank" rel="noopener">Explore this place on the map</a>
+          <p class="jm-photo-credit" id="jm-photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Mumbai,_Gateway_of_India.jpg" target="_blank" rel="noopener">Aktron / Wikimedia Commons</a> · CC BY-SA 4.0</p>
+        </div>
+      </aside>
     </div>
   </div>
 </section>
@@ -7339,6 +7382,13 @@ __glReady(function initScmActs(){
     mumbai:{
       badge:'Mumbai, India',
       title:'Where the instincts came from',
+      city:'Mumbai',
+      coords:'18.9228° N · 72.8343° E',
+      landmark:'Gateway of India · Arabian Sea',
+      image:'assets/journey/mumbai-gateway.jpg',
+      alt:'Gateway of India and Mumbai waterfront viewed from the Arabian Sea',
+      map:'https://www.openstreetmap.org/?mlat=18.9228&mlon=72.8343#map=15/18.9228/72.8343',
+      credit:'Photo: <a href="https://commons.wikimedia.org/wiki/File:Mumbai,_Gateway_of_India.jpg" target="_blank" rel="noopener">Aktron / Wikimedia Commons</a> · CC BY-SA 4.0',
       body:'<p>I grew up inside my family’s electronics business, running <strong>procurement, quality control, inventory, and distribution</strong> for three years. Renegotiated vendor terms for ₹200K in FY24 savings and salvaged defective PVC wire for another ₹90K a year.</p>'
           +'<p>Then <strong>national-level research at ISCM</strong> — building India’s first supply chain index across 1,500+ companies, and hosting CSCOs from the country’s biggest firms.</p>'
     },
@@ -7346,6 +7396,13 @@ __glReady(function initScmActs(){
     chicago:{
       badge:'Chicago, Illinois',
       title:'Where the analytics came in',
+      city:'Chicago',
+      coords:'41.8818° N · 87.6232° W',
+      landmark:'Lake Michigan · Downtown skyline',
+      image:'assets/journey/chicago-skyline.jpg',
+      alt:'Chicago skyline photographed from Lake Michigan',
+      map:'https://www.openstreetmap.org/?mlat=41.8818&mlon=-87.6232#map=13/41.8818/-87.6232',
+      credit:'Photo: <a href="https://commons.wikimedia.org/wiki/File:Chicago_Skyline_from_Lake_Michigan.jpg" target="_blank" rel="noopener">Bladerunner2019 / Wikimedia Commons</a> · CC BY-SA 3.0',
       body:'<p>An <strong>MS in Supply Chain Management at DePaul’s Kellstadt Graduate School</strong>, graduating June 2026 — predictive analytics, procurement strategy, inventory optimization.</p>'
           +'<p>Alongside it, two campus roles and a full <strong>ERP system I built solo</strong>. The operational instincts came from Mumbai; Chicago is where I paired them with the tools.</p>'
     }
@@ -7356,6 +7413,13 @@ __glReady(function initScmActs(){
   var badge=document.getElementById('jm-badge');
   var titleEl=document.getElementById('jm-title');
   var bodyEl=document.getElementById('jm-body');
+  var placeVisual=document.getElementById('jm-place-visual');
+  var placeImage=document.getElementById('jm-place-image');
+  var placeCoords=document.getElementById('jm-place-coords');
+  var placeCity=document.getElementById('jm-place-city');
+  var placeLandmark=document.getElementById('jm-place-landmark');
+  var mapLink=document.getElementById('jm-map-link');
+  var photoCredit=document.getElementById('jm-photo-credit');
   var current=null;
 
   function showCity(city){
@@ -7364,12 +7428,20 @@ __glReady(function initScmActs(){
     document.querySelectorAll('.jm-city-btn').forEach(function(b){
       b.classList.toggle('jm-city-active', b.getAttribute('data-city')===city);
     });
-    if(detail){ detail.classList.add('swap'); }
+    if(detail) detail.classList.add('swap');
+    if(placeVisual) placeVisual.classList.add('swap');
     setTimeout(function(){
       if(badge) badge.textContent=d.badge;
       if(titleEl) titleEl.textContent=d.title;
       if(bodyEl) bodyEl.innerHTML=d.body;
+      if(placeImage){ placeImage.src=d.image; placeImage.alt=d.alt; }
+      if(placeCoords) placeCoords.textContent=d.coords;
+      if(placeCity) placeCity.textContent=d.city;
+      if(placeLandmark) placeLandmark.textContent=d.landmark;
+      if(mapLink) mapLink.href=d.map;
+      if(photoCredit) photoCredit.innerHTML=d.credit;
       if(detail) detail.classList.remove('swap');
+      if(placeVisual) placeVisual.classList.remove('swap');
     },220);
   }
   document.querySelectorAll('.jm-city-btn').forEach(function(btn){
@@ -7401,7 +7473,7 @@ __glReady(function initScmActs(){
   }
 
   var W=canvas.parentElement.offsetWidth||700;
-  var H=Math.min(Math.round(W*0.58),460);
+  var H=Math.max(300,canvas.parentElement.offsetHeight||Math.min(Math.round(W*0.58),620));
   canvas.width=W; canvas.height=H;
 
   var renderer,scene,camera,globeGroup,planeGroup,planeSprite,routePts,animating=true;
@@ -7416,7 +7488,7 @@ __glReady(function initScmActs(){
 
   scene=new THREE.Scene();
   camera=new THREE.PerspectiveCamera(46,W/H,0.05,100);
-  camera.position.set(0,0.95,2.45);
+  camera.position.set(0,0.8,2.28);
   camera.lookAt(0,0.08,0);
 
   /* lighting */
@@ -7430,6 +7502,32 @@ __glReady(function initScmActs(){
 
   /* ocean sphere — canvas texture with subtle continental shading */
   (function buildEarth(){
+    /* Use NASA's real Blue Marble satellite mosaic. Keep the file local so the
+       globe remains reliable and does not depend on a third-party request. */
+    var earthMat=new THREE.MeshPhongMaterial({
+      color:0xffffff,
+      specular:0x284766,
+      shininess:7,
+      emissive:0x010205
+    });
+    var realEarth=new THREE.Mesh(new THREE.SphereGeometry(1,96,96),earthMat);
+    globeGroup.add(realEarth);
+    new THREE.TextureLoader().load('assets/journey/earth-blue-marble.png',function(map){
+      map.encoding=THREE.sRGBEncoding;
+      map.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
+      earthMat.map=map;
+      earthMat.needsUpdate=true;
+    });
+    globeGroup.add(new THREE.Mesh(
+      new THREE.SphereGeometry(1.025,64,64),
+      new THREE.MeshPhongMaterial({color:0x5aa7ff,transparent:true,opacity:0.08,side:THREE.FrontSide,depthWrite:false})
+    ));
+    globeGroup.add(new THREE.Mesh(
+      new THREE.SphereGeometry(1.075,64,64),
+      new THREE.MeshBasicMaterial({color:0x4d9dff,transparent:true,opacity:0.055,side:THREE.BackSide,depthWrite:false})
+    ));
+    return;
+
     var tc=document.createElement('canvas'); tc.width=2048; tc.height=1024;
     var ctx=tc.getContext('2d');
     /* ocean gradient */
@@ -7571,7 +7669,7 @@ __glReady(function initScmActs(){
 
   /* graticule */
   (function buildGraticule(){
-    var mat=new THREE.LineBasicMaterial({color:0x1e4070,transparent:true,opacity:0.38});
+    var mat=new THREE.LineBasicMaterial({color:0x88b4dc,transparent:true,opacity:0.12});
     function line(pts){ globeGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),mat)); }
     var R=1.001;
     for(var lat=-60;lat<=60;lat+=30){
@@ -7918,21 +8016,14 @@ __glReady(function initScmActs(){
       var localPos=getRoutePt(progress);
       var worldPos=localPos.clone().applyMatrix4(globeGroup.matrixWorld);
 
-      /* flyP: 0 = on globe surface, 1 = just in front of camera
-         Slow start, accelerates toward end for cinematic feel */
-      var flyP=Math.pow(Math.max(0,(progress-0.08)/0.92),2.6);
-      flyP=Math.min(1,flyP);
-
-      /* Target position: 0.42 units in front of camera along view axis */
-      var camFwd=new THREE.Vector3(); camera.getWorldDirection(camFwd);
-      var targetPos=camera.position.clone().addScaledVector(camFwd,0.42);
-
-      /* Sprite world position: blend from globe surface to near-camera */
-      var finalPos=worldPos.clone().lerp(targetPos,flyP);
+      /* Keep the aircraft close to the planet and visually to scale. The old
+         camera fly-toward made it become a giant illustration at arrival. */
+      var flyP=0;
+      var finalPos=worldPos.clone();
       planeSprite.position.copy(finalPos);
 
-      /* Sprite scale: grows as it approaches (perspective adds more on top) */
-      var sc=0.14+flyP*0.10;
+      /* A restrained route marker, not the subject of the scene. */
+      var sc=0.075;
       planeSprite.scale.set(sc,sc,1);
 
       /* Sprite rotation: nose follows projected flight direction on screen.
@@ -8048,7 +8139,7 @@ __glReady(function initScmActs(){
   /* resize */
   window.addEventListener('resize',function(){
     var nW=canvas.parentElement.offsetWidth||700;
-    var nH=Math.min(Math.round(nW*0.58),460);
+    var nH=Math.max(300,canvas.parentElement.offsetHeight||Math.min(Math.round(nW*0.58),620));
     W=nW; H=nH;
     renderer.setSize(nW,nH);
     camera.aspect=nW/nH;
