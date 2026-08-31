@@ -460,15 +460,18 @@ section:nth-child(even){background:var(--surface);}
 section:nth-child(odd){background:var(--bg);}
 #hero{background:var(--surface)!important;min-height:100vh;padding-top:52px;}
 
-/* ══════════════════════════════
-   CONNECTIVE WORLD — one persistent fixed
-   background behind About → Timeline, showing
-   the supply chain in motion as you scroll:
-   sourcing → manufacturing → intermodal transport
-══════════════════════════════ */
-.connective-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;}
-@media(max-width:760px){.connective-canvas{display:none;}}
-#about,#experience,#education,#skills,#timeline{background:transparent!important;position:relative;z-index:1;}
+/* Content sections stay calm and readable. The portfolio already has focused
+   3D moments in the hero, route map, and supply-chain journey; a fourth
+   full-screen scene behind the résumé content created oversized objects and
+   empty space on wide displays. */
+#about,#experience,#education,#skills,#timeline{position:relative;z-index:1;}
+#about,#education,#timeline{background:var(--bg)!important;}
+#experience,#skills{background:var(--surface)!important;}
+#about{
+  min-height:auto;
+  padding-top:clamp(5.5rem,9vh,7.5rem);
+  padding-bottom:clamp(5.5rem,9vh,7.5rem);
+}
 
 /* ── REVEAL ANIMATIONS ── */
 .reveal{opacity:0;transform:translateY(32px);filter:blur(8px);transition:opacity .8s var(--ease-out),transform .8s var(--ease-out),filter .8s var(--ease-out);}
@@ -1795,12 +1798,6 @@ section{scroll-margin-top:64px;}
 
 
 
-<!-- persistent background world — Source → Make → Intermodal,
-     rendered behind About through Timeline as one continuous scene -->
-<canvas class="connective-canvas" id="connective-canvas-0"></canvas>
-<canvas class="connective-canvas" id="connective-canvas-1"></canvas>
-<canvas class="connective-canvas" id="connective-canvas-2"></canvas>
-
 <!-- CURSOR -->
 <div id="cur"></div>
   <div id="hero-explore-hint">&#128269; The port is clickable, try a container</div>
@@ -1898,8 +1895,8 @@ section{scroll-margin-top:64px;}
     <div class="stats-2x2">
       <div class="stat-card reveal"><div class="stat-n">₹200K</div><div class="stat-l">FY24 Cost Savings</div></div>
       <div class="stat-card reveal" style="transition-delay:.1s"><div class="stat-n">1,500+</div><div class="stat-l">Companies Analyzed</div></div>
-      <div class="stat-card reveal" style="transition-delay:.2s"><div class="stat-n">6</div><div class="stat-l">Roles · 2 Countries</div></div>
-      <div class="stat-card reveal" style="transition-delay:.3s"><div class="stat-n" data-nocount>Jun 2026</div><div class="stat-l">MS Graduation</div></div>
+      <div class="stat-card reveal" style="transition-delay:.2s"><div class="stat-n">30%</div><div class="stat-l">Material Availability Improved</div></div>
+      <div class="stat-card reveal" style="transition-delay:.3s"><div class="stat-n">₹90K</div><div class="stat-l">Annual Waste Savings</div></div>
     </div>
     <div class="about-text reveal-r">
       <h2>From Mumbai<br>to <strong>Chicago</strong></h2>
@@ -4912,6 +4909,7 @@ __glReady(function initHeroPort(){
 __glReady(function initConnectiveWorld(){
   if(typeof THREE === 'undefined') return;
   if(matchMedia('(max-width:760px)').matches) return;
+  if(!document.querySelector('.connective-canvas')) return;
 
   const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const PALETTE = [0x1c3a5e, 0x2f5a85, 0x2b2b2f, 0x6b7280];
