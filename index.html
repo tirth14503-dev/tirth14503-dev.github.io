@@ -1847,16 +1847,21 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
   });
   document.body.classList.add('lab-ready');
 
-  document.querySelectorAll('[data-open-lab]').forEach(function(button){
-    button.addEventListener('click',function(){
-      var target=document.getElementById(button.getAttribute('data-open-lab'));
-      if(!target) return;
-      modules.forEach(function(section){section.classList.toggle('lab-open',section===target);});
-      requestAnimationFrame(function(){
-        target.scrollIntoView({behavior:'smooth',block:'start'});
-        window.dispatchEvent(new Event('resize'));
-        try{if(window.ScrollTrigger) ScrollTrigger.refresh();}catch(e){}
-      });
+  document.addEventListener('click',function(event){
+    var button=event.target.closest&&event.target.closest('[data-open-lab]');
+    if(!button) return;
+    event.preventDefault();
+    var target=document.getElementById(button.getAttribute('data-open-lab'));
+    if(!target) return;
+    var currentModules=[].slice.call(document.querySelectorAll('.lab-module'));
+    currentModules.forEach(function(section){section.classList.toggle('lab-open',section===target);});
+    document.querySelectorAll('[data-open-lab]').forEach(function(item){
+      item.setAttribute('aria-expanded',item===button?'true':'false');
+    });
+    requestAnimationFrame(function(){
+      target.scrollIntoView({behavior:'smooth',block:'start'});
+      window.dispatchEvent(new Event('resize'));
+      try{if(window.ScrollTrigger) ScrollTrigger.refresh();}catch(e){}
     });
   });
 });
