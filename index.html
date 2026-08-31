@@ -7892,11 +7892,14 @@ __glReady(function initScmActs(){
     /* ── Build THREE.Sprite ── */
     var tex=new THREE.CanvasTexture(ac);
     var mat=new THREE.SpriteMaterial({
-      map:tex, transparent:true, depthWrite:false,
+      map:tex, transparent:true, depthWrite:false,depthTest:false,
       sizeAttenuation:true   /* grows/shrinks with camera distance */
     });
     planeSprite=new THREE.Sprite(mat);
     planeSprite.scale.set(0.17,0.17,1);
+    /* This is a route indicator, so it must remain legible even when the
+       great-circle path passes close to the globe's horizon. */
+    planeSprite.renderOrder=50;
     planeSprite.visible=false;
     scene.add(planeSprite);
   })();
