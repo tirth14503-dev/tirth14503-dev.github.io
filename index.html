@@ -1833,37 +1833,6 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
     button.addEventListener('click',downloadResume);
   });
 
-  var modules=[].slice.call(document.querySelectorAll('.lab-module'));
-  modules.forEach(function(section){
-    var back=document.createElement('button');
-    back.type='button';
-    back.className='lab-back';
-    back.textContent='← Back to Interactive Lab';
-    back.addEventListener('click',function(){
-      section.classList.remove('lab-open');
-      document.getElementById('lab').scrollIntoView({behavior:'smooth',block:'start'});
-    });
-    section.insertBefore(back,section.firstChild);
-  });
-  document.body.classList.add('lab-ready');
-
-  document.addEventListener('click',function(event){
-    var button=event.target.closest&&event.target.closest('[data-open-lab]');
-    if(!button) return;
-    event.preventDefault();
-    var target=document.getElementById(button.getAttribute('data-open-lab'));
-    if(!target) return;
-    var currentModules=[].slice.call(document.querySelectorAll('.lab-module'));
-    currentModules.forEach(function(section){section.classList.toggle('lab-open',section===target);});
-    document.querySelectorAll('[data-open-lab]').forEach(function(item){
-      item.setAttribute('aria-expanded',item===button?'true':'false');
-    });
-    requestAnimationFrame(function(){
-      target.scrollIntoView({behavior:'smooth',block:'start'});
-      window.dispatchEvent(new Event('resize'));
-      try{if(window.ScrollTrigger) ScrollTrigger.refresh();}catch(e){}
-    });
-  });
 });
 </script>
 
@@ -1913,12 +1882,13 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 #lab{background:linear-gradient(180deg,#f5f5f7 0%,#edf1f5 100%);}
 .lab-intro{max-width:670px;color:var(--text2);font-family:var(--fs);font-size:.96rem;line-height:1.75;margin-bottom:2rem;}
 .lab-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
-.lab-card{appearance:none;text-align:left;min-height:190px;border:1px solid var(--border);border-radius:22px;padding:1.35rem;background:rgba(255,255,255,.82);cursor:pointer;display:flex;flex-direction:column;transition:transform .28s var(--spring),box-shadow .28s,border-color .28s;color:var(--text);}
+.lab-card{appearance:none;text-align:left;text-decoration:none;min-height:190px;border:1px solid var(--border);border-radius:22px;padding:1.35rem;background:rgba(255,255,255,.82);cursor:pointer;display:flex;flex-direction:column;transition:transform .28s var(--spring),box-shadow .28s,border-color .28s;color:var(--text);}
 .lab-card:hover{transform:translateY(-6px);box-shadow:var(--shadow2);border-color:rgba(28,58,94,.35);}
 .lab-card span{font-family:var(--fm);font-size:.48rem;letter-spacing:.22em;color:var(--gold);}
 .lab-card strong{font-family:var(--fc);font-size:1.45rem;font-weight:600;line-height:1.05;margin:auto 0 .6rem;}
 .lab-card small{font-family:var(--fs);font-size:.75rem;color:var(--text2);}
-body.lab-ready .lab-module:not(.lab-open){display:none!important;}
+.lab-module{display:flex!important;scroll-margin-top:76px;}
+.lab-module:target{outline:2px solid rgba(28,58,94,.22);outline-offset:-2px;}
 .lab-back{position:sticky;top:72px;z-index:8;display:inline-flex;align-items:center;gap:.45rem;margin-bottom:1.1rem;padding:.58rem .9rem;border:1px solid var(--border);border-radius:999px;background:rgba(255,255,255,.9);backdrop-filter:blur(14px);font-family:var(--fs);font-size:.72rem;font-weight:600;color:var(--text);cursor:pointer;}
 
 /* Below-the-fold rendering and motion safeguards */
@@ -2382,15 +2352,16 @@ body.lab-ready .lab-module:not(.lab-open){display:none!important;}
   <div class="sec-rule reveal"></div>
   <p class="lab-intro reveal">The professional story stays focused. These hands-on tools are here when you want to see how I think through operations, planning, and role fit.</p>
   <div class="lab-grid">
-    <button class="lab-card reveal" type="button" data-open-lab="game"><span>01</span><strong>Load the Ship</strong><small>A fast proof-point game</small></button>
-    <button class="lab-card reveal" type="button" data-open-lab="simulator"><span>02</span><strong>DDMRP Simulator</strong><small>Stress-test a supply network</small></button>
-    <button class="lab-card reveal" type="button" data-open-lab="impact"><span>03</span><strong>Impact Estimator</strong><small>Model savings scenarios</small></button>
-    <button class="lab-card reveal" type="button" data-open-lab="matcher"><span>04</span><strong>Role Matcher</strong><small>Compare a job to verified skills</small></button>
+    <a class="lab-card reveal" href="/?lab=game#game"><span>01</span><strong>Load the Ship</strong><small>A fast proof-point game</small></a>
+    <a class="lab-card reveal" href="/?lab=simulator#simulator"><span>02</span><strong>DDMRP Simulator</strong><small>Stress-test a supply network</small></a>
+    <a class="lab-card reveal" href="/?lab=impact#impact"><span>03</span><strong>Impact Estimator</strong><small>Model savings scenarios</small></a>
+    <a class="lab-card reveal" href="/?lab=matcher#matcher"><span>04</span><strong>Role Matcher</strong><small>Compare a job to verified skills</small></a>
   </div>
 </section>
 
 <!-- LOAD THE SHIP GAME -->
 <section id="game" class="lab-module">
+  <a class="lab-back" href="/?lab=menu#lab">← Back to Interactive Lab</a>
   <div class="sec-eyebrow reveal">Interlude</div>
   <h2 class="sec-title reveal">Load the <em>ship.</em></h2>
   <div class="sec-rule reveal"></div>
@@ -2495,6 +2466,7 @@ body.lab-ready .lab-module:not(.lab-open){display:none!important;}
 @keyframes simFlow{to{stroke-dashoffset:-26}}
 </style>
 <section id="simulator" class="lab-module">
+  <a class="lab-back" href="/?lab=menu#lab">← Back to Interactive Lab</a>
   <div class="sec-eyebrow reveal">DDMRP &bull; Interactive</div>
   <h2 class="sec-title reveal" style="transition-delay:.08s">Think in <strong>Systems</strong></h2>
   <div class="sec-rule reveal" style="transition-delay:.12s"></div>
@@ -2848,6 +2820,7 @@ body.lab-ready .lab-module:not(.lab-open){display:none!important;}
 
 <!-- ⑧ IMPACT CALCULATOR -->
 <section id="impact" class="lab-module">
+  <a class="lab-back" href="/?lab=menu#lab">← Back to Interactive Lab</a>
   <div class="sec-eyebrow reveal">Calculator</div>
   <h2 class="sec-title reveal" style="transition-delay:.08s">Impact <strong>Estimator</strong></h2>
   <div class="sec-rule reveal" style="transition-delay:.12s"></div>
@@ -2889,6 +2862,7 @@ body.lab-ready .lab-module:not(.lab-open){display:none!important;}
 
 <!-- ⑨ SMART RESUME MATCHER -->
 <section id="matcher" class="lab-module">
+  <a class="lab-back" href="/?lab=menu#lab">← Back to Interactive Lab</a>
   <div class="sec-eyebrow reveal">AI Tool</div>
   <h2 class="sec-title reveal" style="transition-delay:.08s">Role <strong>Matcher</strong></h2>
   <div class="sec-rule reveal" style="transition-delay:.12s"></div>
