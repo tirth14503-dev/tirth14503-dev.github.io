@@ -1,5 +1,5 @@
 'use strict';
-fetch('/marginguard/app-link.json', {cache:'no-store'})
+fetch('/marginguard/app-link.json?v=' + Date.now(), {cache:'no-store'})
   .then(response => {if(!response.ok) throw new Error();return response.json();})
   .then(data => {
     const url=new URL(data.url);
