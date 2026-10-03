@@ -2002,6 +2002,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
     <span class="nav-pill" id="nav-pill"></span>
     <span class="nav-link" data-sec="recruiter" role="link" tabindex="0">Results</span>
     <span class="nav-link" data-sec="projects" role="link" tabindex="0">Projects</span>
+    <a class="nav-startup" href="/marginguard/">My startup ↗</a>
     <span class="nav-link" data-sec="experience" role="link" tabindex="0">Experience</span>
     <span class="nav-link" data-sec="skills" role="link" tabindex="0">Skills</span>
     <span class="nav-link" data-sec="lab" role="link" tabindex="0">Lab</span>
@@ -2016,6 +2017,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 <nav id="mobile-nav" aria-label="Mobile section navigation" aria-hidden="true" inert>
   <a href="#recruiter">Results</a>
   <a href="#projects">Projects</a>
+  <a href="/marginguard/">My startup · MarginGuard</a>
   <a href="#experience">Experience</a>
   <a href="#skills">Skills</a>
   <a href="#lab">Lab</a>
@@ -2347,6 +2349,12 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
   <h2 class="sec-title reveal">Built, modeled,<br /><strong>shipped.</strong></h2>
   <div class="sec-rule reveal"></div>
   <div class="pj-grid" id="proj-grid">
+    <a class="pj-card reveal" style="text-decoration:none" href="/marginguard/" aria-label="Explore MarginGuard, my startup project">
+      <span class="pj-badge">My startup · Working prototype</span><div class="pj-title">MarginGuard</div>
+      <div class="pj-desc">My startup project for <strong>invoice review, inventory analysis, and production planning</strong>. Explore the product and try the working prototype in your own workspace.</div>
+      <div class="pj-tags"><span>Supply Chain</span><span>Python</span><span>Planning</span><span>Startup</span></div>
+      <span style="display:block;margin-top:1.3rem;font-size:.8rem;color:var(--gold)">Explore my startup ↗</span>
+    </a>
 
     <div class="pj-card reveal" style="transition-delay:.05s" data-case="forecast">
       <span class="pj-badge">MGT 594 · Machine Learning</span>
@@ -3105,6 +3113,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       <a href="#experience">Work</a>
       <a href="#projects">Projects</a>
       <a href="#writing">Writing</a>
+      <a href="/marginguard/">MarginGuard</a>
       <a href="#contact">Contact</a>
     </nav>
     <div class="ft-socials">
@@ -4672,4 +4681,11 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
   .exp-date{ white-space:normal !important; }
   .exp-role,.exp-org{ overflow-wrap:anywhere; }
 }
+</style>
+
+<style>
+.nav-startup{font-family:var(--fs);font-size:.78rem;font-weight:500;text-decoration:none;color:var(--text2);white-space:nowrap;position:relative;z-index:1;}
+.nav-startup:hover{color:var(--text);}
+.nav-startup:focus-visible{outline:2px solid var(--gold);outline-offset:4px;}
+@media(min-width:901px) and (max-width:1260px){.nav-startup{display:none;}}
 </style>

@@ -1,6 +1,6 @@
 {
   "_version": 1,
-  "_updated": "2026-08-30",
+  "_updated": "2026-10-02",
   "hero": {
     "tag": "Supply Chain Analyst · Procurement · Analytics",
     "bio": "I combine hands-on operations experience with Python, SQL, forecasting, and procurement analytics to reduce cost, improve availability, and make complex supply chain decisions clearer."
@@ -113,6 +113,18 @@
     }
   ],
   "projects": [
+    {
+      "id": "marginguard",
+      "badge": "My startup · Working prototype",
+      "title": "MarginGuard",
+      "desc": "My startup project for <strong>invoice review, inventory analysis, and production planning</strong>. Explore the product and try the working prototype in your own workspace.",
+      "tags": [
+        "Supply Chain",
+        "Python",
+        "Planning",
+        "Startup"
+      ]
+    },
     {
       "id": "forecast",
       "badge": "MGT 594 · Machine Learning",

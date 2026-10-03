@@ -124,6 +124,12 @@
     var delays=[.05,.12,.19,.05,.12,.19];
     return projs.map(function(p,i){
       var d=delays[i]!==undefined?delays[i]:.05;
+      if(p.id==='marginguard'){
+        return '<a class="pj-card reveal" href="/marginguard/" style="text-decoration:none;transition-delay:'+d+'s" aria-label="Explore MarginGuard, my startup project">'+
+          '<span class="pj-badge">'+esc(p.badge)+'</span><div class="pj-title">'+esc(p.title)+'</div>'+
+          '<div class="pj-desc">'+p.desc+'</div><div class="pj-tags">'+(p.tags||[]).map(function(t){return '<span>'+esc(t)+'</span>';}).join('')+'</div>'+
+          '<span style="display:block;margin-top:1.3rem;font-size:.8rem;color:var(--gold)">Explore my startup ↗</span></a>';
+      }
       var story=projectStory(p.id);
       var featured=story?' pj-featured':'';
       var middle=story?'<div class="pj-story"><div><span>Challenge</span><p>'+esc(story.challenge)+'</p></div><div><span>Approach</span><p>'+esc(story.approach)+'</p></div><div><span>Outcome</span><p>'+esc(story.outcome)+'</p></div></div>':'<div class="pj-desc">'+p.desc+'</div>';
