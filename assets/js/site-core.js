@@ -8,48 +8,6 @@ document.getElementById('loader').style.display='none';
 document.getElementById('topnav').classList.add('vis');
 document.getElementById('ctrl-panel').classList.add('vis');
 
-/* ═══════════════════════════════════
-   CURSOR — Apple spring physics
-═══════════════════════════════════ */
-const cur=document.getElementById('cur');
-const curR=document.getElementById('cur-r');
-let cx=0,cy=0,rx=0,ry=0,curAngle=0;
-/* Plane cursor: top-down 737 silhouette, nose always facing direction of travel.
-   SVG nose points up (y=0); CSS rotate(0rad)=up, rotate(π/2)=right → atan2(dx,-dy) */
-cur.innerHTML=`<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
-  <ellipse cx="14" cy="14" rx="2.4" ry="9.5" fill="#d4a840"/>
-  <ellipse cx="14" cy="5"  rx="2.4" ry="2.8" fill="#e8bc50"/>
-  <polygon points="14,10 2,18 14,16 26,18" fill="#c89828"/>
-  <polygon points="14,21 8,26 14,24 20,26" fill="#b08820"/>
-</svg>`;
-document.addEventListener('mousemove',e=>{
-  var dx=e.clientX-cx, dy=e.clientY-cy;
-  if(dx*dx+dy*dy>9) curAngle=Math.atan2(dx,-dy); /* nose=up at 0rad */
-  cx=e.clientX; cy=e.clientY;
-  cur.style.transform=`translate(${cx}px,${cy}px) translate(-50%,-50%) rotate(${curAngle}rad)`;
-});
-document.addEventListener('mousedown',()=>curR.classList.add('click'));
-document.addEventListener('mouseup',()=>curR.classList.remove('click'));
-
-// Spring-based cursor ring
-(function animCursor(){
-  const k=0.1; // spring constant
-  rx+=(cx-rx)*k;
-  ry+=(cy-ry)*k;
-  curR.style.transform=`translate(${rx}px,${ry}px) translate(-50%,-50%)`;
-  requestAnimationFrame(animCursor);
-})();
-
-// Hover states
-document.querySelectorAll('button,a,.exp-item,.ct-link-item,.aip-chip,.ctrl-btn,.nav-link,.nav-logo').forEach(el=>{
-  el.addEventListener('mouseenter',()=>curR.classList.add('big'));
-  el.addEventListener('mouseleave',()=>{curR.classList.remove('big');curR.classList.remove('text');});
-});
-document.querySelectorAll('input,textarea').forEach(el=>{
-  el.addEventListener('mouseenter',()=>curR.classList.add('text'));
-  el.addEventListener('mouseleave',()=>curR.classList.remove('text'));
-});
-
 /* hero 3D globe lives in a separate <script> below, loaded via the
    classic global THREE build so it also works when this file is
    opened directly (file://) and not just served over http(s) */
@@ -72,14 +30,6 @@ document.querySelectorAll('.nav-link').forEach(n=>n.addEventListener('keydown',e
 /* ═══════════════════════════════════
    EXPERIENCE ACCORDION
 ═══════════════════════════════════ */
-document.querySelectorAll('.exp-item').forEach(item=>{
-  item.addEventListener('click',()=>{
-    const wasOpen=item.classList.contains('open');
-    document.querySelectorAll('.exp-item').forEach(i=>i.classList.remove('open'));
-    if(!wasOpen)item.classList.add('open');
-  });
-});
-
 /* ═══════════════════════════════════
    CONTACT FORM
 ═══════════════════════════════════ */
@@ -153,13 +103,7 @@ function openExpItem(n){
   setTimeout(function(){
     var items=document.querySelectorAll('#experience .exp-item');
     var item=items[n-1]; if(!item)return;
-    if(!item.classList.contains('open')){
-      item.classList.add('open');
-      var body=item.querySelector('.exp-body');
-      if(body) body.style.maxHeight='600px';
-      var icon=item.querySelector('.exp-toggle-icon');
-      if(icon) icon.style.transform='rotate(45deg)';
-    }
+    if(window.setExperienceOpen)window.setExperienceOpen(item,true);
     setTimeout(function(){item.scrollIntoView({behavior:'smooth',block:'center'});},500);
   },800);
 }
@@ -652,6 +596,7 @@ function speak(text){
 function toggle(){
   isOpen=!isOpen;panel.classList.toggle('open',isOpen);
   btn.classList.toggle('on',isOpen);
+  panel.inert=!isOpen;
   panel.setAttribute('aria-hidden',isOpen?'false':'true');
   btn.setAttribute('aria-expanded',isOpen?'true':'false');
   if(isOpen&&!msgs.children.length){
@@ -905,11 +850,11 @@ if(mic&&(window.SpeechRecognition||window.webkitSpeechRecognition)){
 
     // Procurement savings: ~8% of spend via strategic sourcing
     const procSave=spend*0.08;
-    // Defect reduction: reduce defect rate by 40%, defect cost = 3% of spend per defect %
+    // Illustrative defect savings: 40% reduction with a 15% cost factor.
     const defSave=spend*defect*0.4*0.15;
     // Inventory optimization: reduce carrying cost 15% via DDMRP
     const invSave=spend*0.35*inv*0.15;
-    // Vendor consolidation: $800/vendor removed (admin, audit, risk)
+    // Vendor consolidation: $1,200/vendor removed (illustrative admin/audit factor)
     const vendorsToRemove=Math.max(0,Math.floor(vendors*0.1));
     const vendSave=vendorsToRemove*1200;
     const total=procSave+defSave+invSave+vendSave;
@@ -918,6 +863,10 @@ if(mic&&(window.SpeechRecognition||window.webkitSpeechRecognition)){
     document.getElementById('cv-spend').textContent=fmt(spend);
     document.getElementById('cv-defect').textContent=defect*100+'%';
     document.getElementById('cv-inv').textContent=(inv*100)+'%';
+    slVend.setAttribute('aria-valuetext',vendors+' vendors');
+    slSpend.setAttribute('aria-valuetext',fmt(spend)+' US dollars per year');
+    slDef.setAttribute('aria-valuetext',defect*100+' percent');
+    slInv.setAttribute('aria-valuetext',inv*100+' percent');
     document.getElementById('calc-total').innerHTML=fmt(total);
     document.getElementById('calc-proc').textContent=fmt(procSave);
     document.getElementById('calc-def').textContent=fmt(defSave);
@@ -1049,7 +998,9 @@ if(mic&&(window.SpeechRecognition||window.webkitSpeechRecognition)){
 
   function doMatch(){
     const jd=ta.value.trim();
-    if(jd.length<30){ta.style.borderColor='rgba(255,59,48,.5)';setTimeout(()=>ta.style.borderColor='',1500);return;}
+    const error=document.getElementById('matcher-error');
+    if(jd.length<30){error.hidden=false;ta.setAttribute('aria-invalid','true');ta.focus();return;}
+    error.hidden=true;ta.removeAttribute('aria-invalid');
     btn.disabled=true;
     out.style.display='block';
     typing.style.display='flex';

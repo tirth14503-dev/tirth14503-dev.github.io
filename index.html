@@ -1975,7 +1975,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 
 
 
-<link rel="stylesheet" href="/assets/css/portfolio-ux.css?v=20261025">
+<link rel="stylesheet" href="/assets/css/portfolio-ux.css?v=20261025b">
 
 <!-- CURSOR -->
 <div id="cur"></div>
@@ -2012,7 +2012,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
     <span class="nav-link" data-sec="contact" role="link" tabindex="0">Contact</span>
   </div>
   <button class="tldr-hint" id="tldr-open" aria-label="Open recruiter quick-summary view">TL;DR</button>
-  <button class="cmdk-hint" id="cmdk-open" aria-label="Open quick search (Ctrl K)"><span>&#8984;K</span></button>
+  <button class="cmdk-hint" id="cmdk-open" aria-label="Search the portfolio (Ctrl K)"><span>Search</span></button>
   <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get in Touch</button>
   <button class="nav-menu-toggle" id="nav-menu-toggle" type="button" aria-label="Open navigation menu" aria-controls="mobile-nav" aria-expanded="false">Menu</button>
 </nav>
@@ -2134,6 +2134,15 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
   <div class="sec-eyebrow reveal">Projects</div>
   <h2 class="sec-title reveal">Built, modeled,<br /><strong>shipped.</strong></h2>
   <div class="sec-rule reveal"></div>
+  <div class="project-browser" id="project-browser" hidden>
+    <div class="project-filters" role="group" aria-label="Filter projects">
+      <button type="button" data-project-filter="all" aria-pressed="true">All projects</button>
+      <button type="button" data-project-filter="supply-chain" aria-pressed="false">Supply chain</button>
+      <button type="button" data-project-filter="analytics" aria-pressed="false">Analytics</button>
+      <button type="button" data-project-filter="product" aria-pressed="false">Product building</button>
+    </div>
+    <p id="project-count" role="status" aria-live="polite">7 projects</p>
+  </div>
   <div class="pj-grid" id="proj-grid">
     <a class="pj-card reveal" style="text-decoration:none" href="/marginguard/" aria-label="Explore MarginGuard, my startup project">
       <span class="pj-badge">My startup · Working prototype</span><div class="pj-title">MarginGuard</div>
@@ -2197,21 +2206,22 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
   <div class="sec-eyebrow reveal">Work</div>
   <h2 class="sec-title reveal" style="transition-delay:.08s">Work <strong>Experience</strong></h2>
   <div class="sec-rule reveal" style="transition-delay:.12s"></div>
+  <div class="section-tools"><p>Select a role to explore its responsibilities and results.</p><button type="button" id="experience-expand" aria-controls="exp-list">Expand all roles</button></div>
   <div class="exp-list" id="exp-list">
     <div class="exp-item reveal" style="transition-delay:.06s">
-      <div class="exp-header">
-        <div class="exp-num-badge">01</div>
-        <div class="exp-meta">
-          <div class="exp-role">LPC Office Assistant</div>
-          <div class="exp-org">College of Communication &#183; DePaul University</div>
-        </div>
-        <div class="exp-right">
-          <div class="exp-date">Sep 2025 &ndash; Jun 2026</div>
-          <div class="exp-loc-pill">Chicago, IL</div>
-        </div>
-        <div class="exp-toggle-icon">+</div>
-      </div>
-      <div class="exp-body">
+      <button class="exp-header" type="button" id="exp-heading-1" aria-expanded="false" aria-controls="exp-body-1">
+        <span class="exp-num-badge">01</span>
+        <span class="exp-meta">
+          <span class="exp-role">LPC Office Assistant</span>
+          <span class="exp-org">College of Communication &#183; DePaul University</span>
+        </span>
+        <span class="exp-right">
+          <span class="exp-date">Sep 2025 &ndash; Jun 2026</span>
+          <span class="exp-loc-pill">Chicago, IL</span>
+        </span>
+        <span class="exp-toggle-icon" aria-hidden="true">+</span>
+      </button>
+      <div class="exp-body" id="exp-body-1" role="region" aria-labelledby="exp-heading-1" hidden>
         <ul class="exp-bullets">
           <li>Manage <span class="hl">office operations</span>: printing, scanning, communications, and call handling</li>
           <li>Coordinate <span class="hl">faculty requests</span> and maintain organized workflows across multiple projects</li>
@@ -2220,19 +2230,19 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       </div>
     </div>
     <div class="exp-item reveal" style="transition-delay:.1s">
-      <div class="exp-header">
-        <div class="exp-num-badge">02</div>
-        <div class="exp-meta">
-          <div class="exp-role">Student Ambassador</div>
-          <div class="exp-org">Kellstadt School of Business · DePaul University</div>
-        </div>
-        <div class="exp-right">
-          <div class="exp-date">Feb 2025 &ndash; Present</div>
-          <div class="exp-loc-pill">Chicago, IL</div>
-        </div>
-        <div class="exp-toggle-icon">+</div>
-      </div>
-      <div class="exp-body">
+      <button class="exp-header" type="button" id="exp-heading-2" aria-expanded="false" aria-controls="exp-body-2">
+        <span class="exp-num-badge">02</span>
+        <span class="exp-meta">
+          <span class="exp-role">Student Ambassador</span>
+          <span class="exp-org">Kellstadt School of Business · DePaul University</span>
+        </span>
+        <span class="exp-right">
+          <span class="exp-date">Feb 2025 &ndash; Present</span>
+          <span class="exp-loc-pill">Chicago, IL</span>
+        </span>
+        <span class="exp-toggle-icon" aria-hidden="true">+</span>
+      </button>
+      <div class="exp-body" id="exp-body-2" role="region" aria-labelledby="exp-heading-2" hidden>
         <ul class="exp-bullets">
           <li>Led <span class="hl">7+ recruitment events</span> using CRM (Slate) to manage prospective student pipelines</li>
           <li>Advised <span class="hl">100+ prospective students</span> on SCM, analytics and logistics curricula and career paths</li>
@@ -2242,19 +2252,19 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       </div>
     </div>
     <div class="exp-item reveal" style="transition-delay:.17s">
-      <div class="exp-header">
-        <div class="exp-num-badge">03</div>
-        <div class="exp-meta">
-          <div class="exp-role">Operations & SC Consultant</div>
-          <div class="exp-org">Kothari Electronics · Family Business</div>
-        </div>
-        <div class="exp-right">
-          <div class="exp-date">Jun 2021 &ndash; Jul 2024</div>
-          <div class="exp-loc-pill">Mumbai, India</div>
-        </div>
-        <div class="exp-toggle-icon">+</div>
-      </div>
-      <div class="exp-body">
+      <button class="exp-header" type="button" id="exp-heading-3" aria-expanded="false" aria-controls="exp-body-3">
+        <span class="exp-num-badge">03</span>
+        <span class="exp-meta">
+          <span class="exp-role">Operations & SC Consultant</span>
+          <span class="exp-org">Kothari Electronics · Family Business</span>
+        </span>
+        <span class="exp-right">
+          <span class="exp-date">Jun 2021 &ndash; Jul 2024</span>
+          <span class="exp-loc-pill">Mumbai, India</span>
+        </span>
+        <span class="exp-toggle-icon" aria-hidden="true">+</span>
+      </button>
+      <div class="exp-body" id="exp-body-3" role="region" aria-labelledby="exp-heading-3" hidden>
         <ul class="exp-bullets">
           <li>Managed end-to-end operations: procurement, manufacturing oversight, QC, inventory and distribution</li>
           <li>Strategic sourcing initiatives achieved <span class="hl">₹200,000 in FY24 cost savings</span> through vendor renegotiation</li>
@@ -2264,19 +2274,19 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       </div>
     </div>
     <div class="exp-item reveal" style="transition-delay:.24s">
-      <div class="exp-header">
-        <div class="exp-num-badge">04</div>
-        <div class="exp-meta">
-          <div class="exp-role">Research Analyst</div>
-          <div class="exp-org">Institute of Supply Chain Management (ISCM)</div>
-        </div>
-        <div class="exp-right">
-          <div class="exp-date">Jul 2023 &ndash; Jul 2024</div>
-          <div class="exp-loc-pill">Mumbai, India</div>
-        </div>
-        <div class="exp-toggle-icon">+</div>
-      </div>
-      <div class="exp-body">
+      <button class="exp-header" type="button" id="exp-heading-4" aria-expanded="false" aria-controls="exp-body-4">
+        <span class="exp-num-badge">04</span>
+        <span class="exp-meta">
+          <span class="exp-role">Research Analyst</span>
+          <span class="exp-org">Institute of Supply Chain Management (ISCM)</span>
+        </span>
+        <span class="exp-right">
+          <span class="exp-date">Jul 2023 &ndash; Jul 2024</span>
+          <span class="exp-loc-pill">Mumbai, India</span>
+        </span>
+        <span class="exp-toggle-icon" aria-hidden="true">+</span>
+      </button>
+      <div class="exp-body" id="exp-body-4" role="region" aria-labelledby="exp-heading-4" hidden>
         <ul class="exp-bullets">
           <li>Analyzed <span class="hl">1,500+ companies across 24 sectors</span> using R, Excel and Tableau to benchmark SC performance</li>
           <li>Built India's first national supply chain index, enhanced methodology by <span class="hl">40%</span> over prior frameworks</li>
@@ -2286,19 +2296,19 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       </div>
     </div>
     <div class="exp-item reveal" style="transition-delay:.31s">
-      <div class="exp-header">
-        <div class="exp-num-badge">05</div>
-        <div class="exp-meta">
-          <div class="exp-role">Content & Social Media Intern</div>
-          <div class="exp-org">Career Launcher</div>
-        </div>
-        <div class="exp-right">
-          <div class="exp-date">Feb 2023 &ndash; Apr 2023</div>
-          <div class="exp-loc-pill">Mumbai, India</div>
-        </div>
-        <div class="exp-toggle-icon">+</div>
-      </div>
-      <div class="exp-body">
+      <button class="exp-header" type="button" id="exp-heading-5" aria-expanded="false" aria-controls="exp-body-5">
+        <span class="exp-num-badge">05</span>
+        <span class="exp-meta">
+          <span class="exp-role">Content & Social Media Intern</span>
+          <span class="exp-org">Career Launcher</span>
+        </span>
+        <span class="exp-right">
+          <span class="exp-date">Feb 2023 &ndash; Apr 2023</span>
+          <span class="exp-loc-pill">Mumbai, India</span>
+        </span>
+        <span class="exp-toggle-icon" aria-hidden="true">+</span>
+      </button>
+      <div class="exp-body" id="exp-body-5" role="region" aria-labelledby="exp-heading-5" hidden>
         <ul class="exp-bullets">
           <li>SEO-optimized content strategy raised website traffic by <span class="hl">25%</span> and session time by <span class="hl">40%</span></li>
           <li>Grew Instagram account organically by <span class="hl">10,000+ followers</span> through targeted campaigns</li>
@@ -2307,19 +2317,19 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       </div>
     </div>
     <div class="exp-item reveal" style="transition-delay:.38s">
-      <div class="exp-header">
-        <div class="exp-num-badge">06</div>
-        <div class="exp-meta">
-          <div class="exp-role">Supply Chain Intern</div>
-          <div class="exp-org">Mentone Concretes</div>
-        </div>
-        <div class="exp-right">
-          <div class="exp-date">May 2022 &ndash; Jul 2022</div>
-          <div class="exp-loc-pill">Mumbai, India</div>
-        </div>
-        <div class="exp-toggle-icon">+</div>
-      </div>
-      <div class="exp-body">
+      <button class="exp-header" type="button" id="exp-heading-6" aria-expanded="false" aria-controls="exp-body-6">
+        <span class="exp-num-badge">06</span>
+        <span class="exp-meta">
+          <span class="exp-role">Supply Chain Intern</span>
+          <span class="exp-org">Mentone Concretes</span>
+        </span>
+        <span class="exp-right">
+          <span class="exp-date">May 2022 &ndash; Jul 2022</span>
+          <span class="exp-loc-pill">Mumbai, India</span>
+        </span>
+        <span class="exp-toggle-icon" aria-hidden="true">+</span>
+      </button>
+      <div class="exp-body" id="exp-body-6" role="region" aria-labelledby="exp-heading-6" hidden>
         <ul class="exp-bullets">
           <li>Evaluated supplier performance with scorecards; removed 2 underperforming vendors from approved list</li>
           <li>Applied MRP to prevent stockouts, material availability improved by <span class="hl">30%</span></li>
@@ -2379,7 +2389,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
   <h3 class="sec-title reveal" style="transition-delay:.08s">Think in <strong>Systems</strong></h3>
   <div class="sec-rule reveal" style="transition-delay:.12s"></div>
   <p class="reveal" style="max-width:580px;color:var(--text2,#4a5568);line-height:1.75;margin-bottom:2.4rem;font-size:.95rem;transition-delay:.18s;">
-    Stress-test a supply chain in real time. Demand spike, supplier disruption, buffer drawdown &mdash; watch DDMRP buffer-zone logic respond across each node.
+    Explore an illustrative supply-chain stress test. Adjust demand, supplier delay, and buffer coverage to see simplified zones change across the network. Use this learning model to compare scenarios; production DDMRP sizing needs additional inputs.
   </p>
   <div class="sim-panel reveal" style="transition-delay:.26s">
     <div class="sim-top">
@@ -2480,7 +2490,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
     </div>
     <div class="calc-results reveal-r">
       <div class="calc-result-card">
-        <div class="calc-res-eyebrow">Projected Annual Impact</div>
+        <div class="calc-res-eyebrow">Illustrative Annual Savings</div>
         <div class="calc-big-num" id="calc-total">$<span>0</span></div>
         <div class="calc-sub-metrics">
           <div class="calc-sub"><div class="calc-sub-n" id="calc-proc">$0</div><div class="calc-sub-l">Procurement savings</div></div>
@@ -2488,18 +2498,29 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
           <div class="calc-sub"><div class="calc-sub-n" id="calc-inv">$0</div><div class="calc-sub-l">Inventory optimization</div></div>
           <div class="calc-sub"><div class="calc-sub-n" id="calc-vend">$0</div><div class="calc-sub-l">Vendor consolidation</div></div>
         </div>
-        <div class="calc-disclaimer">* Estimates based on methodologies applied at Kothari Electronics (strategic sourcing, DDMRP, supplier rationalisation, defect reduction). Results vary by industry and baseline. For a tailored analysis, reach out: tirth14503@gmail.com</div>
+        <details class="tool-method"><summary>How this estimate is calculated</summary>
+          <p>This scenario uses fixed illustrative assumptions, rather than a forecast for your business. All amounts are in USD.</p>
+          <ul>
+            <li><strong>Sourcing:</strong> 8% of annual procurement spend.</li>
+            <li><strong>Defects:</strong> spend × defect rate × 40% reduction × 15% cost factor.</li>
+            <li><strong>Inventory:</strong> spend × 35% inventory-value proxy × carrying-cost rate × 15% reduction.</li>
+            <li><strong>Vendors:</strong> $1,200 per vendor removed, assuming 10% consolidation rounded down.</li>
+          </ul>
+          <p>The total adds these estimates. Savings can overlap; implementation costs and industry differences are not included.</p>
+        </details>
       </div>
     </div>
   </div>
 </section><section id="matcher" class="lab-module" role="tabpanel" aria-labelledby="lab-tab-matcher" tabindex="0">
-  <div class="sec-eyebrow reveal">AI Tool</div>
+  <div class="sec-eyebrow reveal">Skills check</div>
   <h3 class="sec-title reveal" style="transition-delay:.08s">Role <strong>Matcher</strong></h3>
   <div class="sec-rule reveal" style="transition-delay:.12s"></div>
   <div class="matcher-wrap reveal" style="transition-delay:.16s">
     <p style="font-family:var(--fs);color:var(--text2);font-size:.95rem;line-height:1.8;margin-bottom:1.6rem;">Paste a job description below and a transparent scoring engine cross-references it against my verified skills matrix, live in your browser: strengths, keywords matched, and any gaps.</p>
     <div class="matcher-inp-wrap">
-      <textarea id="matcher-ta" aria-label="Job description to compare with my skills" placeholder="Paste a job description here… e.g. 'Supply Chain Analyst at Amazon, seeking candidates with experience in demand planning, data analytics (SQL, Python), vendor management…'"></textarea>
+      <p id="matcher-help" class="tool-help">A local comparison against my published experience. Paste at least 30 characters; the text stays in your browser.</p>
+      <textarea id="matcher-ta" aria-label="Job description to compare with my skills" aria-describedby="matcher-help matcher-error" placeholder="Paste a job description here… e.g. 'Supply Chain Analyst at Amazon, seeking candidates with experience in demand planning, data analytics (SQL, Python), vendor management…'"></textarea>
+      <p id="matcher-error" class="tool-error" role="alert" hidden>Enter at least 30 characters from the job description to compare the role.</p>
     </div>
     <button id="matcher-btn">Analyze My Fit</button>
     <div id="matcher-out">
@@ -2959,7 +2980,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       <div class="cl-item"><span class="cl-dot"></span>Wired in Tirthal AI, the role-fit matcher, and Load the Ship</div>
       <div class="cl-item"><span class="cl-dot"></span>Deployed to tirthalkothari.com with a real domain and SEO pass</div>
       <div class="cl-item"><span class="cl-dot"></span>Accessibility, performance, and a maturity pass on the visuals</div>
-      <div class="cl-item"><span class="cl-dot"></span>This week: quick search, print resume, and this changelog</div>
+      <div class="cl-item"><span class="cl-dot"></span>October 2026: one Interactive Lab, accessible navigation, and direct contact</div>
     </div>
   </div>
 </section>
@@ -3061,6 +3082,9 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
     document.getElementById('sv-demand').textContent='+'+d+'%';
     document.getElementById('sv-delay').textContent=dl+' day'+(dl===1?'':'s');
     document.getElementById('sv-buffer').textContent=bw+' week'+(bw===1?'':'s');
+    srD.setAttribute('aria-valuetext',d+' percent demand increase');
+    srDl.setAttribute('aria-valuetext',dl+' days supplier delay');
+    srB.setAttribute('aria-valuetext',bw+' weeks buffer stock');
     // DDMRP buffer calculation
     var bufDays=bw*5;
     var dFactor=1+d/100;
@@ -3076,29 +3100,31 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
     setNode('r',retailPct);
     setArrow(1,dl>8?'blocked':dl>4?'slow':'normal');
     setArrow(2,d>60?'fast':d>30?'normal':'normal');
-    setArrow(3,dcPct<33?'slow':dcPct<10?'blocked':'fast');
+    setArrow(3,dcPct<10?'blocked':dcPct<33?'slow':'fast');
     var badge=document.getElementById('sbadge');
     var rtext=document.getElementById('srtext');
     var raction=document.getElementById('sraction');
     var shortfall=consumed>bufDays;
-    var z=zone(dcPct);
+    var lowestPct=Math.min(supplierPct,factoryPct,dcPct,retailPct);
+    var z=zone(lowestPct);
+    var lowestName=[['Supplier',supplierPct],['Factory',factoryPct],['Distribution center',dcPct],['Retail',retailPct]].sort(function(a,b){return a[1]-b[1];})[0][0];
     badge.className='sim-badge '+z;
-    if(shortfall||dcPct<8){
+    if(shortfall||dcPct<=0){
       badge.textContent='\u26a1 Stockout Risk';
-      rtext.textContent='Buffer depleted at DC. Estimated shortfall: '+(Math.ceil(consumed-bufDays))+' days of stock. Bullwhip effect amplifying upstream \u2014 supplier capacity also stressed.';
+      rtext.textContent='Buffer depleted at DC. Estimated shortfall: '+(Math.max(0,Math.ceil(consumed-bufDays)))+' days of stock. Bullwhip effect amplifying upstream \u2014 supplier capacity also stressed.';
       raction.textContent='Action: Expedite open POs. Activate emergency reorder. Qualify alternate supplier. Consider demand rationing.';
     } else if(z==='red'){
-      badge.textContent='\u26a0 Red Zone Penetration';
-      rtext.textContent='DC buffer at '+Math.round(dcPct)+'% \u2014 in the DDMRP red zone. At current demand (+'+d+'%) and delay ('+dl+' days), network will face stock pressure.';
+      badge.textContent='\u26a0 Network Stock Pressure';
+      rtext.textContent=lowestName+' at '+Math.round(lowestPct)+'%; DC buffer at '+Math.round(dcPct)+'%. Demand (+'+d+'%) and supplier delay ('+dl+' day'+(dl===1?'':'s')+') are creating stock pressure in this scenario.';
       raction.textContent='Action: Pull Qualified Replenishment Order (QRO) now. Alert supplier for expedited lead time.';
     } else if(z==='yellow'){
       badge.textContent='\u25ce Yellow Zone Caution';
-      rtext.textContent='Buffer at '+Math.round(dcPct)+'% \u2014 yellow zone. Demand spike of +'+d+'% combined with '+dl+'-day supplier delay is consuming buffer faster than normal.';
-      raction.textContent='Action: Issue QRO if buffer approaches 33%. Review demand forecast accuracy.';
+      rtext.textContent=lowestName+' at '+Math.round(lowestPct)+'%; DC buffer at '+Math.round(dcPct)+'%. Review the network response to demand (+'+d+'%) and supplier delay ('+dl+' day'+(dl===1?'':'s')+').';
+      raction.textContent='Action: Review replenishment priorities and supplier capacity. Compare the scenario with a higher buffer.';
     } else {
       badge.textContent='\u25cf System Stable';
       rtext.textContent='All nodes in green zone. DC buffer at '+Math.round(dcPct)+'%. Supplier and factory throughput within acceptable range.';
-      raction.textContent='No action required. DDMRP buffer positioned correctly.';
+      raction.textContent='This scenario keeps all nodes in the green zone. Compare a demand spike or supplier delay to explore the response.';
     }
   }
   [srD,srDl,srB].forEach(function(s){s.addEventListener('input',update);});
@@ -3189,7 +3215,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 </script>
 
 <!-- AI CHAT -->
-<div id="ai-panel" role="dialog" aria-label="Chat with Tirthal AI" aria-modal="false" aria-hidden="true">
+<div id="ai-panel" role="dialog" aria-label="Chat with Tirthal AI" aria-modal="false" aria-hidden="true" inert>
   <div class="aip-head">
     <div class="aip-left">
       <div class="aip-av">TK</div>
@@ -3222,7 +3248,8 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 </div>
 
 <script src="/assets/js/portfolio-ux.js?v=20261025"></script>
-<script src="/assets/js/site-core.js?v=ux-20261025"></script>
+<script src="/assets/js/portfolio-polish.js?v=20261025b"></script>
+<script src="/assets/js/site-core.js?v=ux-20261025b"></script>
 
 <!-- ═══════════════════════════════════
      HERO — live 3D dockyard (Three.js)
@@ -3497,7 +3524,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 
 
 
-<div id="case-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="cm-title"><div class="cm-card">
+<div id="case-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="cm-title" inert><div class="cm-card">
   <button class="cm-x" aria-label="Close">&times;</button>
   <div class="cm-head"><div class="cm-badge"></div><div class="cm-title" id="cm-title"></div></div>
   <div class="cm-body"></div>
@@ -3557,6 +3584,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
   }
   function open(key,syncUrl=true,trigger=null){
     const c=CASES[key]; if(!c) return;
+    if(window.revealPortfolioProject)window.revealPortfolioProject(key);
     activeKey=key;
     lastTrigger=trigger||lastTrigger;
     badge.textContent=c.badge; title.textContent=c.title;
@@ -3568,7 +3596,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       +'<div class="cm-sec evidence-note"><div class="cm-sec-h">Project context</div><p>'+({forecast:'Academic team project. Deliverable: cleaned retail data, engineered features, and a forecasting model comparison for replenishment planning. The card graphic is an illustrative preview.',kehe:'University industry practicum using KeHE’s 2024 RFP. Deliverable: a lane-level carrier-award recommendation balancing cost, coverage, and service. The card uses an illustrative bid matrix.',automation:'Self-directed build. Deliverable: a Postgres-to-analysis-to-email workflow. The card shows the architecture connecting Supabase, AI-assisted analysis, and stakeholder alerts.',segmentation:'Machine-learning project. Deliverable: customer clusters, elbow-method validation, and tailored loyalty recommendations for each segment.',churn:'Machine-learning project. Deliverable: a decision-tree classifier with tuned depth and leaf size, translated into proposed retention actions.',optimization:'Decision-modeling coursework. Deliverable: constrained production models in Excel Solver, sensitivity analysis, and cost/capacity scenarios.'}[key])+'</p></div>'
       +'<div class="cm-sec"><div class="cm-sec-h">Tools</div><div class="cm-tools">'+c.tools.map(t=>'<span>'+t+'</span>').join('')+'</div></div>';
     modal.classList.add('show');
-    modal.setAttribute('aria-hidden','false');
+    modal.inert=false;modal.setAttribute('aria-hidden','false');
     document.body.style.overflow='hidden';
     shareBtn.textContent='Copy shareable link';
     if(syncUrl&&location.hash!=='#case-'+key){
@@ -3578,7 +3606,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
   }
   function close(syncUrl=true){
     modal.classList.remove('show');
-    modal.setAttribute('aria-hidden','true');
+    modal.inert=true;modal.setAttribute('aria-hidden','true');
     document.body.style.overflow='';
     if(syncUrl&&caseHash())history.replaceState(null,'',location.pathname+location.search+'#projects');
     if(lastTrigger){lastTrigger.focus();lastTrigger=null;}
@@ -3767,27 +3795,11 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
     }
   }catch(e){}
 
-  /* ── magnetic buttons ── */
-  try{
-    if(!touch && !reduced){
-      document.querySelectorAll('.btn-gold,.btn-ghost,.nav-cta').forEach(function(b){
-        b.addEventListener('mousemove',function(e){
-          var r=b.getBoundingClientRect();
-          var dx=(e.clientX-(r.left+r.width/2))*.22, dy=(e.clientY-(r.top+r.height/2))*.3;
-          b.style.transition='transform .12s ease-out';
-          b.style.transform='translate('+dx+'px,'+dy+'px)';
-        });
-        b.addEventListener('mouseleave',function(){
-          b.style.transition='transform .5s var(--spring)';
-          b.style.transform='';
-        });
-      });
-    }
-  }catch(e){}
+
 })();
 </script>
 
-<div id="art-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="am-title"><div class="am-card">
+<div id="art-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="am-title" inert><div class="am-card">
   <button class="am-x" aria-label="Close">&times;</button>
   <div class="am-head"><div class="am-kicker"></div><div class="am-title" id="am-title"></div></div>
   <div class="am-body"></div>
@@ -3825,6 +3837,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       ]}
   };
   var modal=document.getElementById('art-modal');
+  var articleTrigger=null;
   var kick=modal.querySelector('.am-kicker'), title=modal.querySelector('.am-title'), body=modal.querySelector('.am-body');
   function open(key){
     var a=ARTICLES[key]; if(!a) return;
@@ -3834,15 +3847,15 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       return '<p>'+p+'</p>';
     }).join('')+'<div class="am-end">Tirthal Kothari</div>';
     modal.classList.add('show');
-    modal.setAttribute('aria-hidden','false');
+    modal.inert=false;modal.setAttribute('aria-hidden','false');
     modal.querySelector('.am-card').scrollTop=0;
     document.body.style.overflow='hidden';
     modal.querySelector('.am-x').focus();
   }
-  function close(){ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+  function close(){if(!modal.classList.contains('show'))return;modal.classList.remove('show');modal.inert=true;modal.setAttribute('aria-hidden','true');document.body.style.overflow='';if(articleTrigger){articleTrigger.focus();articleTrigger=null;} }
   document.addEventListener('click',function(e){
     var card=e.target.closest&&e.target.closest('[data-article]');
-    if(card){ open(card.getAttribute('data-article')); return; }
+    if(card){articleTrigger=card.querySelector('button'); open(card.getAttribute('data-article')); return; }
     if(e.target===modal||(e.target.closest&&e.target.closest('.am-x'))) close();
   });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
@@ -3959,7 +3972,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 
 
 <!-- VOICE ASSISTANT OVERLAY -->
-<div id="voice-overlay" role="dialog" aria-label="Voice assistant" aria-modal="true" aria-hidden="true">
+<div id="voice-overlay" role="dialog" aria-label="Voice assistant" aria-modal="true" aria-hidden="true" inert>
   <button id="vo-close" aria-label="End voice conversation">&times;</button>
   <div class="va-stage">
     <div class="vo-orb" id="vo-orb">
@@ -3976,7 +3989,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 
 
 <!-- RECRUITER TL;DR OVERLAY -->
-<div id="tldr-overlay" role="dialog" aria-label="Quick summary" aria-modal="true" aria-hidden="true">
+<div id="tldr-overlay" role="dialog" aria-label="Quick summary" aria-modal="true" aria-hidden="true" inert>
   <div class="tldr-card">
     <button id="tldr-close" aria-label="Close quick summary">&times;</button>
     <div class="tldr-eyebrow">Quick Summary</div>
@@ -4010,7 +4023,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 
 
 <!-- MATCH SHARE CARD -->
-<div id="ms-overlay" role="dialog" aria-label="Shareable match result" aria-modal="true" aria-hidden="true">
+<div id="ms-overlay" role="dialog" aria-label="Shareable match result" aria-modal="true" aria-hidden="true" inert>
   <div class="ms-card" id="ms-card">
     <button id="ms-close" aria-label="Close">&times;</button>
     <div class="ms-brand">Tirthal Kothari &middot; Role Fit</div>
@@ -4030,14 +4043,14 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 </div>
 
 <!-- COMMAND PALETTE -->
-<div id="cmdk-overlay" aria-hidden="true">
+<div id="cmdk-overlay" aria-hidden="true" inert>
   <div id="cmdk-box" role="dialog" aria-label="Quick search" aria-modal="true">
     <div class="cmdk-inp-row">
       <span class="cmdk-icon">&#9906;</span>
-      <input id="cmdk-input" type="text" placeholder="Jump to a section, project, tool&hellip;" autocomplete="off" aria-label="Quick search input">
+      <input id="cmdk-input" type="text" role="combobox" aria-autocomplete="list" aria-controls="cmdk-list" aria-expanded="false" placeholder="Jump to a section, project, tool&hellip;" autocomplete="off" aria-label="Quick search input">
       <span class="cmdk-esc">ESC</span>
     </div>
-    <div id="cmdk-list"></div>
+    <div id="cmdk-list" role="listbox" aria-label="Search results"></div>
   </div>
 </div>
 
@@ -4083,9 +4096,10 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 
   function render(){
     list.innerHTML='';
-    if(!filtered.length){ list.innerHTML='<div class="cmdk-empty">No matches</div>'; return; }
+    if(!filtered.length){list.innerHTML='<div class="cmdk-empty">No matches</div>';input.removeAttribute('aria-activedescendant');return;}
     filtered.forEach(function(c,i){
       var row=document.createElement('div');
+      row.setAttribute('role','option');row.id='cmdk-option-'+i;row.setAttribute('aria-selected',String(i===activeIdx));
       row.className='cmdk-row'+(i===activeIdx?' active':'');
       row.innerHTML='<div class="cmdk-row-l"><div class="cmdk-row-title">'+c.t+'</div><div class="cmdk-row-sub">'+c.s+'</div></div><div class="cmdk-row-grp">'+c.g+'</div>';
       row.addEventListener('mouseenter',function(){ activeIdx=i; render(); });
@@ -4093,7 +4107,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       list.appendChild(row);
     });
     var activeEl=list.children[activeIdx];
-    if(activeEl) activeEl.scrollIntoView({block:'nearest'});
+    if(activeEl){input.setAttribute('aria-activedescendant',activeEl.id);activeEl.scrollIntoView({block:'nearest'});}
   }
 
   function filter(){
@@ -4112,17 +4126,22 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
     setTimeout(c.run, 120);
   }
 
+  var searchTrigger=null;
   function open(){
+    searchTrigger=document.activeElement;input.setAttribute('aria-expanded','true');
     overlay.classList.add('show');
-    overlay.setAttribute('aria-hidden','false');
+    overlay.inert=false;overlay.setAttribute('aria-hidden','false');
     input.value=''; filter();
     setTimeout(function(){ input.focus(); },50);
     document.body.style.overflow='hidden';
   }
   function close(){
+    if(!overlay.classList.contains('show'))return;
+    input.setAttribute('aria-expanded','false');
     overlay.classList.remove('show');
-    overlay.setAttribute('aria-hidden','true');
+    overlay.inert=true;overlay.setAttribute('aria-hidden','true');
     document.body.style.overflow='';
+    if(searchTrigger&&searchTrigger.isConnected)searchTrigger.focus();searchTrigger=null;
   }
 
   document.addEventListener('keydown',function(e){
@@ -4366,7 +4385,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
   function openOverlay(){
     active=true;
     overlay.classList.add('show');
-    overlay.setAttribute('aria-hidden','false');
+    overlay.inert=false;overlay.setAttribute('aria-hidden','false');
     unsupportedEl.hidden=true;
     statusEl.textContent='Say “Hey Tirthal” or just ask a question';
     captionEl.textContent='';
@@ -4378,7 +4397,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
     synth.cancel();
     try{ recog.stop(); }catch(e){}
     overlay.classList.remove('show');
-    overlay.setAttribute('aria-hidden','true');
+    overlay.inert=true;overlay.setAttribute('aria-hidden','true');
     setState(null);
     launchBtn.focus();
   }
@@ -4402,13 +4421,13 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 
   function open(){
     overlay.classList.add('show');
-    overlay.setAttribute('aria-hidden','false');
+    overlay.inert=false;overlay.setAttribute('aria-hidden','false');
     document.body.style.overflow='hidden';
     closeBtn.focus();
   }
   function close(){
     overlay.classList.remove('show');
-    overlay.setAttribute('aria-hidden','true');
+    overlay.inert=true;overlay.setAttribute('aria-hidden','true');
     document.body.style.overflow='';
     openBtn.focus();
   }
@@ -4462,7 +4481,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
     var str=document.getElementById('ms-strengths');
     str.innerHTML=(d.strengths||[]).slice(0,3).map(function(s){ return '<div>'+s+'</div>'; }).join('');
     overlay.classList.add('show');
-    overlay.setAttribute('aria-hidden','false');
+    overlay.inert=false;overlay.setAttribute('aria-hidden','false');
     document.body.style.overflow='hidden';
     closeBtn.focus();
     var arc=document.getElementById('ms-arc'), scoreEl=document.getElementById('ms-score');
@@ -4480,7 +4499,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
     setTimeout(function(){ scoreEl.textContent=d.score+'%'; },1000);
   };
 
-  function close(){ overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+  function close(){ overlay.classList.remove('show'); overlay.inert=true;overlay.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
   closeBtn.addEventListener('click',close);
   overlay.addEventListener('click',function(e){ if(e.target===overlay) close(); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&overlay.classList.contains('show')) close(); });
@@ -4575,64 +4594,11 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 })();
 </script>
 
-<!-- Confetti on contact CTAs -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.2/confetti.browser.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-(function(){
-  function fireConfetti(x,y){
-    if(typeof confetti==='undefined') return;
-    var cx=(x||window.innerWidth/2)/window.innerWidth;
-    var cy=(y||window.innerHeight*0.6)/window.innerHeight;
-    confetti({particleCount:130,spread:80,origin:{x:cx,y:cy},
-      colors:['#1c3a5e','#b8860b','#e8c060','#f0f5f7','#2e5f8a','#4ade80'],
-      gravity:0.85,scalar:1.1,drift:0.15,decay:0.92});
-  }
-  function showToast(msg){
-    var t=document.createElement('div');
-    t.innerHTML=msg;
-    t.style.cssText='position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(24px);background:linear-gradient(135deg,#0d1f3c,#1c3a5e);color:#e0eeff;padding:13px 28px;border-radius:28px;font-family:var(--fs,system-ui);font-size:.88rem;font-weight:500;z-index:9999;opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 10px 40px rgba(0,0,0,.32),0 0 0 1px rgba(255,255,255,.12);pointer-events:none;white-space:nowrap;';
-    document.body.appendChild(t);
-    requestAnimationFrame(function(){t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';});
-    setTimeout(function(){
-      t.style.opacity='0';t.style.transform='translateX(-50%) translateY(24px)';
-      setTimeout(function(){t.remove();},420);
-    },3400);
-  }
-
-  window.addEventListener('load',function(){
-    /* nav Get in Touch */
-    document.querySelectorAll('.nav-cta').forEach(function(btn){
-      btn.addEventListener('click',function(e){
-        fireConfetti(e.clientX,e.clientY);
-        showToast('Great choice &mdash; Tirthal replies within 24h.');
-      });
-    });
-    /* hero Let\'s Connect + game Let\'s Talk */
-    document.querySelectorAll('.btn-ghost,.btn-gold').forEach(function(btn){
-      var t=btn.textContent||'';
-      if(/connect|talk/i.test(t)){
-        btn.addEventListener('click',function(e){
-          fireConfetti(e.clientX,e.clientY);
-          showToast('Connecting you with Tirthal \u2014 watch your inbox.');
-        });
-      }
-    });
-    /* email links */
-    document.querySelectorAll('a[href^="mailto"]').forEach(function(a){
-      a.addEventListener('click',function(e){
-        fireConfetti(e.clientX,e.clientY);
-        showToast('Email client opening \u2014 great move!');
-      });
-    });
-  });
-})();
-</script>
-
 <!-- ═══════════════════════════════════════════════════════════
      CMS CONTENT LOADER — fetches content.json from GitHub
      Updates all editable sections without a full page rebuild
      ═══════════════════════════════════════════════════════ -->
-<script src="/assets/js/content-loader.js?v=ux-20261025"></script>
+<script src="/assets/js/content-loader.js?v=ux-20261025b"></script>
 
 <!-- Mobile fix: experience cards forced horizontal page scroll on phones.
      The desktop layout uses an 86px timeline rail with an absolutely

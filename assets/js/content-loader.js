@@ -42,12 +42,12 @@
       // Projects
       if(d.projects && d.projects.length){
         var pg=document.getElementById('proj-grid');
-        if(pg){ pg.innerHTML=renderProj(d.projects); observeReveal(pg); }
+        if(pg){ pg.innerHTML=renderProj(d.projects); observeReveal(pg); if(window.refreshPortfolioCards)window.refreshPortfolioCards(); }
       }
       // Writing
       if(d.writing && d.writing.length){
         var wg=document.getElementById('writing-grid');
-        if(wg){ wg.innerHTML=renderWriting(d.writing); observeReveal(wg); }
+        if(wg){ wg.innerHTML=renderWriting(d.writing); observeReveal(wg); if(window.refreshPortfolioCards)window.refreshPortfolioCards(); }
       }
       // After all content replaced: refresh GSAP scroll positions so section
       // headings (sec-title, sec-eyebrow) animate in correctly after layout shift
@@ -93,13 +93,13 @@
   function renderExp(exps){
     return exps.map(function(e,i){
       return '<div class="exp-item">'+
-        '<div class="exp-header">'+
-        '<div class="exp-num-badge">'+esc(e.n)+'</div>'+
-        '<div class="exp-meta"><div class="exp-role">'+esc(e.role)+'</div><div class="exp-org">'+esc(e.org)+'</div></div>'+
-        '<div class="exp-right"><div class="exp-date">'+esc(e.date)+'</div><div class="exp-loc-pill">'+esc(e.loc)+'</div></div>'+
-        '<div class="exp-toggle-icon">+</div>'+
-        '</div>'+
-        '<div class="exp-body"><ul class="exp-bullets">'+
+        '<button class="exp-header" type="button" id="exp-heading-'+(i+1)+'" aria-expanded="false" aria-controls="exp-body-'+(i+1)+'">'+
+        '<span class="exp-num-badge">'+esc(e.n)+'</span>'+
+        '<span class="exp-meta"><span class="exp-role">'+esc(e.role)+'</span><span class="exp-org">'+esc(e.org)+'</span></span>'+
+        '<span class="exp-right"><span class="exp-date">'+esc(e.date)+'</span><span class="exp-loc-pill">'+esc(e.loc)+'</span></span>'+
+        '<span class="exp-toggle-icon" aria-hidden="true">+</span>'+
+        '</button>'+
+        '<div class="exp-body" id="exp-body-'+(i+1)+'" role="region" aria-labelledby="exp-heading-'+(i+1)+'" hidden><ul class="exp-bullets">'+
         (e.bullets||[]).map(function(b){ return '<li>'+b+'</li>'; }).join('')+
         '</ul></div></div>';
     }).join('');
@@ -160,23 +160,7 @@
   }
 
   function rewireExp(container){
-    container.addEventListener('click', function(e){
-      var hdr=e.target.closest('.exp-header');
-      if(!hdr) return;
-      var item=hdr.closest('.exp-item');
-      if(!item) return;
-      var isOpen=item.classList.contains('open');
-      container.querySelectorAll('.exp-item.open').forEach(function(x){
-        x.classList.remove('open');
-        var icon=x.querySelector('.exp-toggle-icon');
-        if(icon) icon.textContent='+';
-      });
-      if(!isOpen){
-        item.classList.add('open');
-        var icon=item.querySelector('.exp-toggle-icon');
-        if(icon) icon.textContent='−';
-      }
-    });
+    if(window.initializeExperience)window.initializeExperience(container);
   }
 
   /* CMS-injected cards are created after the page's own IntersectionObserver
