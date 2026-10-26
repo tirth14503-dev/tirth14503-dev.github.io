@@ -53,6 +53,7 @@
       // headings (sec-title, sec-eyebrow) animate in correctly after layout shift
       setTimeout(function(){
         if(typeof ScrollTrigger!=='undefined') ScrollTrigger.refresh();
+        window.dispatchEvent(new Event('tk:content-ready'));
       }, 100);
       // Contact links
       if(d.contact){
@@ -105,8 +106,8 @@
   }
 
   function projectPreview(id){
-    if(id==='forecast') return '<div class="project-preview"><div class="preview-kicker"><span>Demand signal</span><b>Forecast vs. actual</b></div><div class="forecast-chart"><i style="height:28%"></i><i style="height:47%"></i><i style="height:39%"></i><i style="height:66%"></i><i style="height:55%"></i><i style="height:78%"></i><i style="height:69%"></i><i style="height:88%"></i></div></div>';
-    if(id==='kehe') return '<div class="project-preview"><div class="preview-kicker"><span>Carrier bid matrix</span><b>Lane award view</b></div><div class="bid-matrix"><span>Lane</span><span>A</span><span>B</span><span>C</span><span>Award</span><span>CHI–IND</span><span>$</span><span>$$</span><span>$$</span><span class="win">A</span><span>ATL–DAL</span><span>$$</span><span>$</span><span>$$</span><span class="win">B</span><span>PHL–CLE</span><span>$$</span><span>$$</span><span>$</span><span class="win">C</span></div></div>';
+    if(id==='forecast') return '<div class="project-preview"><div class="preview-kicker"><span>Demand signal</span><b>Illustrative preview</b></div><div class="forecast-chart"><i style="height:28%"></i><i style="height:47%"></i><i style="height:39%"></i><i style="height:66%"></i><i style="height:55%"></i><i style="height:78%"></i><i style="height:69%"></i><i style="height:88%"></i></div></div>';
+    if(id==='kehe') return '<div class="project-preview"><div class="preview-kicker"><span>Carrier bid matrix</span><b>Illustrative preview</b></div><div class="bid-matrix"><span>Lane</span><span>A</span><span>B</span><span>C</span><span>Award</span><span>CHI–IND</span><span>$</span><span>$$</span><span>$$</span><span class="win">A</span><span>ATL–DAL</span><span>$$</span><span>$</span><span>$$</span><span class="win">B</span><span>PHL–CLE</span><span>$$</span><span>$$</span><span>$</span><span class="win">C</span></div></div>';
     if(id==='automation') return '<div class="project-preview"><div class="preview-kicker"><span>Automated pipeline</span><b>Signal to action</b></div><div class="workflow-mini"><b>SUPABASE<br>DATA</b><i></i><b>AI<br>ANALYSIS</b><i></i><b>GMAIL<br>ALERT</b></div></div>';
     return '';
   }
@@ -128,18 +129,18 @@
         return '<a class="pj-card reveal" href="/marginguard/" style="text-decoration:none;transition-delay:'+d+'s" aria-label="Explore MarginGuard, my startup project">'+
           '<span class="pj-badge">'+esc(p.badge)+'</span><div class="pj-title">'+esc(p.title)+'</div>'+
           '<div class="pj-desc">'+p.desc+'</div><div class="pj-tags">'+(p.tags||[]).map(function(t){return '<span>'+esc(t)+'</span>';}).join('')+'</div>'+
-          '<span style="display:block;margin-top:1.3rem;font-size:.8rem;color:var(--gold)">Explore my startup ↗</span></a>';
+          '<span class="project-action">Explore product ↗</span></a>';
       }
       var story=projectStory(p.id);
       var featured=story?' pj-featured':'';
       var middle=story?'<div class="pj-story"><div><span>Challenge</span><p>'+esc(story.challenge)+'</p></div><div><span>Approach</span><p>'+esc(story.approach)+'</p></div><div><span>Outcome</span><p>'+esc(story.outcome)+'</p></div></div>':'<div class="pj-desc">'+p.desc+'</div>';
-      return '<div class="pj-card reveal'+featured+'" style="transition-delay:'+d+'s" data-case="'+esc(p.id)+'" role="button" tabindex="0" aria-haspopup="dialog" aria-label="Open case study: '+esc(p.title)+'">'+
+      return '<div class="pj-card reveal'+featured+'" style="transition-delay:'+d+'s" data-case="'+esc(p.id)+'">'+
         projectPreview(p.id)+
         '<span class="pj-badge">'+esc(p.badge)+'</span>'+
         '<div class="pj-title">'+esc(p.title)+'</div>'+
         middle+
         '<div class="pj-tags">'+(p.tags||[]).map(function(t){ return '<span>'+esc(t)+'</span>'; }).join('')+'</div>'+
-        '</div>';
+        '<div class="project-actions"><button type="button" class="project-action" aria-haspopup="dialog" aria-label="View '+esc(p.title)+' case study">View case study →</button></div></div>';
     }).join('');
   }
 
@@ -191,7 +192,7 @@
       entries.forEach(function(en){
         if(en.isIntersecting){ show(en.target); o.unobserve(en.target); }
       });
-    },{threshold:.1});
+    },{threshold:0,rootMargin:"0px 0px 100px 0px"});
     els.forEach(function(el){ o.observe(el); });
     setTimeout(function(){
       els.forEach(function(el){

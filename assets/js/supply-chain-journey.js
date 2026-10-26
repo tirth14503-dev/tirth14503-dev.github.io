@@ -26,7 +26,9 @@
   const PAGE_BG = 0xf5f5f7;
   let renderer;
   try{ renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true}); }
-  catch(e){ setTimeout(initScmActs, 1200); return; }
+  catch(e){ journey.classList.add('webgl-failed'); return; }
+  canvas.addEventListener('webglcontextlost',function(e){e.preventDefault();journey.classList.remove('webgl-ready');journey.classList.add('webgl-failed');captions.forEach(c=>c.removeAttribute('aria-hidden'));});
+  canvas.addEventListener('webglcontextrestored',function(){journey.classList.remove('webgl-failed');});
   renderer.setClearColor(0x000000, 0);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 1.75));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -626,6 +628,7 @@
     camera.updateProjectionMatrix();
   }
   window.addEventListener('resize', resize);
+  journey.classList.add('webgl-ready');
   resize();
 
   const mouseT = { x: 0, y: 0 }, mouse = { x: 0, y: 0 };
@@ -766,24 +769,21 @@
     sun.position.set(tp.x + 10, 14, tp.z + 8);
     sunTarget.position.set(tp.x, 0, tp.z);
 
-    /* captions / dots / progress / mood */
+    /* Keep the nearest chapter fully readable throughout its interval. */
     progressBar.style.width = (p * 100).toFixed(2) + '%';
     let active = 0, bestD = 9;
-    CH_CENTERS.forEach((c, i) => {
-      const d = Math.abs(p - c);
-      if(d < bestD){ bestD = d; active = i; }
-      const wgt = Math.max(0, 1 - d / 0.15);
-      const cap = captions[i];
-      if(cap){
-        cap.style.opacity = wgt.toFixed(3);
-        cap.style.filter = 'blur(' + ((1 - wgt) * 14).toFixed(1) + 'px)';
-        cap.style.transform = 'translateY(' + ((1 - wgt) * 40).toFixed(1) + 'px) scale(' + (0.96 + wgt * 0.04).toFixed(3) + ')';
-      }
+    CH_CENTERS.forEach((c,i)=>{const d=Math.abs(p-c);if(d<bestD){bestD=d;active=i;}});
+    captions.forEach((cap,i)=>{
+      cap.style.opacity=i===active?'1':'0';
+      cap.style.filter='none';
+      cap.style.transform='none';
+      cap.setAttribute('aria-hidden',i===active?'false':'true');
     });
     dotItems.forEach((d, i) => d.classList.toggle('on', i === active));
     if(active !== lastMood){ lastMood = active; sticky.style.background = MOODS[active]; }
 
     renderer.render(scene, camera);
+    journey.classList.add('webgl-ready');
   }
   frame();
     });

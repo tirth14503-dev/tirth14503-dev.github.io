@@ -57,7 +57,7 @@ document.querySelectorAll('input,textarea').forEach(el=>{
 /* ═══════════════════════════════════
    SCROLL REVEALS + NAV ACTIVE
 ═══════════════════════════════════ */
-const io=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('up');});},{threshold:.1});
+const io=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('up');});},{threshold:0,rootMargin:"0px 0px 100px 0px"});
 document.querySelectorAll('.reveal,.reveal-l,.reveal-r,.reveal-scale').forEach(el=>io.observe(el));
 const secIO=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
@@ -83,17 +83,6 @@ document.querySelectorAll('.exp-item').forEach(item=>{
 /* ═══════════════════════════════════
    CONTACT FORM
 ═══════════════════════════════════ */
-document.getElementById('contact-form').addEventListener('submit',(event)=>{
-  event.preventDefault();
-  const n=document.getElementById('ct-name').value||'';
-  const e=document.getElementById('ct-email').value||'';
-  const m=document.getElementById('ct-msg').value||'';
-  if(!n.trim()||!e.trim()||!m.trim())return;
-  window.location.href=`mailto:tirth14503@gmail.com?subject=Portfolio Enquiry from ${encodeURIComponent(n)}&body=${encodeURIComponent(m+'\n\nFrom: '+n+'\nEmail: '+e)}`;
-  const ok=document.getElementById('ct-ok');ok.style.display='block';
-  setTimeout(()=>ok.style.display='none',4500);
-});
-
 document.getElementById('ct-copy-email').addEventListener('click',async function(){
   const email='tirth14503@gmail.com';
   const button=this;
@@ -151,6 +140,7 @@ function gotoSection(id){
     if(!panel.classList.contains('open')) btn.click();
     return;
   }
+  if(window.selectLabTool&&['game','simulator','impact','matcher'].includes(id))window.selectLabTool(id);
   var el=document.getElementById(id); if(!el)return;
   setTimeout(function(){
     el.scrollIntoView({behavior:'smooth',block:'start'});
@@ -293,7 +283,7 @@ var KB=[
   /* No KB entry answered contact questions - 'How do I contact you?' is an
      offered chip and hit the generic fallback. */
   {k:['how do i contact','how to contact','contact you','get in touch','reach you','how can i reach','best way to reach','contact details'],
-   r:"Easiest is email: **tirth14503@gmail.com** \u2014 I reply within a day.\n\nYou can also find me on LinkedIn at **linkedin.com/in/tirthalkothari**, and the Contact section has a QR code and my phone number.\n\nI\u2019m in **Chicago** and graduate in **June 2026**, so I\u2019m actively speaking with teams now.",
+   r:"Easiest is email: **tirth14503@gmail.com** \u2014 I reply within a day.\n\nYou can also find me on LinkedIn at **linkedin.com/in/tirthalkothari**, and the Contact section has a QR code and my phone number.\n\nI\u2019m in **Chicago** and graduated in **June 2026**, so I\u2019m actively speaking with teams now.",
    chips:['Copy email address','Take me to Contact','Open to opportunities?']},
 
   /* Self-introduction. 'Tell me about yourself' is the default chip shown on
@@ -308,7 +298,7 @@ I grew up in my family’s electronics business in **Mumbai**, where supply chai
 
 The research side came later: a year at ISCM analyzing **1,500+ companies across 24 sectors** to build India’s first national supply chain index.
 
-Now I’m finishing my **MS in Supply Chain Management at DePaul’s Kellstadt School** in Chicago, graduating **June 2026**. Six roles, two countries. These days I’m as happy writing SQL as I am on the phone with a supplier — I think that mix is the whole point.`,
+I completed my **MS in Supply Chain Management at DePaul’s Kellstadt School** in Chicago in **June 2026**. Six roles, two countries. These days I’m as happy writing SQL as I am on the phone with a supplier — I think that mix is the whole point.`,
    chips:['Why supply chain?','Show me Projects','Take me to Experience','Open to opportunities?']},
 
   {k:['kehe','truckload','rfp','carrier bid','practicum','industry project','transportation project'],
@@ -317,7 +307,7 @@ Now I’m finishing my **MS in Supply Chain Management at DePaul’s Kellstadt S
 
   {k:['lpc','office assistant','college of communication','campus job','current job'],
    r:"Alongside the ambassador role I work as an **LPC Office Assistant** at DePaul's College of Communication (Sept 2025–June 2026): coordinating faculty schedules, managing event logistics, administrative operations. Light by design — keeps bandwidth free for academics and job searching.",
-   chips:['Take me to Experience','Tell me about the Ambassador role','When do you graduate?']},
+   chips:['Take me to Experience','Tell me about the Ambassador role','When did you graduate?']},
 
   {k:['blog','article','wrote','day in the life','kellstadt blog','published','writing'],
    r:"I've published in two places:\n\n• **DePaul Inside Kellstadt** — 'A Day in the Life of an MS in Supply Chain Management Student.' Covers the Loop campus commute, collaborative study culture, what the coursework really involves.\n\n• **Supply Chain Champions** — co-authored India's first national SC ranking report (1,500+ companies, national press coverage).\n\nAlso three **Field Notes** essays here on the portfolio: the KeHE RFP, the SC index methodology, and why I built my own ERP.",
@@ -344,8 +334,8 @@ Now I’m finishing my **MS in Supply Chain Management at DePaul’s Kellstadt S
    chips:['Open that experience','Take me to Experience','Tell me about DePaul']},
 
   {k:['depaul','ms','program','coursework','school','university','kellstadt'],
-   r:"I'm in the **MS Supply Chain Management program at DePaul's Kellstadt Graduate School**, Chicago, graduating June 2026.\n\nStandout coursework: Transportation & Logistics, Global Sourcing & Procurement, Decision Making for Managers, Machine Learning for Business (real projects, not toy datasets), Operations Management.\n\nThe program integrates live industry exposure — the KeHE RFP was a real practicum project. I also serve as Student Ambassador for the program.",
-   chips:['Tell me about projects','Take me to Experience','When do you graduate?']},
+   r:"I completed my **MS in Supply Chain Management at DePaul's Kellstadt Graduate School**, Chicago, in June 2026.\n\nStandout coursework: Transportation & Logistics, Global Sourcing & Procurement, Decision Making for Managers, Machine Learning for Business (real projects, not toy datasets), Operations Management.\n\nThe program integrates live industry exposure — the KeHE RFP was a real practicum project. I also serve as Student Ambassador for the program.",
+   chips:['Tell me about projects','Take me to Experience','When did you graduate?']},
 
   {k:['python','sql','r','tableau','excel','data','analytics','technical skills','tools','tech stack'],
    r:"**Technical toolkit:**\n\n• **Languages:** Python (pandas, scikit-learn, matplotlib), R, SQL\n• **BI & Viz:** Tableau, Power BI, Advanced Excel (Solver, pivots, VBA basics)\n• **SC Software:** AnyLogistix, Slate CRM, MRP systems\n• **Dev:** Django, Git, HTML/CSS (built this portfolio)\n• **ML:** scikit-learn — regression, classification, clustering\n\nAll used in actual projects: ERP (Django + SQL), index (R + Tableau), ML models (Python + scikit-learn).",
@@ -388,7 +378,7 @@ Now I’m finishing my **MS in Supply Chain Management at DePaul’s Kellstadt S
    chips:['Take me to Voices','Copy email address','Take me to Contact']},
 
   {k:['open to','available','hiring','job','role','position','looking for','full time','full-time'],
-   r:"**Yes, fully open.** Available for full-time roles starting **June 2026** after MS graduation.\n\n**Targeting:**\n• Supply chain analyst / operations analyst\n• Procurement / sourcing specialist\n• Logistics analyst\n• Supply chain consulting (operations-focused)\n\n**Preferred sectors:** manufacturing, retail/e-commerce, consulting, technology SC.\n\n**Location:** open to Chicago and anywhere in the US.\n\nEmail **tirth14503@gmail.com** to start a conversation.",
+   r:"**Yes, fully open.** Open to full-time opportunities after completing my MS in **June 2026**.\n\n**Targeting:**\n• Supply chain analyst / operations analyst\n• Procurement / sourcing specialist\n• Logistics analyst\n• Supply chain consulting (operations-focused)\n\n**Preferred sectors:** manufacturing, retail/e-commerce, consulting, technology SC.\n\n**Location:** open to Chicago and anywhere in the US.\n\nEmail **tirth14503@gmail.com** to start a conversation.",
    chips:['Copy email address','Take me to Contact','What makes you unique?']},
 
   {k:['unique','stand out','different','why you','value proposition','differentiate'],
@@ -440,7 +430,7 @@ Now I’m finishing my **MS in Supply Chain Management at DePaul’s Kellstadt S
    r:"Here's a quick overview of my **6 roles across 2 countries**:\n\n**01** LPC Office Assistant · DePaul (Sep 2025–Jun 2026, Chicago)\n**02** Student Ambassador · DePaul Kellstadt (Feb 2025–Present, Chicago)\n**03** Operations & SC Consultant · Kothari Electronics (Jun 2021–Jul 2024, Mumbai)\n**04** Research Analyst · ISCM (Jul 2023–Jul 2024, Mumbai)\n**05** Content & Social Media Intern · Career Launcher (Feb–Apr 2023, Mumbai)\n**06** Supply Chain Intern · Mentone Concretes (May–Jul 2022, Mumbai)\n\nThe highest-impact role is **#03** — three years, end-to-end manufacturing ops, over Rs 200K in documented savings.",
    chips:['Open experience 3 (Kothari Electronics)','Open experience 4 (ISCM)','Open experience 6 (Mentone)','What was your biggest impact?']},
   {k:['hello','hi','hey','howdy','greetings'],
-   r:"Hey! I'm **Tirthal** — supply chain & analytics, finishing my MS at DePaul in Chicago in June 2026.\n\nI can answer questions about my background **and** navigate this portfolio for you. Try _\"take me to Projects\"_, _\"open experience 3\"_, _\"show me the ERP project\"_, or _\"surprise me\"_.\n\nWhat do you want to explore?",
+   r:"Hey! I'm **Tirthal** — supply chain & analytics, a June 2026 MS graduate of DePaul in Chicago.\n\nI can answer questions about my background **and** navigate this portfolio for you. Try _\"take me to Projects\"_, _\"open experience 3\"_, _\"show me the ERP project\"_, or _\"surprise me\"_.\n\nWhat do you want to explore?",
    chips:['Tell me about yourself','Show me Projects','Take me to Experience','What can you do?']},
 
   {k:['biggest impact','biggest achievement','most proud','best result','top achievement','biggest win'],
@@ -458,9 +448,9 @@ Now I’m finishing my **MS in Supply Chain Management at DePaul’s Kellstadt S
 /* ── CONVO PATTERNS ─────────────────────────────────────── */
 var CONVO=[
   [/^(hi|hey|hello|yo|sup)\s*[!.]?\s*$/i,
-   ["Hey! I'm Tirthal — supply chain & analytics, DePaul MS graduating June 2026. Ask me anything, or say **\"take me to [section]\"** to navigate anywhere on this site. What's on your mind?"]],
+   ["Hey! I'm Tirthal — supply chain & analytics, DePaul MS graduated June 2026. Ask me anything, or say **\"take me to [section]\"** to navigate anywhere on this site. What's on your mind?"]],
   [/what('s| is) your name|^name\??$|who are you/i,
-   ["Tirthal Kothari — MS Supply Chain Management candidate at DePaul, Chicago. Graduating June 2026 and actively looking for full-time supply chain and operations roles."]],
+   ["Tirthal Kothari — MS Supply Chain Management graduate at DePaul, Chicago. Graduated June 2026 and actively looking for full-time supply chain and operations roles."]],
   [/how old|your age/i,
    ["Early career, but with more hands-on operational experience than most — three years running a family manufacturing business before grad school tends to accelerate that."]],
   [/(weather|time is it|sports|movie|music|song|recipe)/i,
@@ -473,7 +463,7 @@ var CONVO=[
 
 /* ── FACTS FALLBACK ──────────────────────────────────────── */
 var FACTS=[
-  "Tirthal is completing his MS in Supply Chain Management at DePaul University's Kellstadt Graduate School in Chicago, graduating June 2026.",
+  "Tirthal completed his MS in Supply Chain Management at DePaul University's Kellstadt Graduate School in Chicago, graduated June 2026.",
   "He built India's first national supply chain index at ISCM, analyzing 1,500+ public companies across 24 sectors.",
   "He generated ₹200,000 in FY24 procurement savings at Kothari Electronics through strategic sourcing.",
   "He built a full ERP system solo in Django, Python, and SQL — live at tirthalkothari.pythonanywhere.com — with AI forecasting and barcode scanning.",
@@ -484,7 +474,7 @@ var FACTS=[
   "He led the Supply Chain Dialogue Series at ISCM, hosting Chief Supply Chain Officers from India's top companies.",
   "He grew an Instagram community by 10,000+ followers in one month at Career Launcher.",
   "He speaks English, Hindi, and Gujarati.",
-  "Open to full-time supply chain roles anywhere in the US from June 2026. Email: tirth14503@gmail.com.",
+  "Open to full-time supply chain opportunities. MS completed June 2026. Email: tirth14503@gmail.com.",
   "His ML projects include retail demand forecasting, customer churn prediction (decision trees), and customer segmentation (K-Means).",
   "He worked a real 2024 inbound truckload RFP for KeHE Distributors in DePaul's transportation practicum.",
   "He holds a Bachelor of Management Studies in E-Commerce Operations from Nagindas Khandwala College, University of Mumbai.",
@@ -666,7 +656,7 @@ function toggle(){
   btn.setAttribute('aria-expanded',isOpen?'true':'false');
   if(isOpen&&!msgs.children.length){
     var bubble=addBotBubble();
-    var welcome="Hey! I’m **Tirthal** — supply chain & analytics, MS candidate at DePaul, Chicago.\n\nI can answer questions about my background **and** navigate this portfolio for you. Try:\n• _\"Take me to Projects\"_\n• _\"Open experience 3\"_ (Kothari Electronics)\n• _\"Show me the ERP project\"_\n• _\"Surprise me\"_\n\nWhat do you want to explore?";
+    var welcome="Hey! I’m **Tirthal** — supply chain & analytics, MS graduate of DePaul, Chicago.\n\nI can answer questions about my background **and** navigate this portfolio for you. Try:\n• _\"Take me to Projects\"_\n• _\"Open experience 3\"_ (Kothari Electronics)\n• _\"Show me the ERP project\"_\n• _\"Surprise me\"_\n\nWhat do you want to explore?";
     streamInto(welcome,bubble).then(function(){
       setChips(['Tell me about yourself','Show me Projects','Take me to Experience','What can you do?']);
     });
@@ -713,7 +703,7 @@ async function doSend(){
         speak(emsg.replace(/\*\*/g,''));
         openExpItem(intent.n);
         var EXP_ROLE_CHIPS=[
-              ['Tell me about your work experience','Tell me about Student Ambassador role','Take me to Projects','When do you graduate?'],
+              ['Tell me about your work experience','Tell me about Student Ambassador role','Take me to Projects','When did you graduate?'],
               ['Tell me about Student Ambassador role','Tell me about Kothari Electronics','DePaul coursework?','Take me to Projects'],
               ['Tell me about Kothari Electronics','What were the Rs 200K savings?','Operations skills?','Tell me about ISCM'],
               ['Tell me about the SC index','Tell me about Kothari Electronics','What certifications do you have?','Take me to Projects'],
@@ -773,7 +763,7 @@ async function doSend(){
         var detected=!explicit?'**Looks like a job description — generating your tailored cover letter:**\n\n':'';
         var cl=detected+
           'Dear '+company+' Hiring Team,\n\n'+
-          'I am writing to express my strong interest in the **'+role+'** role. As an MS Supply Chain Management candidate at DePaul University (graduating June 2026) with three years of hands-on experience in manufacturing procurement and operations, I bring both academic foundation and real-world P&L accountability that most early-career candidates cannot.\n\n'+
+          'I am writing to express my strong interest in the **'+role+'** role. As an MS Supply Chain Management graduate of DePaul University (graduated June 2026) with three years of hands-on experience in manufacturing procurement and operations, I bring both academic foundation and real-world P&L accountability that most early-career candidates cannot.\n\n'+
           (hasProc||hasOps?'**Procurement impact you can verify:** At Kothari Electronics, I renegotiated vendor terms and redesigned a PVC wire reprocessing workflow, delivering **₹200,000 in documented FY24 savings** — not projected, not estimated, actual finance-team-confirmed numbers.\n\n':'')+
           (hasERP?'**Built a live ERP from scratch:** Django, Python, SQL — multi-user authentication, inventory management, financial KPIs, AI demand forecasting, barcode scanner with camera. Running now at tirthalkothari.pythonanywhere.com. I built it to understand what I\'d eventually manage, not to pad a resume.\n\n':'')+
           (hasPy?'**Analytical depth:** I built India\'s first national supply chain index analyzing **1,500+ public companies** across 24 sectors in R, Excel, and Tableau — improving efficiency methodology by 40% over prior frameworks. The results were published as the Top 20 Supply Chain Champions of India report.\n\n':'')+
@@ -952,6 +942,7 @@ if(mic&&(window.SpeechRecognition||window.webkitSpeechRecognition)){
 
   // Also wire up the control panel button
   ctrlBtn?.addEventListener('click',()=>{
+    if(window.selectLabTool)window.selectLabTool('matcher');
     document.getElementById('matcher').scrollIntoView({behavior:'smooth'});
     setTimeout(()=>ta.focus(),600);
   });
@@ -1104,102 +1095,5 @@ if(mic&&(window.SpeechRecognition||window.webkitSpeechRecognition)){
 
   btn.addEventListener('click',doMatch);
   ta.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.ctrlKey)doMatch();});
-})();
-
-/* ═══════════════════════════════════
-   COFFEE CHAT CALENDAR
-═══════════════════════════════════ */
-(()=>{
-  const monthsEl=document.getElementById('cal-months');
-  const gridEl=document.getElementById('cal-grid');
-  const timesEl=document.getElementById('cal-times');
-  const confirmEl=document.getElementById('cal-confirm');
-  const confirmBtn=document.getElementById('cal-confirm-btn');
-  const bookedEl=document.getElementById('cal-booked');
-  if(!monthsEl)return;
-
-  const today=new Date();
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const days=['Su','Mo','Tu','We','Th','Fr','Sa'];
-  const TIMES=['9:00 AM','9:30 AM','10:00 AM','11:00 AM','2:00 PM','3:00 PM','4:00 PM','4:30 PM'];
-  // Available days: Mon-Fri only, starting 3 days from today
-  const AVAIL_DAYS=[1,2,3,4,5]; // Mon-Fri
-
-  let selectedMonth=today.getMonth();
-  let selectedYear=today.getFullYear();
-  let selectedDay=null,selectedTime=null;
-
-  // Render month tabs (current + next 2)
-  for(let i=0;i<3;i++){
-    const m=(today.getMonth()+i)%12;
-    const y=today.getFullYear()+Math.floor((today.getMonth()+i)/12);
-    const btn=document.createElement('button');
-    btn.className='cal-month-btn'+(i===0?' active':'');
-    btn.textContent=months[m];
-    btn.dataset.m=m; btn.dataset.y=y;
-    btn.addEventListener('click',()=>{
-      document.querySelectorAll('.cal-month-btn').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      selectedMonth=+btn.dataset.m; selectedYear=+btn.dataset.y;
-      selectedDay=null;selectedTime=null;
-      renderGrid();renderTimes();
-    });
-    monthsEl.appendChild(btn);
-  }
-
-  function renderGrid(){
-    gridEl.innerHTML='';
-    // Day labels
-    days.forEach(d=>{const el=document.createElement('div');el.className='cal-day-label';el.textContent=d;gridEl.appendChild(el);});
-    const firstDay=new Date(selectedYear,selectedMonth,1).getDay();
-    const daysInMonth=new Date(selectedYear,selectedMonth+1,0).getDate();
-    const minDate=new Date(today);minDate.setDate(minDate.getDate()+3);
-
-    for(let i=0;i<firstDay;i++){const el=document.createElement('div');el.className='cal-day empty';gridEl.appendChild(el);}
-    for(let d=1;d<=daysInMonth;d++){
-      const el=document.createElement('div');
-      const date=new Date(selectedYear,selectedMonth,d);
-      const dow=date.getDay();
-      const isPast=date<minDate;
-      if(!isPast&&AVAIL_DAYS.includes(dow)){
-        el.className='cal-day avail'+(selectedDay===d?' selected':'');
-        el.textContent=d;
-        el.addEventListener('click',()=>{
-          selectedDay=d;selectedTime=null;
-          renderGrid();renderTimes();
-        });
-      } else {
-        el.className='cal-day past';el.textContent=d;
-      }
-      gridEl.appendChild(el);
-    }
-  }
-
-  function renderTimes(){
-    timesEl.innerHTML='';
-    confirmEl.style.display='none';
-    if(!selectedDay){timesEl.innerHTML='<span style="font-family:var(--fm);font-size:.46rem;letter-spacing:.14em;color:var(--text3);text-transform:uppercase">Select a date first</span>';return;}
-    TIMES.forEach(t=>{
-      const el=document.createElement('span');
-      el.className='cal-time'+(selectedTime===t?' selected':'');
-      el.textContent=t;
-      el.addEventListener('click',()=>{
-        selectedTime=t;renderTimes();
-        confirmEl.style.display='block';
-        confirmBtn.textContent=`Confirm: ${months[selectedMonth]} ${selectedDay}, ${t} CT →`;
-      });
-      timesEl.appendChild(el);
-    });
-  }
-
-  confirmBtn?.addEventListener('click',()=>{
-    const subj=`Coffee Chat Request: ${months[selectedMonth]} ${selectedDay}, ${selectedTime} CT`;
-    const body=`Hi Tirthal,\n\nI'd love to book a 15-minute coffee chat on ${months[selectedMonth]} ${selectedDay} at ${selectedTime} CT.\n\nLooking forward to connecting!\n\n[Your name & contact]`;
-    window.location.href=`mailto:tirth14503@gmail.com?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
-    confirmEl.style.display='none';
-    bookedEl.style.display='block';
-  });
-
-  renderGrid();renderTimes();
 })();
 

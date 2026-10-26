@@ -10,7 +10,9 @@ __glReady(function initHeroPort(){
 
   let renderer;
   try{ renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true}); }
-  catch(e){ setTimeout(initHeroPort, 1200); return; }
+  catch(e){ heroSec.classList.add('webgl-failed'); return; }
+  canvas.addEventListener('webglcontextlost',function(e){e.preventDefault();heroSec.classList.remove('webgl-ready');heroSec.classList.add('webgl-failed');});
+  canvas.addEventListener('webglcontextrestored',function(){heroSec.classList.remove('webgl-failed');});
   renderer.setClearColor(0x000000, 0);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -804,6 +806,7 @@ __glReady(function initHeroPort(){
     beaconGlow.material.opacity = 0.25 + (Math.sin(clock * 2.6) > 0.4 ? 0.45 : 0);
 
     renderer.render(scene, camera);
+    heroSec.classList.add('webgl-ready');
   }
   frame();
 });

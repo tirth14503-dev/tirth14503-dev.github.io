@@ -32,7 +32,7 @@
       alt:'Chicago skyline photographed from Lake Michigan',
       map:'https://www.openstreetmap.org/?mlat=41.8818&mlon=-87.6232#map=13/41.8818/-87.6232',
       credit:'Photo: <a href="https://commons.wikimedia.org/wiki/File:Chicago_Skyline_from_Lake_Michigan.jpg" target="_blank" rel="noopener">Bladerunner2019 / Wikimedia Commons</a> · CC BY-SA 3.0',
-      body:'<p>An <strong>MS in Supply Chain Management at DePaul’s Kellstadt Graduate School</strong>, graduating June 2026 — predictive analytics, procurement strategy, inventory optimization.</p>'
+      body:'<p>An <strong>MS in Supply Chain Management at DePaul’s Kellstadt Graduate School</strong>, completed June 2026 — predictive analytics, procurement strategy, inventory optimization.</p>'
           +'<p>Alongside it, two campus roles and a full <strong>ERP system I built solo</strong>. The operational instincts came from Mumbai; Chicago is where I paired them with the tools.</p>'
     }
   };
@@ -80,7 +80,7 @@
 
   /* ── 3-D Globe ── */
   var canvas=document.getElementById('jm-globe');
-  if(!canvas||typeof THREE==='undefined') return;
+  if(!canvas||typeof THREE==='undefined'||matchMedia('(prefers-reduced-motion:reduce)').matches) return;
 
   /* helpers */
   function latLon3(lat,lon,r){
@@ -115,6 +115,8 @@
     renderer.toneMappingExposure=1.05;
   }catch(e){ return; }
 
+  canvas.addEventListener('webglcontextlost',function(e){e.preventDefault();animating=false;canvas.parentElement.classList.remove('webgl-ready');});
+  canvas.addEventListener('webglcontextrestored',function(){animating=true;});
   scene=new THREE.Scene();
   camera=new THREE.PerspectiveCamera(46,W/H,0.05,100);
   camera.position.set(0,0.8,2.28);
@@ -627,11 +629,11 @@
       var rect=section.getBoundingClientRect();
       var vh=window.innerHeight||document.documentElement.clientHeight;
       if(rect.bottom>0&&rect.top<vh){
-        var raw=(vh*0.65-rect.top)/(rect.height*0.72);
+        var raw=(vh*0.65-rect.top)/(rect.height*0.48);
         targetProgress=Math.max(0,Math.min(1,raw));
       }
     }
-    progress+=(targetProgress-progress)*0.04;
+    progress+=(targetProgress-progress)*0.12;
 
     /* rotate globe to follow flight path */
     globeGroup.rotation.y=Y_START+(Y_END-Y_START)*progress;
@@ -765,6 +767,7 @@
     })();
 
     renderer.render(scene,camera);
+    canvas.parentElement.classList.add('webgl-ready');
   }
   tick();
 
