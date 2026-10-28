@@ -3,76 +3,66 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MarginGuard · My startup project | Tirthal Kothari</title>
-  <meta name="description" content="MarginGuard is Tirthal Kothari's startup project: a working supply-chain application for invoice review, inventory analysis, and production planning.">
-  <meta property="og:title" content="MarginGuard · From supply-chain data to a clearer decision">
-  <meta property="og:description" content="Explore my startup project and try the working MarginGuard prototype.">
+  <title>MarginGuard — Follow the money. Find the decision.</title>
+  <meta name="description" content="Invoice review, inventory insight and business planning with the evidence behind every decision. Explore MarginGuard, built by Tirthal Kothari.">
+  <meta property="og:title" content="MarginGuard — A clearer view of your working capital">
+  <meta property="og:description" content="Follow the money from purchase order to a reviewed business decision.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://tirthalkothari.com/marginguard/">
   <link rel="canonical" href="https://tirthalkothari.com/marginguard/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=customer1">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=Manrope:wght@400;500;600;650;700;750;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="story.css?v=1">
   <script src="launch.js?v=3" defer></script>
+  <script src="story.js?v=1" type="module"></script>
   <link rel="stylesheet" href="quick-tour.css">
   <script src="quick-tour.js" defer></script>
 </head>
-<body>
+<body data-guide-auto="off">
   <a class="skip" href="#main">Skip to content</a>
-  <header class="site-header">
-    <a class="portfolio" href="/" aria-label="Back to Tirthal Kothari's portfolio"><span class="monogram">TK</span><span>Tirthal Kothari<span class="portfolio-label">PORTFOLIO / MY STARTUP</span></span></a>
-    <nav aria-label="Page navigation"><a href="#product">The product</a><a href="#pricing">Pricing</a><a href="#story">Why I built it</a><a class="nav-back" href="/">Back to portfolio ↗</a></nav>
+  <header class="header">
+    <a class="brand" href="#top" aria-label="MarginGuard home"><svg viewBox="0 0 32 34" aria-hidden="true"><path d="M3 28V6l13 7L29 6v22l-13-7Z"/><path d="M3 6 16 1l13 5M16 13v21"/></svg>MarginGuard</a>
+    <nav aria-label="Main navigation"><a href="#product">The product</a><a href="#workflow">How it works</a><a href="#pricing">Early access</a></nav>
+    <a class="nav-cta" data-launch href="app/">Open workspace <span>↗</span></a>
   </header>
   <main id="main">
-    <section class="hero wrap">
-      <div class="hero-copy">
-        <div class="eyebrow"><span></span> MY STARTUP PROJECT</div>
-        <p class="product-name">MarginGuard</p>
-        <h1>From scattered data<br>to a <em>clearer decision.</em></h1>
-        <p class="intro">A workspace for the decisions behind your supply chain. Built for small and midsize businesses. Review invoice differences, understand stock risks, and choose your next step with the source evidence beside every recommendation.</p>
-        <div class="hero-actions"><a class="button primary" data-launch href="app/">Try MarginGuard <span>↗</span></a><button type="button" class="mg-tour-link" data-guide-start>Quick tour <span>↗</span></button></div>
-        <p class="availability">Free early preview · Payments coming soon · Hosted from my PC; availability varies.</p>
-        <p class="signature">Built by <strong>Tirthal Kothari</strong><span>Supply chain meets software.</span></p>
+    <div class="narrative" id="top">
+      <button class="motion-toggle" type="button" id="motion-toggle" aria-pressed="false">Pause 3D motion</button>
+      <div class="scene-pin" aria-hidden="true">
+        <div class="scene-glow"></div>
+        <div class="scene-grid"></div>
+        <div id="cash-scene"><div class="cash-fallback"><div class="fallback-note"><span>MARGINGUARD</span><strong>Working<br>capital.</strong><small>FOLLOW THE EVIDENCE</small></div><div class="fallback-band">MG / 001</div></div></div>
+        <div class="scene-caption"><span class="live-dot"></span><span id="scene-label">Your working capital, in focus.</span><span class="scene-index" id="scene-index">01 / 05</span></div>
+        <span class="scene-footnote">CONCEPTUAL VISUAL · NOT REAL CURRENCY</span>
       </div>
-      <div class="preview" aria-label="Illustrative view of MarginGuard's synthetic sample audit">
-        <div class="preview-top"><div class="guard-mark">M</div><strong>MarginGuard</strong><span>WORKSPACE</span><div class="avatar">TK</div></div>
-        <div class="preview-content">
-          <div class="preview-context"><span>INDUSTRIAL PARTS</span><span class="sample-label">Synthetic sample</span></div>
-          <h2>A clearer view<br>of your margin.</h2>
-          <div class="review-brief"><span>REVIEW BRIEF</span><strong>5 findings need a decision.</strong><p>Follow the evidence. Record the next step.</p><div class="progress"><i></i></div></div>
-          <div class="metrics"><div><span>Invoice variances</span><strong>$550</strong><small>Potential overcharges · review required</small></div><div><span>Excess inventory</span><strong>$28,800</strong><small>Stock value above the coverage target</small></div></div>
-          <div class="findings"><div class="finding"><i>!</i><span><strong>Check the invoice price</strong><small>Purchase order ↔ invoice evidence</small></span><span class="finding-arrow">↗</span></div><div class="finding"><i>↗</i><span><strong>Review stock coverage</strong><small>Inventory ↔ average daily demand</small></span><span class="finding-arrow">↗</span></div></div>
-          <p class="preview-caption">Illustrative interface · All amounts are synthetic.<br>Potential variances and inventory value are not realized savings.</p>
-        </div>
-      </div>
+      <section class="chapter hero" data-chapter="0">
+        <div class="chapter-copy"><p class="eyebrow"><span class="status-dot"></span> SUPPLY CHAIN INTELLIGENCE</p><h1>Follow the money.<br><span>Find the decision.</span></h1><p class="lede">Your margin lives in the details.<br>Bring invoices, inventory and planning into focus—with the evidence to make your next move.</p><div class="actions"><a class="button mint" data-launch href="app/">Explore MarginGuard <span>↗</span></a><a class="text-link" href="#product">Follow the story <span>↓</span></a></div><p class="hero-note">Working product. Built by Tirthal Kothari.</p></div>
+        <div class="hero-bottom"><span>EVERY NUMBER HAS A STORY.</span><span>SCROLL TO FOLLOW IT <span class="down-arrow">↓</span></span></div>
+      </section>
+      <section class="chapter" id="product" data-chapter="1">
+        <div class="chapter-copy"><p class="eyebrow">01 / THE INVISIBLE DIFFERENCE</p><h2>Small differences.<br><span>Real exposure.</span></h2><p class="lede">The price you agreed to. The price you were billed. They should tell the same story.</p><p class="body-copy">Compare invoices with purchase orders. Review price differences, excess quantities and possible duplicate lines, with the original rows beside each finding.</p><div class="evidence-card"><div class="evidence-head"><span>PRICE CHECK</span><span>Illustrative example</span></div><div class="evidence-row"><span>Agreed unit price</span><strong>$10.00</strong></div><div class="evidence-row"><span>Invoiced unit price</span><strong>$12.00</strong></div><div class="evidence-row evidence-total"><span>Difference to review</span><strong>+$2.00 / unit</strong></div><p>A potential variance, pending review.</p></div></div>
+      </section>
+      <section class="chapter" data-chapter="2">
+        <div class="chapter-copy"><p class="eyebrow">02 / THE CAPITAL IN YOUR STOCK</p><h2>Money moves.<br><span>Or sits on a shelf.</span></h2><p class="lede">Too much stock ties up capital.<br>Too little puts your next sale at risk.</p><p class="body-copy">See stock coverage, excess inventory and replenishment gaps. Explore demand and lead-time assumptions before deciding what needs attention.</p><div class="signal-list"><div><span class="signal-line"></span><strong>Stock cover</strong><span>Demand × lead time</span></div><div><span class="signal-line"></span><strong>Excess inventory</strong><span>Capital above your target</span></div><div><span class="signal-line"></span><strong>Margin exposure</strong><span>Cost against selling price</span></div></div></div>
+      </section>
+      <section class="chapter" data-chapter="3">
+        <div class="chapter-copy"><p class="eyebrow">03 / THE CHOICE AHEAD</p><h2>See the tradeoff.<br><span>Then make the call.</span></h2><p class="lede">A lower price is only part of the picture. Cash, capacity and timing matter too.</p><p class="body-copy">Compare supplier offers and planning scenarios. Explore product mixes within entered cash and resource limits, and inspect what changes between options.</p><div class="decision-tags"><span>Supplier comparison</span><span>Cash scenarios</span><span>Shared capacity</span><span>Product mix</span></div><p class="small-note">Scenarios depend on your inputs. They do not place orders or move money.</p></div>
+      </section>
+      <section class="chapter last-chapter" data-chapter="4">
+        <div class="chapter-copy"><p class="eyebrow">04 / THE EVIDENCE THAT STAYS</p><h2>A decision today.<br><span>Context for tomorrow.</span></h2><p class="lede">Keep the finding, the assumptions and the reasoning together.</p><p class="body-copy">Save a decision. Reopen its history. Compare expected results with recorded outcomes. Ask the AI Bot to explain the evidence or find a past review.</p><a class="text-link mint-text" href="#workflow">See the workflow <span>↗</span></a></div>
+      </section>
+    </div>
+    <section class="workflow light-section" id="workflow">
+      <div class="section-top"><p class="eyebrow">FROM RECORDS TO A REVIEWED DECISION</p><span>LESS GUESSWORK. MORE CONTEXT.</span></div>
+      <div class="section-heading"><h2>Your data.<br>A clearer way through.</h2><p>A practical workspace for small and midsize businesses. Start with a synthetic sample, then bring your own authorized records.</p></div>
+      <ol class="workflow-steps"><li><span>01</span><h3>Bring the records.</h3><p>Import CSV or Excel files, map columns and review the data checks before saving.</p></li><li><span>02</span><h3>Look behind the number.</h3><p>Inspect a finding and its source rows. Test an assumption or compare a scenario.</p></li><li><span>03</span><h3>Keep the decision.</h3><p>Save a reviewed next step and track recorded outcomes with their context.</p></li></ol>
+      <div class="workflow-bottom"><button type="button" class="text-link" data-guide-start>Take the quick tour <span>↗</span></button><p>Reviewed exports from Tally, QuickBooks Online and Xero are supported.<br>Live ERP synchronization is still in development.</p></div>
     </section>
-    <div class="capability-strip wrap"><span>INVOICE REVIEW</span><span>INVENTORY INSIGHT</span><span>PRODUCTION PLANNING</span><span>TRACEABLE EVIDENCE</span></div>
-    <section id="product" class="product wrap">
-      <div class="section-heading"><div><p class="eyebrow">THE PRODUCT</p><h2>One place to review.<br>More room to think.</h2></div><p>MarginGuard brings analysis and follow-through into the same workspace, so a finding can become a reviewed decision.</p></div>
-      <div class="feature-grid">
-        <article><span class="feature-number">01 / REVIEW</span><div class="feature-icon">≋</div><h3>Find invoice gaps.</h3><p>Compare purchase orders and invoices. Investigate price differences, quantities, and possible duplicate lines with the original source rows in view.</p><span class="feature-foot">FROM RECORDS TO FINDINGS</span></article>
-        <article><span class="feature-number">02 / UNDERSTAND</span><div class="feature-icon">◫</div><h3>See inventory exposure.</h3><p>Review stock coverage, excess inventory, and replenishment gaps. Keep the assumptions visible and test demand or lead-time changes.</p><span class="feature-foot">FROM STOCK TO CONTEXT</span></article>
-        <article><span class="feature-number">03 / PLAN</span><div class="feature-icon">◇</div><h3>Plan around constraints.</h3><p>Explore shared materials, bills of materials, and production capacity. Compare scenarios and understand what a change would unlock.</p><span class="feature-foot">FROM CONSTRAINTS TO OPTIONS</span></article>
-      </div>
-      <div class="feature-grid customer-feature-grid">
-        <article><span class="feature-number">04 / DECIDE</span><div class="feature-icon">→</div><h3>A practical next step.</h3><p>Open a prioritized recommendation, inspect its source rows, and see your recorded corrections. Approved drafts and confirmed outcomes stay connected to the finding.</p><span class="feature-foot">FROM EVIDENCE TO ACTION</span></article>
-        <article><span class="feature-number">05 / LEARN</span><div class="feature-icon">✧</div><h3>Learn from your reviews.</h3><p>Opt into a local review model trained on your workspace’s approved examples. It needs enough real reviews and separate audit validation before influencing the review order. No paid AI service is required.</p><span class="feature-foot">LOCAL, OPTIONAL REVIEW LEARNING</span></article>
-        <article><span class="feature-number">06 / GET STARTED</span><div class="feature-icon">✓</div><h3>A guided first audit.</h3><p>Set up your company, map your CSV or Excel columns, and check the data before saving. Recovery codes, private workspace exports and an in-app support inbox help you keep control.</p><span class="feature-foot">FROM SAMPLE TO YOUR BUSINESS</span></article>
-      </div>
-    </section>
-    <section id="pricing" class="pricing wrap">
-      <div class="section-heading"><div><p class="eyebrow">START FREE</p><h2>Time to explore.<br>A simple next step.</h2></div><p>Try the current tools for 14 days without a card. The planned Early Access subscription is $9 USD per month for one account.</p></div>
-      <div class="price-grid"><article><p class="eyebrow">FREE TRIAL</p><h3>Explore the workflow.</h3><p class="plan-price">$0 <small>for 14 days</small></p><ul><li>Your own workspace and synthetic sample audit</li><li>Invoice review, inventory insight, and planning</li><li>CSV / Excel imports and evidence exports</li><li>No card required</li></ul><a class="button primary" data-launch href="app/">Start free trial <span>↗</span></a><p class="plan-note">Complimentary preview access continues after the trial while paid billing is disabled. No automatic charge.</p></article><article class="planned-plan"><p class="eyebrow">PLANNED EARLY ACCESS</p><h3>Keep working with your data.</h3><p class="plan-price">$9 <small>USD / month</small></p><ul><li>All current tools for one account</li><li>Traceable findings and review drafts</li><li>Production plans and scenario comparisons</li><li>Monthly subscription; cancel future renewals</li></ul><span class="coming-soon">Paid checkout coming soon</span><p class="plan-note">Payments are not connected yet. No card is collected and no automatic charge will be made. A subscription starts only when you choose it.</p></article></div>
-      <p class="pricing-context">MarginGuard is an evolving prototype hosted from my PC; availability varies. Optional cloud AI uses your own API key and is billed separately by the AI provider.</p>
-    </section>
-    <section id="story" class="story">
-      <div class="wrap story-grid"><div><p class="eyebrow">WHY I BUILT IT</p><h2>The analysis should<br>lead somewhere.</h2></div><div class="story-copy"><p>My supply-chain work keeps bringing me back to the same challenge: the data exists, but making a decision means piecing it together across files, assumptions, and conversations.</p><p>I’m building MarginGuard to make that review more practical. The goal is to help someone see the issue, inspect the evidence, test an option, and record what happened next.</p><div class="stage"><span>PROJECT STAGE</span><strong>Working prototype</strong><p>The core review workflow, guided imports and local review learning are available to try. Start with synthetic sample data before testing your own authorized records. This early preview has no uptime SLA.</p></div></div></div>
-    </section>
-    <section class="workflow wrap"><p class="eyebrow">TAKE IT FOR A SPIN</p><h2>Start with the sample.<br>Follow a finding through.</h2><ol><li><span>01</span><strong>Create an account.</strong><p>Start a 14-day trial with your own workspace and a synthetic industrial-parts audit.</p></li><li><span>02</span><strong>Look behind a number.</strong><p>Open a finding to inspect the records and prepare a review draft.</p></li><li><span>03</span><strong>Choose the next step.</strong><p>Inspect a recommendation, save a reviewed decision, and record the outcome.</p></li></ol></section>
-    <section class="cta wrap" id="try"><div><p class="eyebrow">MARGINGUARD</p><h2>See the workflow<br>for yourself.</h2><p>Open the prototype and choose “Create an account” to begin.</p></div><div class="cta-actions"><a class="button light" data-launch href="app/">Open MarginGuard <span>↗</span></a><p>The app runs while my PC is awake and connected.<br>If it’s unavailable, please try again later.</p><a class="contact-link" href="mailto:tirth14503@gmail.com?subject=MarginGuard%20feedback">Share feedback with me ↗</a></div></section>
+    <section class="pricing light-section" id="pricing"><div class="section-heading"><div><p class="eyebrow">EARLY ACCESS</p><h2>Start with a finding.<br>See where it leads.</h2></div><div class="price-box"><span>EXPLORE THE CURRENT PRODUCT</span><strong>$0 <small>/ 14-day trial</small></strong><p>No card required. Complimentary preview access continues while paid billing is disabled.</p><a class="button dark" data-launch href="app/">Create your workspace <span>↗</span></a><p class="planned-price">Planned Early Access: $9 USD / month.<br>Paid checkout is not connected yet.</p></div></div></section>
+    <section class="founder"><div><p class="eyebrow">BUILT FROM THE WORK</p><h2>Good analysis should<br>lead somewhere.</h2></div><div><p>The data exists. The hard part is connecting it to a decision you can explain. MarginGuard brings those steps into one practical workflow.</p><span>Built by Tirthal Kothari <small>SUPPLY CHAIN & SOFTWARE</small></span><p class="availability">An evolving product, hosted from my PC. Availability varies; there is no uptime SLA. Start with the sample before uploading authorized business records.</p></div></section>
+    <footer><a class="brand" href="#top">MarginGuard</a><a href="/">Tirthal Kothari’s portfolio ↗</a><a href="mailto:tirth14503@gmail.com?subject=MarginGuard">Get in touch ↗</a><span>© 2026 MarginGuard</span></footer>
   </main>
-  <footer class="wrap"><a href="/">← Back to my portfolio</a><span>© 2026 Tirthal Kothari · MarginGuard</span><a href="mailto:tirth14503@gmail.com?subject=MarginGuard">Let’s talk ↗</a></footer>
 </body>
 </html>

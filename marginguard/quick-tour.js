@@ -70,5 +70,5 @@
     }
     if(!seen())open();
   });
-  if(!inApp && !seen())open();
+  if(!inApp && document.body.dataset.guideAuto !== 'off' && !seen())open();
 })();
