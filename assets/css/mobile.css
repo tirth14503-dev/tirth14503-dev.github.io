@@ -1,0 +1,111 @@
+/* ─────────────────────────────────────────────────────────────
+   Mobile + cross-browser hardening
+   Loaded last on index.html so it wins over the inline styles.
+   Desktop layout is untouched except for the two global bug fixes
+   at the top (text inflation and the contact headline gap).
+   ───────────────────────────────────────────────────────────── */
+
+/* Stop iOS Safari / Android Chrome from inflating text on rotate. */
+html{-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;text-size-adjust:100%;}
+
+/* Prevent any stray sideways scroll. `clip` (unlike `hidden`) does not
+   create a scroll container, so position:sticky and scroll-pinned
+   scenes keep working. Older browsers keep the existing body rule. */
+@supports (overflow:clip){html,body{overflow-x:clip;}}
+
+/* Remove the 300ms tap delay / double-tap zoom on controls. */
+a,button,input,select,textarea,label,summary,[role="button"]{touch-action:manipulation;}
+
+/* "Let's / build / something." had an empty line after the bold word:
+   <strong> is display:block, so the following <br> added a blank line. */
+.ct-big strong + br{display:none;}
+
+/* Off-screen sections are skipped with content-visibility:auto and a
+   900px placeholder. "auto" makes the browser remember each section's
+   real height, so menu links (About, Contact, …) land in the right
+   place instead of jumping. Browsers without support keep 900px. */
+#about,#journeymap,#projects,#experience,#writing,#education,#skills,#timeline,#scflow,#lab,#contact{contain-intrinsic-size:auto 900px;}
+
+/* Full-height hero that fits the visible screen on iOS (100vh includes
+   the hidden URL bar there). svh falls back to 100vh where unsupported. */
+#hero{min-height:100vh;min-height:100svh;}
+
+/* ── Phones and small tablets ───────────────────────────────── */
+@media (max-width:760px){
+
+  /* Sections were forced to a full screen height and vertically
+     centered, which left big blank bands above/below short sections
+     (Timeline, Changelog, the end of the page). Let them size to
+     their content instead. #hero keeps its own full-height rule. */
+  section{min-height:0;justify-content:flex-start;}
+  #hero{min-height:100vh;min-height:100svh;justify-content:center;}
+
+  section:not(#hero){
+    padding-left:max(1.25rem, env(safe-area-inset-left));
+    padding-right:max(1.25rem, env(safe-area-inset-right));
+  }
+
+  /* Long words / emails / URLs never push the layout wider. */
+  h1,h2,h3,h4,p,li,a,.ct-link-item{overflow-wrap:break-word;}
+  img,video,canvas,svg,iframe{max-width:100%;}
+  img,video{height:auto;}
+
+  /* iOS zooms the page when focusing inputs under 16px. */
+  input,select,textarea{font-size:16px !important;}
+
+  /* ── Legibility: nothing under ~11px on a phone ── */
+  .sec-eyebrow,.hero-tag,.hero-scroll,#hero-explore-hint,.recruiter-kicker,
+  .recruiter-fact > span,.hero-proof span,
+  .pj-badge,.preview-kicker b,.preview-kicker span,.pj-story span,
+  .exp-date,.exp-loc-pill,.exp-num-badge,
+  .edu-badge,.edu-meta,.sg-head,.cert-src,
+  .tl-year,.tl-badge,.tl-metric,.tl-metric strong,.tl-hint,
+  .scm-tag,.scm-dot-item,.scf-met-l,
+  .jm-city-lbl,.jm-scroll-hint,.jm-place-coords,.jm-detail-badge,.jm-map-link,
+  .hud-route,.hud-lbl,.hud-unit,
+  .gs-name,.crate-chip,#game-reset,#game-count,
+  .calc-lbl,.calc-res-eyebrow,.calc-sub-l,.sim-badge,.match-typing,
+  .stat-l,.coffee-topic,.coffee-sub,.coffee-tz,
+  .ct-lbl,.ct-form-title,.cl-eyebrow,
+  .ft-bottom span,#site-updated,#vo-role,
+  .tldr-eyebrow,.tldr-sec-h,.tldr-stats span,.tldr-hint,
+  .cmdk-row-grp,.cmdk-esc,.cmdk-hint span,.ms-brand,.ms-hint,
+  .aip-status,.pc-hint,.ld-sub{
+    font-size:11px !important;
+    line-height:1.45;
+  }
+  .chip,.tag,.pj-tags span,.jm-city-btn{font-size:12px !important;}
+  .jm-photo-credit,.jm-photo-credit a,.jm-earth-credit,.jm-earth-credit a{font-size:11.5px !important;}
+  /* Tiny labels inside the illustrative project previews */
+  .bid-matrix span,.workflow-mini b{font-size:9px !important;}
+
+  /* ── Comfortable touch targets (≈44px) ── */
+  .ft-links,.ft-socials{gap:.15rem !important;}
+  .ft-links a,.ft-socials a{display:inline-flex;align-items:center;min-height:40px;}
+  .ct-link-item{min-height:44px;}
+  .ct-links a{padding-top:.35rem;padding-bottom:.35rem;}
+  #ctrl-panel .ctrl-btn{min-height:40px;display:inline-flex;align-items:center;font-size:12px !important;}
+  .jm-city-btn,#game-reset{min-height:40px;}
+  .cm-x,.aip-x,.aip-voice-toggle,
+  #case-modal button[aria-label*="lose"],#art-modal button[aria-label*="lose"],
+  [class*="close"],[aria-label="Close"]{min-width:40px;min-height:40px;}
+  .nav-logo{min-height:40px;min-width:40px;}
+
+  /* Keep the last lines of the page clear of the floating bottom bar. */
+  #site-footer{padding-bottom:calc(5.5rem + env(safe-area-inset-bottom)) !important;}
+  #ctrl-panel{bottom:calc(.75rem + env(safe-area-inset-bottom)) !important;max-width:calc(100vw - 1.5rem);}
+
+  /* Big decorative headlines scale to the screen instead of clipping. */
+  .ct-big{font-size:clamp(2.6rem,13vw,3.4rem) !important;line-height:.95 !important;margin-bottom:2rem !important;}
+}
+
+/* Very small phones (iPhone SE 1st gen, Galaxy Fold cover screen). */
+@media (max-width:360px){
+  section:not(#hero){padding-left:1rem;padding-right:1rem;}
+  .sec-title{font-size:clamp(1.9rem,10vw,2.4rem) !important;}
+}
+
+/* Touch devices: hover-only effects should never hide content. */
+@media (hover:none){
+  .pj-card:hover,.cert-card:hover,.stat-card:hover{transform:none;}
+}
