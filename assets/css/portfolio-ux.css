@@ -148,7 +148,9 @@ body{cursor:auto}
 .nav-logo,.nav-link,.nav-cta,.hero-scroll,.hero-btns a{text-decoration:none}
 .nav-logo,.nav-link,.nav-cta{display:inline-flex;align-items:center;justify-content:center;min-height:44px}
 .hero-btns a{display:inline-flex;align-items:center;justify-content:center;min-height:46px;line-height:1.4;text-align:center}
-.hero-availability{color:#4c515a;font:500 .82rem/1.6 var(--fs);margin:1rem 0 0}
+.hero-availability{display:flex;flex-wrap:wrap;gap:.25rem .7rem;color:#4c515a;font:500 .82rem/1.6 var(--fs);margin:1rem 0 0}
+.hero-availability span{white-space:nowrap}
+.hero-availability span+span::before{content:'·';margin-right:.7rem}
 .hero-tag{font-size:.65rem;letter-spacing:.18em}
 .hero-proof span{font-size:.6875rem;line-height:1.5;letter-spacing:.08em}
 .hero-name .hl{animation-delay:0s!important;animation-duration:.55s}
@@ -164,5 +166,5 @@ body{cursor:auto}
   .hero-name{font-size:clamp(5rem,10vw,9rem)}
   .hero-inner{background:rgba(255,255,255,.9)}
 }
-@media(max-width:760px){.hero-availability{font-size:.8rem;max-width:30ch}.hero-proof{margin-top:1.25rem}}
+@media(max-width:760px){.hero-availability{font-size:.8rem}.hero-proof{margin-top:1.25rem}}
 @media print{.hero-availability{color:#333}}
