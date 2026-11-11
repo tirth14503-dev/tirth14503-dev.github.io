@@ -1,7 +1,9 @@
 
 (function cmsLoad(){
-  var RAW = new URL('content.json?v=' + Date.now(), window.location.href).href;
-  fetch(RAW, {cache:'no-store'})
+  // Revalidate the same resource on every visit so dashboard publications stay
+  // fresh while unchanged content can reuse the browser's cached response.
+  var RAW = new URL('content.json', window.location.href).href;
+  fetch(RAW, {cache:'no-cache'})
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(d){ if(d) applyContent(d); })
     .catch(function(){/* silently fallback to hardcoded content */});
@@ -134,13 +136,17 @@
       var story=projectStory(p.id);
       var featured=story?' pj-featured':'';
       var middle=story?'<div class="pj-story"><div><span>Challenge</span><p>'+esc(story.challenge)+'</p></div><div><span>Approach</span><p>'+esc(story.approach)+'</p></div><div><span>Outcome</span><p>'+esc(story.outcome)+'</p></div></div>':'<div class="pj-desc">'+p.desc+'</div>';
+      var hasCasePage=['forecast','kehe','automation','segmentation','churn','optimization'].indexOf(p.id)!==-1;
+      var action=hasCasePage
+        ? '<a class="project-action" href="/projects/'+p.id+'/" aria-label="Read '+esc(p.title)+' case study">Read case study →</a>'
+        : '<button type="button" class="project-action" aria-haspopup="dialog" aria-label="View '+esc(p.title)+' case study">View case study →</button>';
       return '<div class="pj-card reveal'+featured+'" style="transition-delay:'+d+'s" data-case="'+esc(p.id)+'">'+
         projectPreview(p.id)+
         '<span class="pj-badge">'+esc(p.badge)+'</span>'+
         '<div class="pj-title">'+esc(p.title)+'</div>'+
         middle+
         '<div class="pj-tags">'+(p.tags||[]).map(function(t){ return '<span>'+esc(t)+'</span>'; }).join('')+'</div>'+
-        '<div class="project-actions"><button type="button" class="project-action" aria-haspopup="dialog" aria-label="View '+esc(p.title)+' case study">View case study →</button></div></div>';
+        '<div class="project-actions">'+action+'</div></div>';
     }).join('');
   }
 

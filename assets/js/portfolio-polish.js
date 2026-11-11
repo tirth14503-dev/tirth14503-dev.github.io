@@ -59,6 +59,15 @@
     if(card&&card.hidden){selected='all';applyFilter();}
   };
   window.refreshPortfolioCards=function(){
+    projectGrid.querySelectorAll('[data-case]').forEach(function(card){
+      var link=card.querySelector('a.project-action');
+      if(!link||card.querySelector('.project-quick-view'))return;
+      var preview=document.createElement('button');
+      preview.type='button';preview.className='project-quick-view';
+      preview.textContent='Quick view';preview.setAttribute('aria-haspopup','dialog');
+      preview.setAttribute('aria-label','Quick view: '+card.querySelector('.pj-title').textContent.trim());
+      link.parentElement.appendChild(preview);
+    });
     document.querySelectorAll('#writing [data-article]').forEach(function(card){
       if(card.querySelector('.article-action'))return;
       var actions=document.createElement('div');actions.className='project-actions';

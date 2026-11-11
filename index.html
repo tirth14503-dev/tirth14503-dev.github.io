@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -1975,7 +1976,10 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 
 
 
-<link rel="stylesheet" href="/assets/css/portfolio-ux.css?v=20261025b">
+<link rel="stylesheet" href="/assets/css/portfolio-ux.css?v=20261110">
+
+</head>
+<body>
 
 <!-- CURSOR -->
 <div id="cur"></div>
@@ -1997,23 +2001,23 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 </div>
 
 <!-- TOP NAV -->
-<a href="#recruiter" class="skip-link">Skip to content</a>
-<nav id="topnav">
-  <button class="nav-logo" type="button" aria-label="Back to top" onclick="scrollTo({top:0,behavior:'smooth'})">TK</button>
+<a href="#main-content" class="skip-link">Skip to content</a>
+<nav id="topnav" aria-label="Primary navigation">
+  <a class="nav-logo" href="#hero" aria-label="Back to top">TK</a>
   <div class="nav-links" role="navigation" aria-label="Section navigation">
     <span class="nav-pill" id="nav-pill"></span>
-    <span class="nav-link" data-sec="recruiter" role="link" tabindex="0">Results</span>
-    <span class="nav-link" data-sec="projects" role="link" tabindex="0">Projects</span>
+    <a class="nav-link" data-sec="recruiter" href="#recruiter">Results</a>
+    <a class="nav-link" data-sec="projects" href="#projects">Projects</a>
     <a class="nav-startup" href="/marginguard/">My startup ↗</a>
-    <span class="nav-link" data-sec="experience" role="link" tabindex="0">Experience</span>
-    <span class="nav-link" data-sec="skills" role="link" tabindex="0">Skills</span>
-    <span class="nav-link" data-sec="lab" role="link" tabindex="0">Lab</span>
-    <span class="nav-link" data-sec="about" role="link" tabindex="0">About</span>
-    <span class="nav-link" data-sec="contact" role="link" tabindex="0">Contact</span>
+    <a class="nav-link" data-sec="experience" href="#experience">Experience</a>
+    <a class="nav-link" data-sec="skills" href="#skills">Skills</a>
+    <a class="nav-link" data-sec="lab" href="#lab">Lab</a>
+    <a class="nav-link" data-sec="about" href="#about">About</a>
+    <a class="nav-link" data-sec="contact" href="#contact">Contact</a>
   </div>
   <button class="tldr-hint" id="tldr-open" aria-label="Open recruiter quick-summary view">TL;DR</button>
   <button class="cmdk-hint" id="cmdk-open" aria-label="Search the portfolio (Ctrl K)"><span>Search</span></button>
-  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get in Touch</button>
+  <a class="nav-cta" href="#contact">Get in Touch</a>
   <button class="nav-menu-toggle" id="nav-menu-toggle" type="button" aria-label="Open navigation menu" aria-controls="mobile-nav" aria-expanded="false">Menu</button>
 </nav>
 <nav id="mobile-nav" aria-label="Mobile section navigation" aria-hidden="true" inert>
@@ -2055,6 +2059,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 })();
 </script>
 
+<main id="main-content" tabindex="-1">
 <!-- ① HERO -->
 <section id="hero">
   <canvas id="hero-canvas" aria-hidden="true"></canvas>
@@ -2087,21 +2092,22 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
   <div class="hero-inner">
     <div class="hero-tag">Supply Chain Analyst · Procurement · Analytics</div>
     <h1 class="hero-name" aria-label="Tirthal Kothari">Tirthal<br><em>Kothari</em></h1>
-    <p class="hero-sub">I combine hands-on operations experience with Python, SQL, forecasting, and procurement analytics to reduce cost, improve availability, and make complex supply chain decisions clearer.</p>
+    <p class="hero-sub">I turn supply chain data into better procurement, inventory, and planning decisions. Hands-on operations experience, backed by Python, SQL, and forecasting.</p>
+    <p class="hero-availability">Chicago · Open to relocation · Open to full-time roles</p>
     <div class="hero-proof" aria-label="Selected impact">
       <div><strong>₹200K</strong><span>FY24 cost savings</span></div>
       <div><strong>1,500+</strong><span>companies analyzed</span></div>
       <div><strong>30%</strong><span>availability improved</span></div>
     </div>
     <div class="hero-btns">
-      <button class="btn-gold" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">View Featured Projects</button>
-      <button class="btn-ghost" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contact Me →</button>
+      <a class="btn-gold" href="#projects">View Featured Projects</a>
+      <a class="btn-ghost" href="#contact">Contact Me →</a>
       <a class="btn-ghost" href="/Tirthal_Kothari_Resume.pdf" download="Tirthal_Kothari_Resume.pdf">Resume &#8595;</a>
     </div>
   </div>
-  <div class="hero-scroll" onclick="document.getElementById('recruiter').scrollIntoView({behavior:'smooth'})">
-    <div class="scroll-line"></div>Scroll
-  </div>
+  <a class="hero-scroll" href="#recruiter">
+    <span class="scroll-line" aria-hidden="true"></span>Scroll
+  </a>
 </section>
 
 <!-- RECRUITER SNAPSHOT -->
@@ -2122,7 +2128,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       <div class="recruiter-fact reveal"><span>Availability</span><strong>Open to full-time opportunities</strong></div>
     </div>
     <div class="recruiter-actions-inline reveal">
-      <button type="button" data-download-resume>Download résumé</button>
+      <a href="/Tirthal_Kothari_Resume.pdf" download="Tirthal_Kothari_Resume.pdf">Download résumé</a>
       <a href="https://linkedin.com/in/tirthalkothari" target="_blank" rel="noopener">LinkedIn ↗</a>
       <a href="mailto:tirth14503@gmail.com">Email me</a>
     </div>
@@ -2156,7 +2162,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       <div class="pj-title">Retail Demand Forecasting</div>
       <div class="pj-desc">Team ML project on retail store inventory data: EDA and feature engineering across <strong>inventory levels, orders, pricing and discounts</strong>, then trained and compared models to forecast units sold and flag replenishment risk.</div>
       <div class="pj-tags"><span>Python</span><span>pandas</span><span>scikit-learn</span><span>seaborn</span></div>
-      <div class="project-actions"><button type="button" class="project-action" aria-label="View forecast case study">View case study →</button></div>
+      <div class="project-actions"><a class="project-action" href="/projects/forecast/" aria-label="Read Retail Demand Forecasting case study">Read case study →</a></div>
     </div>
 
     <div class="pj-card reveal" style="transition-delay:.12s" data-case="kehe">
@@ -2164,7 +2170,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       <div class="pj-title">Inbound Truckload RFP</div>
       <div class="pj-desc">Worked a <strong>real 2024 inbound TL RFP for KeHE Distributors</strong> in DePaul's transportation practicum, analyzed lane-level carrier bids and built an award recommendation balancing cost, coverage and service.</div>
       <div class="pj-tags"><span>Transportation</span><span>Procurement</span><span>Bid Analysis</span></div>
-      <div class="project-actions"><button type="button" class="project-action" aria-label="View kehe case study">View case study →</button></div>
+      <div class="project-actions"><a class="project-action" href="/projects/kehe/" aria-label="Read Inbound Truckload RFP case study">Read case study →</a></div>
     </div>
 
     <div class="pj-card reveal" style="transition-delay:.19s" data-case="automation">
@@ -2172,7 +2178,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       <div class="pj-title">AI-Automated SC Analytics</div>
       <div class="pj-desc">End-to-end analytics stack built solo: a <strong>Supabase Postgres warehouse</strong>, Quadratic AI spreadsheets for analysis, and <strong>n8n workflow automation</strong> wiring supply chain datasets to automated Gmail alerts.</div>
       <div class="pj-tags"><span>n8n</span><span>PostgreSQL</span><span>Quadratic AI</span><span>Automation</span></div>
-      <div class="project-actions"><button type="button" class="project-action" aria-label="View automation case study">View case study →</button></div>
+      <div class="project-actions"><a class="project-action" href="/projects/automation/" aria-label="Read AI-Automated SC Analytics case study">Read case study →</a></div>
     </div>
 
     <div class="pj-card reveal" style="transition-delay:.05s" data-case="segmentation">
@@ -2180,7 +2186,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       <div class="pj-title">Customer Segmentation</div>
       <div class="pj-desc">K-Means clustering over <strong>income, spending score and channel mix</strong> to carve a retail customer base into actionable segments, elbow-method validation and a tailored loyalty-program play per cluster.</div>
       <div class="pj-tags"><span>Python</span><span>K-Means</span><span>Segmentation</span></div>
-      <div class="project-actions"><button type="button" class="project-action" aria-label="View segmentation case study">View case study →</button></div>
+      <div class="project-actions"><a class="project-action" href="/projects/segmentation/" aria-label="Read Customer Segmentation case study">Read case study →</a></div>
     </div>
 
     <div class="pj-card reveal" style="transition-delay:.12s" data-case="churn">
@@ -2188,7 +2194,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       <div class="pj-title">Churn Prediction Model</div>
       <div class="pj-desc">Decision-tree classifier on <strong>tenure, charges, support calls and contract type</strong>, tuned depth and leaf size, then translated the tree's splits into concrete retention actions for at-risk customers.</div>
       <div class="pj-tags"><span>scikit-learn</span><span>Decision Trees</span><span>Classification</span></div>
-      <div class="project-actions"><button type="button" class="project-action" aria-label="View churn case study">View case study →</button></div>
+      <div class="project-actions"><a class="project-action" href="/projects/churn/" aria-label="Read Churn Prediction Model case study">Read case study →</a></div>
     </div>
 
     <div class="pj-card reveal" style="transition-delay:.19s" data-case="optimization">
@@ -2196,7 +2202,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       <div class="pj-title">Optimization in Excel</div>
       <div class="pj-desc">Linear-programming production models (<strong>M&amp;D Chemicals</strong>) and decision-analysis labs in Excel Solver: formulating constraints, reading sensitivity reports and running what-if scenarios on cost and capacity.</div>
       <div class="pj-tags"><span>Excel Solver</span><span>Linear Programming</span><span>Sensitivity</span></div>
-      <div class="project-actions"><button type="button" class="project-action" aria-label="View optimization case study">View case study →</button></div>
+      <div class="project-actions"><a class="project-action" href="/projects/optimization/" aria-label="Read Optimization in Excel case study">Read case study →</a></div>
     </div>
 
   </div>
@@ -2980,7 +2986,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
       <div class="cl-item"><span class="cl-dot"></span>Wired in Tirthal AI, the role-fit matcher, and Load the Ship</div>
       <div class="cl-item"><span class="cl-dot"></span>Deployed to tirthalkothari.com with a real domain and SEO pass</div>
       <div class="cl-item"><span class="cl-dot"></span>Accessibility, performance, and a maturity pass on the visuals</div>
-      <div class="cl-item"><span class="cl-dot"></span>October 2026: one Interactive Lab, accessible navigation, and direct contact</div>
+      <div class="cl-item"><span class="cl-dot"></span>November 2026: dedicated case studies, native navigation, and faster repeat visits</div>
     </div>
   </div>
 </section>
@@ -3158,6 +3164,8 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 <!-- CHANGELOG -->
 
 
+</main>
+
 <!-- FOOTER -->
 <footer id="site-footer">
   <div class="ft-top">
@@ -3181,7 +3189,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
   </div>
   <div class="ft-bottom">
     <span>&copy; 2026 Tirthal Kothari &middot; Chicago, IL</span>
-    <span id="site-updated">Site last updated October 2026</span>
+    <span id="site-updated">Site last updated November 2026</span>
   </div>
 </footer>
 
@@ -3248,8 +3256,8 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 </div>
 
 <script src="/assets/js/portfolio-ux.js?v=20261025"></script>
-<script src="/assets/js/portfolio-polish.js?v=20261025b"></script>
-<script src="/assets/js/site-core.js?v=ux-20261025b"></script>
+<script src="/assets/js/portfolio-polish.js?v=20261110"></script>
+<script src="/assets/js/site-core.js?v=20261110"></script>
 
 <!-- ═══════════════════════════════════
      HERO — live 3D dockyard (Three.js)
@@ -3283,7 +3291,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 ═══════════════════════════════════ -->
 <script src="/assets/js/supply-chain-journey.js?v=ux-20261025"></script>
 
-</body>
+
 
 
 <script>
@@ -3525,8 +3533,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 
 
 <div id="case-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="cm-title" inert><div class="cm-card">
-  <button class="cm-x" aria-label="Close">&times;</button>
-  <div class="cm-head"><div class="cm-badge"></div><div class="cm-title" id="cm-title"></div></div>
+  <div class="cm-head"><button class="cm-x" type="button" aria-label="Close case study">&times;</button><div class="cm-badge"></div><div class="cm-title" id="cm-title"></div></div>
   <div class="cm-body"></div>
   <div class="cm-actions"><button class="cm-share" id="cm-share" type="button">Copy shareable link</button></div>
 </div></div>
@@ -3535,39 +3542,39 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 (function caseStudies(){
   const CASES={
     forecast:{badge:'MGT 594 · Machine Learning',title:'Retail Demand Forecasting',
-      situation:'Our team got a messy retail dataset: inventory levels, orders, pricing, promotions. One brief: predict what sells. The data was a mess for the first week, honestly, before anything useful came out of it.',
-      action:'I ran the <strong>EDA and feature engineering</strong>: cleaning the dataset, encoding categoricals, and building predictive features from price, discount depth, and inventory position. We then trained and compared multiple regression models to forecast units sold and surface replenishment risk.',
-      result:'A working forecasting pipeline that flags which SKUs are likely to run short, early enough that a planner can actually act on it instead of finding out at the shelf.',
+      situation:'Our academic team worked with retail inventory, orders, pricing, and promotion data to forecast units sold and identify replenishment risk. The dataset needed cleaning and feature preparation before modeling.',
+      action:'I handled <strong>EDA and feature engineering</strong>: cleaning the dataset, encoding categorical variables, and creating features from price, discount depth, and inventory position. Our team then trained and compared regression models to forecast units sold.',
+      result:'A working forecasting pipeline and model comparison that surface potential SKU shortages to support replenishment planning.',
       metrics:[['Python','stack'],['5+','features engineered'],['Team','collaboration']],
       tools:['Python','pandas','scikit-learn','seaborn','matplotlib']},
     kehe:{badge:'Industry Practicum · KeHE',title:'Inbound Truckload RFP',
-      situation:'KeHE Distributors let our practicum class work their real 2024 inbound truckload RFP: actual lanes, actual carrier bids, not a sanitized classroom version of one.',
-      action:'I analyzed <strong>lane-level carrier bids</strong> across cost, coverage and service, then built an award recommendation that balanced the cheapest rate against reliability and network fit.',
-      result:'A carrier-award recommendation I could defend line by line, built the same way a transportation buyer would build one before signing.',
+      situation:'Our university transportation practicum worked with KeHE Distributors’ real 2024 inbound truckload RFP, including lane-level carrier bids.',
+      action:'I analyzed <strong>lane-level carrier bids</strong> across cost, coverage, and service, then developed an award recommendation that balanced rates with reliability and network fit.',
+      result:'A lane-level carrier-award recommendation with a clear rationale for the cost, coverage, and service tradeoffs.',
       metrics:[['2024','live RFP'],['Lane-level','bid analysis'],['Real','client data']],
       tools:['Excel','Bid Analysis','Carrier Sourcing','Transportation']},
     automation:{badge:'Self-Directed Build',title:'AI-Automated SC Analytics',
-      situation:'I kept reading about modern data stacks and got curious how far one person could get without a data team behind them. Decided to find out directly instead of speculating.',
-      action:'I stood up a <strong>Supabase Postgres warehouse</strong>, used Quadratic’s AI spreadsheets for analysis, and wired <strong>n8n workflow automation</strong> to move supply chain datasets and fire automated Gmail alerts on the signals that matter.',
-      result:'A pipeline that mostly runs itself now. Data lands, gets analyzed, and the right person gets an email. A lot of teams are still doing this step manually.',
+      situation:'This self-directed build explored how to connect supply chain data, analysis, and stakeholder alerts in one repeatable workflow.',
+      action:'I set up a <strong>Supabase Postgres warehouse</strong>, used Quadratic’s AI spreadsheets for analysis, and connected <strong>n8n workflow automation</strong> to move supply chain datasets and send Gmail alerts.',
+      result:'An end-to-end pipeline connecting stored data, AI-assisted analysis, and automated email alerts.',
       metrics:[['n8n','automation'],['Postgres','warehouse'],['AI','analysis']],
       tools:['n8n','PostgreSQL','Supabase','Quadratic AI','Gmail API']},
     segmentation:{badge:'Machine Learning',title:'Customer Segmentation',
-      situation:'A retail chain wanted loyalty programs but treated every customer the same. The data (income, spending score, channel mix) made it obvious there were very different kinds of customers in there.',
-      action:'I applied <strong>K-Means clustering</strong>, validated the cluster count with the elbow method, and profiled each segment into an actionable persona.',
-      result:'Clear customer segments with a specific loyalty approach for each, instead of one program for everyone.',
+      situation:'This machine-learning project used retail customer data on income, spending score, and channel mix to explore customer differences and inform loyalty recommendations.',
+      action:'I applied <strong>K-Means clustering</strong>, validated the cluster count with the elbow method, and profiled each segment to develop proposed loyalty approaches.',
+      result:'Customer segments and proposed loyalty recommendations tailored to each group.',
       metrics:[['K-Means','clustering'],['Elbow','validated'],['Personas','actionable']],
       tools:['Python','scikit-learn','K-Means','pandas']},
     churn:{badge:'Machine Learning',title:'Churn Prediction Model',
-      situation:'Which customers are about to leave, and why? A subscription dataset held tenure, charges, support calls and contract type; the goal was to predict churn before it happened.',
-      action:'I built a <strong>decision-tree classifier</strong>, tuned depth and minimum leaf size to avoid overfitting, then read the tree’s splits to translate them into concrete retention actions.',
-      result:'A model that predicts who’s about to leave and shows why, which matters, because the why is the part you can actually fix.',
+      situation:'This machine-learning project used a subscription dataset with tenure, charges, support calls, and contract type to model customer churn and understand its contributing factors.',
+      action:'I built a <strong>decision-tree classifier</strong>, tuned depth and minimum leaf size to limit overfitting, and interpreted the tree’s splits to develop proposed retention actions.',
+      result:'An interpretable churn classifier with proposed retention actions based on its decision rules.',
       metrics:[['Decision','tree'],['Tuned','depth + leaf'],['Explainable','splits']],
       tools:['Python','scikit-learn','Decision Trees','LabelEncoder']},
     optimization:{badge:'Decision Modeling',title:'Optimization in Excel',
-      situation:'M&D Chemicals needed to hit production targets at minimum cost under real capacity and demand constraints, a classic linear-programming problem.',
-      action:'I formulated the <strong>LP model in Excel Solver</strong>: defining decision variables, constraints and the objective, then read the sensitivity report to understand which constraints actually bound the solution, and ran what-if scenarios on cost and capacity.',
-      result:'An optimal production plan, plus the sensitivity analysis to show which constraints actually mattered and by how much.',
+      situation:'The M&D Chemicals coursework case called for minimizing production cost while meeting demand and capacity constraints.',
+      action:'I formulated the <strong>LP model in Excel Solver</strong>, defining decision variables, constraints, and the objective. I then interpreted the sensitivity report and ran what-if scenarios on cost and capacity.',
+      result:'An optimized production plan for the coursework case, supported by sensitivity analysis and cost/capacity scenarios.',
       metrics:[['LP','model'],['Solver','optimized'],['Sensitivity','analysis']],
       tools:['Excel Solver','Linear Programming','Sensitivity Analysis']}
   };
@@ -3613,7 +3620,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
   }
   async function copyShareLink(){
     if(!activeKey)return;
-    const url=location.origin+location.pathname+location.search+'#case-'+activeKey;
+    const url=location.origin+'/projects/'+activeKey+'/';
     try{
       await navigator.clipboard.writeText(url);
     }catch(error){
@@ -3625,11 +3632,14 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
     setTimeout(function(){shareBtn.textContent='Copy shareable link';},1800);
   }
   document.querySelectorAll('.pj-card[data-case]').forEach(function(card){
-    card.querySelector('.project-action')?.setAttribute('aria-haspopup','dialog');
+    card.querySelector('button.project-action')?.setAttribute('aria-haspopup','dialog');
   });
   document.addEventListener('click',function(e){
     const card=e.target.closest&&e.target.closest('.pj-card[data-case]');
-    if(card){ open(card.dataset.case,true,e.target.closest('button')||card.querySelector('.project-action')||card); return; }
+    if(card){
+      if(e.target.closest('a[href]'))return;
+      open(card.dataset.case,true,e.target.closest('button')||card.querySelector('button')||card.querySelector('.project-action')||card); return;
+    }
     if(e.target===modal||e.target.closest('.cm-x')) close();
   });
   document.addEventListener('keydown',function(e){
@@ -4598,7 +4608,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
      CMS CONTENT LOADER — fetches content.json from GitHub
      Updates all editable sections without a full page rebuild
      ═══════════════════════════════════════════════════════ -->
-<script src="/assets/js/content-loader.js?v=ux-20261025b"></script>
+<script src="/assets/js/content-loader.js?v=20261110"></script>
 
 <!-- Mobile fix: experience cards forced horizontal page scroll on phones.
      The desktop layout uses an 86px timeline rail with an absolutely
@@ -4640,3 +4650,5 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 @media(min-width:901px) and (max-width:1260px){.nav-startup{display:none;}}
 </style>
 <link rel="stylesheet" href="/assets/css/mobile.css?v=20261109">
+</body>
+</html>

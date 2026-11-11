@@ -20,12 +20,15 @@ document.querySelectorAll('.reveal,.reveal-l,.reveal-r,.reveal-scale').forEach(e
 const secIO=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
     if(e.isIntersecting)
-      document.querySelectorAll('.nav-link').forEach(n=>n.classList.toggle('on',n.dataset.sec===e.target.id));
+      document.querySelectorAll('.nav-link').forEach(n=>{
+        const active=n.dataset.sec===e.target.id;
+        n.classList.toggle('on',active);
+        if(active)n.setAttribute('aria-current','location');
+        else n.removeAttribute('aria-current');
+      });
   });
 },{threshold:.4});
 document.querySelectorAll('section[id]').forEach(s=>secIO.observe(s));
-document.querySelectorAll('.nav-link').forEach(n=>n.addEventListener('click',()=>document.getElementById(n.dataset.sec)?.scrollIntoView({behavior:'smooth'})));
-document.querySelectorAll('.nav-link').forEach(n=>n.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();document.getElementById(n.dataset.sec)?.scrollIntoView({behavior:'smooth'});}}));
 
 /* ═══════════════════════════════════
    EXPERIENCE ACCORDION

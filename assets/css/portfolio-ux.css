@@ -129,7 +129,7 @@ body{cursor:auto}
 #matcher-ta[aria-invalid=true]{border-color:#a12626}
 [inert]{pointer-events:none}
 @media(max-width:620px){
-  body>section:not(#hero){padding-top:3.5rem;padding-bottom:3.5rem}
+  main>section:not(#hero){padding-top:3.5rem;padding-bottom:3.5rem}
   .section-tools{align-items:flex-start;flex-direction:column}
   .exp-header{flex-wrap:wrap;gap:.8rem}
   .exp-meta{flex:1;min-width:0}
@@ -143,3 +143,26 @@ body{cursor:auto}
   #proj-grid>.pj-card[hidden],.exp-body[hidden]{display:block!important}
   .exp-body{max-height:none!important}
 }
+
+/* Native links keep section and case-study navigation usable without scripts. */
+.nav-logo,.nav-link,.nav-cta,.hero-scroll,.hero-btns a{text-decoration:none}
+.nav-logo,.nav-link,.nav-cta{display:inline-flex;align-items:center;justify-content:center;min-height:44px}
+.hero-btns a{display:inline-flex;align-items:center;justify-content:center;min-height:46px;line-height:1.4;text-align:center}
+.hero-availability{color:#4c515a;font:500 .82rem/1.6 var(--fs);margin:1rem 0 0}
+.hero-tag{font-size:.65rem;letter-spacing:.18em}
+.hero-proof span{font-size:.6875rem;line-height:1.5;letter-spacing:.08em}
+.hero-name .hl{animation-delay:0s!important;animation-duration:.55s}
+.recruiter-actions-inline>a:first-child{background:#fff;color:#1c3a5e;border-color:#fff}
+.hero-proof{margin-top:1.6rem}
+#main-content:focus{outline:none}
+#topnav{opacity:1;transform:none}
+.project-quick-view{appearance:none;border:0;background:transparent;color:#1c3a5e;font:600 .8rem/1.4 var(--fs);text-decoration:underline;text-underline-offset:4px;min-height:44px;padding:.65rem .4rem;cursor:pointer}
+.project-quick-view:hover{color:#102a48}
+#case-modal .cm-x{z-index:3}
+#case-modal .cm-head{padding-right:4.8rem}
+@media(min-width:761px){
+  .hero-name{font-size:clamp(5rem,10vw,9rem)}
+  .hero-inner{background:rgba(255,255,255,.9)}
+}
+@media(max-width:760px){.hero-availability{font-size:.8rem;max-width:30ch}.hero-proof{margin-top:1.25rem}}
+@media print{.hero-availability{color:#333}}

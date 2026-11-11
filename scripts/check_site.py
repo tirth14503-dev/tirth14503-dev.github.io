@@ -13,6 +13,7 @@ from urllib.parse import unquote, urlsplit
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
 MAX_INDEX_BYTES = 350_000
+CASE_KEYS = ("forecast", "kehe", "automation", "segmentation", "churn", "optimization")
 
 
 class AssetParser(HTMLParser):
@@ -87,6 +88,31 @@ def main() -> None:
     hash_keys = set(re.findall(r"\b([a-z0-9-]+):\{badge:", html))
     if not card_keys or not card_keys.issubset(hash_keys):
         fail("one or more project cards do not have matching case-study data")
+
+    if html.count('<main ') != 1 or 'href="#main-content" class="skip-link"' not in html:
+        fail("homepage needs one main landmark and a matching skip link")
+    if re.search(r'<span[^>]+class="nav-link"', html):
+        fail("section navigation must use native anchor links")
+    for key in CASE_KEYS:
+        route = f"/projects/{key}/"
+        if f'href="{route}"' not in html:
+            fail(f"homepage has no direct case-study link: {route}")
+        page = ROOT / route.strip("/") / "index.html"
+        if not page.exists():
+            fail(f"case study is missing: {route}")
+        study_html = page.read_text(encoding="utf-8")
+        study_parser = AssetParser()
+        study_parser.feed(study_html)
+        if study_html.count('<main ') != 1 or study_html.count('<h1 ') != 1:
+            fail(f"case study needs one main and one H1: {route}")
+        if f'rel="canonical" href="https://tirthalkothari.com{route}"' not in study_html:
+            fail(f"case study canonical is missing: {route}")
+        for tag, reference in study_parser.references:
+            target = local_target(reference)
+            if target is not None and not target.exists():
+                fail(f"missing case-study asset ({route}): {reference}")
+        if f"https://tirthalkothari.com{route}" not in (ROOT / "sitemap.xml").read_text(encoding="utf-8"):
+            fail(f"case study is absent from sitemap: {route}")
 
     print(
         f"Site checks passed: {len(parser.ids)} IDs, "
