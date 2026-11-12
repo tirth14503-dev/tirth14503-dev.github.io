@@ -4,7 +4,6 @@
 /* ═══════════════════════════════════
    LOADER
 ═══════════════════════════════════ */
-document.getElementById('loader').style.display='none';
 document.getElementById('topnav').classList.add('vis');
 document.getElementById('ctrl-panel').classList.add('vis');
 
@@ -27,8 +26,8 @@ const secIO=new IntersectionObserver(entries=>{
         else n.removeAttribute('aria-current');
       });
   });
-},{threshold:.4});
-document.querySelectorAll('section[id]').forEach(s=>secIO.observe(s));
+},{rootMargin:'-45% 0px -50% 0px',threshold:0});
+document.querySelectorAll('main > section[id]').forEach(s=>secIO.observe(s));
 
 /* ═══════════════════════════════════
    EXPERIENCE ACCORDION

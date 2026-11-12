@@ -1988,9 +1988,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 </head>
 <body>
 
-<!-- CURSOR -->
-<div id="cur"></div>
-  <div id="hero-explore-hint">&#128269; The port is clickable, try a container</div>
+  <div id="hero-explore-hint">Tip: click a container in the port to see the story behind it</div>
   <div id="port-card" aria-live="polite">
     <button id="port-card-x" aria-label="Close">&#215;</button>
     <div class="pc-tag"></div>
@@ -1998,14 +1996,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
     <div class="pc-body"></div>
     <div class="pc-hint">Click other containers, the ship, the crane&#8230;</div>
   </div>
-<div id="cur-r"></div>
 
-<!-- LOADER -->
-<div id="loader">
-  <div class="ld-logo">TK</div>
-  <div class="ld-sub">Tirthal Kothari · Portfolio</div>
-  <div class="ld-bar"></div>
-</div>
 
 <!-- TOP NAV -->
 <a href="#main-content" class="skip-link">Skip to content</a>
@@ -3217,12 +3208,17 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
     var dock=document.getElementById('ctrl-panel');
     var hero=document.getElementById('hero');
     if(!dock||!hero||!('IntersectionObserver' in window))return;
-    new IntersectionObserver(function(entries){
-      var parked=!entries[0].isIntersecting;
+    /* Show the dock between the hero and the contact section only:
+       the hero and contact area already have the same actions. */
+    var inView={};
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){inView[e.target.id]=e.isIntersecting;});
+      var parked=Object.keys(inView).some(function(k){return inView[k];});
       dock.classList.toggle('parked',parked);
       dock.toggleAttribute('inert',parked);
       dock.setAttribute('aria-hidden',String(parked));
-    },{threshold:.12}).observe(hero);
+    },{threshold:0});
+    ['hero','contact','site-footer'].forEach(function(id){var el=document.getElementById(id);if(el)io.observe(el);});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',keepDockClear);
   else keepDockClear();
@@ -3264,7 +3260,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 
 <script src="/assets/js/portfolio-ux.js?v=20261112"></script>
 <script src="/assets/js/portfolio-polish.js?v=20261110"></script>
-<script src="/assets/js/site-core.js?v=20261110"></script>
+<script src="/assets/js/site-core.js?v=20261112"></script>
 
 <!-- ═══════════════════════════════════
      HERO — live 3D dockyard (Three.js)
@@ -3388,7 +3384,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
           ship.style.transform='translateX(-50%) translateY(2px)';
           setTimeout(()=>ship.style.transform='translateX(-50%)',300);
           if(loaded===5){
-            setTimeout(()=>{confetti();done.style.display='block';showToast('<strong>Ship fully loaded!</strong> This is how I ship results.');},350);
+            setTimeout(()=>{done.style.display='block';showToast('<strong>Ship fully loaded!</strong> This is how I ship results.');},350);
           }
         }
     chip.setAttribute('aria-disabled','true');
@@ -3685,20 +3681,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
   var touch=false;
   try{ touch=window.matchMedia('(hover: none)').matches; }catch(e){}
 
-  /* ── scroll progress bar (rect-based: artifact-safe) ── */
-  try{
-    var pb=document.createElement('div'); pb.id='tk-progress'; pb.innerHTML='<i></i>';
-    document.body.appendChild(pb);
-    var pbi=pb.firstChild, lastP=-1;
-    (function ptick(){
-      var se=document.scrollingElement||document.documentElement;
-      var y=Math.max(-document.body.getBoundingClientRect().top, se.scrollTop||0, window.pageYOffset||0);
-      var total=document.body.scrollHeight-window.innerHeight;
-      var p=total>0?Math.min(1,Math.max(0,y/total)):0;
-      if(Math.abs(p-lastP)>0.001){ pbi.style.transform='scaleX('+p+')'; lastP=p; }
-      requestAnimationFrame(ptick);
-    })();
-  }catch(e){}
+  /* scroll progress bar removed (refine pass) */
 
   /* ── hero letter choreography ── */
   try{
@@ -3938,11 +3921,6 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 
 <script>
 (function visualPackJS(){
-  /* grain layer */
-  try{
-    var g=document.createElement('div'); g.id='tk-grain';
-    document.body.appendChild(g);
-  }catch(e){}
 
   /* sliding nav pill */
   try{
@@ -4657,5 +4635,6 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 @media(min-width:901px) and (max-width:1260px){.nav-startup{display:none;}}
 </style>
 <link rel="stylesheet" href="/assets/css/mobile.css?v=20261109">
+<link rel="stylesheet" href="/assets/css/refine.css?v=20261112">
 </body>
 </html>

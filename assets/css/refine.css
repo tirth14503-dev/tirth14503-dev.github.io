@@ -1,0 +1,169 @@
+/* ─────────────────────────────────────────────────────────────
+   Refinement layer — loaded last.
+   One calm visual system over the earlier inline layers:
+   content-sized sections, solid cards instead of frosted glass,
+   readable labels, and short, quiet motion.
+   ───────────────────────────────────────────────────────────── */
+
+:root{
+  --rf-line:rgba(17,24,39,.09);
+  --rf-line-strong:rgba(17,24,39,.16);
+  --rf-card:#ffffff;
+  --rf-radius:18px;
+  --rf-shadow:0 1px 2px rgba(17,24,39,.04),0 2px 8px rgba(17,24,39,.04);
+  --rf-shadow-hover:0 2px 4px rgba(17,24,39,.05),0 10px 28px rgba(17,24,39,.08);
+  --rf-ease:cubic-bezier(.2,.7,.2,1);
+}
+
+/* ── Gimmicks off: custom cursor, film grain, page loader, progress bar ── */
+#cur,#cur-r,#tk-grain,#loader,#tk-progress,#pageProgress{display:none!important;}
+body{cursor:auto!important;}
+
+/* ── Section rhythm: size to content, consistent spacing ──
+   Every section used to be forced to a full screen and vertically
+   centred, leaving large empty bands around short content. */
+main>section:not(#hero){
+  min-height:0!important;
+  justify-content:flex-start!important;
+  padding-top:clamp(4.5rem,8vw,7.5rem)!important;
+  padding-bottom:clamp(4.5rem,8vw,7.5rem)!important;
+}
+#voices,#coffee{padding-top:clamp(3.5rem,6vw,5.5rem)!important;padding-bottom:clamp(3.5rem,6vw,5.5rem)!important;}
+
+/* ── Section headings: readable label, no decorative underline ── */
+.sec-eyebrow{font-size:.72rem!important;letter-spacing:.16em!important;margin-bottom:.9rem;font-weight:500;}
+.sec-title{line-height:1!important;letter-spacing:-.015em;margin-bottom:2.4rem!important;text-shadow:none!important;}
+.sec-eyebrow{text-shadow:none!important;}
+.sec-rule,.sec-rule.reveal,.sec-rule.reveal.up{display:none!important;}
+
+/* ── Cards: solid surfaces with a hairline, no frosted glass ── */
+.hero-inner,.about-text,.stat-card,.exp-item,.edu-card,.skill-group,.tl-card,.pj-card,.lab-card,
+.cert-card,.coffee-card,.ct-form,.vo-card,.voice-card,.lab-workbench{
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+}
+.about-text,.stat-card,.exp-item,.edu-card,.skill-group,.tl-card,.pj-card,.lab-card,.cert-card{
+  background:var(--rf-card)!important;
+  border:1px solid var(--rf-line)!important;
+  border-radius:var(--rf-radius)!important;
+  box-shadow:var(--rf-shadow)!important;
+}
+.pj-card::before{display:none!important;}
+
+/* Hover = a slightly stronger edge and shadow. No jumping or scaling. */
+.pj-card,.stat-card,.lab-card,.cert-card,.edu-card,.skill-group,.tl-card,.exp-item{
+  transition:box-shadow .25s var(--rf-ease),border-color .25s var(--rf-ease)!important;
+}
+.pj-card:hover,.stat-card:hover,.lab-card:hover,.cert-card:hover,.edu-card:hover,.skill-group:hover,.tl-card:hover{
+  transform:none!important;
+  border-color:var(--rf-line-strong)!important;
+  box-shadow:var(--rf-shadow-hover)!important;
+}
+
+/* ── Buttons: flat, firm, no bounce or glow ── */
+.btn-gold,.btn-ghost,.nav-cta,.project-action,.ct-btn{
+  transition:background-color .2s ease,border-color .2s ease,color .2s ease,box-shadow .2s ease!important;
+}
+.btn-gold{box-shadow:none!important;border-radius:12px!important;padding:.9rem 1.6rem!important;}
+.btn-gold:hover{transform:none!important;box-shadow:none!important;}
+.btn-ghost{
+  background:#fff!important;border:1px solid var(--rf-line-strong)!important;border-radius:12px!important;
+  padding:.9rem 1.4rem!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+}
+.btn-ghost:hover{transform:none!important;background:#f3f5f8!important;color:var(--text)!important;border-color:rgba(28,58,94,.35)!important;}
+.nav-cta{border-radius:10px!important;}
+.nav-cta:hover{transform:none!important;}
+.project-action{border-radius:10px!important;}
+
+/* ── Navigation ── */
+#topnav{border-bottom-color:var(--rf-line)!important;}
+.nav-link::after{transition:width .2s ease!important;}
+/* With the link row collapsed, keep the utility buttons grouped on the
+   right instead of floating in the middle of the bar. */
+@media(max-width:1100px){
+  #topnav .tldr-hint{margin-left:auto;}
+  #topnav .tldr-hint,#topnav .cmdk-hint{margin-right:.5rem;}
+  #topnav .nav-cta{margin-right:.6rem;}
+}
+.tldr-hint,.cmdk-hint{font-size:.68rem!important;letter-spacing:.04em!important;}
+
+/* ── Hero ── */
+@media(min-width:761px){
+  .hero-inner{
+    background:rgba(255,255,255,.94)!important;
+    border:1px solid var(--rf-line)!important;
+    border-radius:24px!important;
+    box-shadow:0 1px 2px rgba(17,24,39,.04),0 24px 60px rgba(17,24,39,.08)!important;
+  }
+}
+@media(max-width:760px){
+  .hero-inner{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;}
+  .hero-tag{letter-spacing:.1em!important;font-size:.66rem!important;line-height:1.5;}
+  .hero-tag::before{display:none!important;}
+}
+.hero-tag{background:transparent!important;border:0!important;padding:0!important;letter-spacing:.16em!important;font-size:.7rem!important;margin-bottom:1.6rem!important;}
+.hero-tag::before{animation:none!important;opacity:.9;}
+.hero-name{letter-spacing:-.02em!important;line-height:.9!important;}
+/* The name used to blur, rotate and slide in letter by letter, and the rest
+   faded in on timers that stalled while the 3D scripts loaded (text sat
+   half-transparent for seconds on phones). Hero text now shows at once. */
+.hero-name .hl,.hero-tag,.hero-sub,.hero-proof,.hero-name,.hero-btns,.hero-scroll{
+  animation:none!important;opacity:1!important;filter:none!important;
+}
+.hero-name .hl{transform:none!important;}
+.scroll-line{animation:none!important;opacity:.5;}
+#hero-explore-hint{font-family:var(--fs)!important;letter-spacing:0!important;text-transform:none!important;}
+
+/* ── Scroll reveals: one subtle fade-up, never blurred ── */
+.reveal,.reveal-l,.reveal-r,.reveal-scale{filter:none!important;}
+
+/* ── Floating shortcut dock ──
+   It appeared only on the hero, duplicating the hero buttons and covering
+   them on phones. It now appears after the hero (desktop only). */
+#ctrl-panel{
+  border:1px solid var(--rf-line)!important;
+  box-shadow:0 6px 24px rgba(17,24,39,.10)!important;
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+  background:rgba(255,255,255,.97)!important;
+}
+@media(max-width:760px){#ctrl-panel{display:none!important;}}
+
+/* ── Changelog: a compact footnote, not a full-screen section ── */
+#changelog{padding-top:3rem!important;padding-bottom:3rem!important;border-top:1px solid var(--rf-line);}
+.cl-eyebrow{font-size:.7rem!important;letter-spacing:.16em!important;}
+.cl-track{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:.55rem 2rem!important;}
+.cl-item{width:auto!important;border:0!important;margin:0!important;padding:0!important;align-items:baseline!important;color:var(--text2);}
+.cl-dot{transform:translateY(-2px);}
+
+/* ── Lab game: no confetti burst ── */
+#game-confetti{display:none!important;}
+
+/* ── Small labels were 7–8px; make them legible ── */
+.pj-badge,.edu-badge,.tl-badge,.exp-num-badge,.lab-card span,.stat-l,.sg-head,.cert-src,
+.recruiter-kicker,.recruiter-fact>span,.coffee-topic,.ct-lbl,.ct-form-title{
+  font-size:max(.66rem,11px)!important;letter-spacing:.1em!important;
+}
+.pj-tags span{font-size:max(.66rem,11px)!important;letter-spacing:.02em!important;}
+/* Badges can wrap to two lines now that they are readable. */
+.pj-badge,.edu-badge,.tl-badge{border-radius:8px!important;line-height:1.4!important;}
+
+/* Contact headline was oversized next to the form. */
+@media(min-width:761px){.ct-big{font-size:clamp(2.6rem,4.6vw,4.2rem)!important;line-height:1!important;}}
+
+/* ── Phones ── */
+@media(max-width:760px){
+  main>section:not(#hero){padding-top:3.5rem!important;padding-bottom:3.5rem!important;}
+  #hero{justify-content:flex-start!important;padding-top:calc(52px + 2rem)!important;padding-bottom:2.5rem!important;}
+  /* The middle dot was wrapping onto its own line. */
+  .hero-availability{gap:.2rem 1rem!important;}
+  .hero-availability span+span::before{content:none!important;}
+  .hero-availability span{position:relative;}
+  .hero-btns{gap:.6rem!important;}
+  .hero-btns a{flex:1 1 auto;}
+  .hero-btns .btn-gold{flex-basis:100%;}
+  .sec-title{margin-bottom:1.6rem!important;}
+  #changelog{padding-bottom:calc(3rem + env(safe-area-inset-bottom))!important;}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .hero-name .hl{animation:none!important;opacity:1!important;}
+}
