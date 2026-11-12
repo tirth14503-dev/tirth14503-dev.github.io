@@ -95,6 +95,7 @@
         showStatus('Direct messaging is awaiting email verification. Please use Copy email address below to contact me in the meantime. Your message is still here.','error');
       }else if(response.ok&&(result.success===true||result.success==='true')){
         showStatus('Your message was accepted for delivery. Thank you for getting in touch.','success');
+        track(String(data.get('_subject'))==='Coffee chat request'?'coffee_chat_submit':'contact_submit');
         form.reset();
       }else{
         showStatus('The message could not be sent. Please try again or use Copy email address below. Your message is still here.','error');
@@ -104,5 +105,14 @@
     }finally{
       clearTimeout(timeout);submit.disabled=false;submit.textContent='Send Message →';form.removeAttribute('aria-busy');
     }
+  });
+  // GA4 conversion events; no-ops if gtag is unavailable (e.g. blocked).
+  function track(name,params){if(typeof gtag==='function')gtag('event',name,params||{});}
+  document.addEventListener('click',function(event){
+    var link=event.target.closest&&event.target.closest('a[href]');
+    if(!link)return;
+    var href=link.getAttribute('href')||'';
+    if(/Tirthal_Kothari_Resume\.pdf/i.test(href))track('resume_download',{link_url:link.href});
+    else if(/linkedin\.com\/in\/tirthalkothari/i.test(href))track('linkedin_click',{link_url:link.href});
   });
 })();

@@ -56,13 +56,31 @@ for (const [i, key] of keys.entries()) {
   const next = keys[(i + 1) % keys.length];
   const canonical = `https://tirthalkothari.com/projects/${key}/`;
   const title = `${c.title} · Tirthal Kothari`;
+  const description = `${d.summary} A case study by Tirthal Kothari.`;
+  const articleLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    url: canonical,
+    mainEntityOfPage: canonical,
+    image: 'https://tirthalkothari.com/og.jpg',
+    author: { '@type': 'Person', name: 'Tirthal Kothari', url: 'https://tirthalkothari.com/' },
+  }).replaceAll('<', '\\u003c');
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3858WEPE8Y"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3858WEPE8Y');
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${esc(title)}</title>
-  <meta name="description" content="${esc(d.summary)} A case study by Tirthal Kothari.">
+  <meta name="description" content="${esc(description)}">
   <link rel="canonical" href="${canonical}">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <meta property="og:type" content="article">
@@ -72,6 +90,7 @@ for (const [i, key] of keys.entries()) {
   <meta property="og:image" content="https://tirthalkothari.com/og.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="/assets/css/case-study.css?v=20261110">
+  <script type="application/ld+json">${articleLd}</script>
 </head>
 <body>
   <a class="skip-link" href="#case-study">Skip to case study</a>
