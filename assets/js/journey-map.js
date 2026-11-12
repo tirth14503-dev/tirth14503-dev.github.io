@@ -143,7 +143,7 @@
     });
     var realEarth=new THREE.Mesh(new THREE.SphereGeometry(1,96,96),earthMat);
     globeGroup.add(realEarth);
-    new THREE.TextureLoader().load('assets/journey/earth-blue-marble.png',function(map){
+    new THREE.TextureLoader().load('assets/journey/earth-blue-marble.jpg',function(map){
       map.encoding=THREE.sRGBEncoding;
       map.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
       earthMat.map=map;

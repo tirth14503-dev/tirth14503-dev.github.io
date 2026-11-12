@@ -803,6 +803,21 @@ if(mic&&(window.SpeechRecognition||window.webkitSpeechRecognition)){
   wrap.addEventListener('mouseleave',()=>{isDown=false;wrap.style.cursor='grab';});
   wrap.addEventListener('mouseup',()=>{isDown=false;wrap.style.cursor='grab';});
   wrap.addEventListener('mousemove',e=>{if(!isDown)return;e.preventDefault();const x=e.pageX-wrap.offsetLeft;wrap.scrollLeft=scrollL-(x-startX)*1.2;});
+  /* Arrow buttons + keyboard: dragging alone was hard on trackpads. */
+  const prev=document.getElementById('tl-prev'),next=document.getElementById('tl-next');
+  const step=()=>Math.max(260,Math.round(wrap.clientWidth*0.8));
+  const go=d=>wrap.scrollBy({left:d*step(),behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});
+  const sync=()=>{
+    const max=wrap.scrollWidth-wrap.clientWidth-2;
+    if(prev)prev.disabled=wrap.scrollLeft<=2;
+    if(next)next.disabled=wrap.scrollLeft>=max;
+  };
+  if(prev)prev.addEventListener('click',()=>go(-1));
+  if(next)next.addEventListener('click',()=>go(1));
+  wrap.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();go(1);}else if(e.key==='ArrowLeft'){e.preventDefault();go(-1);}});
+  wrap.addEventListener('scroll',sync,{passive:true});
+  window.addEventListener('resize',sync);
+  sync();
 })();
 
 /* ═══════════════════════════════════

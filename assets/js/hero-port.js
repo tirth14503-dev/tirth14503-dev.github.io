@@ -226,7 +226,7 @@ __glReady(function initHeroPort(){
   }
   /* yellow safety stripe + lane dashes */
   const stripe = new THREE.Mesh(new THREE.PlaneGeometry(30, 0.22),
-    new THREE.MeshStandardMaterial({ color: 0xd9b229, roughness: 0.85 }));
+    new THREE.MeshStandardMaterial({ color: 0xbfa75e, roughness: 0.85 }));
   stripe.rotation.x = -Math.PI/2;
   stripe.position.set(0, 0.556, 2.18);
   scene.add(stripe);
@@ -347,7 +347,7 @@ __glReady(function initHeroPort(){
   const craneGold = new THREE.MeshStandardMaterial({ color: 0x17324f, roughness: 0.55, metalness: 0.35 });
   const craneDark = new THREE.MeshStandardMaterial({ color: 0x33373d, roughness: 0.6, metalness: 0.45 });
   const texHazard = cvs(64, 64, (ctx, w, h) => {
-    ctx.fillStyle = '#d9b229'; ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = '#bfa75e'; ctx.fillRect(0, 0, w, h);
     ctx.fillStyle = '#1d1d1f';
     for(let i = -1; i < 5; i++){
       ctx.beginPath();

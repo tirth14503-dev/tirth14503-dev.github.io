@@ -30,6 +30,17 @@ main>section:not(#hero){
 }
 #voices,#coffee{padding-top:clamp(3.5rem,6vw,5.5rem)!important;padding-bottom:clamp(3.5rem,6vw,5.5rem)!important;}
 
+/* Off-screen sections were skipped with content-visibility:auto and a 900px
+   placeholder. Real heights differ a lot (the truck journey is ~3 screens),
+   so the page resized while scrolling and menu jumps landed in the wrong
+   place. Render normally; the heavy 3D is lazy-loaded separately. */
+main>section{content-visibility:visible!important;contain-intrinsic-size:none!important;}
+/* Reserve the scroll-driven truck journey's height before its 3D starts,
+   so nothing below it shifts when it switches on. */
+@media(min-width:761px) and (prefers-reduced-motion:no-preference){
+  html:not(.no-webgl) #scflow .scm-journey:not(.webgl-failed){height:300vh;}
+}
+
 /* ── Section headings: readable label, no decorative underline ── */
 .sec-eyebrow{font-size:.72rem!important;letter-spacing:.16em!important;margin-bottom:.9rem;font-weight:500;}
 .sec-title{line-height:1!important;letter-spacing:-.015em;margin-bottom:2.4rem!important;text-shadow:none!important;}
@@ -167,3 +178,26 @@ main>section:not(#hero){
 @media(prefers-reduced-motion:reduce){
   .hero-name .hl{animation:none!important;opacity:1!important;}
 }
+
+/* ── Career timeline: arrow controls, calmer badges ── */
+.tl-controls{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:.5rem;}
+.tl-controls p{font:400 .92rem/1.6 var(--fs);color:var(--text2);margin:0;}
+.tl-arrows{display:flex;gap:.5rem;}
+.tl-arrow{appearance:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--rf-line-strong);background:#fff;color:var(--text);font:500 1.05rem var(--fs);cursor:pointer;transition:background-color .2s,border-color .2s,opacity .2s;}
+.tl-arrow:hover:not(:disabled){background:#f3f5f8;border-color:rgba(28,58,94,.35);}
+.tl-arrow:disabled{opacity:.35;cursor:default;}
+.tl-scroll-wrap{scroll-snap-type:x proximity;}
+.tl-scroll-wrap:focus-visible{outline:3px solid #316a9e;outline-offset:4px;border-radius:12px;}
+.tl-node{scroll-snap-align:start;}
+.tl-node:hover .tl-card{transform:none!important;}
+.tl-node:hover .tl-dot{transform:none!important;box-shadow:0 0 0 2px var(--gold)!important;}
+.tl-year{font-size:.68rem!important;letter-spacing:.1em!important;}
+.tl-metric{font-size:.72rem!important;line-height:1.5;}
+.tl-badge{font-size:.62rem!important;}
+/* One muted family instead of iOS rainbow colours */
+.tl-badge.sc,.tl-badge.res,.tl-badge.edu,.tl-badge.con,.tl-badge.dig{border:1px solid var(--rf-line-strong)!important;}
+.tl-badge.sc{background:#e9eef4!important;color:#1c3a5e!important;}
+.tl-badge.edu{background:#eef0f3!important;color:#3d4856!important;}
+.tl-badge.res{background:#edf1ee!important;color:#3d5a49!important;}
+.tl-badge.con{background:#f3efe8!important;color:#6b5434!important;}
+.tl-badge.dig{background:#f0eef3!important;color:#4f4566!important;}

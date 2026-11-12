@@ -132,8 +132,8 @@
     });
   }
   const texHazard = cvs(64, 64, (ctx, w, h) => {
-    ctx.fillStyle = '#d9b229'; ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = '#1d1d1f';
+    ctx.fillStyle = '#b9a46a'; ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = '#3a3e45';
     for(let i = -1; i < 5; i++){
       ctx.beginPath();
       ctx.moveTo(i * 24, 0); ctx.lineTo(i * 24 + 12, 0);
@@ -156,19 +156,22 @@
   });
   const texAwning = cvs(128, 64, (ctx, w, h) => {
     for(let x = 0; x < w; x += 16){
-      ctx.fillStyle = (x / 16) % 2 ? '#f4f1e8' : '#c09018';
+      ctx.fillStyle = (x / 16) % 2 ? '#eeece6' : '#2a4766';
       ctx.fillRect(x, 0, 16, h);
     }
   });
 
   /* ══════════ materials ══════════ */
+  const leafMats = [0x9aa58f, 0x8b977f].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.95, flatShading: true }));
+  const barkMat = new THREE.MeshStandardMaterial({ color: 0x5a5650, roughness: 0.9 });
+  function canopy(r, i){ return new THREE.Mesh(new THREE.IcosahedronGeometry(r, 1), leafMats[i % 2]); }
   const darkMat = new THREE.MeshStandardMaterial({ color: 0x33373d, roughness: 0.6, metalness: 0.45 });
   const goldMat = new THREE.MeshStandardMaterial({ color: 0x1c3a5e, roughness: 0.5, metalness: 0.3 });
   const glassMat = new THREE.MeshStandardMaterial({ color: 0x26313e, roughness: 0.25, metalness: 0.4 });
   const hazardMat = new THREE.MeshStandardMaterial({ map: texHazard, roughness: 0.7 });
   const hubMat = new THREE.MeshStandardMaterial({ color: 0x8f939a, roughness: 0.5, metalness: 0.6 });
   const tyreMat = new THREE.MeshStandardMaterial({ color: 0x17181c, roughness: 0.9 });
-  const warmWin = new THREE.MeshBasicMaterial({ color: 0xffc478 });
+  const warmWin = new THREE.MeshBasicMaterial({ color: 0xeedfbf });
 
   /* ══════════ containers ══════════ */
   const LINER_COLORS = [0x733a2f, 0x334f67, 0x405b4a, 0x35516e, 0x515357];
@@ -308,7 +311,7 @@
   const smokes = [];
   chimneys.forEach((ch, ci) => {
     for(let s = 0; s < 5; s++){
-      const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: smokeTex, transparent: true, opacity: 0.4, depthWrite: false }));
+      const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: smokeTex, transparent: true, opacity: 0.18, depthWrite: false }));
       factory.add(sp);
       smokes.push({ sp, bx: ch.position.x, bz: ch.position.z, ph: s / 5 + ci * 0.4 });
     }
@@ -389,7 +392,7 @@
   shop.add(awning);
   decal(texText('TK MART', 30, 'rgba(28,58,94,.95)', 384, 56), 3.4, 0.55, 0, 2.95, 1.52, 0, shop);
   /* parked cars */
-  [[-4.6, 0x55606c], [4.6, 0x8a4a3a]].forEach(cv2 => {
+  [[-4.6, 0x55606c], [4.6, 0x8b929b]].forEach(cv2 => {
     const car = new THREE.Group();
     const bodyM = new THREE.MeshStandardMaterial({ color: cv2[1], roughness: 0.4, metalness: 0.4 });
     box(1.9, 0.42, 0.85, bodyM, 0, 0.42, 0, car);
@@ -415,7 +418,7 @@
   home.position.copy(hFrame.pos);
   home.rotation.y = hFrame.face;
   scene.add(home);
-  pad(11, 9, hFrame.pos.x, hFrame.pos.z, 0xb9c4a4);
+  pad(11, 9, hFrame.pos.x, hFrame.pos.z, 0xc3c8b6);
   box(5, 2.4, 4.2, new THREE.MeshStandardMaterial({ color: 0xf1ede2, roughness: 0.85 }), 0, 1.2, -0.8, home);
   /* pitched roof */
   const roofShape = new THREE.Shape();
@@ -450,14 +453,12 @@
   home.add(path);
   box(0.08, 0.9, 0.08, darkMat, 1.2, 0.45, 4.4, home);
   box(0.4, 0.26, 0.24, goldMat, 1.2, 1.0, 4.4, home);
-  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.18, 1.4, 8),
-    new THREE.MeshStandardMaterial({ color: 0x6b5138, roughness: 0.9 }));
+  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.13, 1.4, 8), barkMat);
   trunk.position.set(-2.8, 0.7, 1.8);
   trunk.castShadow = true;
   home.add(trunk);
   [[0, 1.9, 0, 0.85], [0.5, 1.5, 0.3, 0.6], [-0.45, 1.55, -0.2, 0.55]].forEach(bl => {
-    const blob = new THREE.Mesh(new THREE.SphereGeometry(bl[3], 12, 10),
-      new THREE.MeshStandardMaterial({ color: 0x7f9463, roughness: 0.9 }));
+    const blob = canopy(bl[3] * 0.92, 0);
     blob.position.set(-2.8 + bl[0], bl[1], 1.8 + bl[2]);
     blob.castShadow = true;
     home.add(blob);
@@ -483,14 +484,13 @@
       lamp.position.set(fr.pos.x, 2.65, fr.pos.z);
       scene.add(lamp);
     } else {
-      const tr = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.14, 1.1, 8),
-        new THREE.MeshStandardMaterial({ color: 0x6b5138, roughness: 0.9 }));
+      const tr = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.1, 1.1, 8), barkMat);
       tr.position.set(fr.pos.x, 0.55, fr.pos.z);
       tr.castShadow = true;
       scene.add(tr);
-      const fol = new THREE.Mesh(new THREE.SphereGeometry(0.65 + (dt * 53 % 1) * 0.3, 12, 10),
-        new THREE.MeshStandardMaterial({ color: (Math.round(dt * 200) % 2) ? 0x7f9463 : 0x8fa370, roughness: 0.9 }));
-      fol.position.set(fr.pos.x, 1.55, fr.pos.z);
+      const fol = canopy(0.58 + (dt * 53 % 1) * 0.25, Math.round(dt * 200));
+      fol.scale.y = 1.25;
+      fol.position.set(fr.pos.x, 1.6, fr.pos.z);
       fol.castShadow = true;
       scene.add(fol);
     }
@@ -600,8 +600,8 @@
     [0.52,  0.2, 2.6,  9.0],
     [0.62, -4.6, 1.9, -5.5],
     [0.80,  1.5, 7.5,  9.5],
-    [0.92,  5.5, 2.1,  6.0],
-    [1.00,  6.8, 2.5,  8.5]
+    [0.92, -4.2, 2.8,  6.5],
+    [1.00, -5.2, 3.6,  7.4]
   ];
   function camOffset(p){
     let i = 0;
@@ -747,7 +747,7 @@
       sm.sp.position.set(sm.bx + Math.sin(lp * 5 + sm.ph * 9) * 0.3, 6.4 + lp * 2.6, sm.bz);
       const sc = 0.5 + lp * 1.6;
       sm.sp.scale.set(sc, sc, 1);
-      sm.sp.material.opacity = 0.35 * Math.sin(lp * Math.PI);
+      sm.sp.material.opacity = 0.16 * Math.sin(lp * Math.PI);
     });
 
     /* cinematic camera: keyed offsets in truck-heading space + drift + mouse */
