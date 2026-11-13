@@ -1,0 +1,2 @@
+carrier,origin,destination,mode,rate_basis,rate,fuel_percent,valid_from,valid_to,miles,minimum_charge,accessorials,billing_days,free_minutes
+Example Freight Lines,"Chicago, IL","Dallas, TX",FTL,flat,2500.00,12,2026-01-01,2026-12-31,920,,liftgate=75; detention=60,90,120

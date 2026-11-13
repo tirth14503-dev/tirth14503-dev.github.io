@@ -1,0 +1,4 @@
+sku,on_hand,avg_daily_demand,unit_cost,lead_time_days
+VALVE-10,20,5,12.50,14
+PUMP-20,600,2,80.00,30
+

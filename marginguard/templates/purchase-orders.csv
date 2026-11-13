@@ -1,0 +1,4 @@
+po_number,sku,supplier,ordered_qty,unit_price,expected_date
+PO-1001,VALVE-10,Acme Industrial,100,12.50,2026-09-10
+PO-1002,PUMP-20,Northstar Parts,50,80.00,2026-09-14
+

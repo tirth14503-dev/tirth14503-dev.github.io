@@ -1,0 +1,5 @@
+invoice_number,carrier,invoice_date,shipment_ref,origin,destination,charge_type,description,amount,billed_weight,billed_miles,mode,service,currency,credit_for,payment_terms,paid_date,paid_amount
+INV-1001,Example Freight Lines,2026-10-02,SH-501,"Chicago, IL","Dallas, TX",linehaul,Linehaul,2650.00,18000,925,FTL,standard,USD,,2/10 net 30,2026-10-25,3063.00
+INV-1001,Example Freight Lines,2026-10-02,SH-501,"Chicago, IL","Dallas, TX",fuel,Fuel surcharge,318.00,,,,,,,,,
+INV-1001,Example Freight Lines,2026-10-02,SH-501,"Chicago, IL","Dallas, TX",accessorial,Liftgate,95.00,,,,,,,,,
+CM-2001,Example Freight Lines,2026-10-20,,,,credit,Credit for liftgate,-95.00,,,,,,INV-1001,,,

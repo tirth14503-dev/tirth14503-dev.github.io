@@ -114,6 +114,71 @@ section:not(.hero) { padding-block: clamp(4rem, 8vw, 6.5rem); }
 .meter-track.lead span { background: var(--navy); }
 .assistant-note { max-width: 72ch; margin-top: 3rem; color: var(--muted); font-size: .9rem; }
 
+/* Header sales link */
+.nav-sales { padding: .45rem .9rem; border: 1px solid rgba(178, 206, 226, .45); border-radius: 4px; color: var(--on-navy); font-size: .9rem; font-weight: 500; white-space: nowrap; }
+.nav-sales:hover { border-color: var(--powder); background: rgba(178, 206, 226, .1); }
+
+/* Audience */
+.audience { background: var(--card); border-bottom: 1px solid var(--line); }
+section.audience { padding-block: clamp(3rem, 6vw, 4.5rem); }
+.audience h2 { font-size: clamp(1.4rem, 2.2vw, 1.75rem); }
+.audience-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.5rem; margin-top: 1.75rem; }
+.audience-grid p { margin-top: .5rem; color: var(--muted); font-size: .94rem; }
+
+/* Screens */
+.screen { margin: 0; }
+.screen img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--card); box-shadow: 0 18px 40px -28px rgba(19, 35, 61, .45); }
+.screen figcaption { margin-top: .8rem; color: var(--muted); font-size: .9rem; }
+.screen figcaption strong { color: var(--text); font-weight: 600; }
+.screen-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; margin-top: 2.25rem; }
+
+/* Templates */
+.templates { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 1.5rem 3rem; margin-top: clamp(3rem, 6vw, 4.5rem); padding-top: 2rem; border-top: 1px solid var(--line); }
+.templates-copy h3 { font-family: var(--serif); font-size: 1.4rem; }
+.templates-copy p { margin-top: .5rem; color: var(--muted); font-size: .94rem; }
+.template-list { margin: 0; padding: 0; list-style: none; border-top: 2px solid var(--navy); }
+.template-list li { display: flex; justify-content: space-between; gap: 1rem; padding: .7rem 0; border-bottom: 1px solid var(--line); font-size: .94rem; }
+.template-list a { color: var(--indigo); font-weight: 500; }
+.template-list a::after { content: ' (CSV)'; color: var(--muted); font-weight: 400; }
+.template-list a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.template-list span { color: var(--muted); font-size: .85rem; }
+
+/* What's new */
+.changelog { background: var(--card); border-top: 1px solid var(--line); }
+.changelog-inner { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(2rem, 6vw, 5rem); }
+.changelog .intro { margin-bottom: 0; }
+.change-list { margin: 0; padding: 0; list-style: none; border-top: 2px solid var(--navy); }
+.change-list li { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--line); }
+.change-list time { color: var(--muted); font-size: .88rem; font-variant-numeric: tabular-nums; padding-top: .1rem; }
+.change-list h3 { font-size: 1rem; }
+.change-list p { margin-top: .3rem; color: var(--muted); font-size: .92rem; }
+
+/* Contact sales */
+.contact { background: var(--card); border-top: 1px solid var(--line); }
+.contact-inner { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(2rem, 6vw, 5rem); align-items: start; }
+.contact-copy > p { margin-top: .9rem; color: var(--muted); font-size: 1.05rem; }
+.contact-facts { margin: 2rem 0 0; }
+.contact-facts div { padding: .9rem 0; border-top: 1px solid var(--line); }
+.contact-facts dt { font-weight: 600; font-size: .92rem; }
+.contact-facts dd { margin: .25rem 0 0; color: var(--muted); font-size: .92rem; }
+.contact-form { display: grid; gap: 1rem; padding: clamp(1.5rem, 3vw, 2.25rem); background: #fff; border: 1px solid var(--line); border-radius: 6px; }
+.field-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.contact-form label { display: block; font-size: .88rem; font-weight: 500; }
+.contact-form label > input, .contact-form label > select, .contact-form label > textarea { display: block; margin-top: .35rem; }
+.contact-form .optional { color: var(--muted); font-weight: 400; }
+.contact-form input, .contact-form select, .contact-form textarea { width: 100%; min-height: 44px; padding: .6rem .75rem; border: 1px solid #c4c8c2; border-radius: 4px; background: #fff; color: var(--text); font: 400 .95rem/1.4 var(--sans); }
+.contact-form textarea { resize: vertical; min-height: 110px; }
+.contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus { outline: 2px solid var(--indigo); outline-offset: 0; border-color: var(--indigo); }
+.contact-form .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.form-foot { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; }
+.form-foot .button { border: 0; cursor: pointer; }
+.form-foot .button:disabled { opacity: .6; cursor: default; }
+.form-note { color: var(--muted); font-size: .85rem; }
+.form-status { font-size: .94rem; }
+.form-status:empty { display: none; }
+.form-status[data-tone="error"] { color: #9b2c2c; }
+.form-status[data-tone="success"] { padding: 1rem 1.1rem; background: rgba(178, 206, 226, .35); border-left: 3px solid var(--indigo); color: var(--text); font-weight: 500; }
+
 /* Invoice checks table */
 .checks { background: var(--card); border-top: 1px solid var(--line); }
 .table-scroll { overflow-x: auto; }
@@ -214,7 +279,9 @@ footer nav a:hover { color: #fff; }
   .header nav { gap: 1.4rem; }
 }
 @media (max-width: 880px) {
-  .module-grid, .faq-inner, .tracker { grid-template-columns: minmax(0, 1fr); }
+  .module-grid, .faq-inner, .tracker, .changelog-inner, .contact-inner, .templates, .screen-pair { grid-template-columns: minmax(0, 1fr); }
+  .audience-grid { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+  .changelog .intro { margin-bottom: 1rem; }
   .faq .intro { margin-bottom: 1rem; }
 }
 @media (max-width: 600px) {
@@ -227,6 +294,9 @@ footer nav a:hover { color: #fff; }
   .check-table td { margin-top: .3rem; }
   .check-table td:last-child { font-size: .85rem; }
   .tracker-figures dd { font-size: 1.4rem; }
+  .field-row { grid-template-columns: minmax(0, 1fr); }
+  .change-list li { grid-template-columns: minmax(0, 1fr); gap: .25rem; }
+  .nav-cta { display: none; }
 }
 @media (max-width: 880px) {
   .header nav { display: none; }

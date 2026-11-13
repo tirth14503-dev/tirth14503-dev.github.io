@@ -1,0 +1,2 @@
+shipment_ref,ship_date,carrier,origin,destination,weight,miles,mode,authorized_accessorials,po_number,service,arrived,departed,exception,exception_date,claim_filed_date
+SH-501,2026-09-30,Example Freight Lines,"Chicago, IL","Dallas, TX",18000,920,FTL,,PO-7701,standard,2026-10-01 08:00,2026-10-01 09:30,,,

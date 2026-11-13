@@ -1,0 +1,4 @@
+invoice_number,po_number,sku,supplier,invoiced_qty,unit_price,invoice_date
+INV-501,PO-1001,VALVE-10,Acme Industrial,100,14.00,2026-09-12
+INV-502,PO-1002,PUMP-20,Northstar Parts,55,80.00,2026-09-15
+INV-502,PO-1002,PUMP-20,Northstar Parts,55,80.00,2026-09-15

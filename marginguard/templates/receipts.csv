@@ -1,0 +1,4 @@
+receipt_id,po_number,sku,supplier,quantity,receipt_date,movement
+GRN-301,PO-1001,VALVE-10,Acme Industrial,100,2026-09-10,receipt
+GRN-302,PO-1002,PUMP-20,Northstar Parts,50,2026-09-14,receipt
+RTN-303,PO-1002,PUMP-20,Northstar Parts,2,2026-09-18,return
