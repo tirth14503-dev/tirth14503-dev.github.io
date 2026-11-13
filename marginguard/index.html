@@ -26,189 +26,182 @@
   <meta name="twitter:image" content="https://tirthalkothari.com/og.jpg">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"MarginGuard","applicationCategory":"BusinessApplication","description":"Compare supplier invoices with purchase orders and available receipts. Review possible billing issues, check stock risks and see the records behind each finding.","url":"https://tirthalkothari.com/marginguard/","author":{"@type":"Person","name":"Tirthal Kothari","url":"https://tirthalkothari.com/"}}</script>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preload" href="fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="quick-tour.css?v=3">
-  <link rel="stylesheet" href="story.css?v=4">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+  <meta name="theme-color" content="#13233d">
+  <link rel="stylesheet" href="quick-tour.css?v=4">
+  <link rel="stylesheet" href="story.css?v=6">
   <script src="launch.js?v=3" defer></script>
-  <script src="story.js?v=3" defer></script>
+  <script src="story.js?v=4" defer></script>
   <script src="quick-tour.js?v=2" defer></script>
 </head>
-<body data-guide-auto="off" data-motion="off">
+<body data-guide-auto="off">
   <a class="skip" href="#main">Skip to content</a>
   <header class="header">
     <div class="wrap header-inner">
       <a class="brand" href="#top" aria-label="MarginGuard home"><svg viewBox="0 0 32 34" aria-hidden="true"><path d="M3 28V6l13 7L29 6v22l-13-7Z"/><path d="M3 6 16 1l13 5M16 13v21"/></svg>MarginGuard</a>
-      <nav aria-label="Main navigation"><a href="#product">The product</a><a href="#workflow">How it works</a><a href="#pricing">Early access</a></nav>
-      <a class="nav-cta" data-launch href="https://app.tirthalkothari.com/">Open workspace <span aria-hidden="true">↗</span></a>
+      <nav aria-label="Main navigation"><a href="#product">Product</a><a href="#film">Overview</a><a href="#workflow">Getting started</a><a href="#pricing">Pricing</a></nav>
+      <a class="nav-cta" data-launch href="https://app.tirthalkothari.com/">Sign in</a>
     </div>
   </header>
   <main id="main">
-    <div class="narrative" id="top">
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-grid" aria-hidden="true"></div>
-        <div class="wrap hero-inner">
-          <div class="hero-copy">
-            <p class="eyebrow"><span class="status-dot"></span> Invoice review &amp; inventory planning</p>
-            <h1 id="hero-title">Check invoices against your orders.</h1>
-            <p class="lede">Compare supplier invoices with purchase orders and any receipts you have. Review price and quantity differences and possible duplicates, with the source rows behind each finding.</p>
-            <p class="hero-stock">See what may run short and where you’re carrying too much stock.</p>
-            <div class="actions">
-              <a class="button primary" data-launch href="https://app.tirthalkothari.com/">Open workspace <span aria-hidden="true">↗</span></a>
-              <a class="text-link" href="#workflow">How it works <span aria-hidden="true">↓</span></a>
-            </div>
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="wrap hero-inner">
+        <div class="hero-copy">
+          <p class="kicker">Invoice review and inventory planning</p>
+          <h1 id="hero-title">Check every invoice against what you ordered and received.</h1>
+          <p class="lede">MarginGuard compares supplier invoices with purchase orders and receipts. It flags price and quantity differences and possible duplicates, and shows the source rows behind each one.</p>
+          <div class="actions">
+            <a class="button primary" data-launch href="https://app.tirthalkothari.com/">Start free trial</a>
+            <a class="button ghost" href="#film">Watch the overview</a>
           </div>
-          <div class="hero-visual">
-            <div class="document-scene" aria-hidden="true">
-              <div class="document-caption"><strong>Source records</strong><small class="scene-scroll">Scroll to turn ↓</small></div>
-              <div class="document-stage">
-                <div class="document-platform"></div>
-                <div class="document-stack">
-                  <div class="document-sheet receipt-sheet"><div class="document-heading"><span>Receipt</span><small>GRN-027</small></div><strong>40 units</strong><div class="document-rules"></div></div>
-                  <div class="document-sheet order-sheet"><div class="document-heading"><span>Order</span><small>PO-1042</small></div><strong>$10.00</strong><div class="document-rules"></div></div>
-                  <div class="document-sheet invoice-sheet"><div class="document-heading"><span>Invoice</span><small>INV-3016</small></div><strong>$12.00</strong><div class="document-rules"></div><div class="document-stamp">UNIT PRICE</div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <figure class="example" aria-labelledby="example-title">
-            <figcaption class="example-top">
-              <span class="example-title" id="example-title"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 3.5h13v13h-13zM6.5 7h7m-7 3h7m-7 3h4"/></svg> Example audit</span>
-              <span class="sample-label">Fictional records</span>
-            </figcaption>
-            <div class="example-tabs" role="tablist" aria-label="Example findings" hidden>
-              <button type="button" id="example-price" role="tab" aria-selected="true" aria-controls="panel-price">Price</button>
-              <button type="button" id="example-quantity" role="tab" aria-selected="false" aria-controls="panel-quantity" tabindex="-1">Quantity</button>
-              <button type="button" id="example-duplicate" role="tab" aria-selected="false" aria-controls="panel-duplicate" tabindex="-1">Duplicate</button>
-              <button type="button" id="example-stock" role="tab" aria-selected="false" aria-controls="panel-stock" tabindex="-1">Stock</button>
-            </div>
-            <div class="example-panels">
-              <div class="example-panel" id="panel-price">
-                <div class="record-pair">
-                  <div class="source-record"><p>Purchase order</p><small>PO-1042 · Row 8</small><strong>$10.00<small> / unit</small></strong></div>
-                  <div class="source-record"><p>Supplier invoice</p><small>INV-3016 · Row 12</small><strong>$12.00<small> / unit</small></strong></div>
-                </div>
-                <div class="trace" aria-hidden="true"><span></span></div>
-                <div class="finding">
-                  <div><p class="eyebrow">Needs review</p><h2>Unit price differs</h2></div>
-                  <strong class="finding-value">+$2.00<small> per unit</small></strong>
-                </div>
-                <p class="example-note">Check whether the supplier used an approved price change.</p>
-              </div>
-              <div class="example-panel" id="panel-quantity" hidden>
-                <div class="record-pair">
-                  <div class="source-record"><p>Net receipts</p><small>PO-1042 · Item AX-20</small><strong>40<small> received</small></strong></div>
-                  <div class="source-record"><p>Supplier invoice</p><small>INV-3016 · Row 12</small><strong>60<small> billed</small></strong></div>
-                </div>
-                <div class="trace" aria-hidden="true"><span></span></div>
-                <div class="finding">
-                  <div><p class="eyebrow">Needs review</p><h2>Billed above receipts</h2></div>
-                  <strong class="finding-value">20<small> units</small></strong>
-                </div>
-                <p class="example-note">Check that all receipts and returns through the invoice date are on file.</p>
-              </div>
-              <div class="example-panel" id="panel-duplicate" hidden>
-                <div class="record-pair">
-                  <div class="source-record"><p>Invoice row 12</p><small>INV-3016 · Item AX-20</small><strong>60<small> × $12.00</small></strong></div>
-                  <div class="source-record"><p>Invoice row 18</p><small>INV-3016 · Item AX-20</small><strong>60<small> × $12.00</small></strong></div>
-                </div>
-                <div class="trace" aria-hidden="true"><span></span></div>
-                <div class="finding">
-                  <div><p class="eyebrow">Needs review</p><h2>Possible duplicate</h2></div>
-                  <strong class="finding-value">2<small> matching rows</small></strong>
-                </div>
-                <p class="example-note">Check whether both lines belong on the original invoice.</p>
-              </div>
-              <div class="example-panel" id="panel-stock" hidden>
-                <div class="record-pair">
-                  <div class="source-record"><p>Stock coverage</p><small>12 on hand · 3 used per day</small><strong>4<small> days</small></strong></div>
-                  <div class="source-record"><p>Supplier lead time</p><small>Item AX-20 · Stock row 6</small><strong>7<small> days</small></strong></div>
-                </div>
-                <div class="trace" aria-hidden="true"><span></span></div>
-                <div class="finding">
-                  <div><p class="eyebrow">Needs review</p><h2>Stock may run short</h2></div>
-                  <strong class="finding-value">3<small> day gap</small></strong>
-                </div>
-                <p class="example-note">Check current demand and incoming deliveries.</p>
-              </div>
-            </div>
-            <div class="example-foot"><span>Illustrative example</span><button class="motion-toggle" type="button" id="motion-toggle" hidden>Pause motion</button></div>
-          </figure>
+          <p class="hero-note">Imports CSV and Excel exports from Tally, QuickBooks Online and Xero. 14-day trial, no card required.</p>
         </div>
-      </section>
-      <div class="chapter-index">
-        <div class="wrap"><span><small>01</small> Invoice checks</span><span><small>02</small> Inventory</span><span><small>03</small> Planning</span><span><small>04</small> Review history</span></div>
+        <figure class="example" aria-labelledby="example-title">
+          <figcaption class="example-top">
+            <span class="example-title" id="example-title">Example audit</span>
+            <span class="sample-label">Sample data</span>
+          </figcaption>
+          <div class="example-tabs" role="tablist" aria-label="Example findings" hidden>
+            <button type="button" id="example-price" role="tab" aria-selected="true" aria-controls="panel-price">Price</button>
+            <button type="button" id="example-quantity" role="tab" aria-selected="false" aria-controls="panel-quantity" tabindex="-1">Quantity</button>
+            <button type="button" id="example-duplicate" role="tab" aria-selected="false" aria-controls="panel-duplicate" tabindex="-1">Duplicate</button>
+            <button type="button" id="example-stock" role="tab" aria-selected="false" aria-controls="panel-stock" tabindex="-1">Stock</button>
+          </div>
+          <div class="example-panels">
+            <div class="example-panel" id="panel-price">
+              <table class="ledger">
+                <thead><tr><th scope="col">Source</th><th scope="col">Reference</th><th scope="col" class="num">Unit price</th></tr></thead>
+                <tbody>
+                  <tr><td>Purchase order</td><td>PO-1042, row 8</td><td class="num">$10.00</td></tr>
+                  <tr class="flag"><td>Supplier invoice</td><td>INV-3016, row 12</td><td class="num">$12.00</td></tr>
+                </tbody>
+              </table>
+              <div class="finding"><div><p class="finding-label">Needs review</p><h2>Unit price differs</h2></div><strong class="finding-value">+$2.00<small>per unit</small></strong></div>
+              <p class="example-note">Check whether the supplier used an approved price change.</p>
+            </div>
+            <div class="example-panel" id="panel-quantity" hidden>
+              <table class="ledger">
+                <thead><tr><th scope="col">Source</th><th scope="col">Reference</th><th scope="col" class="num">Units</th></tr></thead>
+                <tbody>
+                  <tr><td>Net receipts</td><td>PO-1042, item AX-20</td><td class="num">40</td></tr>
+                  <tr class="flag"><td>Supplier invoice</td><td>INV-3016, row 12</td><td class="num">60</td></tr>
+                </tbody>
+              </table>
+              <div class="finding"><div><p class="finding-label">Needs review</p><h2>Billed above receipts</h2></div><strong class="finding-value">20<small>units</small></strong></div>
+              <p class="example-note">Check that all receipts and returns through the invoice date are on file.</p>
+            </div>
+            <div class="example-panel" id="panel-duplicate" hidden>
+              <table class="ledger">
+                <thead><tr><th scope="col">Line</th><th scope="col">Reference</th><th scope="col" class="num">Amount</th></tr></thead>
+                <tbody>
+                  <tr><td>Invoice row 12</td><td>INV-3016, AX-20</td><td class="num">60 × $12.00</td></tr>
+                  <tr class="flag"><td>Invoice row 18</td><td>INV-3016, AX-20</td><td class="num">60 × $12.00</td></tr>
+                </tbody>
+              </table>
+              <div class="finding"><div><p class="finding-label">Needs review</p><h2>Possible duplicate</h2></div><strong class="finding-value">2<small>matching rows</small></strong></div>
+              <p class="example-note">Check whether both lines belong on the original invoice.</p>
+            </div>
+            <div class="example-panel" id="panel-stock" hidden>
+              <table class="ledger">
+                <thead><tr><th scope="col">Measure</th><th scope="col">Basis</th><th scope="col" class="num">Days</th></tr></thead>
+                <tbody>
+                  <tr class="flag"><td>Stock coverage</td><td>12 on hand, 3 used a day</td><td class="num">4</td></tr>
+                  <tr><td>Supplier lead time</td><td>Item AX-20, stock row 6</td><td class="num">7</td></tr>
+                </tbody>
+              </table>
+              <div class="finding"><div><p class="finding-label">Needs review</p><h2>Stock may run short</h2></div><strong class="finding-value">3<small>day gap</small></strong></div>
+              <p class="example-note">Check current demand and incoming deliveries.</p>
+            </div>
+          </div>
+        </figure>
       </div>
-      <section class="chapter light-section" id="product">
-        <div class="wrap chapter-inner">
-          <div class="chapter-copy"><p class="eyebrow">01 / Invoice checks</p><h2>See why a line was flagged.</h2><p>Open a finding to see the order, invoice and any receipt records behind it. Check the originals before deciding whether there’s a billing error.</p></div>
-          <div class="chapter-detail">
-            <ol class="feature-lines">
-              <li><span>01</span><div><h3>Price differences</h3><p>Compare the billed unit price with the agreed price.</p></div></li>
-              <li><span>02</span><div><h3>Quantity differences</h3><p>Check billed quantities against your orders and available receipts.</p></div></li>
-              <li><span>03</span><div><h3>Possible duplicates</h3><p>Inspect repeated invoice lines before treating them as duplicate charges.</p></div></li>
-            </ol>
-          </div>
-        </div>
-      </section>
-      <section class="chapter dark-section">
-        <div class="wrap chapter-inner">
-          <div class="chapter-copy"><p class="eyebrow">02 / Inventory</p><h2>Find stock that may run short.</h2><p>See how long stock may last, where you hold more than your target and what you may need to reorder. Change demand or lead time to see how the picture shifts.</p></div>
-          <div class="chapter-detail stock-compare">
-            <div class="stock-chart-head"><h3>Stock coverage and lead time</h3><span>Example</span></div>
-            <div class="stock-measure"><span>Stock on hand</span><strong>4 days</strong><div class="measure-track"><span style="--value: 57%"></span></div></div>
-            <div class="stock-measure"><span>Supplier lead time</span><strong>7 days</strong><div class="measure-track"><span style="--value: 100%"></span></div></div>
-            <p>Check whether an incoming delivery can cover the gap.</p>
-          </div>
-        </div>
-      </section>
-      <section class="chapter light-section">
-        <div class="wrap chapter-inner">
-          <div class="chapter-copy"><p class="eyebrow">03 / Planning</p><h2>Compare purchasing and production plans.</h2><p>Compare supplier offers or test a product mix using your cash and capacity limits. Check the assumptions before choosing a plan.</p></div>
-          <div class="chapter-detail">
-            <ol class="feature-lines">
-              <li><span>01</span><div><h3>Supplier offers</h3><p>Compare cost and timing before choosing where to buy.</p></div></li>
-              <li><span>02</span><div><h3>Cash and capacity</h3><p>See which plans fit the limits you enter.</p></div></li>
-              <li><span>03</span><div><h3>Product mix</h3><p>Compare options when products share materials or capacity.</p></div></li>
-            </ol>
-          </div>
-        </div>
-      </section>
-      <section class="chapter dark-section">
-        <div class="wrap chapter-inner">
-          <div class="chapter-copy"><p class="eyebrow">04 / Review history</p><h2>Keep the evidence with the decision.</h2><p>Save what you decided and why. Revisit the records and compare what you expected with what happened.</p><a class="text-link" href="#workflow">See how it works <span aria-hidden="true">↓</span></a></div>
-          <div class="chapter-detail review-steps">
-            <div><span>01</span><strong>Check the records</strong></div>
-            <div><span>02</span><strong>Record your decision</strong></div>
-            <div><span>03</span><strong>Log what happened</strong></div>
-            <p>The optional AI assistant can explain evidence or find a past review. You approve decisions in the workspace and handle orders, messages and payments separately.</p>
-          </div>
-        </div>
-      </section>
-    </div>
-    <section class="workflow light-section" id="workflow">
+    </section>
+
+    <section class="capabilities" id="product" aria-labelledby="product-title">
       <div class="wrap">
-        <div class="section-heading"><div><p class="eyebrow">Getting started</p><h2>From files to findings</h2></div><p>Try the sample audit first, then upload your own records when you’re ready.</p></div>
+        <header class="intro">
+          <h2 id="product-title">What MarginGuard does</h2>
+          <p>Each finding links back to the order, invoice and receipt rows it came from, so you can check the originals before acting on it.</p>
+        </header>
+        <div class="cap-grid">
+          <article class="cap">
+            <h3>Invoice checks</h3>
+            <p>Compares billed prices with agreed prices and billed quantities with orders and receipts. Repeated lines are flagged for you to inspect before anything is treated as a duplicate charge.</p>
+          </article>
+          <article class="cap">
+            <h3>Inventory</h3>
+            <p>Shows how long stock may last and where you hold more than your target.</p>
+            <div class="meter" role="img" aria-label="Example: 4 days of stock against a 7 day lead time">
+              <div class="meter-row"><span>Stock on hand</span><strong>4 days</strong></div>
+              <div class="meter-track"><span style="--value:57%"></span></div>
+              <div class="meter-row"><span>Supplier lead time</span><strong>7 days</strong></div>
+              <div class="meter-track lead"><span style="--value:100%"></span></div>
+            </div>
+          </article>
+          <article class="cap">
+            <h3>Planning</h3>
+            <p>Compare supplier offers on cost and timing, or test a product mix against the cash and capacity limits you enter.</p>
+          </article>
+          <article class="cap">
+            <h3>Review history</h3>
+            <p>Record what you decided and why. Later, log what happened and compare it with what you expected.</p>
+          </article>
+        </div>
+        <p class="assistant-note">An optional AI assistant can explain the evidence or find a past review. Decisions are approved in the workspace, and orders, messages and payments are handled outside it.</p>
+      </div>
+    </section>
+
+    <section class="film" id="film" aria-labelledby="film-title">
+      <div class="wrap film-inner">
+        <header class="intro">
+          <h2 id="film-title">A one-minute overview</h2>
+          <p>Small billing differences are easy to miss when they are spread across hundreds of invoices. This film follows one month-end review.</p>
+        </header>
+        <div class="film-frame">
+          <video id="film-video" preload="none" playsinline poster="media/quiet-leak-poster.jpg" aria-label="MarginGuard overview film, one minute">
+            <source src="media/quiet-leak-1080p.mp4" type="video/mp4">
+          </video>
+          <button type="button" class="film-play" aria-label="Play the one-minute overview">
+            <span class="film-play-text">Play<small>1:00</small></span>
+            <span class="film-play-icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M5 3.5v9l7-4.5z"/></svg></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="workflow" id="workflow" aria-labelledby="workflow-title">
+      <div class="wrap">
+        <header class="intro">
+          <h2 id="workflow-title">Getting started</h2>
+          <p>Try the sample audit first, then upload your own records when you’re ready.</p>
+        </header>
         <ol class="workflow-steps">
-          <li><span>01</span><h3>Import your records</h3><p>Upload CSV or Excel files, match the columns and check the data before saving.</p></li>
-          <li><span>02</span><h3>Review a finding</h3><p>Open a flagged item and check the records and calculation behind it.</p></li>
-          <li><span>03</span><h3>Record the outcome</h3><p>Save a decision and update it when you know what happened.</p></li>
+          <li><h3>Import your records</h3><p>Upload CSV or Excel files, match the columns and check the data before saving.</p></li>
+          <li><h3>Review a finding</h3><p>Open a flagged item and check the records and calculation behind it.</p></li>
+          <li><h3>Record the outcome</h3><p>Save a decision and update it when you know what happened.</p></li>
         </ol>
-        <div class="workflow-bottom"><button type="button" class="text-link" data-guide-start>Take the quick tour <span aria-hidden="true">↗</span></button><p>MarginGuard can review exports from Tally, QuickBooks Online and Xero. Live ERP sync is still in development.</p></div>
+        <div class="workflow-bottom"><button type="button" class="text-link" data-guide-start>Take the quick tour</button><p>Live ERP sync is in development.</p></div>
       </div>
     </section>
-    <section class="pricing light-section" id="pricing">
-      <div class="wrap section-heading">
-        <div><p class="eyebrow">Early access</p><h2>Try MarginGuard for 14 days.</h2></div>
-        <div class="price-box"><p>No card required. The preview stays free while paid billing is unavailable.</p><a class="button primary" data-launch href="https://app.tirthalkothari.com/">Create your workspace <span aria-hidden="true">↗</span></a><p class="planned-price">Planned subscription price is $9 USD per month.</p></div>
+
+    <section class="closing" id="pricing" aria-labelledby="pricing-title">
+      <div class="wrap closing-inner">
+        <div class="price-card">
+          <h2 id="pricing-title">Try MarginGuard free for 14 days</h2>
+          <p>No card required. The preview stays free while paid billing is unavailable.</p>
+          <p class="price-line"><strong>$9</strong> per month planned price, in USD</p>
+          <a class="button primary" data-launch href="https://app.tirthalkothari.com/">Create your workspace</a>
+        </div>
+        <div class="founder">
+          <h3>About MarginGuard</h3>
+          <p>I’m Tirthal Kothari. I built MarginGuard and host it on my own PC, so availability depends on that computer staying online. Start with the sample, and upload business records only if you have permission to use them.</p>
+          <a class="text-link" href="mailto:tirth14503@gmail.com?subject=MarginGuard">Get in touch</a>
+        </div>
       </div>
     </section>
-    <section class="founder dark-section">
-      <div class="wrap section-heading">
-        <div><p class="eyebrow">About MarginGuard</p><h2>Built by Tirthal Kothari</h2></div>
-        <p>I host MarginGuard on my own PC, so availability depends on that computer staying online. Start with the sample, and upload business records only if you have permission to use them.</p>
-      </div>
-    </section>
-    <footer><div class="wrap footer-inner"><a class="brand" href="#top">MarginGuard</a><a href="/">Tirthal Kothari’s portfolio ↗</a><a href="mailto:tirth14503@gmail.com?subject=MarginGuard">Get in touch ↗</a><span>© 2026 MarginGuard</span></div></footer>
   </main>
+  <footer><div class="wrap footer-inner"><a class="brand" href="#top">MarginGuard</a><nav aria-label="Footer"><a href="/">Tirthal Kothari</a><a href="mailto:tirth14503@gmail.com?subject=MarginGuard">Contact</a></nav><span>© 2026 MarginGuard</span></div></footer>
 </body>
 </html>
