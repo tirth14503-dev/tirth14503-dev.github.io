@@ -31,7 +31,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
   <meta name="theme-color" content="#13233d">
   <link rel="stylesheet" href="quick-tour.css?v=4">
-  <link rel="stylesheet" href="story.css?v=6">
+  <link rel="stylesheet" href="story.css?v=7">
   <script src="launch.js?v=3" defer></script>
   <script src="story.js?v=4" defer></script>
   <script src="quick-tour.js?v=2" defer></script>
@@ -41,7 +41,7 @@
   <header class="header">
     <div class="wrap header-inner">
       <a class="brand" href="#top" aria-label="MarginGuard home"><svg viewBox="0 0 32 34" aria-hidden="true"><path d="M3 28V6l13 7L29 6v22l-13-7Z"/><path d="M3 6 16 1l13 5M16 13v21"/></svg>MarginGuard</a>
-      <nav aria-label="Main navigation"><a href="#product">Product</a><a href="#film">Overview</a><a href="#workflow">Getting started</a><a href="#pricing">Pricing</a></nav>
+      <nav aria-label="Main navigation"><a href="#product">Product</a><a href="#freight">Freight and costs</a><a href="#film">Overview</a><a href="#faq">Questions</a><a href="#pricing">Pricing</a></nav>
       <a class="nav-cta" data-launch href="https://app.tirthalkothari.com/">Sign in</a>
     </div>
   </header>
@@ -153,6 +153,84 @@
       </div>
     </section>
 
+    <section class="checks" id="checks" aria-labelledby="checks-title">
+      <div class="wrap">
+        <header class="intro">
+          <h2 id="checks-title">The invoice checks</h2>
+          <p>Every check is a fixed calculation over your own records. A check runs when your files include the columns it needs, so adding optional columns adds more checks.</p>
+        </header>
+        <div class="table-scroll">
+          <table class="check-table">
+            <thead><tr><th scope="col">Check</th><th scope="col">Flags a line when</th><th scope="col">Uses</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Unit price</th><td>The billed price is above the price on the purchase order</td><td>Orders</td></tr>
+              <tr><th scope="row">Quantity</th><td>More units are billed than were received, after returns</td><td>Orders and receipts</td></tr>
+              <tr><th scope="row">Duplicate lines</th><td>The same item and amount appear more than once</td><td>Invoices</td></tr>
+              <tr><th scope="row">Tax</th><td>Tax is above the line’s own rate, or above the rate the supplier usually charges</td><td>Tax columns</td></tr>
+              <tr><th scope="row">Freight</th><td>Freight is above the amount on the order, or charged twice for one order</td><td>Freight columns</td></tr>
+              <tr><th scope="row">Bank details</th><td>A supplier’s bank account changes, or two suppliers share one account</td><td>Bank columns</td></tr>
+              <tr><th scope="row">Payment terms</th><td>The due date is at least five days sooner than the supplier’s usual terms</td><td>Invoice history</td></tr>
+              <tr><th scope="row">Payments</th><td>An invoice is paid twice, paid above its amount, or paid while a finding is still open</td><td>Payment records</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">Bank accounts are shown by their last four characters only.</p>
+      </div>
+    </section>
+
+    <section class="modules" id="freight" aria-labelledby="freight-title">
+      <div class="wrap">
+        <header class="intro">
+          <h2 id="freight-title">Freight and cost insights</h2>
+          <p>Two more views use the same records: one for carrier invoices, one for how your supplier costs are moving.</p>
+        </header>
+        <div class="module-grid">
+          <article class="module">
+            <h3>Freight audit</h3>
+            <p>Upload carrier invoices as CSV. Shipment records and agreed rates are optional and unlock more checks.</p>
+            <ul>
+              <li>Duplicate shipments and repeated extra charges</li>
+              <li>Linehaul and fuel surcharge above the agreed rate</li>
+              <li>Billed weight above shipped weight</li>
+              <li>Lanes on a map, by spend and share flagged</li>
+              <li>Lanes where another carrier you already use cost less</li>
+              <li>Dispute letter drafts per carrier, to copy and send yourself</li>
+            </ul>
+            <table class="mini-table" aria-label="Sample freight lanes">
+              <caption>Lanes, sample data</caption>
+              <thead><tr><th scope="col">Lane</th><th scope="col" class="num">Loads</th><th scope="col" class="num">Flagged</th></tr></thead>
+              <tbody>
+                <tr><td>Chicago, IL to Dallas, TX</td><td class="num">42</td><td class="num">$1,180</td></tr>
+                <tr><td>Atlanta, GA to Columbus, OH</td><td class="num">27</td><td class="num">$640</td></tr>
+                <tr><td>Reno, NV to Fresno, CA</td><td class="num">15</td><td class="num">$0</td></tr>
+              </tbody>
+            </table>
+          </article>
+          <article class="module">
+            <h3>Cost insights</h3>
+            <p>Reads the invoice lines you have already saved. Nothing extra to upload.</p>
+            <ul>
+              <li>Why spend moved over 30, 60 or 90 days: price, volume, new and dropped items</li>
+              <li>The items with the largest price changes</li>
+              <li>A 90-day price trend for each item, and sudden price jumps on the latest invoice</li>
+              <li>How much of your spend sits with each supplier</li>
+              <li>Items you buy from only one supplier</li>
+            </ul>
+            <table class="mini-table" aria-label="Sample change in spend">
+              <caption>Change in spend, last 90 days, sample data</caption>
+              <tbody>
+                <tr><td>Price changes</td><td class="num">+$3,420</td></tr>
+                <tr><td>Buying more or less</td><td class="num">−$1,150</td></tr>
+                <tr><td>New items</td><td class="num">+$880</td></tr>
+                <tr><td>Dropped items</td><td class="num">−$410</td></tr>
+                <tr class="total"><td>Total change</td><td class="num">+$2,740</td></tr>
+              </tbody>
+            </table>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section class="film" id="film" aria-labelledby="film-title">
       <div class="wrap film-inner">
         <header class="intro">
@@ -183,6 +261,67 @@
           <li><h3>Record the outcome</h3><p>Save a decision and update it when you know what happened.</p></li>
         </ol>
         <div class="workflow-bottom"><button type="button" class="text-link" data-guide-start>Take the quick tour</button><p>Live ERP sync is in development.</p></div>
+        <div class="tracker" aria-labelledby="tracker-title">
+          <div class="tracker-copy">
+            <h3 id="tracker-title">Track what you get back</h3>
+            <p>The audit overview keeps a running total of what was found, what you raised with suppliers, and the credits or refunds you recorded. Each finding is counted once.</p>
+          </div>
+          <dl class="tracker-figures">
+            <div><dt>Found</dt><dd>$4,210</dd></div>
+            <div><dt>Claimed</dt><dd>$2,980</dd></div>
+            <div><dt>Credited</dt><dd>$1,640</dd></div>
+          </dl>
+          <p class="tracker-note">Sample workspace</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust" id="data" aria-labelledby="data-title">
+      <div class="wrap">
+        <header class="intro">
+          <h2 id="data-title">How your records are handled</h2>
+        </header>
+        <div class="trust-grid">
+          <div><h3>Calculations, not guesses</h3><p>Findings come from fixed rules you can read in the finding itself. The AI assistant is optional, and it can’t approve a decision for you.</p></div>
+          <div><h3>Nothing is sent for you</h3><p>Dispute letters and quote requests are drafts. You copy them and send them yourself, to the people you choose.</p></div>
+          <div><h3>PDFs are reviewed by you</h3><p>Scanned or PDF invoices are never read into an audit automatically. They go to document assistance, where you check each page against the original.</p></div>
+          <div><h3>Protected sign-in</h3><p>Turn on two-step verification, so signing in needs a code from an authenticator app as well as your password.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq" id="faq" aria-labelledby="faq-title">
+      <div class="wrap faq-inner">
+        <header class="intro">
+          <h2 id="faq-title">Questions</h2>
+          <p>Something else? <a class="text-link" href="mailto:tirth14503@gmail.com?subject=MarginGuard%20question">Email me</a>.</p>
+        </header>
+        <div class="faq-list">
+          <details>
+            <summary>What files do I need?</summary>
+            <p>Supplier invoices and purchase orders, as CSV or Excel. Receipts, stock levels and payment records are optional and add more checks. You match the columns when you import, so the files don’t need a fixed layout.</p>
+          </details>
+          <details>
+            <summary>Does it work with my accounting system?</summary>
+            <p>Export your bills and purchase orders from Tally, QuickBooks Online or Xero and import the files. A live connection to accounting systems is in development.</p>
+          </details>
+          <details>
+            <summary>Is a finding proof that the supplier overcharged?</summary>
+            <p>No. A finding means two records disagree. There may be a reason, such as an approved price change or a receipt that hasn’t been entered yet. Check the source rows before you raise it with the supplier.</p>
+          </details>
+          <details>
+            <summary>Can I try it without my own data?</summary>
+            <p>Yes. Every new workspace can open a sample audit built on fictional records, so you can see each check before uploading anything.</p>
+          </details>
+          <details>
+            <summary>Where is my data stored?</summary>
+            <p>On the computer that runs MarginGuard, which is my own PC. Only upload business records you have permission to use.</p>
+          </details>
+          <details>
+            <summary>What does it cost?</summary>
+            <p>The preview is free while paid billing is unavailable. The planned price is $9 USD per month, and a new workspace starts with a 14-day trial with no card required.</p>
+          </details>
+        </div>
       </div>
     </section>
 
