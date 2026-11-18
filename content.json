@@ -117,7 +117,7 @@
       "id": "marginguard",
       "badge": "My startup · Working prototype",
       "title": "MarginGuard",
-      "desc": "My startup project for <strong>invoice review, inventory analysis, and production planning</strong>. Explore the product and try the working prototype in your own workspace.",
+      "desc": "My startup project for <strong>invoice review, inventory analysis, and production planning</strong>. Explore the product and try the working prototype in your own workspace. <span class=\"free-mark\">The preview stays free while paid billing is unavailable.</span>",
       "tags": [
         "Supply Chain",
         "Python",

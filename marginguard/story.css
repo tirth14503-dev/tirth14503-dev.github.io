@@ -264,6 +264,11 @@ section.audience { padding-block: clamp(3rem, 6vw, 4.5rem); }
 .founder { padding-left: clamp(0rem, 4vw, 3rem); border-left: 1px solid var(--navy-line); }
 .founder h3 { color: #fff; font-family: var(--serif); font-size: 1.35rem; }
 .founder p { margin: .9rem 0 1.25rem; color: var(--on-navy-muted); }
+/* Free-preview highlight: warm gold, reads well on navy and on cream */
+.free-badge { display: inline-flex; align-items: center; gap: .55rem; margin: 0 0 1.25rem; padding: .45rem .85rem; border: 1px solid rgba(240, 201, 110, .5); border-radius: 999px; background: rgba(240, 201, 110, .13); color: #f5d68c; font-size: .86rem; font-weight: 500; line-height: 1.35; }
+.price-card > p.free-badge { margin-top: .9rem; color: #f5d68c; }
+.free-dot { flex: none; width: .5rem; height: .5rem; border-radius: 50%; background: #f0c96e; box-shadow: 0 0 0 3px rgba(240, 201, 110, .25); }
+.free-mark { padding: .05em .3em; border-radius: 4px; background: #fbefcf; color: #5e430a; font-weight: 500; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 .closing .text-link { color: var(--powder); }
 .closing .text-link:hover { color: #fff; }
 

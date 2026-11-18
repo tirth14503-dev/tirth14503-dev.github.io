@@ -31,7 +31,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
   <meta name="theme-color" content="#13233d">
   <link rel="stylesheet" href="quick-tour.css?v=4">
-  <link rel="stylesheet" href="story.css?v=8">
+  <link rel="stylesheet" href="story.css?v=9">
   <script src="launch.js?v=3" defer></script>
   <script src="story.js?v=4" defer></script>
   <script src="quick-tour.js?v=2" defer></script>
@@ -51,6 +51,7 @@
     <section class="hero" id="top" aria-labelledby="hero-title">
       <div class="wrap hero-inner">
         <div class="hero-copy">
+          <p class="free-badge"><span class="free-dot" aria-hidden="true"></span>The preview stays free while paid billing is unavailable.</p>
           <p class="kicker">Invoice review and inventory planning</p>
           <h1 id="hero-title">Check every invoice against what you ordered and received.</h1>
           <p class="lede">MarginGuard compares supplier invoices with purchase orders and receipts. It flags price and quantity differences and possible duplicates, and shows the source rows behind each one.</p>
@@ -387,7 +388,7 @@
           </details>
           <details>
             <summary>What does it cost?</summary>
-            <p>The preview is free while paid billing is unavailable. The planned price is $9 USD per month, and a new workspace starts with a 14-day trial with no card required.</p>
+            <p><mark class="free-mark">The preview is free while paid billing is unavailable.</mark> The planned price is $9 USD per month, and a new workspace starts with a 14-day trial with no card required.</p>
           </details>
         </div>
       </div>
@@ -431,7 +432,8 @@
       <div class="wrap closing-inner">
         <div class="price-card">
           <h2 id="pricing-title">Try MarginGuard free for 14 days</h2>
-          <p>No card required. The preview stays free while paid billing is unavailable.</p>
+          <p>No card required.</p>
+          <p class="free-badge"><span class="free-dot" aria-hidden="true"></span>The preview stays free while paid billing is unavailable.</p>
           <p class="price-line"><strong>$9</strong> per month planned price, in USD</p>
           <a class="button primary" data-launch href="https://app.tirthalkothari.com/">Create your workspace</a>
         </div>

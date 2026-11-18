@@ -1286,6 +1286,7 @@ section{scroll-margin-top:64px;}
 .pj-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold3));opacity:.35;transition:opacity .35s;}
 .pj-card:hover{box-shadow:var(--shadow2);border-color:rgba(28,58,94,.3);transform:translateY(-5px);}
 .pj-card:hover::before{opacity:1;}
+.free-mark{display:inline;padding:.05em .35em;border-radius:4px;background:#fbefcf;color:#5e430a;font-weight:600;box-decoration-break:clone;-webkit-box-decoration-break:clone;}
 .pj-badge{align-self:flex-start;font-family:var(--fm);font-size:.52rem;letter-spacing:.24em;color:var(--gold);background:var(--gold-t2);border:1px solid rgba(28,58,94,.2);padding:.26rem .8rem;border-radius:22px;text-transform:uppercase;}
 .pj-title{font-family:var(--fc);font-size:clamp(1.25rem,1.9vw,1.6rem);font-weight:600;line-height:1.12;color:var(--text);}
 .pj-desc{font-family:var(--fs);font-size:.88rem;color:var(--text2);line-height:1.7;flex:1;}
@@ -2150,7 +2151,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
   <div class="pj-grid" id="proj-grid">
     <a class="pj-card reveal" style="text-decoration:none" href="/marginguard/" aria-label="Explore MarginGuard, my startup project">
       <span class="pj-badge">My startup · Working prototype</span><div class="pj-title">MarginGuard</div>
-      <div class="pj-desc">My startup project for <strong>invoice review, inventory analysis, and production planning</strong>. Explore the product and try the working prototype in your own workspace.</div>
+      <div class="pj-desc">My startup project for <strong>invoice review, inventory analysis, and production planning</strong>. Explore the product and try the working prototype in your own workspace. <span class="free-mark">The preview stays free while paid billing is unavailable.</span></div>
       <div class="pj-tags"><span>Supply Chain</span><span>Python</span><span>Planning</span><span>Startup</span></div>
       <span class="project-action">Explore product ↗</span>
     </a>
