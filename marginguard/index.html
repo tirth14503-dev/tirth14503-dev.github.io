@@ -31,18 +31,19 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
   <meta name="theme-color" content="#13233d">
   <link rel="stylesheet" href="quick-tour.css?v=4">
-  <link rel="stylesheet" href="story.css?v=9">
-  <script src="launch.js?v=3" defer></script>
+  <link rel="stylesheet" href="story.css?v=11">
+  <script src="launch.js?v=4" defer></script>
   <script src="story.js?v=4" defer></script>
   <script src="quick-tour.js?v=2" defer></script>
   <script src="contact.js?v=1" defer></script>
+  <script src="section-nav.js?v=1" defer></script>
 </head>
 <body data-guide-auto="off">
   <a class="skip" href="#main">Skip to content</a>
   <header class="header">
     <div class="wrap header-inner">
       <a class="brand" href="#top" aria-label="MarginGuard home"><svg viewBox="0 0 32 34" aria-hidden="true"><path d="M3 28V6l13 7L29 6v22l-13-7Z"/><path d="M3 6 16 1l13 5M16 13v21"/></svg>MarginGuard</a>
-      <nav aria-label="Main navigation"><a href="#product">Product</a><a href="#freight">Freight and costs</a><a href="#film">Overview</a><a href="#faq">Questions</a><a href="#pricing">Pricing</a></nav>
+      <nav aria-label="Main navigation" class="section-nav"><a href="#film">Overview</a><a href="#product">Product</a><a href="#checks">Checks</a><a href="#freight">Freight</a><a href="#workflow">Setup</a><a href="#data">Your data</a><a href="#faq">Questions</a><a href="#pricing">Pricing</a></nav>
       <a class="nav-cta" data-launch href="https://app.tirthalkothari.com/">Sign in</a>
       <a class="nav-sales" href="#contact">Contact sales</a>
     </div>
@@ -56,10 +57,10 @@
           <h1 id="hero-title">Check every invoice against what you ordered and received.</h1>
           <p class="lede">MarginGuard compares supplier invoices with purchase orders and receipts. It flags price and quantity differences and possible duplicates, and shows the source rows behind each one.</p>
           <div class="actions">
-            <a class="button primary" data-launch href="https://app.tirthalkothari.com/">Start free trial</a>
+            <a class="button primary" data-launch="signup" href="https://app.tirthalkothari.com/#/signup">Start free trial</a>
             <a class="button ghost" href="#film">Watch the overview</a>
           </div>
-          <p class="hero-note">Imports CSV and Excel exports from Tally, QuickBooks Online and Xero. 14-day trial, no card required.</p>
+          <p class="hero-note">Imports CSV and Excel exports from Tally, QuickBooks Online and Xero. Free during the preview, no card required.</p>
         </div>
         <figure class="example" aria-labelledby="example-title">
           <figcaption class="example-top">
@@ -81,7 +82,7 @@
                   <tr class="flag"><td>Supplier invoice</td><td>INV-3016, row 12</td><td class="num">$12.00</td></tr>
                 </tbody>
               </table>
-              <div class="finding"><div><p class="finding-label">Needs review</p><h2>Unit price differs</h2></div><strong class="finding-value">+$2.00<small>per unit</small></strong></div>
+              <div class="finding"><div><p class="finding-label">Needs review</p><h3>Unit price differs</h3></div><strong class="finding-value">+$2.00<small>per unit</small></strong></div>
               <p class="example-note">Check whether the supplier used an approved price change.</p>
             </div>
             <div class="example-panel" id="panel-quantity" hidden>
@@ -92,7 +93,7 @@
                   <tr class="flag"><td>Supplier invoice</td><td>INV-3016, row 12</td><td class="num">60</td></tr>
                 </tbody>
               </table>
-              <div class="finding"><div><p class="finding-label">Needs review</p><h2>Billed above receipts</h2></div><strong class="finding-value">20<small>units</small></strong></div>
+              <div class="finding"><div><p class="finding-label">Needs review</p><h3>Billed above receipts</h3></div><strong class="finding-value">20<small>units</small></strong></div>
               <p class="example-note">Check that all receipts and returns through the invoice date are on file.</p>
             </div>
             <div class="example-panel" id="panel-duplicate" hidden>
@@ -103,7 +104,7 @@
                   <tr class="flag"><td>Invoice row 18</td><td>INV-3016, AX-20</td><td class="num">60 × $12.00</td></tr>
                 </tbody>
               </table>
-              <div class="finding"><div><p class="finding-label">Needs review</p><h2>Possible duplicate</h2></div><strong class="finding-value">2<small>matching rows</small></strong></div>
+              <div class="finding"><div><p class="finding-label">Needs review</p><h3>Possible duplicate</h3></div><strong class="finding-value">2<small>matching rows</small></strong></div>
               <p class="example-note">Check whether both lines belong on the original invoice.</p>
             </div>
             <div class="example-panel" id="panel-stock" hidden>
@@ -114,7 +115,7 @@
                   <tr><td>Supplier lead time</td><td>Item AX-20, stock row 6</td><td class="num">7</td></tr>
                 </tbody>
               </table>
-              <div class="finding"><div><p class="finding-label">Needs review</p><h2>Stock may run short</h2></div><strong class="finding-value">3<small>day gap</small></strong></div>
+              <div class="finding"><div><p class="finding-label">Needs review</p><h3>Stock may run short</h3></div><strong class="finding-value">3<small>day gap</small></strong></div>
               <p class="example-note">Check current demand and incoming deliveries.</p>
             </div>
           </div>
@@ -129,6 +130,24 @@
           <div><h3>Purchasing managers</h3><p>Confirm suppliers billed the agreed price for what actually arrived, and see which items may run short.</p></div>
           <div><h3>Accounts payable teams</h3><p>Hold questionable lines before payment, and catch invoices paid twice or above their amount.</p></div>
           <div><h3>Owners of distributors and manufacturers</h3><p>See where margin is leaking across suppliers, carriers and stock, without a full ERP project.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="film" id="film" aria-labelledby="film-title">
+      <div class="wrap film-inner">
+        <header class="intro">
+          <h2 id="film-title">A one-minute overview</h2>
+          <p>Small billing differences are easy to miss when they are spread across hundreds of invoices. This film follows one month-end review.</p>
+        </header>
+        <div class="film-frame">
+          <video id="film-video" preload="none" playsinline poster="media/quiet-leak-poster.jpg" aria-label="MarginGuard overview film, one minute">
+            <source src="media/quiet-leak-1080p.mp4" type="video/mp4">
+          </video>
+          <button type="button" class="film-play" aria-label="Play the one-minute overview">
+            <span class="film-play-text">Play<small>1:00</small></span>
+            <span class="film-play-icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M5 3.5v9l7-4.5z"/></svg></span>
+          </button>
         </div>
       </div>
     </section>
@@ -268,24 +287,6 @@
       </div>
     </section>
 
-    <section class="film" id="film" aria-labelledby="film-title">
-      <div class="wrap film-inner">
-        <header class="intro">
-          <h2 id="film-title">A one-minute overview</h2>
-          <p>Small billing differences are easy to miss when they are spread across hundreds of invoices. This film follows one month-end review.</p>
-        </header>
-        <div class="film-frame">
-          <video id="film-video" preload="none" playsinline poster="media/quiet-leak-poster.jpg" aria-label="MarginGuard overview film, one minute">
-            <source src="media/quiet-leak-1080p.mp4" type="video/mp4">
-          </video>
-          <button type="button" class="film-play" aria-label="Play the one-minute overview">
-            <span class="film-play-text">Play<small>1:00</small></span>
-            <span class="film-play-icon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M5 3.5v9l7-4.5z"/></svg></span>
-          </button>
-        </div>
-      </div>
-    </section>
-
     <section class="workflow" id="workflow" aria-labelledby="workflow-title">
       <div class="wrap">
         <header class="intro">
@@ -342,23 +343,6 @@
       </div>
     </section>
 
-    <section class="changelog" id="changes" aria-labelledby="changes-title">
-      <div class="wrap changelog-inner">
-        <header class="intro">
-          <h2 id="changes-title">What’s new</h2>
-          <p>Recent releases. MarginGuard is updated often, and each release is tested before it goes live.</p>
-        </header>
-        <ol class="change-list">
-          <li><time datetime="2026-11-13">13 Nov 2026</time><div><h3>Freight imports accept real-world files</h3><p>Carrier invoice exports with different headers, date formats and delimiters now import without editing.</p></div></li>
-          <li><time datetime="2026-11-13">13 Nov 2026</time><div><h3>Carrier match and route planner</h3><p>See lanes where a carrier you already use cost less, draft quote requests, and estimate multi-stop routes.</p></div></li>
-          <li><time datetime="2026-11-13">13 Nov 2026</time><div><h3>Freight audit with lane map</h3><p>Checks carrier invoices against shipments and agreed rates, maps each lane, and drafts dispute letters.</p></div></li>
-          <li><time datetime="2026-11-13">13 Nov 2026</time><div><h3>Cost insights</h3><p>Why spend moved, 90-day price trends, and how much depends on a single supplier.</p></div></li>
-          <li><time datetime="2026-11-12">12 Nov 2026</time><div><h3>Two-step verification</h3><p>Protect your sign-in with a code from an authenticator app.</p></div></li>
-          <li><time datetime="2026-11-11">11 Nov 2026</time><div><h3>More invoice checks</h3><p>Tax, freight, bank detail changes, shortened payment terms and duplicate payments.</p></div></li>
-        </ol>
-      </div>
-    </section>
-
     <section class="faq" id="faq" aria-labelledby="faq-title">
       <div class="wrap faq-inner">
         <header class="intro">
@@ -391,6 +375,23 @@
             <p><mark class="free-mark">The preview is free while paid billing is unavailable.</mark> The planned price is $9 USD per month, and a new workspace starts with a 14-day trial with no card required.</p>
           </details>
         </div>
+      </div>
+    </section>
+
+    <section class="changelog" id="changes" aria-labelledby="changes-title">
+      <div class="wrap changelog-inner">
+        <header class="intro">
+          <h2 id="changes-title">What’s new</h2>
+          <p>Recent releases. MarginGuard is updated often, and each release is tested before it goes live.</p>
+        </header>
+        <ol class="change-list">
+          <li><time datetime="2026-11-13">13 Nov 2026</time><div><h3>Freight imports accept real-world files</h3><p>Carrier invoice exports with different headers, date formats and delimiters now import without editing.</p></div></li>
+          <li><time datetime="2026-11-13">13 Nov 2026</time><div><h3>Carrier match and route planner</h3><p>See lanes where a carrier you already use cost less, draft quote requests, and estimate multi-stop routes.</p></div></li>
+          <li><time datetime="2026-11-13">13 Nov 2026</time><div><h3>Freight audit with lane map</h3><p>Checks carrier invoices against shipments and agreed rates, maps each lane, and drafts dispute letters.</p></div></li>
+          <li><time datetime="2026-11-13">13 Nov 2026</time><div><h3>Cost insights</h3><p>Why spend moved, 90-day price trends, and how much depends on a single supplier.</p></div></li>
+          <li><time datetime="2026-11-12">12 Nov 2026</time><div><h3>Two-step verification</h3><p>Protect your sign-in with a code from an authenticator app.</p></div></li>
+          <li><time datetime="2026-11-11">11 Nov 2026</time><div><h3>More invoice checks</h3><p>Tax, freight, bank detail changes, shortened payment terms and duplicate payments.</p></div></li>
+        </ol>
       </div>
     </section>
 
@@ -431,11 +432,11 @@
     <section class="closing" id="pricing" aria-labelledby="pricing-title">
       <div class="wrap closing-inner">
         <div class="price-card">
-          <h2 id="pricing-title">Try MarginGuard free for 14 days</h2>
+          <h2 id="pricing-title">Try MarginGuard free</h2>
           <p>No card required.</p>
           <p class="free-badge"><span class="free-dot" aria-hidden="true"></span>The preview stays free while paid billing is unavailable.</p>
           <p class="price-line"><strong>$9</strong> per month planned price, in USD</p>
-          <a class="button primary" data-launch href="https://app.tirthalkothari.com/">Create your workspace</a>
+          <a class="button primary" data-launch="signup" href="https://app.tirthalkothari.com/#/signup">Create your workspace</a>
         </div>
         <div class="founder">
           <h3>About MarginGuard</h3>

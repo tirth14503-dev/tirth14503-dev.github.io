@@ -4,6 +4,7 @@ fetch('/marginguard/app-link.json?v=' + Date.now(), {cache:'no-store'})
   .then(data => {
     const url = new URL(data.url);
     if(url.protocol !== 'https:' || url.username || url.password || url.port || !/^(?:[a-z0-9-]+\.trycloudflare\.com|app\.tirthalkothari\.com)$/.test(url.hostname)) return;
-    document.querySelectorAll('[data-launch]').forEach(link => {link.href=url.href;});
+    // data-launch="signup" keeps the page address so Start free trial opens account creation.
+    document.querySelectorAll('[data-launch]').forEach(link => {const target = new URL(url.href); if (link.dataset.launch) target.hash = '/' + link.dataset.launch; link.href = target.href;});
   })
   .catch(() => {/* Keep the portfolio's app launch page as the fallback. */});
