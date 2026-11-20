@@ -282,7 +282,6 @@ footer nav a:hover { color: #fff; }
 
 @media (max-width: 1000px) {
   .cap-grid, .trust-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .header nav { gap: 1.4rem; }
 }
 @media (max-width: 880px) {
   .module-grid, .faq-inner, .tracker, .changelog-inner, .contact-inner, .templates, .screen-pair { grid-template-columns: minmax(0, 1fr); }
@@ -302,10 +301,8 @@ footer nav a:hover { color: #fff; }
   .tracker-figures dd { font-size: 1.4rem; }
   .field-row { grid-template-columns: minmax(0, 1fr); }
   .change-list li { grid-template-columns: minmax(0, 1fr); gap: .25rem; }
-  .nav-cta { display: none; }
 }
 @media (max-width: 880px) {
-  .header nav { display: none; }
   .hero-inner, .closing-inner { grid-template-columns: minmax(0, 1fr); }
   .workflow-steps { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; }
   .founder { padding: 2rem 0 0; border-left: 0; border-top: 1px solid var(--navy-line); }
@@ -332,9 +329,35 @@ footer nav a:hover { color: #fff; }
 .header nav.section-nav a { position: relative; white-space: nowrap; }
 .header nav.section-nav a[aria-current="true"] { color: #fff; }
 .header nav.section-nav a[aria-current="true"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; border-radius: 2px; background: var(--powder); }
-@media (max-width: 1000px) {
-  .header-inner { flex-wrap: wrap; row-gap: 0; }
-  .header nav.section-nav { display: flex; order: 3; width: 100%; gap: 1.2rem; overflow-x: auto; padding: .2rem 0 .7rem; scrollbar-width: none; font-size: .85rem; }
-  .header nav.section-nav::-webkit-scrollbar { display: none; }
-  .nav-sales { margin-left: auto; }
+
+/* Layout round: five-link menu. Below 1100px a Menu button opens the links as a panel; Sign in always shows. */
+.menu-button, .header nav.section-nav .menu-only { display: none; }
+@media (max-width: 1099.98px) {
+  .header-inner { gap: 1rem; }
+  .nav-cta { display: inline-flex; align-items: center; min-height: 44px; }
+  .menu-button { display: inline-flex; align-items: center; gap: .55rem; min-height: 44px; padding: 0 .8rem; border: 1px solid rgba(178, 206, 226, .45); border-radius: 4px; background: none; color: var(--on-navy); font-size: .9rem; font-weight: 500; }
+  .menu-button:hover { border-color: var(--powder); background: rgba(178, 206, 226, .1); }
+  .menu-button:focus-visible { outline-color: var(--powder); }
+  .menu-icon, .menu-icon::before, .menu-icon::after { display: block; width: 16px; height: 2px; border-radius: 1px; background: currentColor; }
+  .menu-icon { position: relative; }
+  .menu-icon::before, .menu-icon::after { content: ""; position: absolute; left: 0; top: -5px; }
+  .menu-icon::after { top: 5px; }
+  .menu-button[aria-expanded="true"] .menu-icon { background: transparent; }
+  .menu-button[aria-expanded="true"] .menu-icon::before { top: 0; transform: rotate(45deg); }
+  .menu-button[aria-expanded="true"] .menu-icon::after { top: 0; transform: rotate(-45deg); }
+  .header nav.section-nav { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 0; padding: .4rem calc((100% - var(--wrap)) / 2) 1rem; background: var(--navy); border-bottom: 1px solid var(--navy-line); box-shadow: 0 18px 32px rgba(10, 20, 40, .35); font-size: 1rem; }
+  .header nav.section-nav.open { display: flex; }
+  .header nav.section-nav a { display: flex; align-items: center; min-height: 48px; border-top: 1px solid var(--navy-line); }
+  .header nav.section-nav a:first-child { border-top: 0; }
+  .header nav.section-nav a[aria-current="true"]::after { top: 14px; bottom: 14px; left: -12px; right: auto; width: 3px; height: auto; }
+}
+@media (max-width: 600px) {
+  .nav-sales { display: none; }
+  .header nav.section-nav .menu-only { display: flex; }
+  .header .brand, footer .brand { min-height: 44px; }
+  /* Touch targets: at least 44px tall on phones. */
+  footer nav { flex-wrap: wrap; gap: 0 1.25rem; }
+  footer nav a { display: inline-flex; align-items: center; min-height: 44px; }
+  .text-link { position: relative; }
+  .text-link::before { content: ""; position: absolute; left: -4px; right: -4px; top: 50%; height: 44px; transform: translateY(-50%); }
 }

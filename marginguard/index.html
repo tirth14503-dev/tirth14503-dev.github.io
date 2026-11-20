@@ -31,21 +31,22 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
   <meta name="theme-color" content="#13233d">
   <link rel="stylesheet" href="quick-tour.css?v=4">
-  <link rel="stylesheet" href="story.css?v=12">
+  <link rel="stylesheet" href="story.css?v=13">
   <script src="launch.js?v=4" defer></script>
   <script src="story.js?v=4" defer></script>
   <script src="quick-tour.js?v=2" defer></script>
   <script src="contact.js?v=2" defer></script>
-  <script src="section-nav.js?v=1" defer></script>
+  <script src="section-nav.js?v=2" defer></script>
 </head>
 <body data-guide-auto="off">
   <a class="skip" href="#main">Skip to content</a>
   <header class="header">
     <div class="wrap header-inner">
       <a class="brand" href="#top" aria-label="MarginGuard home"><svg viewBox="0 0 32 34" aria-hidden="true"><path d="M3 28V6l13 7L29 6v22l-13-7Z"/><path d="M3 6 16 1l13 5M16 13v21"/></svg>MarginGuard</a>
-      <nav aria-label="Main navigation" class="section-nav"><a href="#film">Overview</a><a href="#product">Product</a><a href="#checks">Checks</a><a href="#freight">Freight</a><a href="#workflow">Setup</a><a href="#data">Your data</a><a href="#faq">Questions</a><a href="#pricing">Pricing</a></nav>
+      <nav aria-label="Main navigation" class="section-nav" id="site-menu"><a href="#product">Product</a><a href="#free-scan">Free scan</a><a href="#freight">Freight</a><a href="#data">Security</a><a href="#pricing">Pricing</a><a class="menu-only" href="#contact">Talk to the founder</a></nav>
       <a class="nav-cta" data-launch href="https://app.tirthalkothari.com/">Sign in</a>
       <a class="nav-sales" href="#contact">Talk to the founder</a>
+      <button type="button" class="menu-button" aria-expanded="false" aria-controls="site-menu"><span class="menu-icon" aria-hidden="true"></span>Menu</button>
     </div>
   </header>
   <main id="main">
@@ -124,7 +125,7 @@
       </div>
     </section>
 
-    <section class="workflow scan-steps" aria-labelledby="scan-steps-title">
+    <section class="workflow scan-steps" id="free-scan" aria-labelledby="scan-steps-title">
       <div class="wrap">
         <header class="intro">
           <h2 id="scan-steps-title">How the free scan works</h2>
@@ -444,6 +445,6 @@
       </div>
     </section>
   </main>
-  <footer><div class="wrap footer-inner"><a class="brand" href="#top">MarginGuard</a><nav aria-label="Footer"><a href="/">Tirthal Kothari</a><a href="#contact">Talk to the founder</a></nav><span>© 2026 MarginGuard</span></div></footer>
+  <footer><div class="wrap footer-inner"><a class="brand" href="#top">MarginGuard</a><nav aria-label="Footer"><a href="#film">Overview</a><a href="#checks">Checks</a><a href="#workflow">Setup</a><a href="#faq">Questions</a><a href="/">Tirthal Kothari</a><a href="#contact">Talk to the founder</a></nav><span>© 2026 MarginGuard</span></div></footer>
 </body>
 </html>
