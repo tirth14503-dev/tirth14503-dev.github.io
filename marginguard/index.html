@@ -35,7 +35,7 @@
   <script src="launch.js?v=4" defer></script>
   <script src="story.js?v=4" defer></script>
   <script src="quick-tour.js?v=2" defer></script>
-  <script src="contact.js?v=1" defer></script>
+  <script src="contact.js?v=2" defer></script>
   <script src="section-nav.js?v=1" defer></script>
 </head>
 <body data-guide-auto="off">
@@ -45,17 +45,17 @@
       <a class="brand" href="#top" aria-label="MarginGuard home"><svg viewBox="0 0 32 34" aria-hidden="true"><path d="M3 28V6l13 7L29 6v22l-13-7Z"/><path d="M3 6 16 1l13 5M16 13v21"/></svg>MarginGuard</a>
       <nav aria-label="Main navigation" class="section-nav"><a href="#film">Overview</a><a href="#product">Product</a><a href="#checks">Checks</a><a href="#freight">Freight</a><a href="#workflow">Setup</a><a href="#data">Your data</a><a href="#faq">Questions</a><a href="#pricing">Pricing</a></nav>
       <a class="nav-cta" data-launch href="https://app.tirthalkothari.com/">Sign in</a>
-      <a class="nav-sales" href="#contact">Contact sales</a>
+      <a class="nav-sales" href="#contact">Talk to the founder</a>
     </div>
   </header>
   <main id="main">
     <section class="hero" id="top" aria-labelledby="hero-title">
       <div class="wrap hero-inner">
         <div class="hero-copy">
-          <p class="free-badge"><span class="free-dot" aria-hidden="true"></span>The preview stays free while paid billing is unavailable.</p>
-          <p class="kicker">Free overpayment scan</p>
+          <p class="free-badge"><span class="free-dot" aria-hidden="true"></span>Free during early access.</p>
+          <p class="kicker">For distributors and manufacturers</p>
           <h1 id="hero-title">Find out what you overpaid suppliers. Free, in minutes.</h1>
-          <p class="lede">Drop your supplier invoices and purchase orders, and goods receipts if you have them. MarginGuard checks prices, quantities, items billed but not received, and invoices sent twice, and shows how much you likely overpaid. With a free account it also checks payments, credit notes and contract prices.</p>
+          <p class="lede">Drop your supplier invoices and orders. See what you likely overpaid, with the rows behind every amount.</p>
           <div class="actions">
             <a class="button primary" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan">Free overpayment scan</a>
             <a class="button ghost" data-launch="signup" href="https://app.tirthalkothari.com/#/signup">Create your account</a>
@@ -65,7 +65,7 @@
         </div>
         <figure class="example" aria-labelledby="example-title">
           <figcaption class="example-top">
-            <span class="example-title" id="example-title">Example audit</span>
+            <span class="example-title" id="example-title">Example audit · Northgate Parts</span>
             <span class="sample-label">Sample data</span>
           </figcaption>
           <div class="example-tabs" role="tablist" aria-label="Example findings" hidden>
@@ -131,8 +131,8 @@
         </header>
         <ol class="workflow-steps">
           <li><h3>Drop your files</h3><p>Supplier invoices and purchase orders as CSV or Excel exports, including from Tally, QuickBooks Online and Xero. Add goods receipts if you have them.</p></li>
-          <li><h3>See your total</h3><p>How much you likely overpaid, a separate amount that needs a look, and counts by type. Nothing is stored.</p></li>
-          <li><h3>Open the evidence</h3><p>Create a free account; new accounts join a short waitlist. Once yours is ready, run the scan again to see each invoice, the rows behind every claim and claim letters.</p></li>
+          <li><h3>See your total</h3><p>Prices, quantities, items billed but not received and invoices sent twice are checked. You see how much you likely overpaid, a separate amount that needs a look, and counts by type. Nothing is stored.</p></li>
+          <li><h3>Open the evidence</h3><p>Create a free account; new accounts join a short waitlist. Once yours is ready, run the scan again to see each invoice, the rows behind every claim and claim letters. Accounts also check payments, credit notes and contract prices.</p></li>
         </ol>
       </div>
     </section>
@@ -178,22 +178,8 @@
             <p>Compares billed prices with agreed prices and billed quantities with orders and receipts. Repeated lines are flagged for you to inspect before anything is treated as a duplicate charge.</p>
           </article>
           <article class="cap">
-            <h3>Inventory</h3>
-            <p>Shows how long stock may last and where you hold more than your target.</p>
-            <div class="meter" role="img" aria-label="Example: 4 days of stock against a 7 day lead time">
-              <div class="meter-row"><span>Stock on hand</span><strong>4 days</strong></div>
-              <div class="meter-track"><span style="--value:57%"></span></div>
-              <div class="meter-row"><span>Supplier lead time</span><strong>7 days</strong></div>
-              <div class="meter-track lead"><span style="--value:100%"></span></div>
-            </div>
-          </article>
-          <article class="cap">
-            <h3>Planning</h3>
-            <p>Compare supplier offers on cost and timing, or test a product mix against the cash and capacity limits you enter.</p>
-          </article>
-          <article class="cap">
-            <h3>Review history</h3>
-            <p>Record what you decided and why. Later, log what happened and compare it with what you expected.</p>
+            <h3>Also included</h3>
+            <p>How long stock may last and where you hold more than your target; supplier offers compared on cost and timing; and a record of what you decided, with what happened next.</p>
           </article>
         </div>
         <p class="assistant-note">An optional AI assistant can explain the evidence or find a past review. Decisions are approved in the workspace, and orders, messages and payments are handled outside it.</p>
@@ -267,7 +253,7 @@
               <li>Dispute letter drafts per carrier, to copy and send yourself</li>
             </ul>
             <table class="mini-table" aria-label="Sample freight lanes">
-              <caption>Lanes, sample data</caption>
+              <caption>Northgate Parts lanes, sample data</caption>
               <thead><tr><th scope="col">Lane</th><th scope="col" class="num">Loads</th><th scope="col" class="num">Flagged</th></tr></thead>
               <tbody>
                 <tr><td>Chicago, IL to Dallas, TX</td><td class="num">42</td><td class="num">$1,180</td></tr>
@@ -287,7 +273,7 @@
               <li>Items you buy from only one supplier</li>
             </ul>
             <table class="mini-table" aria-label="Sample change in spend">
-              <caption>Change in spend, last 90 days, sample data</caption>
+              <caption>Northgate Parts, change in spend, last 90 days, sample data</caption>
               <tbody>
                 <tr><td>Price changes</td><td class="num">+$3,420</td></tr>
                 <tr><td>Buying more or less</td><td class="num">−$1,150</td></tr>
@@ -312,7 +298,7 @@
           <li><h3>Review a finding</h3><p>Open a flagged item and check the records and calculation behind it.</p></li>
           <li><h3>Record the outcome</h3><p>Save a decision and update it when you know what happened.</p></li>
         </ol>
-        <div class="workflow-bottom"><button type="button" class="text-link" data-guide-start>Take the quick tour</button><p>Live ERP sync is in development.</p></div>
+        <div class="workflow-bottom"><button type="button" class="text-link" data-guide-start>Take the quick tour</button></div>
         <div class="templates" aria-labelledby="templates-title">
           <div class="templates-copy">
             <h3 id="templates-title">Sample files</h3>
@@ -334,11 +320,11 @@
             <p>The audit overview keeps a running total of what was found, what you raised with suppliers, and the credits or refunds you recorded. Each finding is counted once.</p>
           </div>
           <dl class="tracker-figures">
-            <div><dt>Found</dt><dd>$4,210</dd></div>
-            <div><dt>Claimed</dt><dd>$2,980</dd></div>
-            <div><dt>Credited</dt><dd>$1,640</dd></div>
+            <div><dt>Found</dt><dd>$320</dd></div>
+            <div><dt>Claimed</dt><dd>$320</dd></div>
+            <div><dt>Credited</dt><dd>$240</dd></div>
           </dl>
-          <p class="tracker-note">Sample workspace</p>
+          <p class="tracker-note">Sample: Northgate Parts, invoice INV-3016 above. $120 price gap (60 units at $2) and $200 for 20 units not received (at the $10 order price); the supplier has credited the $240 billed for those 20 units so far.</p>
         </div>
       </div>
     </section>
@@ -351,7 +337,7 @@
         <div class="trust-grid">
           <div><h3>Calculations, not guesses</h3><p>Findings come from fixed rules you can read in the finding itself. The AI assistant is optional, and it can’t approve a decision for you.</p></div>
           <div><h3>Nothing is sent for you</h3><p>Dispute letters and quote requests are drafts. You copy them and send them yourself, to the people you choose.</p></div>
-          <div><h3>PDFs are reviewed by you</h3><p>Scanned or PDF invoices are never read into an audit automatically. They go to document assistance, where you check each page against the original.</p></div>
+          <div><h3>PDF and scanned invoices</h3><p>PDF and scanned invoices are read automatically. Anything the reader isn’t sure of is marked “needs a look” and never counted.</p></div>
           <div><h3>Protected sign-in</h3><p>Turn on two-step verification, so signing in needs a code from an authenticator app as well as your password.</p></div>
         </div>
       </div>
@@ -361,7 +347,7 @@
       <div class="wrap faq-inner">
         <header class="intro">
           <h2 id="faq-title">Questions</h2>
-          <p>Something else? <a class="text-link" href="mailto:tirth14503@gmail.com?subject=MarginGuard%20question">Email me</a>.</p>
+          <p>Something else? <a class="text-link" href="#contact">Ask me</a>.</p>
         </header>
         <div class="faq-list">
           <details>
@@ -370,7 +356,7 @@
           </details>
           <details>
             <summary>Does it work with my accounting system?</summary>
-            <p>Export your bills and purchase orders from Tally, QuickBooks Online or Xero and import the files. A live connection to accounting systems is in development.</p>
+            <p>Export your bills and purchase orders from Tally, QuickBooks Online or Xero and import the files.</p>
           </details>
           <details>
             <summary>Is a finding proof that the supplier overcharged?</summary>
@@ -382,11 +368,11 @@
           </details>
           <details>
             <summary>Where is my data stored?</summary>
-            <p>On the computer that runs MarginGuard, which is my own PC. Only upload business records you have permission to use.</p>
+            <p>Free-scan files are checked in memory and not stored. Files you upload to an account are kept in your workspace, which other customers can’t see. You can remove uploaded payment, credit-note and contract files yourself; to delete your whole account and its audits, ask me and I’ll remove it. Only upload records you have permission to use.</p>
           </details>
           <details>
             <summary>What does it cost?</summary>
-            <p><mark class="free-mark">The preview is free while paid billing is unavailable.</mark> The planned price is $9 USD per month, and a new workspace starts with a 14-day trial with no card required.</p>
+            <p><mark class="free-mark">Free during early access.</mark> Pricing will be announced before anything is charged.</p>
           </details>
         </div>
       </div>
@@ -395,16 +381,13 @@
     <section class="changelog" id="changes" aria-labelledby="changes-title">
       <div class="wrap changelog-inner">
         <header class="intro">
-          <h2 id="changes-title">What’s new</h2>
-          <p>Recent releases. MarginGuard is updated often, and each release is tested before it goes live.</p>
+          <h2 id="changes-title">Recently added</h2>
+          <p>Three recent additions.</p>
         </header>
         <ol class="change-list">
-          <li><time datetime="2026-11-13">13 Nov 2026</time><div><h3>Freight imports accept real-world files</h3><p>Carrier invoice exports with different headers, date formats and delimiters now import without editing.</p></div></li>
-          <li><time datetime="2026-11-13">13 Nov 2026</time><div><h3>Carrier match and route planner</h3><p>See lanes where a carrier you already use cost less, draft quote requests, and estimate multi-stop routes.</p></div></li>
-          <li><time datetime="2026-11-13">13 Nov 2026</time><div><h3>Freight audit with lane map</h3><p>Checks carrier invoices against shipments and agreed rates, maps each lane, and drafts dispute letters.</p></div></li>
-          <li><time datetime="2026-11-13">13 Nov 2026</time><div><h3>Cost insights</h3><p>Why spend moved, 90-day price trends, and how much depends on a single supplier.</p></div></li>
-          <li><time datetime="2026-11-12">12 Nov 2026</time><div><h3>Two-step verification</h3><p>Protect your sign-in with a code from an authenticator app.</p></div></li>
-          <li><time datetime="2026-11-11">11 Nov 2026</time><div><h3>More invoice checks</h3><p>Tax, freight, bank detail changes, shortened payment terms and duplicate payments.</p></div></li>
+          <li><small>Free scan</small><div><h3>Free overpayment scan</h3><p>Drop invoices and orders and see what you likely overpaid, before creating an account. Files are checked in memory and not stored.</p></div></li>
+          <li><small>Accounts</small><div><h3>Credit notes and contract prices</h3><p>Store credit notes and agreed prices in your account. The overpayment scan checks every invoice against them.</p></div></li>
+          <li><small>Freight</small><div><h3>Diesel fuel surcharge check</h3><p>Freight audit checks fuel surcharges against weekly US diesel prices and the fuel table you agreed with each carrier.</p></div></li>
         </ol>
       </div>
     </section>
@@ -412,11 +395,12 @@
     <section class="contact" id="contact" aria-labelledby="contact-title">
       <div class="wrap contact-inner">
         <div class="contact-copy">
-          <h2 id="contact-title">Talk to sales</h2>
+          <h2 id="contact-title">Talk to the founder</h2>
           <p>Tell me about your suppliers and the records you keep. I read every request and reply by email.</p>
           <dl class="contact-facts">
             <div><dt>Good for</dt><dd>Teams checking more invoices than they can review line by line, or carriers billing many lanes.</dd></div>
-            <div><dt>Prefer email?</dt><dd><a class="text-link" href="mailto:tirth14503@gmail.com?subject=MarginGuard%20sales">tirth14503@gmail.com</a></dd></div>
+            <!-- Domain email: when a domain address exists, add data-email="hello@…" to the form below (contact.js uses it if sending fails)
+                 and add a row here: <div><dt>Prefer email?</dt><dd><a class="text-link" href="mailto:hello@…">hello@…</a></dd></div> -->
           </dl>
         </div>
         <form class="contact-form" id="contact-form" novalidate>
@@ -448,18 +432,18 @@
         <div class="price-card">
           <h2 id="pricing-title">Try MarginGuard free</h2>
           <p>No card required.</p>
-          <p class="free-badge"><span class="free-dot" aria-hidden="true"></span>The preview stays free while paid billing is unavailable.</p>
-          <p class="price-line"><strong>$9</strong> per month planned price, in USD</p>
+          <p class="free-badge"><span class="free-dot" aria-hidden="true"></span>Free during early access.</p>
+          <p class="price-line">Pricing will be announced before anything is charged.</p>
           <a class="button primary" data-launch="signup" href="https://app.tirthalkothari.com/#/signup">Create your account</a>
         </div>
         <div class="founder">
           <h3>About MarginGuard</h3>
-          <p>I’m Tirthal Kothari. I built MarginGuard and host it on my own PC, so availability depends on that computer staying online. Start with the sample, and upload business records only if you have permission to use them.</p>
-          <a class="text-link" href="mailto:tirth14503@gmail.com?subject=MarginGuard">Get in touch</a>
+          <p>I’m Tirthal Kothari. I build and run MarginGuard myself, and it’s in early access. Free-scan files are checked in memory and not stored. What you upload to an account stays in your workspace, and I’ll delete your account on request. Start with the sample, and upload business records only if you have permission to use them.</p>
+          <a class="text-link" href="#contact">Talk to the founder</a>
         </div>
       </div>
     </section>
   </main>
-  <footer><div class="wrap footer-inner"><a class="brand" href="#top">MarginGuard</a><nav aria-label="Footer"><a href="/">Tirthal Kothari</a><a href="mailto:tirth14503@gmail.com?subject=MarginGuard">Contact</a></nav><span>© 2026 MarginGuard</span></div></footer>
+  <footer><div class="wrap footer-inner"><a class="brand" href="#top">MarginGuard</a><nav aria-label="Footer"><a href="/">Tirthal Kothari</a><a href="#contact">Talk to the founder</a></nav><span>© 2026 MarginGuard</span></div></footer>
 </body>
 </html>

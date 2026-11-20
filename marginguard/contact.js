@@ -5,7 +5,8 @@
   const status = document.getElementById('contact-status');
   const button = form.querySelector('button[type="submit"]');
   const ENDPOINT = 'https://app.tirthalkothari.com/api/public/sales-request';
-  const EMAIL = 'tirth14503@gmail.com';
+  // A fallback address can be set with data-email on the form (see the comment in index.html). None is published yet.
+  const EMAIL = form.dataset.email || '';
   let started = 0;
 
   const begin = () => { if (!started) started = Date.now(); };
@@ -18,9 +19,13 @@
   }
 
   function fallback(data) {
+    if (!EMAIL) {
+      say('The request couldn’t be sent just now. Please try again in a few minutes.', 'error');
+      return;
+    }
     const body = `Name: ${data.name}\nCompany: ${data.company}\nRole: ${data.role}\nTeam size: ${data.team_size}\nInterested in: ${data.topic}\n\n${data.message}`;
     const link = document.createElement('a');
-    link.href = `mailto:${EMAIL}?subject=${encodeURIComponent('MarginGuard sales request')}&body=${encodeURIComponent(body)}`;
+    link.href = `mailto:${EMAIL}?subject=${encodeURIComponent('MarginGuard request')}&body=${encodeURIComponent(body)}`;
     link.textContent = 'send it by email instead';
     link.className = 'text-link';
     status.textContent = 'The request couldn’t be sent just now. You can ';
