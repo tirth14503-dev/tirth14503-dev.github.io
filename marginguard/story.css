@@ -269,7 +269,8 @@ section.audience { padding-block: clamp(3rem, 6vw, 4.5rem); }
 .price-card > p.free-badge { margin-top: .9rem; color: #f5d68c; }
 .free-dot { flex: none; width: .5rem; height: .5rem; border-radius: 50%; background: #f0c96e; box-shadow: 0 0 0 3px rgba(240, 201, 110, .25); }
 .free-mark { padding: .05em .3em; border-radius: 4px; background: #fbefcf; color: #5e430a; font-weight: 500; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-.closing .text-link { color: var(--powder); }
+.closing .text-link, .hero .text-link { color: var(--powder); }
+.hero .actions { align-items: center; }
 .closing .text-link:hover { color: #fff; }
 
 /* Footer */
