@@ -22,7 +22,7 @@ __glReady(function initHeroPort(){
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(PAGE_BG, 15, 36);
+  scene.fog = new THREE.Fog(PAGE_BG, 19, 42);
   const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 120);
 
   /* ── lighting: warm key sun, cool sky fill, subtle rim ── */
@@ -189,12 +189,44 @@ __glReady(function initHeroPort(){
     return m;
   }
 
+  /* soft studio reflection so paint and chrome read as metal (shared by water, truck) */
+  const sceneEnv = (function(){
+    try{
+      const tex = cvs(256, 128, (g, w, h) => {
+        const gr = g.createLinearGradient(0, 0, 0, h);
+        gr.addColorStop(0, '#ffffff'); gr.addColorStop(0.42, '#dfe6ee');
+        gr.addColorStop(0.5, '#9aa3ad'); gr.addColorStop(1, '#4a4f56');
+        g.fillStyle = gr; g.fillRect(0, 0, w, h);
+      });
+      tex.mapping = THREE.EquirectangularReflectionMapping;
+      const pm = new THREE.PMREMGenerator(renderer);
+      const env = pm.fromEquirectangular(tex).texture;
+      pm.dispose(); tex.dispose();
+      return env;
+    }catch(e){ return null; }
+  })();
+
   /* ══════════ water ══════════ */
   const waterGeo = new THREE.PlaneGeometry(40, 22, 52, 30);
   waterGeo.rotateX(-Math.PI/2);
   const waterBase = waterGeo.attributes.position.array.slice();
-  const water = new THREE.Mesh(waterGeo, new THREE.MeshStandardMaterial({
-    color: 0xafc2c8, roughness: 0.3, metalness: 0.55, transparent: true, opacity: 0.96
+  /* harbour water: deep blue-green, sky reflections, wind ripple streaks */
+  const texRipple = cvs(256, 256, (ctx, w, h) => {
+    ctx.fillStyle = '#c9d3d6'; ctx.fillRect(0, 0, w, h);
+    for(let i = 0; i < 520; i++){
+      const y = Math.random() * h, x = Math.random() * w, len = 8 + Math.random() * 34;
+      const light = Math.random() < 0.55;
+      ctx.strokeStyle = light ? 'rgba(235,245,250,' + (0.16 + Math.random() * 0.22) + ')'
+                              : 'rgba(20,40,52,' + (0.12 + Math.random() * 0.2) + ')';
+      ctx.lineWidth = 0.8 + Math.random() * 1.4;
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo(x + len / 2, y - 1.5, x + len, y); ctx.stroke();
+    }
+  });
+  texRipple.wrapS = texRipple.wrapT = THREE.RepeatWrapping;
+  texRipple.repeat.set(9, 6);
+  const water = new THREE.Mesh(waterGeo, new THREE.MeshPhysicalMaterial({
+    color: 0x164a5e, map: texRipple, roughness: 0.22, metalness: 0,
+    clearcoat: 0.35, clearcoatRoughness: 0.2, envMap: sceneEnv, envMapIntensity: 0.22
   }));
   water.position.set(0, 0, -3);
   water.receiveShadow = true;
@@ -478,7 +510,7 @@ __glReady(function initHeroPort(){
       const stack = 1 + ((si * 2 + r * 3) % 3);
       for(let t = 0; t < stack; t++){
         const c = makeContainer(si);
-        c.position.set(st[0], 0.87 + t * 0.63, 3.6 + r * 1.2);
+        c.position.set(st[0] + r * 1.3, 0.87 + t * 0.63, 4.75);
         c.rotation.y = (Math.random() - 0.5) * 0.02;
         scene.add(c);
       }
@@ -489,23 +521,7 @@ __glReady(function initHeroPort(){
      Real-world proportions: sculpted cab profile (raked windshield, sloped
      hood, high sleeper), chrome grille/bumper/tanks/stacks, rounded tyres
      with duals on drive and trailer axles, skeletal 20ft container chassis. */
-  const truck = new THREE.Group();
-  /* soft studio reflection so paint and chrome read as metal (truck only) */
-  const truckEnv = (function(){
-    try{
-      const tex = cvs(256, 128, (g, w, h) => {
-        const gr = g.createLinearGradient(0, 0, 0, h);
-        gr.addColorStop(0, '#ffffff'); gr.addColorStop(0.42, '#dfe6ee');
-        gr.addColorStop(0.5, '#9aa3ad'); gr.addColorStop(1, '#4a4f56');
-        g.fillStyle = gr; g.fillRect(0, 0, w, h);
-      });
-      tex.mapping = THREE.EquirectangularReflectionMapping;
-      const pm = new THREE.PMREMGenerator(renderer);
-      const env = pm.fromEquirectangular(tex).texture;
-      pm.dispose(); tex.dispose();
-      return env;
-    }catch(e){ return null; }
-  })();
+  const truckEnv = sceneEnv;
   const paintMat = new THREE.MeshPhysicalMaterial({ color: 0x0b1a2e, metalness: 0.3, roughness: 0.3,
     clearcoat: 1, clearcoatRoughness: 0.1, envMap: truckEnv, envMapIntensity: 0.45 });
   const chromeMat = new THREE.MeshStandardMaterial({ color: 0xe8ebef, metalness: 1, roughness: 0.16,
@@ -519,6 +535,8 @@ __glReady(function initHeroPort(){
   const lampMat = new THREE.MeshStandardMaterial({ color: 0xfff4d6, emissive: 0xfff1c9, emissiveIntensity: 0.55, roughness: 0.2 });
   const amberMat = new THREE.MeshStandardMaterial({ color: 0xffb347, emissive: 0xff9a1f, emissiveIntensity: 0.5 });
   const tailMat = new THREE.MeshStandardMaterial({ color: 0xc0262d, emissive: 0x9e1218, emissiveIntensity: 0.45 });
+  function makeTruck(paint, boxIdx){
+  const truck = new THREE.Group();
   function addT(geo, mat, x, y, z, shadow){
     const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z);
     if(shadow !== false) m.castShadow = true;
@@ -550,7 +568,7 @@ __glReady(function initHeroPort(){
   const cabGeo = new THREE.ExtrudeGeometry(prof, { depth: CAB_W, bevelEnabled: true,
     bevelThickness: 0.028, bevelSize: 0.022, bevelSegments: 4, curveSegments: 18 });
   cabGeo.translate(0, 0, -CAB_W / 2);
-  const tcab = addT(cabGeo, paintMat, 0, 0, 0);
+  const tcab = addT(cabGeo, paint, 0, 0, 0);
   tcab.receiveShadow = true;
   const SIDE = CAB_W / 2 + 0.028;
 
@@ -625,7 +643,7 @@ __glReady(function initHeroPort(){
   addT(new THREE.BoxGeometry(0.03, 0.04, 0.7), alloyMat, -1.33, 0.17, 0);
   [-0.18, 0.18].forEach(z => addT(new THREE.BoxGeometry(0.02, 0.17, 0.02), frameMat, -1.32, 0.27, z));
   [-0.32, 0.32].forEach(z => addT(new THREE.BoxGeometry(0.015, 0.03, 0.08), tailMat, -1.145, 0.39, z, false));
-  const tbox = makeContainer(1);
+  const tbox = makeContainer(boxIdx);
   tbox.position.set(-0.53, 0.725, 0);
   truck.add(tbox);
   /* mud flaps behind the drive and trailer tandems */
@@ -669,8 +687,82 @@ __glReady(function initHeroPort(){
       wheel(x, s * 0.355, -s);
     });
   });
+  return { truck, wheels, tbox, tcab };
+  }
+  /* lane truck: runs the back lane */
+  const T1 = makeTruck(paintMat, 1);
+  const truck = T1.truck, wheels = T1.wheels, tcab = T1.tcab;
   truck.position.set(0, 0.555, 6.4);
   scene.add(truck);
+  /* crane truck: drives in under the crane, the crane lifts its box to the ship */
+  const T2 = makeTruck(new THREE.MeshPhysicalMaterial({ color: 0xe9e9e4, metalness: 0.15, roughness: 0.35,
+    clearcoat: 1, clearcoatRoughness: 0.1, envMap: truckEnv, envMapIntensity: 0.5 }), 3);
+  const truck2 = T2.truck;
+  truck2.position.set(-14, 0.555, 3.6);
+  scene.add(truck2);
+
+  /* ══════════ dock workers — hard hats, hi-vis vests ══════════ */
+  const skinMats = [0x8d5a3b, 0xc58c63, 0x5e3a24, 0xe0b08a].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.8 }));
+  const vestMats = [0xff7a1a, 0xd8f03a].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.6, emissive: c, emissiveIntensity: 0.12 }));
+  const bandMat = new THREE.MeshStandardMaterial({ color: 0xe6e9ec, roughness: 0.3, metalness: 0.6 });
+  const pantsMat = new THREE.MeshStandardMaterial({ color: 0x1f2a3a, roughness: 0.85 });
+  const bootMat = new THREE.MeshStandardMaterial({ color: 0x1a1410, roughness: 0.7 });
+  const hatMats = [0xf4f4f0, 0xf2c230, 0xf4f4f0].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.35 }));
+  function limb(len, r, mat){
+    /* pivot at the top so rotations swing from hip / shoulder */
+    const g = new THREE.Group();
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r * 0.9, len, 8), mat);
+    m.position.y = -len / 2; m.castShadow = true; g.add(m);
+    return g;
+  }
+  function makeWorker(i){
+    const w = new THREE.Group();
+    const H = 0.44;                                   /* ~1.8 m at port scale */
+    const legL = limb(0.2, 0.022, pantsMat), legR = limb(0.2, 0.022, pantsMat);
+    legL.position.set(0, 0.215, 0.028); legR.position.set(0, 0.215, -0.028);
+    [legL, legR].forEach(l => {
+      const boot = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.025, 0.035), bootMat);
+      boot.position.set(0.012, -0.205, 0); l.add(boot);
+    });
+    w.add(legL, legR);
+    const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.045, 0.16, 12), vestMats[i % 2]);
+    torso.scale.x = 0.7; torso.position.y = 0.3; torso.castShadow = true; w.add(torso);
+    const band = new THREE.Mesh(new THREE.CylinderGeometry(0.0475, 0.0475, 0.014, 12), bandMat);
+    band.scale.x = 0.7; band.position.y = 0.27; w.add(band);
+    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.016, 0.02, 8), skinMats[i % 4]);
+    neck.position.y = 0.39; w.add(neck);
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.029, 14, 12), skinMats[i % 4]);
+    head.position.y = 0.42; head.castShadow = true; w.add(head);
+    const hat = new THREE.Mesh(new THREE.SphereGeometry(0.033, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2), hatMats[i % 3]);
+    hat.position.y = 0.428; w.add(hat);
+    const brim = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.038, 0.004, 14), hatMats[i % 3]);
+    brim.position.set(0.006, 0.43, 0); w.add(brim);
+    const armL = limb(0.17, 0.014, vestMats[i % 2]), armR = limb(0.17, 0.014, vestMats[i % 2]);
+    armL.position.set(0, 0.37, 0.042); armR.position.set(0, 0.37, -0.042);
+    [armL, armR].forEach(a => {
+      const hand = new THREE.Mesh(new THREE.SphereGeometry(0.012, 8, 6), skinMats[i % 4]);
+      hand.position.y = -0.175; a.add(hand);
+    });
+    w.add(armL, armR);
+    w.userData = { legL, legR, armL, armR };
+    w.scale.setScalar(H / 0.45);
+    w.position.y = 0.555;
+    scene.add(w);
+    return w;
+  }
+  /* signaller beside the crane lane, facing the truck, one arm guiding the lift */
+  const signaller = makeWorker(0);
+  signaller.position.set(5.7, 0.555, 3.0);
+  signaller.rotation.y = Math.PI;
+  /* line handlers at the bollards by the ship */
+  const lh1 = makeWorker(1); lh1.position.set(-0.4, 0.555, 2.55); lh1.rotation.y = Math.PI / 2 + 0.3;
+  lh1.userData.armR.rotation.x = 0.5;
+  const lh2 = makeWorker(2); lh2.position.set(-0.05, 0.555, 2.75); lh2.rotation.y = -Math.PI / 2 - 0.6;
+  const lh3 = makeWorker(3); lh3.position.set(7.2, 0.555, 2.5); lh3.rotation.y = 0.4;
+  lh3.userData.armL.rotation.x = -0.4;
+  /* walker pacing the apron */
+  const walker = makeWorker(4);
+  walker.position.set(-3, 0.555, 5.55);
 
   /* ══════════ cargo freighter overhead ══════════ */
   const plane = new THREE.Group();
@@ -892,6 +984,8 @@ __glReady(function initHeroPort(){
     pos.needsUpdate = true;
     waterGeo.computeVertexNormals();
     foam.material.map.offset.x = (foam.material.map.offset.x + 0.0012) % 1;
+    texRipple.offset.x = (texRipple.offset.x + 0.0004) % 1;
+    texRipple.offset.y = (texRipple.offset.y + 0.00025) % 1;
     glint.material.opacity = 0.32 + Math.sin(clock * 0.8) * 0.08;
 
     /* ship: gentle moored motion */
@@ -899,13 +993,19 @@ __glReady(function initHeroPort(){
     ship.rotation.z = Math.sin(clock * 0.7) * 0.008;
     ship.rotation.x = Math.sin(clock * 0.55 + 1) * 0.005;
 
-    /* crane work cycle: trolley out over ship, lower, lift, return */
-    const cyc = (clock * 0.12) % 1;
-    let tz, hy, carrying = true;
-    if(cyc < 0.3){        tz = 3.2 - (cyc / 0.3) * 4.4;          hy = 3.6; }
-    else if(cyc < 0.5){   tz = -1.2;                             hy = 3.6 - ((cyc - 0.3) / 0.2) * 1.9; }
-    else if(cyc < 0.7){   tz = -1.2;                             hy = 1.7 + ((cyc - 0.5) / 0.2) * 1.9; carrying = false; }
-    else {                tz = -1.2 + ((cyc - 0.7) / 0.3) * 4.4; hy = 3.6; carrying = false; }
+    /* crane work cycle: the crane truck drives in under the portal, the
+       spreader lowers onto its box, lifts it, runs out over the ship, sets it
+       down, returns empty; the truck leaves and the next one arrives */
+    const cyc = (clock * 0.1) % 1;
+    const LAND = 3.6, SEA = -1.2, TOP = 3.6, ON_TRUCK = 1.64, ON_SHIP = 1.7, PARK = 4.13;
+    const ease = t => t < 0 ? 0 : t > 1 ? 1 : t * t * (3 - 2 * t);
+    let tz = LAND, hy = TOP, carrying = false, truckHasBox = true;
+    if(cyc < 0.1){        hy = TOP - ease(cyc / 0.1) * (TOP - ON_TRUCK); }
+    else if(cyc < 0.2){   hy = ON_TRUCK + ease((cyc - 0.1) / 0.1) * (TOP - ON_TRUCK); carrying = true; truckHasBox = false; }
+    else if(cyc < 0.4){   tz = LAND + ease((cyc - 0.2) / 0.2) * (SEA - LAND); carrying = true; truckHasBox = false; }
+    else if(cyc < 0.52){  tz = SEA; hy = TOP - ease((cyc - 0.4) / 0.12) * (TOP - ON_SHIP); carrying = true; truckHasBox = false; }
+    else if(cyc < 0.64){  tz = SEA; hy = ON_SHIP + ease((cyc - 0.52) / 0.12) * (TOP - ON_SHIP); truckHasBox = false; }
+    else if(cyc < 0.84){  tz = SEA + ease((cyc - 0.64) / 0.2) * (LAND - SEA); truckHasBox = false; }
     trolley.position.z = tz;
     spreader.position.set(0, hy, tz);
     hangBox.visible = carrying;
@@ -916,6 +1016,24 @@ __glReady(function initHeroPort(){
       cb.position.set(i === 0 ? -0.28 : 0.28, (cableTop + hy) / 2, tz);
       cb.scale.y = cableLen;
     });
+    /* crane truck: parked while loaded, leaves empty, next one rolls in loaded */
+    let t2x = PARK;
+    if(cyc >= 0.24 && cyc < 0.6){ t2x = PARK + ease((cyc - 0.24) / 0.36) * 16; }
+    else if(cyc >= 0.6 && cyc < 0.66){ t2x = 40; }
+    else if(cyc >= 0.66){ t2x = -15 + ease((cyc - 0.66) / 0.34) * (PARK + 15); truckHasBox = true; }
+    const moving2 = Math.abs(t2x - truck2.position.x) > 0.001 && t2x < 30;
+    truck2.position.x = t2x;
+    truck2.visible = t2x < 30;
+    T2.tbox.visible = truckHasBox;
+    if(moving2) T2.wheels.forEach(w => { w.rotation.y += 0.12; });
+
+    /* dock workers: the walker paces the apron; the signaller waves the crane down */
+    walker.position.x = -3 + Math.sin(clock * 0.18) * 4.2;
+    walker.rotation.y = Math.cos(clock * 0.18) > 0 ? 0 : Math.PI;
+    const stride = Math.sin(clock * 6) * 0.45;
+    walker.userData.legL.rotation.z = stride; walker.userData.legR.rotation.z = -stride;
+    walker.userData.armL.rotation.z = -stride * 0.8; walker.userData.armR.rotation.z = stride * 0.8;
+    signaller.userData.armR.rotation.x = 2.5 + Math.sin(clock * 3) * 0.35;
 
     /* truck run */
     truck.position.x = -14 + ((clock * 1.1) % 28);
