@@ -18,6 +18,19 @@
     status.dataset.tone = tone || '';
   }
 
+  // Screen readers hear which field needs fixing: it is marked invalid and points at the message.
+  function markInvalid(name) {
+    const field = form.querySelector(`[name="${name}"]`);
+    field.setAttribute('aria-invalid', 'true');
+    field.setAttribute('aria-describedby', 'contact-status');
+    field.focus();
+  }
+  form.addEventListener('input', event => {
+    if (event.target.getAttribute('aria-invalid') !== 'true') return;
+    event.target.removeAttribute('aria-invalid');
+    event.target.removeAttribute('aria-describedby');
+  });
+
   function fallback(data) {
     if (!EMAIL) {
       say('The request couldn’t be sent just now. Please try again in a few minutes.', 'error');
@@ -40,12 +53,13 @@
     const missing = ['name', 'email', 'company'].filter(k => !data[k]);
     if (missing.length) {
       say('Please add your name, work email and company.', 'error');
-      form.querySelector(`[name="${missing[0]}"]`).focus();
+      missing.forEach(name => form.querySelector(`[name="${name}"]`).setAttribute('aria-invalid', 'true'));
+      markInvalid(missing[0]);
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
       say('Please check the email address.', 'error');
-      form.querySelector('[name="email"]').focus();
+      markInvalid('email');
       return;
     }
     data.elapsed_ms = started ? Date.now() - started : 0;
