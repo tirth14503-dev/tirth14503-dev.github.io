@@ -546,8 +546,6 @@ section:nth-child(odd){background:var(--bg);}
 #hero{background:var(--surface)!important;position:relative;overflow:hidden;}
 #hero-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:1;}
 @media(max-width:760px){#hero-canvas{display:none;}}
-/* Hero background scene removed: plain background behind the name card */
-#hero-canvas,#hero-mobile-scene,#hero-loading,#hero-explore-hint,#port-card,#port-daynight{display:none!important;}
 .hero-inner{
   position:relative;z-index:2;max-width:640px;
   background:rgba(255,255,255,.58);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);
@@ -3284,8 +3282,7 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
    phones fetch them only when a 3D section comes within ~1.5 screens. */
 (function(){
   if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
-  /* hero-port.js (3D port scene behind the hero name) removed 2026-11-20 at owner's request */
-  var files=['/assets/vendor/three-r128.min.js',
+  var files=['/assets/vendor/three-r128.min.js','/assets/js/hero-port.js?v=20261112b',
              '/assets/js/supply-chain-journey.js?v=20261112b','/assets/js/journey-map.js?v=20261112b'];
   var started=false;
   function load(){
@@ -4660,6 +4657,6 @@ window.addEventListener('DOMContentLoaded',function recruiterPortfolioPass(){
 @media(min-width:901px) and (max-width:1260px){.nav-startup{display:none;}}
 </style>
 <link rel="stylesheet" href="/assets/css/mobile.css?v=20261109">
-<link rel="stylesheet" href="/assets/css/refine.css?v=20261112c">
+<link rel="stylesheet" href="/assets/css/refine.css?v=20261120a">
 </body>
 </html>
