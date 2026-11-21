@@ -22,8 +22,9 @@ __glReady(function initHeroPort(){
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(PAGE_BG, 19, 42);
-  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 120);
+  const HAZE_DAY = 0xe4ecf1, HAZE_NIGHT = 0x14223a;
+  scene.fog = new THREE.Fog(HAZE_DAY, 24, 95);
+  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 260);
 
   /* ── lighting: warm key sun, cool sky fill, subtle rim ── */
   scene.add(new THREE.HemisphereLight(0xfdfbf6, 0x8a7648, 0.8));
@@ -206,8 +207,49 @@ __glReady(function initHeroPort(){
     }catch(e){ return null; }
   })();
 
+  /* ══════════ sky dome: blue overhead fading to a hazy horizon ══════════ */
+  const skyU = { top: { value: new THREE.Color(0x9fc4e3) }, horizon: { value: new THREE.Color(HAZE_DAY) } };
+  const sky = new THREE.Mesh(new THREE.SphereGeometry(200, 32, 16), new THREE.ShaderMaterial({
+    uniforms: skyU, side: THREE.BackSide, depthWrite: false, fog: false, toneMapped: false,
+    vertexShader: 'varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+    fragmentShader: 'uniform vec3 top; uniform vec3 horizon; varying vec3 vP;' +
+      'void main(){ float h = normalize(vP).y; float t = smoothstep(0.0, 0.42, h);' +
+      ' gl_FragColor = vec4(mix(horizon, top, t), 1.0); }'
+  }));
+  sky.renderOrder = -1;
+  scene.add(sky);
+
+  /* ══════════ far shore: low hills, city blocks and distant cranes in the haze ══════════ */
+  const farMat = new THREE.MeshStandardMaterial({ color: 0x6f7f8a, roughness: 1 });
+  const farMat2 = new THREE.MeshStandardMaterial({ color: 0x83919a, roughness: 1 });
+  const shore = new THREE.Group();
+  const land = new THREE.Mesh(new THREE.BoxGeometry(260, 1.2, 10), farMat2);
+  land.position.set(0, 0.3, -86); shore.add(land);
+  for(let i = 0; i < 9; i++){
+    const hill = new THREE.Mesh(new THREE.SphereGeometry(10 + (i % 3) * 4, 18, 10, 0, Math.PI * 2, 0, Math.PI / 2), farMat2);
+    hill.scale.y = 0.28 + (i % 4) * 0.06;
+    hill.position.set(-110 + i * 27, 0.6, -98 - (i % 2) * 6); shore.add(hill);
+  }
+  let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  for(let x = -70; x < 80; ){
+    const w = 1.6 + rnd() * 3.2, h = 1.2 + rnd() * (Math.abs(x - 10) < 30 ? 7 : 3.5);
+    const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, 2 + rnd() * 2), rnd() < 0.5 ? farMat : farMat2);
+    b.position.set(x, 0.9 + h / 2, -84 + rnd() * 3); shore.add(b);
+    x += w + 0.4 + rnd() * 1.6;
+  }
+  /* a row of distant ship-to-shore cranes on the far terminal */
+  for(let i = 0; i < 5; i++){
+    const g = new THREE.Group(), x0 = -48 + i * 7.5;
+    [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([a, b]) => {
+      const l = new THREE.Mesh(new THREE.BoxGeometry(0.35, 9, 0.35), farMat); l.position.set(a * 1.4, 4.5, b * 1.2); g.add(l);
+    });
+    const boom = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 16), farMat); boom.position.set(0, 9.2, 3); g.add(boom);
+    g.position.set(x0, 0.9, -80); shore.add(g);
+  }
+  scene.add(shore);
+
   /* ══════════ water ══════════ */
-  const waterGeo = new THREE.PlaneGeometry(40, 22, 52, 30);
+  const waterGeo = new THREE.PlaneGeometry(170, 100, 85, 50);
   waterGeo.rotateX(-Math.PI/2);
   const waterBase = waterGeo.attributes.position.array.slice();
   /* harbour water: deep blue-green, sky reflections, wind ripple streaks */
@@ -223,12 +265,12 @@ __glReady(function initHeroPort(){
     }
   });
   texRipple.wrapS = texRipple.wrapT = THREE.RepeatWrapping;
-  texRipple.repeat.set(9, 6);
+  texRipple.repeat.set(38, 23);
   const water = new THREE.Mesh(waterGeo, new THREE.MeshPhysicalMaterial({
     color: 0x164a5e, map: texRipple, roughness: 0.22, metalness: 0,
     clearcoat: 0.35, clearcoatRoughness: 0.2, envMap: sceneEnv, envMapIntensity: 0.22
   }));
-  water.position.set(0, 0, -3);
+  water.position.set(0, 0, -36);
   water.receiveShadow = true;
   scene.add(water);
   /* sun glint on the water */
@@ -701,51 +743,85 @@ __glReady(function initHeroPort(){
   truck2.position.set(-14, 0.555, 3.6);
   scene.add(truck2);
 
-  /* ══════════ dock workers — hard hats, hi-vis vests ══════════ */
-  const skinMats = [0x8d5a3b, 0xc58c63, 0x5e3a24, 0xe0b08a].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.8 }));
-  const vestMats = [0xff7a1a, 0xd8f03a].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.6, emissive: c, emissiveIntensity: 0.12 }));
-  const bandMat = new THREE.MeshStandardMaterial({ color: 0xe6e9ec, roughness: 0.3, metalness: 0.6 });
-  const pantsMat = new THREE.MeshStandardMaterial({ color: 0x1f2a3a, roughness: 0.85 });
-  const bootMat = new THREE.MeshStandardMaterial({ color: 0x1a1410, roughness: 0.7 });
-  const hatMats = [0xf4f4f0, 0xf2c230, 0xf4f4f0].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.35 }));
-  function limb(len, r, mat){
-    /* pivot at the top so rotations swing from hip / shoulder */
-    const g = new THREE.Group();
-    const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r * 0.9, len, 8), mat);
-    m.position.y = -len / 2; m.castShadow = true; g.add(m);
-    return g;
+  /* ══════════ dock workers — sculpted figures in PPE ══════════
+     Lathe-turned torso (hips, waist, chest, shoulders), jointed legs and
+     arms (hip/knee, shoulder/elbow), long-sleeve work shirt under a
+     sleeveless hi-vis vest with reflective bands, work trousers, boots,
+     head with ears and a peaked hard hat. Faces +x. ~1.8 m at port scale. */
+  const V = (x, y) => new THREE.Vector2(x, y);
+  const skinMats = [0x6e4128, 0xa86f48, 0x45291a, 0xc79468, 0x8a5634].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.75 }));
+  const vestMats = [0xff4d00, 0xc6f000].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.5, emissive: c, emissiveIntensity: 0.22 }));
+  const shirtMats = [0x14243a, 0x2a2e35, 0x101c30].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.85 }));
+  const bandMat = new THREE.MeshStandardMaterial({ color: 0xdfe3e6, roughness: 0.25, metalness: 0.7 });
+  const pantsMat = new THREE.MeshStandardMaterial({ color: 0x0d0f13, roughness: 0.9 });
+  const bootMat = new THREE.MeshStandardMaterial({ color: 0x1e140c, roughness: 0.6 });
+  const hatMats = [0xf6f6f2, 0xf2c230, 0xf6f6f2, 0xe8692a].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.3 }));
+  /* shared geometry (built once) */
+  const torsoGeo = new THREE.LatheGeometry([V(0.001, 0.205), V(0.04, 0.205), V(0.043, 0.225), V(0.037, 0.258), V(0.042, 0.29),
+    V(0.048, 0.325), V(0.05, 0.345), V(0.042, 0.362), V(0.02, 0.374), V(0.013, 0.378)], 20);
+  const vestGeo = new THREE.LatheGeometry([V(0.041, 0.232), V(0.039, 0.258), V(0.044, 0.29), V(0.05, 0.325),
+    V(0.052, 0.344), V(0.044, 0.36), V(0.03, 0.368)], 20);
+  const vestBandGeo = new THREE.CylinderGeometry(0.0425, 0.0425, 0.008, 20, 1, true);
+  const hipGeo = new THREE.SphereGeometry(0.043, 16, 10, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2);
+  const thighGeo = new THREE.CylinderGeometry(0.022, 0.017, 0.105, 12); thighGeo.translate(0, -0.0525, 0);
+  const shinGeo = new THREE.CylinderGeometry(0.016, 0.013, 0.1, 12); shinGeo.translate(0, -0.05, 0);
+  const kneeGeo = new THREE.SphereGeometry(0.0168, 10, 8);
+  const bootGeo = new THREE.SphereGeometry(0.02, 12, 8); bootGeo.scale(1.7, 0.7, 0.95);
+  const upperArmGeo = new THREE.CylinderGeometry(0.0135, 0.0115, 0.085, 10); upperArmGeo.translate(0, -0.0425, 0);
+  const foreArmGeo = new THREE.CylinderGeometry(0.0112, 0.0092, 0.08, 10); foreArmGeo.translate(0, -0.04, 0);
+  const jointGeo = new THREE.SphereGeometry(0.0128, 10, 8);
+  const handGeo = new THREE.SphereGeometry(0.011, 10, 8); handGeo.scale(0.8, 1.35, 0.6);
+  const neckGeo = new THREE.CylinderGeometry(0.0125, 0.014, 0.022, 10);
+  const headGeo = new THREE.SphereGeometry(0.0245, 18, 14); headGeo.scale(0.92, 1.12, 0.86);
+  const noseGeo = new THREE.SphereGeometry(0.005, 8, 6); noseGeo.scale(1.3, 1, 0.9);
+  const earGeo = new THREE.SphereGeometry(0.0055, 8, 6); earGeo.scale(0.6, 1.2, 0.5);
+  const hatGeo = new THREE.LatheGeometry([V(0.001, 0.034), V(0.012, 0.033), V(0.022, 0.028), V(0.028, 0.019),
+    V(0.03, 0.008), V(0.031, 0.0), V(0.034, -0.002), V(0.034, 0.0)], 20);
+  const peakGeo = new THREE.CylinderGeometry(0.028, 0.03, 0.003, 18, 1, false, -Math.PI / 2.6, Math.PI / 1.3);
+  function part(geo, mat, parent, x, y, z){
+    const m = new THREE.Mesh(geo, mat); m.position.set(x || 0, y || 0, z || 0); m.castShadow = true; parent.add(m); return m;
+  }
+  function makeLeg(side){
+    const hip = new THREE.Group(); hip.position.set(0, 0.208, side * 0.022);
+    part(thighGeo, pantsMat, hip);
+    const knee = new THREE.Group(); knee.position.y = -0.105; hip.add(knee);
+    part(kneeGeo, pantsMat, knee);
+    part(shinGeo, pantsMat, knee);
+    part(bootGeo, bootMat, knee, 0.012, -0.104, 0);
+    hip.userData.knee = knee;
+    return hip;
+  }
+  function makeArm(side, sleeve, skin){
+    const sh = new THREE.Group(); sh.position.set(0, 0.346, side * 0.05);
+    part(jointGeo, sleeve, sh);
+    part(upperArmGeo, sleeve, sh);
+    const elbow = new THREE.Group(); elbow.position.y = -0.085; elbow.rotation.z = 0.18; sh.add(elbow);
+    part(jointGeo, sleeve, elbow).scale.setScalar(0.85);
+    part(foreArmGeo, sleeve, elbow);
+    part(handGeo, skin, elbow, 0, -0.088, 0);
+    sh.rotation.x = -side * 0.08;                           /* arms rest slightly off the body */
+    sh.userData.elbow = elbow;
+    return sh;
   }
   function makeWorker(i){
     const w = new THREE.Group();
-    const H = 0.44;                                   /* ~1.8 m at port scale */
-    const legL = limb(0.2, 0.022, pantsMat), legR = limb(0.2, 0.022, pantsMat);
-    legL.position.set(0, 0.215, 0.028); legR.position.set(0, 0.215, -0.028);
-    [legL, legR].forEach(l => {
-      const boot = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.025, 0.035), bootMat);
-      boot.position.set(0.012, -0.205, 0); l.add(boot);
-    });
-    w.add(legL, legR);
-    const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.045, 0.16, 12), vestMats[i % 2]);
-    torso.scale.x = 0.7; torso.position.y = 0.3; torso.castShadow = true; w.add(torso);
-    const band = new THREE.Mesh(new THREE.CylinderGeometry(0.0475, 0.0475, 0.014, 12), bandMat);
-    band.scale.x = 0.7; band.position.y = 0.27; w.add(band);
-    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.016, 0.02, 8), skinMats[i % 4]);
-    neck.position.y = 0.39; w.add(neck);
-    const head = new THREE.Mesh(new THREE.SphereGeometry(0.029, 14, 12), skinMats[i % 4]);
-    head.position.y = 0.42; head.castShadow = true; w.add(head);
-    const hat = new THREE.Mesh(new THREE.SphereGeometry(0.033, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2), hatMats[i % 3]);
-    hat.position.y = 0.428; w.add(hat);
-    const brim = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.038, 0.004, 14), hatMats[i % 3]);
-    brim.position.set(0.006, 0.43, 0); w.add(brim);
-    const armL = limb(0.17, 0.014, vestMats[i % 2]), armR = limb(0.17, 0.014, vestMats[i % 2]);
-    armL.position.set(0, 0.37, 0.042); armR.position.set(0, 0.37, -0.042);
-    [armL, armR].forEach(a => {
-      const hand = new THREE.Mesh(new THREE.SphereGeometry(0.012, 8, 6), skinMats[i % 4]);
-      hand.position.y = -0.175; a.add(hand);
-    });
-    w.add(armL, armR);
-    w.userData = { legL, legR, armL, armR };
-    w.scale.setScalar(H / 0.45);
+    const skin = skinMats[i % skinMats.length], vest = vestMats[i % 2], shirt = shirtMats[i % 3];
+    const torso = part(torsoGeo, shirt, w); torso.scale.set(0.64, 1, 1);
+    part(hipGeo, pantsMat, w, 0, 0.215, 0).scale.set(0.62, 0.55, 1);
+    const v = part(vestGeo, vest, w); v.scale.set(0.68, 1, 1.04);
+    [0.262, 0.3].forEach(y => { const b = part(vestBandGeo, bandMat, w, 0, y, 0); b.scale.set(0.7, 1, 1.07); });
+    part(neckGeo, skin, w, 0.002, 0.384, 0);
+    const head = new THREE.Group(); head.position.set(0.004, 0.418, 0); w.add(head);
+    part(headGeo, skin, head);
+    part(noseGeo, skin, head, 0.023, -0.002, 0);
+    part(earGeo, skin, head, -0.002, 0, 0.022); part(earGeo, skin, head, -0.002, 0, -0.022);
+    const hat = part(hatGeo, hatMats[i % hatMats.length], head, 0, 0.008, 0);
+    part(peakGeo, hatMats[i % hatMats.length], head, 0.006, 0.007, 0);
+    hat.scale.set(1, 1, 0.94);
+    const legL = makeLeg(1), legR = makeLeg(-1);
+    const armL = makeArm(1, shirt, skin), armR = makeArm(-1, shirt, skin);
+    w.add(legL, legR, armL, armR);
+    w.userData = { legL, legR, armL, armR, head };
     w.position.y = 0.555;
     scene.add(w);
     return w;
@@ -756,8 +832,9 @@ __glReady(function initHeroPort(){
   signaller.rotation.y = Math.PI;
   /* line handlers at the bollards by the ship */
   const lh1 = makeWorker(1); lh1.position.set(-0.4, 0.555, 2.55); lh1.rotation.y = Math.PI / 2 + 0.3;
-  lh1.userData.armR.rotation.x = 0.5;
+  lh1.userData.armR.rotation.x = 0.5; lh1.userData.armR.userData.elbow.rotation.z = 0.9;
   const lh2 = makeWorker(2); lh2.position.set(-0.05, 0.555, 2.75); lh2.rotation.y = -Math.PI / 2 - 0.6;
+  lh2.userData.armL.userData.elbow.rotation.z = 1.2; lh2.userData.armR.userData.elbow.rotation.z = 1.2;
   const lh3 = makeWorker(3); lh3.position.set(7.2, 0.555, 2.5); lh3.rotation.y = 0.4;
   lh3.userData.armL.rotation.x = -0.4;
   /* walker pacing the apron */
@@ -912,7 +989,7 @@ __glReady(function initHeroPort(){
       function apply(n,skip){
         isNight=n;
         if(n){
-          scene.fog.color.set(0x0b1622);
+          scene.fog.color.set(HAZE_NIGHT); skyU.top.value.set(0x050b15); skyU.horizon.value.set(HAZE_NIGHT);
           sun.intensity=0.35; sun.color.set(0xbcd0f0);
           if(hemi){ hemi.intensity=0.35; hemi.color.set(0x2a3a52); hemi.groundColor.set(0x0a1018); }
           renderer.toneMappingExposure=1.25;
@@ -920,7 +997,7 @@ __glReady(function initHeroPort(){
           btn.innerHTML='&#9788;';           /* sun icon => click for day */
           btn.title='Switch to day';
         } else {
-          scene.fog.color.set(DAY.fog);
+          scene.fog.color.set(HAZE_DAY); skyU.top.value.set(0x9fc4e3); skyU.horizon.value.set(HAZE_DAY);
           sun.intensity=DAY.sunI; sun.color.set(DAY.sunC);
           if(hemi){ hemi.intensity=DAY.hemiI; hemi.color.set(0xfdfbf6); hemi.groundColor.set(0x8a7648); }
           renderer.toneMappingExposure=DAY.exp;
@@ -1031,9 +1108,14 @@ __glReady(function initHeroPort(){
     walker.position.x = -3 + Math.sin(clock * 0.18) * 4.2;
     walker.rotation.y = Math.cos(clock * 0.18) > 0 ? 0 : Math.PI;
     const stride = Math.sin(clock * 6) * 0.45;
-    walker.userData.legL.rotation.z = stride; walker.userData.legR.rotation.z = -stride;
-    walker.userData.armL.rotation.z = -stride * 0.8; walker.userData.armR.rotation.z = stride * 0.8;
+    const wu = walker.userData;
+    wu.legL.rotation.z = stride; wu.legR.rotation.z = -stride;
+    wu.legL.userData.knee.rotation.z = -Math.max(0, -Math.cos(clock * 6)) * 0.7;   /* knee bends on the swing */
+    wu.legR.userData.knee.rotation.z = -Math.max(0, Math.cos(clock * 6)) * 0.7;
+    wu.armL.rotation.z = -stride * 0.7; wu.armR.rotation.z = stride * 0.7;
+    walker.position.y = 0.555 + Math.abs(Math.sin(clock * 6)) * 0.006;
     signaller.userData.armR.rotation.x = 2.5 + Math.sin(clock * 3) * 0.35;
+    signaller.userData.armR.userData.elbow.rotation.z = 0.25 + Math.sin(clock * 3) * 0.2;
 
     /* truck run */
     truck.position.x = -14 + ((clock * 1.1) % 28);
