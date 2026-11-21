@@ -105,21 +105,10 @@ main>section{content-visibility:visible!important;contain-intrinsic-size:none!im
     border:0!important;
     box-shadow:none!important;
   }
-  /* Soft fade on the left so the text stays readable over the 3D port;
-     sits above the canvas (z1) and below the text (z2), never blocks clicks */
-  #hero::after{
-    content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
-    background:linear-gradient(90deg,
-      rgba(250,250,250,.97) 0%,rgba(250,250,250,.93) 34%,
-      rgba(250,250,250,.6) 50%,rgba(250,250,250,0) 66%);
-  }
-}
-@media(min-width:761px) and (max-width:1279px){
-  /* text takes more of the width here, so the fade reaches further */
-  #hero::after{
-    background:linear-gradient(90deg,
-      rgba(250,250,250,.97) 0%,rgba(250,250,250,.93) 58%,
-      rgba(250,250,250,.6) 72%,rgba(250,250,250,0) 88%);
+  /* No white wash over the port; a soft glow just around the letters keeps
+     them legible where the crane passes behind them */
+  .hero-tag,.hero-name,.hero-sub,.hero-availability,.hero-proof{
+    text-shadow:0 0 18px rgba(255,255,255,.95),0 0 4px rgba(255,255,255,.9);
   }
 }
 @media(max-width:760px){
