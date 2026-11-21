@@ -138,11 +138,16 @@ __glReady(function initHeroPort(){
     }
     ctx.strokeStyle = 'rgba(70,70,66,.4)'; ctx.lineWidth = 2;
     ctx.strokeRect(0, 0, w, h);
-    for(let i = 0; i < 5; i++){                               /* tyre scuffs */
-      ctx.strokeStyle = 'rgba(40,38,34,.1)'; ctx.lineWidth = 5;
-      ctx.beginPath();
-      ctx.moveTo(Math.random() * w, Math.random() * h);
-      ctx.bezierCurveTo(Math.random() * w, Math.random() * h, Math.random() * w, Math.random() * h, Math.random() * w, Math.random() * h);
+    for(let i = 0; i < 9; i++){                               /* tyre tracks running along the quay */
+      const y = Math.random() * h, a = 0.04 + Math.random() * 0.06;
+      const g = ctx.createLinearGradient(0, y - 4, 0, y + 4);
+      g.addColorStop(0, 'rgba(40,38,34,0)'); g.addColorStop(0.5, 'rgba(40,38,34,' + a + ')'); g.addColorStop(1, 'rgba(40,38,34,0)');
+      ctx.fillStyle = g; ctx.fillRect(0, y - 4, w, 8);
+    }
+    ctx.strokeStyle = 'rgba(60,58,54,.25)'; ctx.lineWidth = 1;   /* hairline cracks */
+    for(let i = 0; i < 6; i++){
+      let x = Math.random() * w, y = Math.random() * h; ctx.beginPath(); ctx.moveTo(x, y);
+      for(let k = 0; k < 5; k++){ x += (Math.random() - 0.5) * 22; y += (Math.random() - 0.5) * 22; ctx.lineTo(x, y); }
       ctx.stroke();
     }
   });
@@ -191,6 +196,40 @@ __glReady(function initHeroPort(){
     g.addColorStop(1, 'rgba(245,200,110,0)');
     ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
   });
+
+  /* painted steel grime (multiplies the paint colour) */
+  const texSteel = cvs(256, 256, (ctx, w, h) => {
+    ctx.fillStyle = '#f2f2f2'; ctx.fillRect(0, 0, w, h);
+    for(let i = 0; i < 2200; i++){
+      const v = 200 + Math.random() * 55 | 0; ctx.fillStyle = 'rgba(' + v + ',' + v + ',' + v + ',.18)';
+      ctx.fillRect(Math.random() * w, Math.random() * h, 2, 2);
+    }
+    for(let i = 0; i < 26; i++){                               /* rust and grime run-off */
+      const x = Math.random() * w, y0 = Math.random() * h, len = 20 + Math.random() * 90;
+      const g = ctx.createLinearGradient(0, y0, 0, y0 + len);
+      const rust = Math.random() < 0.5;
+      g.addColorStop(0, rust ? 'rgba(120,70,40,.28)' : 'rgba(40,40,40,.22)');
+      g.addColorStop(1, 'rgba(40,40,40,0)');
+      ctx.fillStyle = g; ctx.fillRect(x, y0, 1 + Math.random() * 4, len);
+    }
+  });
+  texSteel.wrapS = texSteel.wrapT = THREE.RepeatWrapping;
+  texSteel.repeat.set(0.35, 0.35);
+  /* hull: rust streaks from the scuppers and darker waterline grime */
+  const texHull = cvs(512, 128, (ctx, w, h) => {
+    ctx.fillStyle = '#ececec'; ctx.fillRect(0, 0, w, h);
+    for(let i = 0; i < 70; i++){
+      const x = Math.random() * w, len = h * (0.2 + Math.random() * 0.7);
+      const g = ctx.createLinearGradient(0, 0, 0, len);
+      g.addColorStop(0, 'rgba(130,70,38,' + (0.2 + Math.random() * 0.35) + ')'); g.addColorStop(1, 'rgba(130,70,38,0)');
+      ctx.fillStyle = g; ctx.fillRect(x, 0, 1 + Math.random() * 3, len);
+    }
+    for(let x = 0; x < w; x += 48){ ctx.fillStyle = 'rgba(20,20,20,.18)'; ctx.fillRect(x, 0, 1.5, h); }   /* hull plates */
+    const g = ctx.createLinearGradient(0, h * 0.7, 0, h); g.addColorStop(0, 'rgba(40,45,40,0)'); g.addColorStop(1, 'rgba(40,45,40,.35)');
+    ctx.fillStyle = g; ctx.fillRect(0, h * 0.7, w, h * 0.3);
+  });
+  texHull.wrapS = texHull.wrapT = THREE.RepeatWrapping;
+  texHull.repeat.set(0.18, 0.74);
 
   /* ══════════ container factory — corrugated, weathered, coded ══════════ */
   const LINER_COLORS = [0x733a2f, 0x334f67, 0x405b4a, 0x35516e, 0x515357, 0x6c5138];
@@ -290,7 +329,7 @@ __glReady(function initHeroPort(){
     const glassy = kind === 'glass';
     const m = new THREE.MeshStandardMaterial({ map: t, color: new THREE.Color(tint || 0xffffff).convertSRGBToLinear(),
       roughness: glassy ? 0.18 : 0.8, metalness: glassy ? 0.55 : 0.05, envMap: sceneEnv, envMapIntensity: glassy ? 0.9 : 0.2,
-      fog: false, flatShading: true, emissive: hazeLin.clone(), emissiveIntensity: 0.22 });
+      fog: false, flatShading: true, emissive: hazeLin.clone(), emissiveIntensity: 0.12 });
     m.userData = { linear: true, win: n };
     SKY_MATS.push(m);
     return m;
@@ -298,7 +337,7 @@ __glReady(function initHeroPort(){
   function skylineNight(on){
     SKY_MATS.forEach(m => {
       if(on){ m.emissive.set(0xffffff); m.emissiveMap = m.userData.win; m.emissiveIntensity = 0.9; m.color.setScalar(0.12); }
-      else { m.emissive.copy(hazeLin); m.emissiveMap = null; m.emissiveIntensity = 0.22; m.color.setScalar(1); }
+      else { m.emissive.copy(hazeLin); m.emissiveMap = null; m.emissiveIntensity = 0.12; m.color.setScalar(1); }
       m.needsUpdate = true;
     });
   }
@@ -419,8 +458,8 @@ __glReady(function initHeroPort(){
   texRipple.wrapS = texRipple.wrapT = THREE.RepeatWrapping;
   texRipple.repeat.set(94, 63);
   const water = new THREE.Mesh(waterGeo, new THREE.MeshPhysicalMaterial({
-    color: 0x164a5e, map: texRipple, roughness: 0.22, metalness: 0,
-    clearcoat: 0.35, clearcoatRoughness: 0.2, envMap: sceneEnv, envMapIntensity: 0.22
+    color: new THREE.Color(0x24515f).convertSRGBToLinear(), map: texRipple, roughness: 0.16, metalness: 0,
+    clearcoat: 0.6, clearcoatRoughness: 0.14, envMap: sceneEnv, envMapIntensity: 0.6
   }));
   water.position.set(-40, 0, -110);
   water.receiveShadow = true;
@@ -434,7 +473,7 @@ __glReady(function initHeroPort(){
   /* ══════════ quay ══════════ */
   const quay = new THREE.Mesh(
     new THREE.BoxGeometry(57, 0.55, 6.4),
-    new THREE.MeshStandardMaterial({ map: texConcrete, color: 0x9d9b96, roughness: 0.92, metalness: 0.05 })
+    new THREE.MeshStandardMaterial({ map: texConcrete, color: 0x6c6a66, roughness: 0.95, metalness: 0 })
   );
   quay.position.set(16.5, 0.275, 5.1);
   quay.receiveShadow = true; quay.castShadow = true;
@@ -518,7 +557,7 @@ __glReady(function initHeroPort(){
   hullShape.quadraticCurveTo(-6.15, 0, -5.5, -1.5);      /* rounded stern */
   const hullGeo = new THREE.ExtrudeGeometry(hullShape, { depth: 1.35, bevelEnabled: true, bevelThickness: 0.1, bevelSize: 0.09, bevelSegments: 2 });
   hullGeo.rotateX(-Math.PI/2);
-  const hull = new THREE.Mesh(hullGeo, new THREE.MeshStandardMaterial({ color: 0x2b3a4c, roughness: 0.55, metalness: 0.25 }));
+  const hull = new THREE.Mesh(hullGeo, new THREE.MeshStandardMaterial({ color: new THREE.Color(0x2b3a4c).convertSRGBToLinear(), map: texHull, roughness: 0.7, metalness: 0.2 }));
   hull.position.y = -0.28;
   hull.castShadow = true; hull.receiveShadow = true;
   ship.add(hull);
@@ -548,7 +587,7 @@ __glReady(function initHeroPort(){
   draftDecal.rotation.y = 0.18;
   ship.add(draftDecal);
   /* superstructure: three stepped decks + bridge wings + windows */
-  const whiteMat = new THREE.MeshStandardMaterial({ color: 0xf0eee6, roughness: 0.55, metalness: 0.1 });
+  const whiteMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(0xe6e3da).convertSRGBToLinear(), map: texSteel, roughness: 0.7, metalness: 0.05 });
   const ss1 = new THREE.Mesh(rbox(1.7, 0.95, 2.5, 0.05), whiteMat);
   ss1.position.set(-4.35, 1.62, 0);
   const ss2 = new THREE.Mesh(rbox(1.45, 0.5, 2.2, 0.04), whiteMat);
@@ -597,8 +636,8 @@ __glReady(function initHeroPort(){
   scene.add(ship);
 
   /* ══════════ STS crane — lattice portal, twin-girder boom, A-frame apex ══════════ */
-  const craneGold = new THREE.MeshStandardMaterial({ color: 0x2f5878, roughness: 0.48, metalness: 0.4 });
-  const craneDark = new THREE.MeshStandardMaterial({ color: 0x6a6f76, roughness: 0.6, metalness: 0.4 });
+  const craneGold = new THREE.MeshStandardMaterial({ color: new THREE.Color(0x2f5878).convertSRGBToLinear(), map: texSteel, roughness: 0.66, metalness: 0.2 });
+  const craneDark = new THREE.MeshStandardMaterial({ color: new THREE.Color(0x5f646b).convertSRGBToLinear(), map: texSteel, roughness: 0.7, metalness: 0.25 });
   const texHazard = cvs(64, 64, (ctx, w, h) => {
     ctx.fillStyle = '#bfa75e'; ctx.fillRect(0, 0, w, h);
     ctx.fillStyle = '#1d1d1f';
@@ -612,6 +651,7 @@ __glReady(function initHeroPort(){
   const hazardMat = new THREE.MeshStandardMaterial({ map: texHazard, roughness: 0.7 });
   const craneYellow = new THREE.MeshStandardMaterial({ color: 0xd8a920, roughness: 0.55, metalness: 0.3 });
   const railSteel = new THREE.MeshStandardMaterial({ color: 0x8c9096, roughness: 0.3, metalness: 0.9, envMap: sceneEnv });
+  const bogieMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(0x34373c).convertSRGBToLinear(), map: texSteel, roughness: 0.75, metalness: 0.4 });
   const crane = new THREE.Group();
   function leg(x, z){
     const l = new THREE.Mesh(rbox(0.3, 4.3, 0.3, 0.03), craneGold);
@@ -622,11 +662,15 @@ __glReady(function initHeroPort(){
     const sill = new THREE.Mesh(rbox(0.95, 0.2, 0.3, 0.03), craneGold);
     sill.position.set(x, 0.8, z); sill.castShadow = true; crane.add(sill);
     [-0.3, 0.3].forEach(dx => {
-      const bog = new THREE.Mesh(rbox(0.42, 0.13, 0.24, 0.02), craneDark);
-      bog.position.set(x + dx, 0.66, z); bog.castShadow = true; crane.add(bog);
-      [-0.11, 0.11].forEach(wx => {
-        const wh = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.07, 16), railSteel);
-        wh.rotation.x = Math.PI / 2; wh.position.set(x + dx + wx, 0.615, z); crane.add(wh);
+      const bog = new THREE.Mesh(rbox(0.42, 0.08, 0.2, 0.015), bogieMat);
+      bog.position.set(x + dx, 0.69, z); bog.castShadow = true; crane.add(bog);
+      [-0.24, 0.24].forEach(sz => {                             /* side plates the axles hang from */
+        const pl = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.09, 0.02), bogieMat);
+        pl.position.set(x + dx, 0.64, z + sz * 0.42); crane.add(pl);
+      });
+      [-0.12, 0.12].forEach(wx => {
+        const wh = new THREE.Mesh(new THREE.CylinderGeometry(0.068, 0.068, 0.08, 18), railSteel);
+        wh.rotation.x = Math.PI / 2; wh.position.set(x + dx + wx, 0.632, z); crane.add(wh);
       });
     });
     const tag = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.18, 0.28), hazardMat);   /* striped buffer end */
@@ -1222,7 +1266,7 @@ __glReady(function initHeroPort(){
         isNight=n;
         if(n){
           scene.fog.color.set(HAZE_NIGHT); skyU.top.value.set(0x050b15); skyU.horizon.value.set(HAZE_NIGHT);
-          skylineNight(true); scene.environment = null;
+          skylineNight(true); scene.environment = null; water.material.envMapIntensity = 0.05;
           sun.intensity=0.35; sun.color.set(0xbcd0f0);
           if(hemi){ hemi.intensity=0.35; hemi.color.set(0x2a3a52); hemi.groundColor.set(0x0a1018); }
           renderer.toneMappingExposure=1.25;
@@ -1231,7 +1275,7 @@ __glReady(function initHeroPort(){
           btn.title='Switch to day';
         } else {
           scene.fog.color.set(HAZE_DAY); skyU.top.value.set(0x9fc4e3); skyU.horizon.value.set(HAZE_DAY);
-          skylineNight(false); scene.environment = sceneEnv;
+          skylineNight(false); scene.environment = sceneEnv; water.material.envMapIntensity = 0.6;
           sun.intensity=DAY.sunI; sun.color.set(DAY.sunC);
           if(hemi){ hemi.intensity=DAY.hemiI; hemi.color.set(0xfdfbf6); hemi.groundColor.set(0x8a7648); }
           renderer.toneMappingExposure=DAY.exp;
