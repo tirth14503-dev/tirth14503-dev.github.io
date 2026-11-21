@@ -16,18 +16,32 @@ document.getElementById('ctrl-panel').classList.add('vis');
 ═══════════════════════════════════ */
 const io=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('up');});},{threshold:0,rootMargin:"0px 0px 100px 0px"});
 document.querySelectorAll('.reveal,.reveal-l,.reveal-r,.reveal-scale').forEach(el=>io.observe(el));
-const secIO=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting)
-      document.querySelectorAll('.nav-link').forEach(n=>{
-        const active=n.dataset.sec===e.target.id;
-        n.classList.toggle('on',active);
-        if(active)n.setAttribute('aria-current','location');
-        else n.removeAttribute('aria-current');
-      });
+/* Menu highlight: the section crossing the upper-middle of the screen picks
+   its menu item. Sections without their own item light the item they
+   belong under; the rest (hero, Writing, Voices) light nothing. */
+const NAV_GROUP={recruiter:'recruiter',projects:'projects',experience:'experience',education:'experience',
+  skills:'skills',lab:'lab',game:'lab',simulator:'lab',impact:'lab',matcher:'lab',
+  about:'about',journeymap:'about',timeline:'about',scflow:'about',
+  coffee:'contact',contact:'contact',changelog:'contact'};
+const navSections=[...document.querySelectorAll('main section[id]')];
+let navCurrent;
+function updateNavActive(){
+  const line=innerHeight*0.4;let id='';
+  for(const s of navSections){const r=s.getBoundingClientRect();if(r.height&&r.top<=line)id=s.id;}
+  if(innerHeight+scrollY>=document.documentElement.scrollHeight-4)id='contact';
+  const group=NAV_GROUP[id]||'';
+  if(group===navCurrent)return;navCurrent=group;
+  document.querySelectorAll('.nav-link').forEach(n=>{
+    const active=n.dataset.sec===group;
+    n.classList.toggle('on',active);
+    if(active)n.setAttribute('aria-current','location');
+    else n.removeAttribute('aria-current');
   });
-},{rootMargin:'-45% 0px -50% 0px',threshold:0});
-document.querySelectorAll('main > section[id]').forEach(s=>secIO.observe(s));
+}
+let navTick=false;
+addEventListener('scroll',()=>{if(!navTick){navTick=true;requestAnimationFrame(()=>{navTick=false;updateNavActive();});}},{passive:true});
+addEventListener('resize',updateNavActive);
+updateNavActive();
 
 /* ═══════════════════════════════════
    EXPERIENCE ACCORDION

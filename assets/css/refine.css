@@ -206,3 +206,34 @@ main>section{content-visibility:visible!important;contain-intrinsic-size:none!im
 .tl-badge.res{background:#edf1ee!important;color:#3d5a49!important;}
 .tl-badge.con{background:#f3efe8!important;color:#6b5434!important;}
 .tl-badge.dig{background:#f0eef3!important;color:#4f4566!important;}
+
+/* ── Readable minimum for small labels (2026-11-20) ──
+   Body labels rendered at 7–10px; lift them to 11px. Decorative text inside
+   mini graphics (project previews, globe HUD, game crates) is left alone. */
+#hero-explore-hint,.pc-hint,.tldr-hint,.cmdk-hint span,.hero-scroll,.preview-kicker span,.preview-kicker b,
+.hero-proof span,.stat-l,.exp-date,.exp-loc-pill,.edu-meta,.edu-badge,.tag,.chip,
+.game-status span,.game-status button,.sim-badge,.calc-lbl,.calc-res-eyebrow,.calc-sub-l,.match-typing,
+.jm-scroll-hint,.jm-place-coords,.jm-city-btn,.jm-detail-badge,.jm-map-link,
+.tl-year,.tl-badge,.scm-tag,.scm-dot-item,.scf-met-l,.vo-who span,.coffee-tz,.coffee-sub,.coffee-topic,
+.ft-bottom span,.ctrl-btn,.aip-status,.tldr-eyebrow,.tldr-sec-h,.ms-brand,.ms-hint,.cmdk-esc,.cmdk-row-grp,
+.cert-src,.ct-lbl{
+  font-size:11px!important;
+}
+
+/* Phones: the faint port drawing sat behind the hero buttons like a ghost
+   image; hide it there (desktop keeps it as the no-3D fallback) */
+@media(max-width:760px){#hero-mobile-scene{display:none!important;}}
+
+/* ── Recruiter Snapshot tidy-up (2026-11-21) ──
+   Drop the placeholder "TK" disc (the menu already carries the monogram),
+   line the text up with the facts box, close the empty gap, keep each
+   label next to its value, and give the buttons a usable size. */
+.recruiter-monogram{display:none!important;}
+.recruiter-profile{grid-template-columns:1fr!important;border-bottom:0!important;padding-bottom:0!important;gap:0!important;}
+.recruiter-profile h2{font-size:clamp(2.6rem,5.2vw,4.8rem)!important;}
+.recruiter-profile p{max-width:760px;}
+.recruiter-facts{margin-top:clamp(2.2rem,4vw,3rem)!important;}
+.recruiter-fact{min-height:0!important;justify-content:flex-start!important;gap:.6rem;padding:1.3rem 1.45rem!important;}
+.recruiter-fact strong{font-size:1rem!important;}
+.recruiter-actions-inline{margin-top:1.8rem!important;gap:.75rem!important;}
+.recruiter-actions-inline button,.recruiter-actions-inline a{font-size:.9rem!important;padding:.85rem 1.4rem!important;}

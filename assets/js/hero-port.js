@@ -485,63 +485,188 @@ __glReady(function initHeroPort(){
     }
   });
 
-  /* ══════════ semi truck — tractor cab, chassis rails, tandem axles ══════════ */
+  /* ══════════ semi truck — modelled tractor + container chassis ══════════
+     Real-world proportions: sculpted cab profile (raked windshield, sloped
+     hood, high sleeper), chrome grille/bumper/tanks/stacks, rounded tyres
+     with duals on drive and trailer axles, skeletal 20ft container chassis. */
   const truck = new THREE.Group();
-  const tyreMat = new THREE.MeshStandardMaterial({ color: 0x17181c, roughness: 0.9 });
-  const hubMat = new THREE.MeshStandardMaterial({ color: 0x8f939a, roughness: 0.5, metalness: 0.6 });
-  const glassMat = new THREE.MeshStandardMaterial({ color: 0x26313e, roughness: 0.25, metalness: 0.4 });
-  /* chassis rails */
-  [-0.16, 0.16].forEach(rz => {
-    const railM = new THREE.Mesh(new THREE.BoxGeometry(2.15, 0.08, 0.07), craneDark);
-    railM.position.set(-0.1, 0.36, rz);
-    truck.add(railM);
+  /* soft studio reflection so paint and chrome read as metal (truck only) */
+  const truckEnv = (function(){
+    try{
+      const tex = cvs(256, 128, (g, w, h) => {
+        const gr = g.createLinearGradient(0, 0, 0, h);
+        gr.addColorStop(0, '#ffffff'); gr.addColorStop(0.42, '#dfe6ee');
+        gr.addColorStop(0.5, '#9aa3ad'); gr.addColorStop(1, '#4a4f56');
+        g.fillStyle = gr; g.fillRect(0, 0, w, h);
+      });
+      tex.mapping = THREE.EquirectangularReflectionMapping;
+      const pm = new THREE.PMREMGenerator(renderer);
+      const env = pm.fromEquirectangular(tex).texture;
+      pm.dispose(); tex.dispose();
+      return env;
+    }catch(e){ return null; }
+  })();
+  const paintMat = new THREE.MeshPhysicalMaterial({ color: 0x0b1a2e, metalness: 0.3, roughness: 0.3,
+    clearcoat: 1, clearcoatRoughness: 0.1, envMap: truckEnv, envMapIntensity: 0.45 });
+  const chromeMat = new THREE.MeshStandardMaterial({ color: 0xe8ebef, metalness: 1, roughness: 0.16,
+    envMap: truckEnv, envMapIntensity: 1.2 });
+  const alloyMat = new THREE.MeshStandardMaterial({ color: 0xc9ced4, metalness: 0.9, roughness: 0.3,
+    envMap: truckEnv, envMapIntensity: 1 });
+  const frameMat = new THREE.MeshStandardMaterial({ color: 0x0e1012, metalness: 0.4, roughness: 0.6 });
+  const tyreMat = new THREE.MeshStandardMaterial({ color: 0x040405, roughness: 0.9, metalness: 0 });
+  const glassMat = new THREE.MeshPhysicalMaterial({ color: 0x1a2530, metalness: 0.2, roughness: 0.05,
+    clearcoat: 1, envMap: truckEnv, envMapIntensity: 1.4, side: THREE.DoubleSide });
+  const lampMat = new THREE.MeshStandardMaterial({ color: 0xfff4d6, emissive: 0xfff1c9, emissiveIntensity: 0.55, roughness: 0.2 });
+  const amberMat = new THREE.MeshStandardMaterial({ color: 0xffb347, emissive: 0xff9a1f, emissiveIntensity: 0.5 });
+  const tailMat = new THREE.MeshStandardMaterial({ color: 0xc0262d, emissive: 0x9e1218, emissiveIntensity: 0.45 });
+  function addT(geo, mat, x, y, z, shadow){
+    const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z);
+    if(shadow !== false) m.castShadow = true;
+    truck.add(m); return m;
+  }
+
+  /* tractor frame rails */
+  [-0.17, 0.17].forEach(z => addT(new THREE.BoxGeometry(1.42, 0.07, 0.06), frameMat, 0.6, 0.3, z));
+
+  /* cab body: one sculpted side profile, extruded with rounded edges */
+  const CAB_W = 0.6;
+  const prof = new THREE.Shape();
+  const archA = Math.atan2(0.13, 0.118);
+  prof.moveTo(0.40, 0.38);
+  prof.lineTo(0.90, 0.38);
+  prof.lineTo(0.90, 0.26);
+  prof.lineTo(1.05 - 0.118, 0.26);
+  prof.absarc(1.05, 0.13, 0.176, Math.PI - archA, archA, true);   /* steer wheel arch */
+  prof.lineTo(1.39, 0.26);
+  prof.quadraticCurveTo(1.43, 0.26, 1.43, 0.31);
+  prof.lineTo(1.43, 0.53);
+  prof.quadraticCurveTo(1.43, 0.6, 1.36, 0.605);                  /* rounded nose */
+  prof.lineTo(1.0, 0.64);                                          /* sloped hood */
+  prof.lineTo(0.865, 0.915);                                       /* raked windshield */
+  prof.quadraticCurveTo(0.845, 0.96, 0.79, 0.96);
+  prof.lineTo(0.47, 0.985);                                        /* high-roof sleeper */
+  prof.quadraticCurveTo(0.40, 0.99, 0.40, 0.92);
+  prof.lineTo(0.40, 0.38);
+  const cabGeo = new THREE.ExtrudeGeometry(prof, { depth: CAB_W, bevelEnabled: true,
+    bevelThickness: 0.028, bevelSize: 0.022, bevelSegments: 4, curveSegments: 18 });
+  cabGeo.translate(0, 0, -CAB_W / 2);
+  const tcab = addT(cabGeo, paintMat, 0, 0, 0);
+  tcab.receiveShadow = true;
+  const SIDE = CAB_W / 2 + 0.028;
+
+  /* windshield (two panes) following the rake */
+  const wsLen = Math.hypot(0.135, 0.275), wsAng = Math.atan2(0.135, 0.275);
+  [-0.14, 0.14].forEach(z => {
+    const ws = addT(new THREE.BoxGeometry(0.006, wsLen * 0.86, 0.27), glassMat,
+      0.9325 + Math.cos(wsAng) * 0.026, 0.7775 + Math.sin(wsAng) * 0.026, z, false);
+    ws.rotation.z = wsAng;
   });
-  /* tractor cab: body + windshield + side glass + grille + bumper + exhaust */
-  const tcab = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.52, 0.64),
-    new THREE.MeshStandardMaterial({ color: 0x1c3a5e, roughness: 0.45, metalness: 0.35 }));
-  tcab.position.set(0.92, 0.66, 0);
-  tcab.castShadow = true;
-  truck.add(tcab);
-  const windshield = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.22, 0.54), glassMat);
-  windshield.position.set(1.19, 0.76, 0);
-  windshield.rotation.z = -0.12;
-  truck.add(windshield);
-  [-0.325, 0.325].forEach(sz => {
-    const sideGlass = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.16, 0.02), glassMat);
-    sideGlass.position.set(1.0, 0.78, sz);
-    truck.add(sideGlass);
+  /* door and sleeper glass (flat shapes laid on both cab sides) */
+  const doorWin = new THREE.Shape();
+  doorWin.moveTo(0.64, 0.67); doorWin.lineTo(0.94, 0.67); doorWin.lineTo(0.835, 0.9); doorWin.lineTo(0.64, 0.9); doorWin.lineTo(0.64, 0.67);
+  const sleepWin = new THREE.Shape();
+  sleepWin.moveTo(0.46, 0.76); sleepWin.lineTo(0.56, 0.76); sleepWin.lineTo(0.56, 0.85); sleepWin.lineTo(0.46, 0.85); sleepWin.lineTo(0.46, 0.76);
+  const winGeos = [new THREE.ShapeGeometry(doorWin), new THREE.ShapeGeometry(sleepWin)];
+  [1, -1].forEach(s => {
+    winGeos.forEach(gm => addT(gm, glassMat, 0, 0, s * (SIDE + 0.003), false));
+    /* door seam + handle */
+    addT(new THREE.BoxGeometry(0.004, 0.5, 0.004), frameMat, 0.62, 0.62, s * (SIDE + 0.001), false);
+    addT(new THREE.BoxGeometry(0.05, 0.012, 0.012), chromeMat, 0.68, 0.62, s * (SIDE + 0.006), false);
+    /* mirror arm + mirror head */
+    addT(new THREE.BoxGeometry(0.012, 0.012, 0.09), chromeMat, 0.93, 0.8, s * (SIDE + 0.045), false);
+    addT(new THREE.BoxGeometry(0.03, 0.13, 0.05), frameMat, 0.94, 0.8, s * (SIDE + 0.1));
+    addT(new THREE.BoxGeometry(0.004, 0.11, 0.04), glassMat, 0.922, 0.8, s * (SIDE + 0.1), false);
+    /* cab step + chrome fuel tank with straps */
+    addT(new THREE.BoxGeometry(0.14, 0.02, 0.07), alloyMat, 0.92, 0.33, s * (SIDE - 0.01));
+    const tank = addT(new THREE.CylinderGeometry(0.072, 0.072, 0.3, 24), chromeMat, 0.63, 0.29, s * (SIDE + 0.02));
+    tank.rotation.z = Math.PI / 2;
+    [0.53, 0.73].forEach(x => {
+      const strap = addT(new THREE.TorusGeometry(0.074, 0.006, 6, 24), frameMat, x, 0.29, s * (SIDE + 0.02), false);
+      strap.rotation.y = Math.PI / 2;
+    });
+    /* tall exhaust stack with heat shield */
+    addT(new THREE.CylinderGeometry(0.019, 0.019, 0.72, 16), chromeMat, 0.375, 0.74, s * 0.27);
+    addT(new THREE.CylinderGeometry(0.026, 0.026, 0.26, 16), alloyMat, 0.375, 0.62, s * 0.27);
+    /* headlight + turn lamp */
+    addT(new THREE.BoxGeometry(0.02, 0.05, 0.09), lampMat, 1.448, 0.49, s * 0.23, false);
+    addT(new THREE.BoxGeometry(0.02, 0.025, 0.04), amberMat, 1.448, 0.44, s * 0.255, false);
   });
-  const grille = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.2, 0.5), craneDark);
-  grille.position.set(1.19, 0.5, 0);
-  truck.add(grille);
-  const bumper = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.09, 0.66), craneDark);
-  bumper.position.set(1.2, 0.32, 0);
-  truck.add(bumper);
-  const exhaust = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.5, 8), hubMat);
-  exhaust.position.set(0.68, 0.7, 0.3);
-  truck.add(exhaust);
-  /* flatbed trailer + properly seated container */
-  const bed = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.06, 0.74), craneDark);
-  bed.position.set(-0.42, 0.43, 0);
-  bed.castShadow = true;
-  truck.add(bed);
+  /* chrome grille: vertical bars inside a chrome surround */
+  const grilleTex = cvs(128, 64, (g, w, h) => {
+    g.fillStyle = '#16191d'; g.fillRect(0, 0, w, h);
+    for(let x = 4; x < w; x += 8){ g.fillStyle = '#c9ced4'; g.fillRect(x, 3, 3, h - 6); }
+  });
+  addT(new THREE.BoxGeometry(0.016, 0.27, 0.32), chromeMat, 1.446, 0.42, 0, false);
+  addT(new THREE.BoxGeometry(0.012, 0.25, 0.3),
+    new THREE.MeshStandardMaterial({ map: grilleTex, metalness: 0.8, roughness: 0.3, envMap: truckEnv }), 1.452, 0.42, 0, false);
+  /* bumper: chrome bar with rounded ends */
+  const bump = addT(new THREE.CylinderGeometry(0.045, 0.045, 0.62, 20), chromeMat, 1.47, 0.235, 0);
+  bump.rotation.x = Math.PI / 2;
+  [-0.31, 0.31].forEach(z => addT(new THREE.SphereGeometry(0.045, 16, 12), chromeMat, 1.47, 0.235, z, false));
+  /* roof marker lights + air horns */
+  [-0.16, -0.08, 0, 0.08, 0.16].forEach(z => addT(new THREE.BoxGeometry(0.02, 0.015, 0.03), amberMat, 0.82, 0.975, z, false));
+  [-0.06, 0.06].forEach(z => {
+    const horn = addT(new THREE.CylinderGeometry(0.008, 0.016, 0.12, 10), chromeMat, 0.7, 1.0, z, false);
+    horn.rotation.z = -Math.PI / 2;
+  });
+  /* fifth wheel coupling */
+  addT(new THREE.CylinderGeometry(0.12, 0.12, 0.03, 24), frameMat, 0.2, 0.35, 0);
+
+  /* skeletal 20ft container chassis */
+  [-0.17, 0.17].forEach(z => addT(new THREE.BoxGeometry(1.62, 0.065, 0.05), frameMat, -0.52, 0.36, z));
+  [0.05, -1.11].forEach(x => addT(new THREE.BoxGeometry(0.06, 0.05, 0.78), frameMat, x, 0.39, 0));  /* twist-lock bolsters */
+  addT(new THREE.BoxGeometry(0.06, 0.04, 0.4), frameMat, -0.52, 0.355, 0);
+  /* landing legs with sand-shoe feet */
+  [-0.17, 0.17].forEach(z => {
+    addT(new THREE.BoxGeometry(0.035, 0.22, 0.035), alloyMat, -0.1, 0.22, z);
+    addT(new THREE.BoxGeometry(0.07, 0.015, 0.06), frameMat, -0.1, 0.11, z);
+  });
+  /* rear underride bar + tail lights */
+  addT(new THREE.BoxGeometry(0.03, 0.04, 0.7), alloyMat, -1.33, 0.17, 0);
+  [-0.18, 0.18].forEach(z => addT(new THREE.BoxGeometry(0.02, 0.17, 0.02), frameMat, -1.32, 0.27, z));
+  [-0.32, 0.32].forEach(z => addT(new THREE.BoxGeometry(0.015, 0.03, 0.08), tailMat, -1.145, 0.39, z, false));
   const tbox = makeContainer(1);
-  tbox.position.set(-0.42, 0.77, 0);
+  tbox.position.set(-0.53, 0.725, 0);
   truck.add(tbox);
-  /* wheels: steer axle, tractor tandem, trailer tandem — with hubs */
+  /* mud flaps behind the drive and trailer tandems */
+  [-1, 1].forEach(s => {
+    addT(new THREE.BoxGeometry(0.008, 0.16, 0.1), frameMat, -0.07, 0.14, s * 0.31, false);
+    addT(new THREE.BoxGeometry(0.008, 0.16, 0.1), frameMat, -1.31, 0.14, s * 0.31, false);
+  });
+
+  /* wheels: rounded tyre (lathe profile), alloy rim, hub, lug nuts */
+  const TR = 0.122, TW = 0.085;
+  const tyreGeo = new THREE.LatheGeometry([
+    new THREE.Vector2(0.078, -TW / 2), new THREE.Vector2(0.108, -TW / 2 - 0.002),
+    new THREE.Vector2(TR - 0.004, -TW / 2 + 0.008), new THREE.Vector2(TR, -TW / 4),
+    new THREE.Vector2(TR, TW / 4), new THREE.Vector2(TR - 0.004, TW / 2 - 0.008),
+    new THREE.Vector2(0.108, TW / 2 + 0.002), new THREE.Vector2(0.078, TW / 2)], 32);
+  const rimGeo = new THREE.CylinderGeometry(0.078, 0.078, TW * 0.92, 28);
+  const hubGeo = new THREE.CylinderGeometry(0.03, 0.036, 0.02, 16);
+  const lugGeo = new THREE.CylinderGeometry(0.006, 0.006, 0.012, 6);
   const wheels = [];
-  [0.95, 0.28, 0.02, -0.85, -1.11].forEach(wx => {
-    [-0.31, 0.31].forEach(wz => {
-      const wh = new THREE.Mesh(new THREE.CylinderGeometry(0.155, 0.155, 0.11, 14), tyreMat);
-      wh.rotation.x = Math.PI / 2;
-      wh.position.set(wx, 0.155, wz);
-      wh.castShadow = true;
-      truck.add(wh);
-      const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.115, 10), hubMat);
-      hub.rotation.x = Math.PI / 2;
-      hub.position.set(wx, 0.155, wz);
-      truck.add(hub);
-      wheels.push(wh, hub);
+  function wheel(x, z, outward){
+    const g = new THREE.Group();
+    g.position.set(x, TR, z);
+    g.rotation.x = Math.PI / 2;
+    const t = new THREE.Mesh(tyreGeo, tyreMat); t.castShadow = true; g.add(t);
+    g.add(new THREE.Mesh(rimGeo, alloyMat));
+    const face = outward * (TW * 0.46 + 0.006);
+    const hub = new THREE.Mesh(hubGeo, chromeMat); hub.position.y = face; g.add(hub);
+    for(let i = 0; i < 8; i++){
+      const a = i / 8 * Math.PI * 2;
+      const l = new THREE.Mesh(lugGeo, chromeMat);
+      l.position.set(Math.cos(a) * 0.048, face, Math.sin(a) * 0.048);
+      g.add(l);
+    }
+    truck.add(g); wheels.push(g);
+  }
+  /* after rotation.x = PI/2 a wheel's local +y points to world -z, so outward = -side */
+  [-1, 1].forEach(s => {
+    wheel(1.05, s * 0.3, -s);                                    /* steer: single */
+    [0.31, 0.06, -0.95, -1.19].forEach(x => {                   /* drive + trailer: duals */
+      wheel(x, s * 0.265, -s);
+      wheel(x, s * 0.355, -s);
     });
   });
   truck.position.set(0, 0.555, 6.4);
