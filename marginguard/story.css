@@ -410,6 +410,8 @@ footer nav a:hover { color: var(--on-inverse-strong); }
   /* Touch targets: at least 44px tall on phones. */
   footer nav { flex-wrap: wrap; gap: 0 1.25rem; }
   footer nav a { display: inline-flex; align-items: center; min-height: 44px; }
+  .template-list li { align-items: center; padding-block: .1rem; }
+  .template-list a { display: inline-flex; align-items: center; gap: .3em; min-height: 44px; }
   .text-link { position: relative; }
   .text-link::before { content: ""; position: absolute; left: -4px; right: -4px; top: 50%; height: 44px; transform: translateY(-50%); }
 }
