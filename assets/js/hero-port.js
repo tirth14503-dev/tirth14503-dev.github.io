@@ -219,37 +219,107 @@ __glReady(function initHeroPort(){
   sky.renderOrder = -1;
   scene.add(sky);
 
-  /* ══════════ far shore: low hills, city blocks and distant cranes in the haze ══════════ */
-  const farMat = new THREE.MeshStandardMaterial({ color: 0x6f7f8a, roughness: 1 });
-  const farMat2 = new THREE.MeshStandardMaterial({ color: 0x83919a, roughness: 1 });
-  const shore = new THREE.Group();
-  const land = new THREE.Mesh(new THREE.BoxGeometry(260, 1.2, 10), farMat2);
-  land.position.set(0, 0.3, -86); shore.add(land);
-  for(let i = 0; i < 9; i++){
-    const hill = new THREE.Mesh(new THREE.SphereGeometry(10 + (i % 3) * 4, 18, 10, 0, Math.PI * 2, 0, Math.PI / 2), farMat2);
-    hill.scale.y = 0.28 + (i % 4) * 0.06;
-    hill.position.set(-110 + i * 27, 0.6, -98 - (i % 2) * 6); shore.add(hill);
+  /* ══════════ Chicago skyline across the water ══════════
+     Real towers at real relative heights (1 m ≈ 0.054 units), set ~180 units
+     out along the camera's line of sight. Colours are pre-blended toward the
+     horizon haze (fog is off for these) so they read as distant but clear.
+     At night the window maps light up. */
+  const skyline = new THREE.Group();
+  const SKY_MATS = [];
+  const SKY_S = 24 / 442;                               /* Willis roof = 24 units */
+  const hazeC = new THREE.Color(HAZE_DAY);
+  const winTex = cvs(64, 128, (ctx, w, h) => {
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, w, h);
+    for(let y = 2; y < h; y += 4) for(let x = 2; x < w; x += 4){
+      if(Math.random() < 0.42){ ctx.fillStyle = Math.random() < 0.8 ? '#ffd58a' : '#cfe3ff'; ctx.fillRect(x, y, 2, 2); }
+    }
+  });
+  winTex.wrapS = winTex.wrapT = THREE.RepeatWrapping;
+  function skyMat(hex, haze, w, h){
+    const day = new THREE.Color(hex).lerp(hazeC, (haze == null ? 0.42 : haze) * 0.7).convertSRGBToLinear();   /* r128 treats hex as linear */
+    const t = winTex.clone(); t.needsUpdate = true; t.repeat.set(Math.max(1, w / 1.6), Math.max(1, h / 3));
+    const m = new THREE.MeshStandardMaterial({ color: day, roughness: 0.6, metalness: 0.1, fog: false,
+      emissive: 0xffffff, emissiveMap: t, emissiveIntensity: 0 });
+    m.userData.day = day.clone();
+    m.userData.night = new THREE.Color(hex).multiplyScalar(0.3).lerp(new THREE.Color(HAZE_NIGHT), 0.35).convertSRGBToLinear();
+    SKY_MATS.push(m);
+    return m;
   }
-  let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
-  for(let x = -70; x < 80; ){
-    const w = 1.6 + rnd() * 3.2, h = 1.2 + rnd() * (Math.abs(x - 10) < 30 ? 7 : 3.5);
-    const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, 2 + rnd() * 2), rnd() < 0.5 ? farMat : farMat2);
-    b.position.set(x, 0.9 + h / 2, -84 + rnd() * 3); shore.add(b);
-    x += w + 0.4 + rnd() * 1.6;
+  function tower(x, z, w, d, hM, hex, haze){
+    const h = hM * SKY_S;
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), skyMat(hex, haze, w, h));
+    m.position.set(x, h / 2, z); skyline.add(m); return m;
   }
-  /* a row of distant ship-to-shore cranes on the far terminal */
-  for(let i = 0; i < 5; i++){
-    const g = new THREE.Group(), x0 = -48 + i * 7.5;
-    [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([a, b]) => {
-      const l = new THREE.Mesh(new THREE.BoxGeometry(0.35, 9, 0.35), farMat); l.position.set(a * 1.4, 4.5, b * 1.2); g.add(l);
-    });
-    const boom = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 16), farMat); boom.position.set(0, 9.2, 3); g.add(boom);
-    g.position.set(x0, 0.9, -80); shore.add(g);
+  function skyMast(x, z, baseM, lenM, r){
+    const len = lenM * SKY_S;
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.4, r, len, 6), skyMat(0x3a3d42, 0.5, 0.2, len));
+    m.position.set(x, baseM * SKY_S + len / 2, z); skyline.add(m);
   }
-  scene.add(shore);
+  /* Willis Tower: nine bundled tubes stepping down (50/66/90/108 floors), twin antennas */
+  const WT = 1.25, wHeights = [[205, 442, 368], [270, 442, 368], [205, 368, 270]];
+  for(let i = 0; i < 3; i++) for(let j = 0; j < 3; j++)
+    tower(-16 + (i - 1) * WT, (j - 1) * WT, WT, WT, wHeights[i][j], 0x1b1d21, 0.38);
+  skyMast(-16 - 0.35, -0.2, 442, 85, 0.12); skyMast(-16 + 0.35, -0.2, 442, 75, 0.12);
+  /* 311 South Wacker: square shaft with a round crown */
+  tower(-22, 2, 2.4, 2.4, 260, 0xc2b196);
+  const crown = new THREE.Mesh(new THREE.CylinderGeometry(1.0, 1.15, 33 * SKY_S, 16), skyMat(0xe8ddc8, 0.35, 2, 2));
+  crown.position.set(-22, (260 + 16) * SKY_S, 2); skyline.add(crown);
+  /* Franklin Center + other Loop towers */
+  tower(-19.5, -3, 2.2, 2.2, 307, 0x8b6f5c); skyMast(-19.5, -3, 307, 25, 0.08);
+  /* Two Prudential Plaza: granite shaft, pyramid top and spire */
+  tower(-4, 1, 2.0, 2.0, 255, 0xb9ab9b);
+  const pru = new THREE.Mesh(new THREE.ConeGeometry(1.45, 48 * SKY_S, 4), skyMat(0xb9ab9b, 0.42, 2, 2));
+  pru.rotation.y = Math.PI / 4; pru.position.set(-4, (255 + 24) * SKY_S, 1); skyline.add(pru);
+  skyMast(-4, 1, 303, 22, 0.06);
+  /* Aon Center: tall white slab */
+  tower(-1, -2, 2.9, 2.9, 346, 0xeeeee8, 0.3);
+  /* Trump International: stepped glass setbacks and spire */
+  [[2.8, 0, 200], [2.3, 200, 300], [1.8, 300, 360]].forEach(([w, a, b]) => {
+    const h = (b - a) * SKY_S, m = new THREE.Mesh(new THREE.BoxGeometry(w, h, w * 0.7), skyMat(0x97abbe, 0.36, w, h));
+    m.position.set(-9, a * SKY_S + h / 2, 3); skyline.add(m);
+  });
+  skyMast(-9, 3, 360, 63, 0.1);
+  /* St. Regis: three staggered glass blades */
+  [[0, 363], [0.9, 300], [-0.9, 230]].forEach(([dx, hM], k) => tower(4 + dx, 1 + k * 0.4, 1.0, 1.9, hM, 0x6f8ca5, 0.36));
+  /* Aqua: wavy residential slab */
+  tower(1.5, 4, 1.6, 1.6, 262, 0xd5dbdc, 0.4);
+  /* John Hancock Center: tapered black tower with X-bracing feel, twin antennas */
+  const hk = new THREE.Mesh(new THREE.CylinderGeometry(1.05, 1.75, 344 * SKY_S, 4), skyMat(0x1e2024, 0.38, 2.5, 18));
+  hk.rotation.y = Math.PI / 4; hk.position.set(14, 344 * SKY_S / 2, -4); skyline.add(hk);
+  skyMast(14 - 0.3, -4, 344, 113, 0.1); skyMast(14 + 0.3, -4, 344, 113, 0.1);
+  /* Lake Point Tower: dark bronze trefoil by the lake */
+  [0, 2.1, 4.2].forEach(a => {
+    const c = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.75, 197 * SKY_S, 14), skyMat(0x3b302a, 0.4, 1.5, 10));
+    c.position.set(19 + Math.cos(a) * 0.55, 197 * SKY_S / 2, 6 + Math.sin(a) * 0.55); skyline.add(c);
+  });
+  /* Navy Pier Centennial Wheel on the lakefront */
+  const wheelG = new THREE.Group();
+  const wMat = skyMat(0xf2f2ee, 0.35, 1, 1);
+  const wheelRim = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.06, 6, 40), wMat); wheelG.add(wheelRim);
+  for(let k = 0; k < 12; k++){
+    const sp = new THREE.Mesh(new THREE.BoxGeometry(0.03, 3.2, 0.03), wMat); sp.rotation.z = k * Math.PI / 12; wheelG.add(sp);
+  }
+  [-1, 1].forEach(s => { const leg = new THREE.Mesh(new THREE.BoxGeometry(0.08, 2.2, 0.08), wMat); leg.position.set(s * 0.5, -1.0, 0); leg.rotation.z = s * 0.25; wheelG.add(leg); });
+  wheelG.position.set(25, 2.2, 10); wheelG.rotation.y = 0.5; skyline.add(wheelG);
+  /* lower Loop and River North fill */
+  let sd = 11; const sr = () => (sd = (sd * 9301 + 49297) % 233280) / 233280;
+  const FILL = [0x9a9ea3, 0xb5a892, 0x6f7a86, 0xc9c6bd, 0x58606a, 0x8d8576];
+  for(let x = -34; x < 24; x += 1.4 + sr() * 1.2){
+    if(Math.abs(x + 16) < 2 || Math.abs(x - 14) < 1.6) continue;
+    tower(x, -6 + sr() * 14, 1.1 + sr() * 1.6, 1.1 + sr() * 1.6, 60 + sr() * (Math.abs(x + 4) < 20 ? 170 : 90), FILL[Math.floor(sr() * FILL.length)]);
+  }
+  /* lakefront: low shoreline strip with park trees */
+  const shoreM = new THREE.Mesh(new THREE.BoxGeometry(90, 0.6, 14), skyMat(0x6c7a5c, 0.5, 1, 1));
+  shoreM.position.set(-4, 0.3, 4); skyline.add(shoreM);
+  /* place the whole skyline across the water, square to the camera's view */
+  skyline.position.set(-46, 0, -156);
+  skyline.rotation.y = 0.41;
+  skyline.scale.setScalar(1.3);
+  scene.add(skyline);
+
 
   /* ══════════ water ══════════ */
-  const waterGeo = new THREE.PlaneGeometry(170, 100, 85, 50);
+  const waterGeo = new THREE.PlaneGeometry(420, 280, 105, 70);
   waterGeo.rotateX(-Math.PI/2);
   const waterBase = waterGeo.attributes.position.array.slice();
   /* harbour water: deep blue-green, sky reflections, wind ripple streaks */
@@ -265,12 +335,12 @@ __glReady(function initHeroPort(){
     }
   });
   texRipple.wrapS = texRipple.wrapT = THREE.RepeatWrapping;
-  texRipple.repeat.set(38, 23);
+  texRipple.repeat.set(94, 63);
   const water = new THREE.Mesh(waterGeo, new THREE.MeshPhysicalMaterial({
     color: 0x164a5e, map: texRipple, roughness: 0.22, metalness: 0,
     clearcoat: 0.35, clearcoatRoughness: 0.2, envMap: sceneEnv, envMapIntensity: 0.22
   }));
-  water.position.set(0, 0, -36);
+  water.position.set(-40, 0, -110);
   water.receiveShadow = true;
   scene.add(water);
   /* sun glint on the water */
@@ -281,39 +351,57 @@ __glReady(function initHeroPort(){
 
   /* ══════════ quay ══════════ */
   const quay = new THREE.Mesh(
-    new THREE.BoxGeometry(30, 0.55, 6.4),
+    new THREE.BoxGeometry(57, 0.55, 6.4),
     new THREE.MeshStandardMaterial({ map: texConcrete, roughness: 0.92, metalness: 0.05 })
   );
-  quay.position.set(0, 0.275, 5.1);
+  quay.position.set(16.5, 0.275, 5.1);
   quay.receiveShadow = true; quay.castShadow = true;
   scene.add(quay);
   /* quay wall face + rubber fenders */
-  const wall = new THREE.Mesh(new THREE.BoxGeometry(30, 1.2, 0.22),
+  const wall = new THREE.Mesh(new THREE.BoxGeometry(57, 1.2, 0.22),
     new THREE.MeshStandardMaterial({ color: 0x9a978e, roughness: 0.9 }));
-  wall.position.set(0, -0.05, 1.92);
+  wall.position.set(16.5, -0.05, 1.92);
   scene.add(wall);
-  for(let fx = -13; fx <= 13; fx += 3.2){
+  for(let fx = -10.6; fx <= 44; fx += 3.2){
     const fender = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.55, 0.14),
       new THREE.MeshStandardMaterial({ color: 0x22252a, roughness: 0.95 }));
     fender.position.set(fx, 0.18, 1.83);
     scene.add(fender);
   }
+  /* pier head: end wall and a hazard-striped safety barrier */
+  const endWall = new THREE.Mesh(new THREE.BoxGeometry(0.22, 1.2, 6.4), new THREE.MeshStandardMaterial({ color: 0x9a978e, roughness: 0.9 }));
+  endWall.position.set(-12.0, -0.05, 5.1);
+  scene.add(endWall);
+  const texBarrier = cvs(256, 32, (ctx, w, h) => {
+    ctx.fillStyle = '#e8c33a'; ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = '#1d1d1f';
+    for(let i = -2; i < 18; i++){ ctx.beginPath(); ctx.moveTo(i * 16, h); ctx.lineTo(i * 16 + 8, h); ctx.lineTo(i * 16 + 16, 0); ctx.lineTo(i * 16 + 8, 0); ctx.closePath(); ctx.fill(); }
+  });
+  texBarrier.wrapS = THREE.RepeatWrapping; texBarrier.repeat.set(3, 1);
+  const barrier = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.16, 5.9), [
+    new THREE.MeshStandardMaterial({ map: texBarrier, roughness: 0.6 }), new THREE.MeshStandardMaterial({ map: texBarrier, roughness: 0.6 }),
+    new THREE.MeshStandardMaterial({ color: 0xe8c33a, roughness: 0.6 }), new THREE.MeshStandardMaterial({ color: 0x1d1d1f }),
+    new THREE.MeshStandardMaterial({ color: 0xe8c33a, roughness: 0.6 }), new THREE.MeshStandardMaterial({ color: 0xe8c33a, roughness: 0.6 })]);
+  barrier.position.set(-11.8, 0.64, 5.15);
+  barrier.castShadow = true;
+  scene.add(barrier);
   /* yellow safety stripe + lane dashes */
-  const stripe = new THREE.Mesh(new THREE.PlaneGeometry(30, 0.22),
+  const stripe = new THREE.Mesh(new THREE.PlaneGeometry(57, 0.22),
     new THREE.MeshStandardMaterial({ color: 0xbfa75e, roughness: 0.85 }));
   stripe.rotation.x = -Math.PI/2;
-  stripe.position.set(0, 0.556, 2.18);
+  stripe.position.set(16.5, 0.556, 2.18);
   scene.add(stripe);
-  for(let dx = -14; dx < 15; dx += 1.6){
+  for(let dx = -7.2; dx < 44; dx += 1.6){
+    if(dx > 7 && dx < 21) continue;            /* stacks sit on the line here */
     const dash = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.1),
       new THREE.MeshStandardMaterial({ color: 0xeeeee8, roughness: 0.85 }));
     dash.rotation.x = -Math.PI/2;
-    dash.position.set(dx, 0.556, 6.4);
+    dash.position.set(dx, 0.556, 5.0);
     scene.add(dash);
   }
   /* bollards */
   const bolMat = new THREE.MeshStandardMaterial({ color: 0x33373d, roughness: 0.6, metalness: 0.5 });
-  for(let bx = -13; bx <= 13; bx += 2.6){
+  for(let bx = -10.4; bx <= 44; bx += 2.6){
     const b1 = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.11, 0.24, 10), bolMat);
     b1.position.set(bx, 0.67, 2.35);
     const b2 = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.07, 10), bolMat);
@@ -322,10 +410,10 @@ __glReady(function initHeroPort(){
     scene.add(b1, b2);
   }
   /* foam line along the quay wall */
-  const foam = new THREE.Mesh(new THREE.PlaneGeometry(29, 0.5),
+  const foam = new THREE.Mesh(new THREE.PlaneGeometry(56, 0.5),
     new THREE.MeshBasicMaterial({ map: foamTex, transparent: true, opacity: 0.65, depthWrite: false }));
   foam.rotation.x = -Math.PI/2;
-  foam.position.set(0, 0.02, 1.55);
+  foam.position.set(16.5, 0.02, 1.55);
   scene.add(foam);
 
   /* ══════════ the ship — curved hull, layered superstructure ══════════ */
@@ -547,7 +635,7 @@ __glReady(function initHeroPort(){
   scene.add(crane);
 
   /* ══════════ quay container stacks ══════════ */
-  [[-11.8, 0], [-9.2, 1], [8.4, 2], [11.0, 0], [13.6, 4]].forEach((st, si) => {
+  [[8.4, 2], [11.0, 0], [13.6, 4], [16.2, 1], [18.8, 3]].forEach((st, si) => {
     for(let r = 0; r < 2; r++){
       const stack = 1 + ((si * 2 + r * 3) % 3);
       for(let t = 0; t < stack; t++){
@@ -729,19 +817,60 @@ __glReady(function initHeroPort(){
       wheel(x, s * 0.355, -s);
     });
   });
-  return { truck, wheels, tbox, tcab };
+  /* number plates, front (on the grille) and rear (above the underride bar) */
+  const plateCvs = document.createElement('canvas'); plateCvs.width = 128; plateCvs.height = 64;
+  const plateTex = new THREE.CanvasTexture(plateCvs); plateTex.encoding = THREE.sRGBEncoding;
+  const plateMat = new THREE.MeshStandardMaterial({ map: plateTex, roughness: 0.4, metalness: 0.2 });
+  const plateGeo = new THREE.PlaneGeometry(0.11, 0.055);
+  const pf = new THREE.Mesh(plateGeo, plateMat); pf.position.set(1.463, 0.33, 0); pf.rotation.y = Math.PI / 2; truck.add(pf);
+  const pr = new THREE.Mesh(plateGeo, plateMat); pr.position.set(-1.352, 0.27, 0); pr.rotation.y = -Math.PI / 2; truck.add(pr);
+  function setPlate(text){
+    const g = plateCvs.getContext('2d');
+    g.fillStyle = '#f4f1e6'; g.fillRect(0, 0, 128, 64);
+    g.strokeStyle = '#1b2a44'; g.lineWidth = 4; g.strokeRect(3, 3, 122, 58);
+    g.fillStyle = '#1b2a44'; g.font = 'bold 11px sans-serif'; g.textAlign = 'center';
+    g.fillText('ILLINOIS', 64, 17);
+    g.font = 'bold 27px monospace'; g.fillText(text, 64, 50);
+    plateTex.needsUpdate = true;
   }
-  /* lane truck: runs the back lane */
+  return { truck, wheels, tbox, tcab, paint, setPlate };
+  }
+  /* Two trucks share one loop and take turns at the crane:
+     arrive from the land side (right) on the inbound lane, stop under the
+     crane while it lifts the container, carry on to the pier head, U-turn,
+     and leave along the outbound lane. Every arrival gets a new cab colour,
+     container and number plate. */
   const T1 = makeTruck(paintMat, 1);
-  const truck = T1.truck, wheels = T1.wheels, tcab = T1.tcab;
-  truck.position.set(0, 0.555, 6.4);
-  scene.add(truck);
-  /* crane truck: drives in under the crane, the crane lifts its box to the ship */
   const T2 = makeTruck(new THREE.MeshPhysicalMaterial({ color: 0xe9e9e4, metalness: 0.15, roughness: 0.35,
     clearcoat: 1, clearcoatRoughness: 0.1, envMap: truckEnv, envMapIntensity: 0.5 }), 3);
-  const truck2 = T2.truck;
-  truck2.position.set(-14, 0.555, 3.6);
-  scene.add(truck2);
+  const truck = T1.truck, tcab = T1.tcab;
+  const TRUCKS = [T1, T2];
+  TRUCKS.forEach(T => { T.truck.position.set(40, 0.555, 3.6); scene.add(T.truck); T.lap = -1; T.d = -1; });
+  const CAB_COLORS = [0xb3261e, 0x0b1a2e, 0xe9e9e4, 0x1f5e3a, 0xd39a12, 0x2a2d33, 0x1d6fa5, 0xb9bdc2, 0x6b1f2a, 0xf2f0ea];
+  const PLATE_L = 'ABCDEFGHJKLMNPRSTUVWXYZ';
+  function restyle(T, lap){
+    const r = (n) => { const x = Math.sin((lap + 1) * 12.9898 + n * 78.233 + (T === T1 ? 3.1 : 7.7)) * 43758.5453; return x - Math.floor(x); };
+    T.paint.color.set(CAB_COLORS[Math.floor(r(1) * CAB_COLORS.length)]);
+    T.tbox.material = containerMats[Math.floor(r(2) * containerMats.length)];
+    T.setPlate(PLATE_L[Math.floor(r(3) * 23)] + PLATE_L[Math.floor(r(4) * 23)] + ' ' +
+      String(1000 + Math.floor(r(5) * 9000)));
+  }
+  /* the loop: inbound lane z 3.6 heading -x, U-turn at the pier head, outbound z 6.4 heading +x */
+  const R_IN = 3.6, R_OUT = 6.4, R_X0 = 30, R_XU = -9.3, R_RAD = (R_OUT - R_IN) / 2;
+  const R_LA = R_X0 - R_XU, R_LB = Math.PI * R_RAD, R_LEN = R_LA * 2 + R_LB;
+  const R_PARK = R_X0 - (3.6 - 0.53);            /* box (at local x -0.53, turned) under the spreader */
+  function placeOnRoute(T, d){
+    let x, z, ry;
+    if(d <= R_LA){ x = R_X0 - d; z = R_IN; ry = Math.PI; }
+    else if(d <= R_LA + R_LB){
+      const th = -Math.PI / 2 - (d - R_LA) / R_RAD;   /* sweep round the pier head */
+      x = R_XU + R_RAD * Math.cos(th); z = (R_IN + R_OUT) / 2 + R_RAD * Math.sin(th);
+      const dx = Math.sin(th), dz = -Math.cos(th);  /* direction of travel */
+      ry = Math.atan2(-dz, dx);
+    } else { x = R_XU + (d - R_LA - R_LB); z = R_OUT; ry = 0; }
+    T.truck.position.set(x, 0.555, z);
+    T.truck.rotation.y = ry;
+  }
 
   /* ══════════ dock workers — sculpted figures in PPE ══════════
      Lathe-turned torso (hips, waist, chest, shoulders), jointed legs and
@@ -990,6 +1119,7 @@ __glReady(function initHeroPort(){
         isNight=n;
         if(n){
           scene.fog.color.set(HAZE_NIGHT); skyU.top.value.set(0x050b15); skyU.horizon.value.set(HAZE_NIGHT);
+          SKY_MATS.forEach(m => { m.color.copy(m.userData.night); m.emissiveIntensity = 0.9; });
           sun.intensity=0.35; sun.color.set(0xbcd0f0);
           if(hemi){ hemi.intensity=0.35; hemi.color.set(0x2a3a52); hemi.groundColor.set(0x0a1018); }
           renderer.toneMappingExposure=1.25;
@@ -998,6 +1128,7 @@ __glReady(function initHeroPort(){
           btn.title='Switch to day';
         } else {
           scene.fog.color.set(HAZE_DAY); skyU.top.value.set(0x9fc4e3); skyU.horizon.value.set(HAZE_DAY);
+          SKY_MATS.forEach(m => { m.color.copy(m.userData.day); m.emissiveIntensity = 0; });
           sun.intensity=DAY.sunI; sun.color.set(DAY.sunC);
           if(hemi){ hemi.intensity=DAY.hemiI; hemi.color.set(0xfdfbf6); hemi.groundColor.set(0x8a7648); }
           renderer.toneMappingExposure=DAY.exp;
@@ -1070,19 +1201,18 @@ __glReady(function initHeroPort(){
     ship.rotation.z = Math.sin(clock * 0.7) * 0.008;
     ship.rotation.x = Math.sin(clock * 0.55 + 1) * 0.005;
 
-    /* crane work cycle: the crane truck drives in under the portal, the
-       spreader lowers onto its box, lifts it, runs out over the ship, sets it
-       down, returns empty; the truck leaves and the next one arrives */
-    const cyc = (clock * 0.1) % 1;
-    const LAND = 3.6, SEA = -1.2, TOP = 3.6, ON_TRUCK = 1.64, ON_SHIP = 1.7, PARK = 4.13;
+    /* crane work cycle (30 s): lower onto the waiting truck's box, lift, run
+       out over the ship, set down, return, then wait for the next truck */
+    const CP = 30, ct = clock % CP;
+    const LAND = 3.6, SEA = -1.2, TOP = 3.6, ON_TRUCK = 1.64, ON_SHIP = 1.7;
     const ease = t => t < 0 ? 0 : t > 1 ? 1 : t * t * (3 - 2 * t);
-    let tz = LAND, hy = TOP, carrying = false, truckHasBox = true;
-    if(cyc < 0.1){        hy = TOP - ease(cyc / 0.1) * (TOP - ON_TRUCK); }
-    else if(cyc < 0.2){   hy = ON_TRUCK + ease((cyc - 0.1) / 0.1) * (TOP - ON_TRUCK); carrying = true; truckHasBox = false; }
-    else if(cyc < 0.4){   tz = LAND + ease((cyc - 0.2) / 0.2) * (SEA - LAND); carrying = true; truckHasBox = false; }
-    else if(cyc < 0.52){  tz = SEA; hy = TOP - ease((cyc - 0.4) / 0.12) * (TOP - ON_SHIP); carrying = true; truckHasBox = false; }
-    else if(cyc < 0.64){  tz = SEA; hy = ON_SHIP + ease((cyc - 0.52) / 0.12) * (TOP - ON_SHIP); truckHasBox = false; }
-    else if(cyc < 0.84){  tz = SEA + ease((cyc - 0.64) / 0.2) * (LAND - SEA); truckHasBox = false; }
+    let tz = LAND, hy = TOP, carrying = false;
+    if(ct < 1){          hy = TOP - ease(ct) * (TOP - ON_TRUCK); }
+    else if(ct < 2){     hy = ON_TRUCK + ease(ct - 1) * (TOP - ON_TRUCK); carrying = true; }
+    else if(ct < 4){     tz = LAND + ease((ct - 2) / 2) * (SEA - LAND); carrying = true; }
+    else if(ct < 5.2){   tz = SEA; hy = TOP - ease((ct - 4) / 1.2) * (TOP - ON_SHIP); carrying = true; }
+    else if(ct < 6.4){   tz = SEA; hy = ON_SHIP + ease((ct - 5.2) / 1.2) * (TOP - ON_SHIP); }
+    else if(ct < 8.4){   tz = SEA + ease((ct - 6.4) / 2) * (LAND - SEA); }
     trolley.position.z = tz;
     spreader.position.set(0, hy, tz);
     hangBox.visible = carrying;
@@ -1093,16 +1223,25 @@ __glReady(function initHeroPort(){
       cb.position.set(i === 0 ? -0.28 : 0.28, (cableTop + hy) / 2, tz);
       cb.scale.y = cableLen;
     });
-    /* crane truck: parked while loaded, leaves empty, next one rolls in loaded */
-    let t2x = PARK;
-    if(cyc >= 0.24 && cyc < 0.6){ t2x = PARK + ease((cyc - 0.24) / 0.36) * 16; }
-    else if(cyc >= 0.6 && cyc < 0.66){ t2x = 40; }
-    else if(cyc >= 0.66){ t2x = -15 + ease((cyc - 0.66) / 0.34) * (PARK + 15); truckHasBox = true; }
-    const moving2 = Math.abs(t2x - truck2.position.x) > 0.001 && t2x < 30;
-    truck2.position.x = t2x;
-    truck2.visible = t2x < 30;
-    T2.tbox.visible = truckHasBox;
-    if(moving2) T2.wheels.forEach(w => { w.rotation.y += 0.12; });
+    /* trucks: each runs a 60 s schedule, the second offset by 30 s, so the
+       crane serves them alternately and one arrives as the other leaves */
+    TRUCKS.forEach((T, k) => {
+      const tt = clock + k * CP + 11;                 /* +11: the first truck is already rolling in */
+      const ts = tt % (2 * CP), lap = Math.floor(tt / (2 * CP));
+      if(lap !== T.lap){ T.lap = lap; restyle(T, lap); }
+      let d = -1, hasBox = true;
+      if(ts < 11){           d = R_PARK * (1 - Math.pow(1 - ts / 11, 2)); }             /* arrive, braking */
+      else if(ts < 13.2){    d = R_PARK; hasBox = ts < 12; }                            /* under the crane */
+      else if(ts < 40){      d = R_PARK + ease((ts - 13.2) / 26.8) * (R_LEN - R_PARK); hasBox = false; }
+      T.truck.visible = d >= 0;
+      if(d >= 0){
+        if(Math.abs(d - T.d) > 1e-4) T.wheels.forEach(w => { w.rotation.y += 0.12; });
+        placeOnRoute(T, d);
+      }
+      T.d = d;
+      T.tbox.visible = hasBox;
+      if(ts >= 11 && ts < 13.2) hangBox.material = T.tbox.material;  /* crane lifts this truck's box */
+    });
 
     /* dock workers: the walker paces the apron; the signaller waves the crane down */
     walker.position.x = -3 + Math.sin(clock * 0.18) * 4.2;
@@ -1117,9 +1256,6 @@ __glReady(function initHeroPort(){
     signaller.userData.armR.rotation.x = 2.5 + Math.sin(clock * 3) * 0.35;
     signaller.userData.armR.userData.elbow.rotation.z = 0.25 + Math.sin(clock * 3) * 0.2;
 
-    /* truck run */
-    truck.position.x = -14 + ((clock * 1.1) % 28);
-    wheels.forEach(w => { w.rotation.y += 0.12; });
 
     /* cargo freighter: wide banked circuit over the port */
     const pa = clock * 0.09;
