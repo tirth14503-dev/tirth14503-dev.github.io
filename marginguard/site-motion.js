@@ -6,6 +6,7 @@
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const root = document.documentElement;
   root.classList.add('motion');
+  document.addEventListener('touchstart', () => {}, {passive: true});   // lets iOS Safari show :active, so a tapped tile's image grows
   const number = new Intl.NumberFormat('en-US');
 
   // Shows 0 straight away (width locked, so nothing shifts), then counts to the shipped text after `wait` ms.

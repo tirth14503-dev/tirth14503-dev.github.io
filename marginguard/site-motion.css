@@ -14,14 +14,25 @@
 .motion .button::after { box-shadow: var(--shadow-card); transition: opacity .35s var(--ease-out); }
 .motion .button:active::before { opacity: .1; transition-duration: .06s; }
 
-/* Cards: on hover they grow a little outward (so the pointer never slips off the edge) and gain a shadow. */
-.motion :is(.module, .cap, .tracker, .price-card, .trust-grid > div, .audience-grid > div) { transition: transform .5s var(--spring); }
+@media (hover: hover) and (pointer: fine) { .motion .button:hover::after { opacity: 1; } }
+
+/* Tiles, after Apple's product grid: large rounded tiles with generous space. A screenshot sits in its own clipped
+   frame (.tile-media); on hover, keyboard focus or a press, the IMAGE grows inside the frame while the tile and its
+   text stay exactly where they are. */
+:root { --tile-radius: 22px; --apple: cubic-bezier(.25, .1, .25, 1); }
+.screens .screen { padding: clamp(14px, 2.4vw, 30px) clamp(14px, 2.4vw, 30px) clamp(16px, 2vw, 24px); background: var(--surface); border-radius: var(--tile-radius); box-shadow: var(--shadow-screen); }
+.screens .tile-media { overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.screens .tile-media img { border: 0; border-radius: 0; box-shadow: none; }
+.module { border-color: transparent; border-radius: var(--tile-radius); box-shadow: var(--shadow-screen); }
+.motion .tile-media img { transition: transform .5s var(--apple); }
+.motion .screen:active .tile-media img { transform: scale(1.06); transition-duration: .18s; }
 @media (hover: hover) and (pointer: fine) {
-  .motion .button:hover::after { opacity: 1; }
-  .motion :is(.module, .cap, .tracker, .price-card):hover { transform: scale(1.015); }
-  .motion :is(.module, .cap, .tracker, .price-card) { position: relative; }
-  .motion :is(.module, .cap, .tracker, .price-card)::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: var(--shadow-card); opacity: 0; pointer-events: none; transition: opacity .4s var(--ease-out); }
-  .motion :is(.module, .cap, .tracker, .price-card):hover::after { opacity: .55; }
+  .motion .screen:hover .tile-media img { transform: scale(1.04); }
+  .motion .screen:hover:active .tile-media img { transform: scale(1.06); }
+  /* Text tiles have no image: a deeper shadow answers the pointer instead, and the tile never moves. */
+  .motion .module { position: relative; }
+  .motion .module::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: var(--shadow-card); opacity: 0; pointer-events: none; transition: opacity .5s var(--apple); }
+  .motion .module:hover::after { opacity: .5; }
 }
 
 /* 1. Hero: the sample audit settles in, the flagged price pulses once, then the finding counts up (site-motion.js). */
@@ -50,9 +61,8 @@
 @keyframes mg-depth { from { transform: perspective(1600px) rotateX(14deg) translateY(70px) scale(.88); opacity: .25; } }
 @media (min-width: 900px) {
   .motion .screens .screen-pair { display: contents; }
-  .motion .screens .screen { position: sticky; top: 88px; width: min(100%, calc((100vh - 230px) * 1.6)); margin: 0 auto 32vh; padding: 14px 14px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-screen); }
+  .motion .screens .screen { position: sticky; top: 88px; width: min(100%, calc((100vh - 260px) * 1.6 + 60px)); margin: 0 auto 32vh; }
   .motion .screens .screen:last-of-type { margin-bottom: 0; }
-  .motion .screens .screen img { box-shadow: none; }
   .motion .screens .screen figcaption { font-size: var(--fs-16); }
 }
 
