@@ -1,0 +1,58 @@
+/* Motion for the MarginGuard page. Everything here sits under html.motion, which site-motion.js sets only when the
+   visitor has not asked for reduced motion, so without it the page is exactly as before. Only transform and opacity
+   move; nothing animates layout, and nothing hides the hero while it loads. */
+:root { --spring: cubic-bezier(.3, 1.25, .5, 1); --ease-out: cubic-bezier(.2, .8, .2, 1); }
+@supports (transition-timing-function: linear(0, 1)) {
+  :root { --spring: linear(0, .072, .234, .423, .602, .751, .866, .945, .996, 1.024, 1.036, 1.038, 1.034, 1.027, 1.02, 1.014, 1.008, 1.004, 1.001, 1); }
+}
+
+/* Buttons: a soft lift of shadow on hover and a press that darkens, both on layers behind the label. The button itself
+   never moves or shrinks, so a click right at its edge still lands. */
+.motion .button { position: relative; isolation: isolate; }
+.motion .button::before, .motion .button::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; opacity: 0; }
+.motion .button::before { background: currentColor; transition: opacity .3s var(--ease-out); }
+.motion .button::after { box-shadow: var(--shadow-card); transition: opacity .35s var(--ease-out); }
+.motion .button:active::before { opacity: .1; transition-duration: .06s; }
+@media (hover: hover) and (pointer: fine) {
+  .motion .button:hover::after { opacity: 1; }
+}
+
+/* 1. The sample audit settles in, then its flagged amount pulses once before the finding counts up (site-motion.js). */
+.motion .example { animation: mg-card-in .9s var(--spring) .1s both; transform-origin: 50% 100%; }
+/* A table cell can scale, so it stays a cell. It grows leftward from its right edge, staying inside the card. */
+.motion .ledger tr.flag .num.mg-pulse { animation: mg-pulse .7s var(--ease-out); transform-origin: right center; }
+@keyframes mg-card-in { from { transform: translateY(18px) scale(.97); } }
+@keyframes mg-pulse { 40% { transform: scale(1.08); } }
+
+/* 2. The workspace screenshot tilts flat as it scrolls into view. Scroll-driven where the browser supports it,
+   otherwise it settles once when it comes into view (the .in class). */
+.motion .screen-main img { transform-origin: 50% 100%; }
+@supports (animation-timeline: view()) {
+  .motion .screen-main img { animation: mg-tilt linear both; animation-timeline: view(); animation-range: entry 0% cover 42%; }
+}
+@supports not (animation-timeline: view()) {
+  .motion .screen-main img { transition: transform 1s var(--spring), opacity .6s var(--ease-out); }
+  .motion .screen-main:not(.in) img { transform: perspective(1600px) rotateX(9deg) scale(.94); opacity: .55; }
+}
+@keyframes mg-tilt { from { transform: perspective(1600px) rotateX(9deg) scale(.94); opacity: .55; } }
+
+/* 3. Steps advance as you scroll: each step's rule fills in turn. */
+.motion .workflow-steps li { position: relative; }
+.motion .workflow-steps li::after { content: ""; position: absolute; top: -1px; left: 0; right: 0; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+@supports (animation-timeline: view()) {
+  .motion .workflow-steps li::after { animation: mg-fill linear both; animation-timeline: view(); }
+  .motion .workflow-steps li:nth-child(1)::after { animation-range: entry 60% cover 35%; }
+  .motion .workflow-steps li:nth-child(2)::after { animation-range: entry 90% cover 45%; }
+  .motion .workflow-steps li:nth-child(3)::after { animation-range: cover 20% cover 55%; }
+}
+@supports not (animation-timeline: view()) {
+  .motion .workflow-steps li::after { transition: transform .8s var(--ease-out); }
+  .motion .workflow-steps.in li::after { transform: none; }
+  .motion .workflow-steps.in li:nth-child(2)::after { transition-delay: .25s; }
+  .motion .workflow-steps.in li:nth-child(3)::after { transition-delay: .5s; }
+}
+@keyframes mg-fill { to { transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .motion .example, .motion .screen-main img, .motion .workflow-steps li::after { animation: none !important; transition: none !important; transform: none !important; opacity: 1 !important; }
+}
