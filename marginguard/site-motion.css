@@ -1,58 +1,79 @@
-/* Motion for the MarginGuard page. Everything here sits under html.motion, which site-motion.js sets only when the
-   visitor has not asked for reduced motion, so without it the page is exactly as before. Only transform and opacity
-   move; nothing animates layout, and nothing hides the hero while it loads. */
-:root { --spring: cubic-bezier(.3, 1.25, .5, 1); --ease-out: cubic-bezier(.2, .8, .2, 1); }
+/* Motion for the MarginGuard page. html.motion is set in <head> only when the visitor has not asked for reduced motion;
+   html.motion-ready is set by site-motion.js once it has marked what will reveal, so without the script nothing is
+   hidden. Only transform and opacity move. The hero is never hidden: it shows at first paint and only settles. */
+:root { --spring: cubic-bezier(.3, 1.25, .5, 1); --ease-out: cubic-bezier(.2, .8, .2, 1); --rise: 34px; }
 @supports (transition-timing-function: linear(0, 1)) {
   :root { --spring: linear(0, .072, .234, .423, .602, .751, .866, .945, .996, 1.024, 1.036, 1.038, 1.034, 1.027, 1.02, 1.014, 1.008, 1.004, 1.001, 1); }
 }
 
-/* Buttons: a soft lift of shadow on hover and a press that darkens, both on layers behind the label. The button itself
-   never moves or shrinks, so a click right at its edge still lands. */
+/* Buttons: a soft shadow on hover and a press that darkens, on layers behind the label. The button never moves or
+   shrinks, so a click at its very edge still lands. */
 .motion .button { position: relative; isolation: isolate; }
 .motion .button::before, .motion .button::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; opacity: 0; }
 .motion .button::before { background: currentColor; transition: opacity .3s var(--ease-out); }
 .motion .button::after { box-shadow: var(--shadow-card); transition: opacity .35s var(--ease-out); }
 .motion .button:active::before { opacity: .1; transition-duration: .06s; }
+
+/* Cards: on hover they grow a little outward (so the pointer never slips off the edge) and gain a shadow. */
+.motion :is(.module, .cap, .tracker, .price-card, .trust-grid > div, .audience-grid > div) { transition: transform .5s var(--spring); }
 @media (hover: hover) and (pointer: fine) {
   .motion .button:hover::after { opacity: 1; }
+  .motion :is(.module, .cap, .tracker, .price-card):hover { transform: scale(1.015); }
+  .motion :is(.module, .cap, .tracker, .price-card) { position: relative; }
+  .motion :is(.module, .cap, .tracker, .price-card)::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: var(--shadow-card); opacity: 0; pointer-events: none; transition: opacity .4s var(--ease-out); }
+  .motion :is(.module, .cap, .tracker, .price-card):hover::after { opacity: .55; }
 }
 
-/* 1. The sample audit settles in, then its flagged amount pulses once before the finding counts up (site-motion.js). */
+/* 1. Hero: the sample audit settles in, the flagged price pulses once, then the finding counts up (site-motion.js). */
 .motion .example { animation: mg-card-in .9s var(--spring) .1s both; transform-origin: 50% 100%; }
-/* A table cell can scale, so it stays a cell. It grows leftward from its right edge, staying inside the card. */
-.motion .ledger tr.flag .num.mg-pulse { animation: mg-pulse .7s var(--ease-out); transform-origin: right center; }
+.motion .ledger tr.flag .num.mg-pulse { animation: mg-pulse .7s var(--ease-out); transform-origin: right center; }   /* stays a table cell */
 @keyframes mg-card-in { from { transform: translateY(18px) scale(.97); } }
 @keyframes mg-pulse { 40% { transform: scale(1.08); } }
 
-/* 2. The workspace screenshot tilts flat as it scrolls into view. Scroll-driven where the browser supports it,
-   otherwise it settles once when it comes into view (the .in class). */
-.motion .screen-main img { transform-origin: 50% 100%; }
-@supports (animation-timeline: view()) {
-  .motion .screen-main img { animation: mg-tilt linear both; animation-timeline: view(); animation-range: entry 0% cover 42%; }
-}
-@supports not (animation-timeline: view()) {
-  .motion .screen-main img { transition: transform 1s var(--spring), opacity .6s var(--ease-out); }
-  .motion .screen-main:not(.in) img { transform: perspective(1600px) rotateX(9deg) scale(.94); opacity: .55; }
-}
-@keyframes mg-tilt { from { transform: perspective(1600px) rotateX(9deg) scale(.94); opacity: .55; } }
+/* 2. Reveals: below-the-fold blocks rise and settle as they come into view; big headings arrive word by word.
+   --d is each item's stagger, set by site-motion.js. */
+.motion-ready .rv { opacity: 0; transform: translateY(var(--rise)); }
+.motion-ready .rv.in { opacity: 1; transform: none; transition: opacity .8s var(--ease-out) var(--d, 0ms), transform 1.1s var(--spring) var(--d, 0ms); }
+.motion-ready .rv-words .w { display: inline-block; opacity: 0; transform: translateY(.6em); }
+.motion-ready .rv-words.in .w { opacity: 1; transform: none; transition: opacity .7s var(--ease-out) var(--d, 0ms), transform 1s var(--spring) var(--d, 0ms); }
 
-/* 3. Steps advance as you scroll: each step's rule fills in turn. */
-.motion .workflow-steps li { position: relative; }
-.motion .workflow-steps li::after { content: ""; position: absolute; top: -1px; left: 0; right: 0; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+/* 3. The workspace story: on wide screens the three screenshots become a sticky stack. Each one scales up from 0.88
+   with depth as it scrolls in, then holds while the next slides over it. Phones get the same scale-in, unstacked. */
+.motion .screens .screen { transform-origin: 50% 0; }
 @supports (animation-timeline: view()) {
-  .motion .workflow-steps li::after { animation: mg-fill linear both; animation-timeline: view(); }
-  .motion .workflow-steps li:nth-child(1)::after { animation-range: entry 60% cover 35%; }
-  .motion .workflow-steps li:nth-child(2)::after { animation-range: entry 90% cover 45%; }
-  .motion .workflow-steps li:nth-child(3)::after { animation-range: cover 20% cover 55%; }
+  .motion .screens .screen { animation: mg-depth linear both; animation-timeline: view(); animation-range: entry 0% entry 85%; }
 }
 @supports not (animation-timeline: view()) {
-  .motion .workflow-steps li::after { transition: transform .8s var(--ease-out); }
-  .motion .workflow-steps.in li::after { transform: none; }
-  .motion .workflow-steps.in li:nth-child(2)::after { transition-delay: .25s; }
-  .motion .workflow-steps.in li:nth-child(3)::after { transition-delay: .5s; }
+  .motion-ready .screens .screen { transition: transform 1.1s var(--spring), opacity .7s var(--ease-out); }
+  .motion-ready .screens .screen:not(.in) { transform: perspective(1600px) rotateX(14deg) translateY(70px) scale(.88); opacity: .25; }
+}
+@keyframes mg-depth { from { transform: perspective(1600px) rotateX(14deg) translateY(70px) scale(.88); opacity: .25; } }
+@media (min-width: 900px) {
+  .motion .screens .screen-pair { display: contents; }
+  .motion .screens .screen { position: sticky; top: 88px; width: min(100%, calc((100vh - 230px) * 1.6)); margin: 0 auto 32vh; padding: 14px 14px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-screen); }
+  .motion .screens .screen:last-of-type { margin-bottom: 0; }
+  .motion .screens .screen img { box-shadow: none; }
+  .motion .screens .screen figcaption { font-size: var(--fs-16); }
+}
+
+/* 4. Steps: each step's rule fills in turn as you scroll (time-based where scroll timelines are missing). */
+.motion .workflow-steps li { position: relative; }
+.motion .workflow-steps li::after { content: ""; position: absolute; top: -1px; left: 0; right: 0; height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+@supports (animation-timeline: view()) {
+  .motion .workflow-steps li::after { animation: mg-fill linear both; animation-timeline: view(); animation-range: entry 70% cover 40%; }
+}
+@supports not (animation-timeline: view()) {
+  .motion .workflow-steps li::after { transition: transform .9s var(--ease-out) var(--d, 0ms); }
+  .motion .workflow-steps li.in::after { transform: none; }
 }
 @keyframes mg-fill { to { transform: none; } }
 
+/* 5. Money that counts: bigger tracker figures; each one lifts once when its count lands. */
+.motion .tracker-figures dd { font-size: clamp(2rem, 4.2vw, 3rem); }
+.motion .mg-landed { animation: mg-land .6s var(--spring); transform-origin: left bottom; }
+@keyframes mg-land { 45% { transform: translateY(-4px) scale(1.06); } }
+
 @media (prefers-reduced-motion: reduce) {
-  .motion .example, .motion .screen-main img, .motion .workflow-steps li::after { animation: none !important; transition: none !important; transform: none !important; opacity: 1 !important; }
+  .motion *, .motion *::before, .motion *::after { animation: none !important; transition: none !important; }
+  .motion-ready .rv, .motion-ready .rv-words .w, .motion .screens .screen { opacity: 1 !important; transform: none !important; }
 }
