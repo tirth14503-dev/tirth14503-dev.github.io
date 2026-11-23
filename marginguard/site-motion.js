@@ -73,7 +73,7 @@
     h.classList.add('rv-words');
     marked.push(h);
   });
-  const groups = ['.intro > p', '.audience-grid > div', '.cap-grid > .cap', '.assistant-note', '.module-grid > .module',
+  const groups = ['.intro > p', '.audience-grid > div', '.cap-grid > .cap', '.tile-row > .tile', '.assistant-note', '.module-grid > .module',
     '.workflow-steps > li', '.workflow-bottom', '.templates', '.tracker', '.trust-grid > div', '.trust-more', '.faq-list > details',
     '.check-table tbody tr', '.table-note', '.change-list > li', '.contact-copy', '.contact-form', '.price-card', '.founder'];
   document.querySelectorAll(groups.join(',')).forEach(el => {

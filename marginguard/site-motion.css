@@ -35,6 +35,24 @@
   .motion .module:hover::after { opacity: .5; }
 }
 
+/* The capability row: four calm tiles (Findings, Pay gate, Recovery, Price trends), each a link to where the page
+   explains it. Same image-in-frame behaviour; keyboard focus gets it too, with a visible ring. */
+.tile-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; margin-top: 2.75rem; }
+.tile { display: flex; flex-direction: column; gap: .35rem; padding: 16px 16px 22px; background: var(--surface); border-radius: var(--tile-radius); box-shadow: var(--shadow-screen); color: var(--ink); text-decoration: none; }
+.tile .tile-media { display: block; overflow: hidden; margin-bottom: .85rem; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.tile .tile-media img { display: block; width: 100%; height: auto; }
+.tile-title { font: var(--fw-semibold) var(--fs-20)/1.2 var(--font-serif); }
+.tile-text { color: var(--muted); font-size: var(--fs-14); line-height: 1.5; }
+.tile:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+@media (max-width: 1000px) { .tile-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .tile-row { grid-template-columns: minmax(0, 1fr); } }
+.motion .tile:focus-visible .tile-media img { transform: scale(1.05); }
+.motion .tile:active .tile-media img { transform: scale(1.07); transition-duration: .18s; }
+@media (hover: hover) and (pointer: fine) {
+  .motion .tile:hover .tile-media img { transform: scale(1.05); }
+  .motion .tile:hover:active .tile-media img { transform: scale(1.07); }
+}
+
 /* 1. Hero: the sample audit settles in, the flagged price pulses once, then the finding counts up (site-motion.js). */
 .motion .example { animation: mg-card-in .9s var(--spring) .1s both; transform-origin: 50% 100%; }
 .motion .ledger tr.flag .num.mg-pulse { animation: mg-pulse .7s var(--ease-out); transform-origin: right center; }   /* stays a table cell */
