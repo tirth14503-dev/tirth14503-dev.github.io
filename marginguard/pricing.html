@@ -33,7 +33,7 @@
   <link rel="preload" href="fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/castoro-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/source-sans-3-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="home.css?v=2">
+  <link rel="stylesheet" href="home.css?v=3">
   <script>
   /* Before the first paint: note that scripts run, and switch the motion on only where it is wanted.
      Add ?motion=off to the address to see the still page. If home.js never starts, the motion is switched off again. */
@@ -44,7 +44,7 @@
   })();
   </script>
   <script src="launch.js?v=4" defer></script>
-  <script src="home.js?v=2" defer></script>
+  <script src="home.js?v=3" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -174,14 +174,25 @@
 
 </main>
 
-<footer class="colophon">
-  <div class="grid">
-    <div class="c1"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M12 14v19c0 8.3 7.5 15.7 20 21 12.5-5.3 20-12.7 20-21V14" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="round"/><path d="M20 40V20m24 20V20" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="square"/><path class="v" d="m20 20 12 12 12-12" fill="none" stroke-width="6"/></svg>MarginGuard</div>
-    <div class="c2"><p>Supplier invoice audit for distributors and manufacturers. Every company, person and figure in the pictures and the film is fictional.</p></div>
-    <div class="c3"><p>Set in Besley, Castoro and Source Sans 3, under the SIL Open Font License.</p></div>
-    <div class="c4">
-      <nav aria-label="Footer"><a href="product.html">How it works</a><a href="pricing.html">Pricing</a><a href="security.html">Security</a><a href="whats-new.html">What’s new</a><a href="./#contact">Talk to the founder</a><a data-launch href="https://app.tirthalkothari.com/">Sign in</a><a href="/">Tirthal Kothari</a></nav>
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a class="foot-name" href="./"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M12 14v19c0 8.3 7.5 15.7 20 21 12.5-5.3 20-12.7 20-21V14" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="round"/><path d="M20 40V20m24 20V20" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="square"/><path class="v" d="m20 20 12 12 12-12" fill="none" stroke-width="6"/></svg>MarginGuard</a>
+        <p>Supplier invoice audit for distributors and manufacturers. Built and run by Tirthal Kothari.</p>
+        <p><a class="btn" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan">Run a free scan</a></p>
+      </div>
+      <nav class="foot-cols" aria-label="Footer">
+        <div><h2 class="foot-h">Product</h2><ul><li><a href="product.html#find">Find overcharges</a></li><li><a href="product.html#pay-gate">Pay gate</a></li><li><a href="product.html#recovery">Recovery</a></li><li><a href="product.html#price-trends">Price trends</a></li><li><a href="product.html#suppliers">Suppliers</a></li><li><a href="product.html#freight">Freight</a></li><li><a href="product.html#accountants">Accountants</a></li><li><a href="product.html#files">Any file in</a></li></ul></div>
+        <div><h2 class="foot-h">Learn</h2><ul><li><a href="product.html">How it works</a></li><li><a href="./#film">The film</a></li><li><a href="product.html#sample-files">Sample files</a></li><li><a href="whats-new.html">What’s new</a></li></ul></div>
+        <div><h2 class="foot-h">Company</h2><ul><li><a href="pricing.html">Pricing</a></li><li><a href="pricing.html#questions">Questions</a></li><li><a href="security.html">Security and data</a></li><li><a href="/">Tirthal Kothari</a></li></ul></div>
+        <div><h2 class="foot-h">Contact</h2><ul><li><a href="./#contact">Talk to the founder</a></li><li><a href="mailto:margingaurd@gmail.com">margingaurd@gmail.com</a></li><li><a data-launch href="https://app.tirthalkothari.com/">Sign in</a></li></ul></div>
+      </nav>
+    </div>
+    <div class="foot-base">
       <p>© 2026 MarginGuard</p>
+      <p>Every company, person and figure in the pictures and the film is fictional.</p>
+      <p>Set in Besley, Castoro and Source Sans 3, under the SIL Open Font License.</p>
     </div>
   </div>
 </footer>

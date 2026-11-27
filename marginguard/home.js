@@ -39,6 +39,53 @@
     });
 
     var go = function (el) { el.classList.add('go'); };
+
+    /* A number counts up once from nought, then stays. Read out whole; its width is held so nothing beside it moves. */
+    var countUp = function (el) {
+      if (el.getAttribute('data-done')) return;
+      el.setAttribute('data-done', '1');
+      var to = parseFloat(el.getAttribute('data-count')) || 0, dec = +(el.getAttribute('data-decimals') || 0),
+          pre = el.getAttribute('data-prefix') || '', text = el.textContent;
+      if (!to || !window.requestAnimationFrame) return;
+      var width = el.getBoundingClientRect().width, said = document.createElement('span'), shown = document.createElement('span');
+      said.className = 'vh'; said.textContent = text; shown.setAttribute('aria-hidden', 'true');
+      var fmt = function (v) { return pre + v.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec }); };
+      shown.textContent = fmt(0); el.textContent = ''; el.appendChild(said); el.appendChild(shown);
+      el.style.minWidth = Math.ceil(width) + 'px';
+      var k = parseFloat(getComputedStyle(root).getPropertyValue('--k')) || 1, wait = (+(el.getAttribute('data-delay') || 0)) * k, t0 = 0;
+      var frame = function (now) {
+        if (!t0) t0 = now;
+        var p = Math.min(1, (now - t0) / (1100 * k)), v = to * (1 - Math.pow(1 - p, 3));
+        shown.textContent = p < 1 ? fmt(dec ? v : Math.round(v)) : text;
+        if (p < 1) requestAnimationFrame(frame);
+      };
+      setTimeout(function () { requestAnimationFrame(frame); }, wait);
+    };
+    /* Sections and headings rise into place once as they come into view; members of a group follow one another. */
+    var reveal = function () {
+      [].forEach.call(document.querySelectorAll('[data-rise-group]'), function (g) {
+        [].forEach.call(g.querySelectorAll('[data-rise]'), function (el, i) { el.style.setProperty('--i', i); });
+      });
+      var items = [].slice.call(document.querySelectorAll('[data-rise], .count'));
+      if (!items.length) return;
+      var show = function (el) { if (el.classList.contains('count')) countUp(el); else el.classList.add('in'); };
+      var rio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { show(e.target); rio.unobserve(e.target); } });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.1 });
+      items.forEach(function (el) { rio.observe(el); });
+      var pending = items.slice(), queued = 0;                  /* a long jump: anything above the window's foot is shown */
+      var check = function () {
+        queued = 0;
+        pending = pending.filter(function (el) {
+          if (el.classList.contains('in') || el.getAttribute('data-done')) return false;
+          if (el.getBoundingClientRect().top < innerHeight) { show(el); rio.unobserve(el); return false; }
+          return true;
+        });
+        if (!pending.length) removeEventListener('scroll', onJump);
+      };
+      var onJump = function () { if (!queued) queued = requestAnimationFrame(check); };
+      addEventListener('scroll', onJump, { passive: true });
+    };
     var start = function () {
       window.mgStarted = true;
       if (!root.classList.contains('m')) return;
@@ -70,6 +117,7 @@
         if (begun) return; begun = true;
         seqs.forEach(function (el) { io.observe(el); });
         addEventListener('scroll', onScroll, { passive: true });
+        reveal();
       };
       var ready = (document.fonts && document.fonts.ready) || Promise.resolve();
       ready.then(function () { setTimeout(begin, 200); });     /* wait for the type, so nothing is marked on a page still settling */
@@ -149,5 +197,63 @@
     opener.addEventListener('click', function (e) { e.preventDefault(); setPanel(!panel.classList.contains('is-open'), true); });
     var fromAddress = function () { if (/^#contact(-panel|-form)?$/.test(location.hash)) setPanel(true, false); };
     fromAddress(); window.addEventListener('hashchange', fromAddress);
+  }
+
+  /* ---------- 5. the homepage's story: on wide screens the screen stays and shows the step being read ---------- */
+  var steps = [].slice.call(document.querySelectorAll('.story-step')), stage = document.querySelector('.story-screen');
+  if (steps.length && stage && 'IntersectionObserver' in window) {
+    var shots = [].slice.call(stage.children), bars = [].slice.call(document.querySelectorAll('.story-progress i'));
+    var setStep = function (n) {
+      steps.forEach(function (s, i) { s.classList.toggle('is-on', i === n); });
+      shots.forEach(function (p, i) { p.classList.toggle('is-on', i === n); });
+      bars.forEach(function (b, i) { b.classList.toggle('is-on', i <= n); });
+    };
+    var sio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) setStep(+e.target.getAttribute('data-story')); });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    steps.forEach(function (s) { sio.observe(s); });
+    setStep(0);
+  }
+
+  /* ---------- 6. the product tabs (ARIA tabs: arrow keys, Home and End; an address like #paygate opens its tab) ---------- */
+  var tabs = [].slice.call(document.querySelectorAll('.show-tabs [role="tab"]'));
+  if (tabs.length) {
+    var select = function (n, focus) {
+      tabs.forEach(function (t, i) {
+        var on = i === n, p = document.getElementById(t.getAttribute('aria-controls'));
+        t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1;
+        if (p) { p.classList.toggle('is-on', on); if (on) p.removeAttribute('inert'); else p.setAttribute('inert', ''); }
+      });
+      if (focus) { tabs[n].focus(); tabs[n].scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
+    };
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { select(i, false); });
+      t.addEventListener('keydown', function (e) {
+        var n = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+        if (n === undefined) return;
+        e.preventDefault(); select((n + tabs.length) % tabs.length, true);
+      });
+    });
+    var tabFromAddress = function () {
+      var id = location.hash.slice(1);
+      tabs.forEach(function (t, i) { if (id && t.getAttribute('aria-controls') === id) select(i, false); });
+    };
+    select(0, false); tabFromAddress(); window.addEventListener('hashchange', tabFromAddress);
+  }
+
+  /* ---------- 7. the film's picture drifts a little as the page goes by (motion on only) ---------- */
+  var cinema = document.querySelector('.cinema-frame');
+  if (cinema && root.classList.contains('m') && window.requestAnimationFrame) {
+    var drifting = 0;
+    var place = function () {
+      drifting = 0;
+      if (cinema.classList.contains('playing')) return;
+      var r = cinema.getBoundingClientRect(), h = innerHeight;
+      if (r.bottom < 0 || r.top > h) return;
+      var p = (r.top + r.height / 2 - h / 2) / (h / 2 + r.height / 2);       /* -1 above the middle, 1 below */
+      cinema.style.setProperty('--py', (p * 26).toFixed(1) + 'px');
+    };
+    addEventListener('scroll', function () { if (!drifting) drifting = requestAnimationFrame(place); }, { passive: true });
+    place();
   }
 })();
