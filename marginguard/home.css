@@ -1,0 +1,646 @@
+/* =====================================================================
+   MarginGuard homepage, "In the margin".
+
+   Black is your paperwork. Colour is MarginGuard's hand on it:
+     the pen          notes and marks, in the margin
+     the highlighter  money: what was overcharged, held or found
+     the stamp        a status: Held, Blocked, Recovered
+   Columns 10-12 of a 12-column grid are the margin. It is tinted, and a
+   rule in the pen's colour runs down the page beside it.
+
+   Text and records never move. Only the hand does, once (see "Motion").
+   ===================================================================== */
+
+/* ---------- type: three families, self-hosted, SIL Open Font License (see fonts/) ---------- */
+@font-face{font-family:"Besley";font-style:normal;font-weight:400 700;font-display:swap;
+  src:url(fonts/besley-latin.woff2) format("woff2")}
+@font-face{font-family:"Castoro";font-style:normal;font-weight:400;font-display:swap;
+  src:url(fonts/castoro-latin.woff2) format("woff2")}
+@font-face{font-family:"Castoro";font-style:italic;font-weight:400;font-display:swap;
+  src:url(fonts/castoro-italic-latin.woff2) format("woff2")}
+@font-face{font-family:"Source Sans 3";font-style:normal;font-weight:400 700;font-display:swap;
+  src:url(fonts/source-sans-3-latin.woff2) format("woff2")}
+/* Stand-ins with the same width and height as the real faces, so nothing shifts when the real ones arrive. */
+@font-face{font-family:"Besley standin";src:local("Georgia");size-adjust:114.6%;ascent-override:109.1%;descent-override:37.1%;line-gap-override:0%}
+@font-face{font-family:"Castoro standin";src:local("Georgia");size-adjust:100.4%;ascent-override:75.2%;descent-override:24.4%;line-gap-override:0%}
+@font-face{font-family:"Source Sans standin";src:local("Arial");size-adjust:91.3%;ascent-override:112.2%;descent-override:43.8%;line-gap-override:0%}
+
+:root{
+  /* Oxblood on white. The deep tone, #3A141C, is the colour the owner picked. */
+  --paper:#FFFFFF;      /* the page */
+  --margin:#F9F4F2;     /* the margin column */
+  --sheet:#FFFFFF;      /* a document lying on the page */
+  --ink:#1D1719;        /* print */
+  --ink2:#655C5B;       /* captions and small print */
+  --rn:#756B69;         /* row numbers in the sample files */
+  --pen:#7A1F32;        /* the pen: MarginGuard's notes and marks */
+  --pen-line:#D0B0B3;   /* the margin rule */
+  --hi:#F4CF6E;         /* the highlighter: counted money only */
+  --held:#7A1F32;       /* stamp: Held, Blocked */
+  --ok:#27505B;         /* stamp: Recovered */
+  --deep:#3A141C;       /* index tabs, the button, the film's room, the back cover, headings */
+  --deep-2:#52202B;
+  --on-deep:#FBF7F4; --on-deep-2:#E4D9D6; --on-deep-mute:#C9B8B6;
+  --head:#3A141C;       /* headings */
+  --rule:#3A141C;       /* the heavy rule that opens a section */
+  --hair:#E2DAD6;       /* lines between rows of a table */
+  --edge:#D3CBC7;       /* the edge of a sheet of paper */
+  --field:#857A77;      /* the edge of a form field (3:1 on white) */
+  --display:"Besley","Besley standin",Georgia,serif;                   /* a Clarendon: the face of invoices and ledgers */
+  --text:"Castoro","Castoro standin",Georgia,"Times New Roman",serif;  /* reading text and the margin notes */
+  --sans:"Source Sans 3","Source Sans standin",Arial,sans-serif;       /* records, tables, labels */
+  --gut:24px;
+  --side:64px;
+  --ease:cubic-bezier(.22,.8,.24,1);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:clip;scroll-behavior:auto}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--text);font-size:19px;line-height:1.55;
+  font-synthesis:none;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:color-mix(in srgb,var(--hi) 55%,transparent)}
+img{display:block;max-width:100%;height:auto}
+picture{display:block}
+[hidden]{display:none !important}   /* contact.js hides the fields once a request is sent */
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:.2em}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--pen);outline-offset:3px}
+p{margin:0 0 .85em}
+h1,h2,h3{margin:0;font-weight:500}
+[id]{scroll-margin-top:96px}
+.num{font-variant-numeric:tabular-nums lining-nums;text-align:right;white-space:nowrap}
+.nw{white-space:nowrap}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.skip{position:absolute;left:-999px;top:0}
+.skip:focus{left:var(--side);top:8px;background:var(--paper);padding:8px 12px;z-index:60}
+.text-link{text-decoration:underline}
+
+.page{position:relative;max-width:1440px;margin:0 auto}
+.wrap{padding-inline:var(--side)}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gut)}
+
+/* ---------- masthead: stays at the top of the window ---------- */
+.mast{position:sticky;top:0;z-index:40;background:var(--paper)}
+/* on windows wider than the page, the masthead's paper still reaches both edges, so nothing shows beside it while scrolling */
+.mast::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);background:var(--paper)}
+.mast-row{position:relative;display:flex;align-items:center;gap:28px;padding:16px 0 13px;border-bottom:2px solid var(--rule)}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;text-decoration:none;font-family:var(--sans);font-weight:650;font-size:22px;line-height:1;letter-spacing:-.022em;color:var(--ink)}
+.brand svg{width:27px;height:27px;flex:none}
+.brand svg .v{stroke:var(--pen)}
+.mast-nav{display:flex;align-items:center;gap:28px;font-family:var(--sans);font-size:15px;font-weight:500}
+.mast-nav a{text-decoration:none;padding:8px 0}
+.mast-nav a:hover{text-decoration:underline}
+.mast-nav .in-menu,.menu-button{display:none}
+.btn{position:relative;display:inline-block;font-family:var(--sans);font-weight:600;font-size:16px;line-height:1;padding:14px 20px 15px;
+  background:var(--deep);color:var(--on-deep);text-decoration:none;border:0;border-radius:0;cursor:pointer}
+.btn::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--hi);transform:scaleX(0);transform-origin:0 50%}
+.btn:hover,.btn:focus-visible{background:var(--deep-2)}
+.btn:hover::after,.btn:focus-visible::after{transform:none}
+.btn[disabled]{opacity:.6;cursor:default}
+.mast .btn{font-size:14.5px;padding:11px 15px 12px}
+.dateline{font-family:var(--sans);font-size:13.5px;line-height:1.4;color:var(--ink2);padding-top:9px}
+
+/* ---------- the margin ----------
+   In a 12-column grid, the middle of the gutter before column 10 is at 75% + a quarter gutter.
+   The band runs from there to the edge of the window; the rule is its left edge. */
+.below{position:relative}
+.below::after,.below::before{content:"";position:absolute;z-index:0;top:0;bottom:0;
+  left:calc(var(--side) + (100% - 2*var(--side))*.75 + var(--gut)/4)}
+.below::after{right:calc(50% - 50vw);background:var(--margin)}
+.below::before{width:1px;background:var(--pen-line);z-index:1}
+.below>*{position:relative;z-index:2}
+
+/* ---------- the hand: pen, highlighter, stamp ---------- */
+.mnote{grid-column:10 / span 3;color:var(--pen);font-size:15.5px;line-height:1.42;margin:0}
+.mnote p{margin:0 0 .7em}
+.mnote a{color:inherit}
+.k{position:relative;z-index:1;font-family:var(--sans);font-weight:700;font-size:.72em;color:var(--pen);margin-left:2px;vertical-align:.55em;line-height:0}
+.tk{display:inline-block;width:11px;height:9px;margin-left:5px;color:var(--pen);vertical-align:.02em}
+.tk path{fill:none;stroke:currentColor;stroke-width:1.7;stroke-dasharray:15}
+/* the highlighter: one stroke behind a figure, cut a little unevenly at each end */
+.hl{position:relative;display:inline-block;isolation:isolate;padding:0 .24em;margin:0 -.24em}
+.hl::before{content:"";position:absolute;z-index:-1;left:0;right:0;top:9%;bottom:4%;background:var(--hi);opacity:.9;transform-origin:0 50%;
+  clip-path:polygon(0 16%,2.5% 0,98% 5%,100% 20%,99% 86%,96.5% 100%,1.5% 95%,0 80%)}
+/* the pen circles what is set aside to check (not counted, so not highlighted) */
+.ring{position:relative;display:inline-block}
+.ring svg{position:absolute;left:-10px;top:-6px;width:calc(100% + 20px);height:calc(100% + 11px);overflow:visible;pointer-events:none}
+.ring path{fill:none;stroke:var(--pen);stroke-width:2.5;stroke-linecap:round;stroke-dasharray:1}
+.ring+.k{margin-left:11px}
+/* the pen underlines what a flagged figure was compared with */
+.ref{position:relative;display:inline-block}
+.ref::after{content:"";position:absolute;left:-1px;right:-1px;bottom:-3px;height:2px;background:var(--pen);transform-origin:0 50%}
+/* a rubber stamp: the only capitals on the page */
+.stamp{--r:-3deg;display:inline-block;flex:none;font-family:var(--display);font-weight:700;font-size:12.5px;line-height:1;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--held);border:2px solid currentColor;outline:1px solid currentColor;outline-offset:2px;border-radius:2px;
+  padding:5px 8px 4px 9px;margin:0 3px;white-space:nowrap;transform:rotate(var(--r));filter:url(#ink)}
+.stamp.ok{--r:2.2deg;color:var(--ok)}
+.stamp.alt{--r:-1.4deg}
+.callouts .stamp{display:block;width:max-content;margin:-3px 0 7px 3px}
+
+/* ---------- opening ---------- */
+.open{padding-top:58px;padding-bottom:92px}
+h1{grid-column:1 / span 9;font-family:var(--display);font-size:50px;line-height:1.08;letter-spacing:-.016em;margin-bottom:44px;text-wrap:balance;color:var(--head)}
+.open .mnote.first{align-self:start;padding-top:10px;font-size:16.5px}
+.lede{grid-column:1 / span 4}
+.standfirst{font-size:20.5px;line-height:1.5;margin:0 0 28px}
+.small{font-family:var(--sans);font-size:14px;line-height:1.45;color:var(--ink2)}
+.lede .small{margin:14px 0 0;max-width:26em}
+.toc{margin:44px 0 0;padding:14px 0 0;border-top:1px solid var(--ink);font-family:var(--sans);font-size:14.5px;line-height:1.3}
+.toc h2{font-family:var(--sans);font-weight:600;font-size:13.5px;margin-bottom:6px}
+.toc ol{list-style:none;margin:0;padding:0}
+.toc li{display:grid;grid-template-columns:22px 1fr}
+.toc li span{color:var(--ink2);font-variant-numeric:tabular-nums;padding:4px 0}
+.toc a{text-decoration:none;padding:4px 0}
+.toc a:hover{text-decoration:underline}
+
+/* ---------- exhibits ---------- */
+.ex{margin:0}
+.ex-head{font-family:var(--sans);font-size:14.5px;line-height:1.35;padding:9px 0 12px;border-top:1px solid var(--ink);margin:0}
+.ex-head b{font-weight:700;margin-right:10px}
+.source{font-family:var(--sans);font-size:13.5px;line-height:1.45;color:var(--ink2);margin:12px 0 0}
+
+/* Exhibit 1: three files and the marks on them */
+.ex1{grid-column:5 / span 8;display:grid;grid-template-columns:subgrid;align-content:start}
+.ex1 .ex-head{grid-column:1 / span 5}
+.ex1 .key{grid-column:6 / span 3;font-family:var(--sans);font-size:13.5px;line-height:1.35;margin:0;padding:10px 0 0;color:var(--ink2)}
+.ex1 .key b{font-weight:600;color:var(--ink)}
+.ex1 .key b.c{color:var(--pen)}
+.sheet{background:var(--sheet);border:1px solid var(--edge);font-family:var(--sans);font-size:14.5px;line-height:1.3}
+.sheet .cap{font-weight:600;font-size:12.5px;padding:9px 14px 0;height:30px}
+.sheet .cap span{font-weight:400;color:var(--ink2);margin-left:6px}
+.row{display:grid;grid-template-columns:24px 1.2fr 1.2fr 1.25fr .7fr 1fr;column-gap:10px;padding-inline:14px;align-items:baseline}
+.row>*{min-width:0}
+.row.hd{font-size:12.5px;color:var(--ink2);height:27px;align-items:end;padding-bottom:6px;position:relative}
+.row.hd::after{content:"";position:absolute;left:14px;right:14px;bottom:0;border-bottom:1px solid var(--ink)}
+.row .rn{color:var(--rn);font-size:12.5px;font-variant-numeric:tabular-nums}
+.row small{display:block;font-size:12.5px;color:var(--ink2);white-space:nowrap;margin-top:2px}
+.sheet .row.ln{min-height:36px;padding-top:9px;padding-bottom:8px;position:relative}
+.sheet .row.ln+.row.ln::before,.invgrid .row.ln.sep::before{content:"";position:absolute;left:14px;right:14px;top:0;border-top:1px solid var(--hair)}
+.sheet.po,.sheet.grn{grid-column:1 / span 5;margin-top:12px}
+.sheet.po .row{grid-template-columns:24px 1.05fr 1.55fr 1.05fr .7fr 1fr}
+.sheet .typ{color:var(--ink2);text-align:right}
+
+.invgrid{grid-column:1 / -1;display:grid;grid-template-columns:subgrid;grid-template-rows:30px 27px;position:relative}
+/* five of the figure's eight columns: 62.5% less three-eighths of a gutter */
+.invgrid::before{content:"";position:absolute;left:0;top:0;bottom:0;width:calc(62.5% - var(--gut)*.375);background:var(--sheet);border:1px solid var(--edge)}
+.invgrid .cap,.invgrid .row{grid-column:1 / span 5;font-family:var(--sans);font-size:14.5px;line-height:1.3;position:relative}
+.invgrid .cap{grid-row:1;font-weight:600;font-size:12.5px;padding:9px 15px 0}
+.invgrid .cap span{font-weight:400;color:var(--ink2);margin-left:6px}
+.invgrid .row{padding-inline:15px}
+.invgrid .row.hd{grid-row:2;font-size:12.5px}
+.invgrid .row.hd::after{left:15px;right:15px}
+.invgrid .row.ln{padding-top:10px;padding-bottom:10px;min-height:60px;align-items:start}
+.invgrid .row.ln.sep::before{left:15px;right:15px}
+.mark{grid-column:6 / span 3;position:relative;color:var(--pen);font-size:15px;line-height:1.36;padding:7px 0 8px}
+.mark b{display:block;font-family:var(--sans);font-weight:600;font-size:13.5px;line-height:1.3;margin-bottom:1px}
+.mark p{margin:0}
+.mark::before,.callouts li::before{position:absolute;left:calc(var(--gut)/-2);top:8px;transform:translateX(-50%);width:20px;height:20px;border-radius:50%;
+  background:var(--pen);color:#fff;font-family:var(--sans);font-weight:700;font-size:12px;line-height:20px;text-align:center}
+.mark::before{content:attr(data-k)}
+.mark::after{content:"";position:absolute;top:18px;height:1px;background:var(--pen);left:calc(var(--gut)*-1);width:calc(var(--gut)/2 - 10px)}
+/* the money found */
+.tally{grid-column:6 / span 3;grid-row:span 2;align-self:start;color:var(--pen);font-family:var(--sans);margin-top:12px}
+.found{margin:0;padding-top:11px;border-top:1px solid var(--pen)}
+.found .lab{display:block;font-weight:600;font-size:14px;line-height:1.3;margin-bottom:5px}
+.found .amt{display:block;font-family:var(--display);font-weight:500;font-size:40px;line-height:1.12;letter-spacing:-.012em}
+.found .amt .hl{padding:0 .16em;margin:0 -.16em}
+.look{display:flex;justify-content:space-between;gap:16px;margin:14px 0 0;padding:8px 0 7px;border-top:1px solid var(--pen-line);border-bottom:1px solid var(--pen-line);font-size:15.5px;line-height:1.3}
+.tally .tick-key{font-size:13.5px;line-height:1.35;margin:12px 0 0}
+.tally .tick-key .tk{margin:0 6px 0 0}
+.ex1 .source{grid-column:1 / span 5}
+
+/* ---------- sections: each opens with a rule and an index tab ---------- */
+.sec{padding-top:0;padding-bottom:96px}
+.sec-head{border-top:2px solid var(--rule);margin-bottom:30px;align-items:start}
+.sec-head .no{grid-column:1 / span 2}
+.sec-head .no i{display:grid;place-items:center;width:48px;height:48px;padding-bottom:2px;background:var(--deep);color:var(--hi);
+  font-family:var(--display);font-style:normal;font-weight:500;font-size:26px;line-height:1}
+.sec-head h2{grid-column:3 / span 7;padding-top:17px;font-family:var(--display);font-size:30px;line-height:1.15;letter-spacing:-.012em;color:var(--head)}
+.sec.minor .sec-head h2{font-size:24px}
+.sec-head .no:empty{min-height:1px}
+.text{grid-column:3 / span 6}
+.main{grid-column:3 / span 7}
+.sec .grid>.mnote{padding-top:4px}
+.sec .text+.mnote+.main,.sec .text+.main{margin-top:18px}
+.gap{margin-top:40px}
+h3.sub{font-family:var(--display);font-size:21px;line-height:1.25;letter-spacing:-.006em;color:var(--head);margin-bottom:10px}
+
+/* tables set as statements */
+.ledger{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:15.5px;line-height:1.38}
+.ledger th{font-weight:600;font-size:13px;text-align:left;vertical-align:bottom;padding:0 0 7px;border-bottom:1px solid var(--ink)}
+.ledger td,.ledger tbody th{padding:10px 0 10px;border-bottom:1px solid var(--hair);vertical-align:top}
+.ledger tbody th{font-size:inherit}
+.ledger th+th,.ledger td+td,.ledger th+td{padding-left:22px}
+.ledger th.num,.ledger td.num{text-align:right}
+.ledger tr.total td{font-weight:600;border-top:1px solid var(--ink);border-bottom:3px double var(--ink)}
+.checks tbody th{width:21%;white-space:nowrap}
+.checks td:last-child{width:23%;color:var(--ink2)}
+/* a sideline: the margin rule thickens beside the rows a note is about */
+.checks tr.shown td:last-child{position:relative}
+.checks tr.shown td:last-child::after{content:"";position:absolute;top:-1px;bottom:0;width:3px;right:calc(var(--gut)/-2 - 1.5px);background:var(--pen);transform-origin:50% 0}
+.mnote.split{display:flex;flex-direction:column;justify-content:space-between;margin-top:18px}
+.mnote.split p:first-child{margin-top:31px}
+.mnote.split p:last-child{margin-bottom:.7em}
+.files td:last-child{color:var(--ink2);text-align:right;white-space:nowrap}
+
+/* 1: the free scan, three steps */
+.steps{grid-column:3 / span 7;display:grid;grid-template-columns:subgrid;list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{grid-column:1 / -1;display:grid;grid-template-columns:subgrid;padding:15px 0 6px;border-top:1px solid var(--hair);counter-increment:s}
+.steps li:first-child{border-top:1px solid var(--ink)}
+.steps h3{grid-column:1 / span 2;position:relative;padding-left:22px;font-family:var(--display);font-size:19.5px;line-height:1.3;letter-spacing:-.005em;color:var(--head)}
+.steps h3::before{content:counter(s);position:absolute;left:0;top:.28em;font-family:var(--sans);font-weight:400;font-size:15px;line-height:1.3;color:var(--ink2);font-variant-numeric:tabular-nums}
+.steps p{grid-column:3 / span 5;font-size:18px;line-height:1.5}
+
+/* screens with notes in the margin */
+.shot{grid-column:3 / span 10;display:grid;grid-template-columns:subgrid;margin-top:20px}
+.shot .ex-head{grid-column:1 / span 7}
+.plate{grid-column:1 / -1;display:grid;grid-template-columns:subgrid}
+.mount{grid-column:1 / span 7;position:relative;border:1px solid color-mix(in srgb,var(--ink) 30%,transparent);background:var(--sheet)}
+.shot.narrow .mount{grid-column:1 / span 6}
+.mount img{width:100%}
+.pins{display:none}
+.callouts{grid-column:8 / span 3;position:relative;list-style:none;margin:0;padding:0;counter-reset:c;color:var(--pen);font-size:15px;line-height:1.36}
+.callouts li{position:absolute;left:0;right:0;top:calc(var(--y)*1%);margin-top:-18px;padding-top:8px;counter-increment:c}
+.callouts li::before{content:counter(c)}
+.callouts li::after{content:"";position:absolute;top:18px;height:1px;background:var(--pen);transform-origin:0 50%;
+  left:calc(var(--gut)*-1 - var(--reach,0px));width:calc(var(--gut)/2 - 10px + var(--reach,0px))}
+.shot.narrow .callouts li{--reach:calc((100% - 2*var(--gut))/3 + var(--gut))}
+
+/* ---------- the film ---------- */
+.film{background:var(--deep);color:var(--on-deep);margin-bottom:96px;padding:68px 0 72px;
+  margin-inline:calc(50% - 50vw);padding-inline:calc(50vw - 50%)}
+.film .lead{grid-column:1 / span 9;position:relative;margin:0;background:#000;overflow:hidden;aspect-ratio:1920/824}
+.film .lead.playing{aspect-ratio:16/9}
+.film .lead picture{width:100%;height:100%}
+.film .lead img,.film .lead video{width:100%;height:100%;object-fit:cover;display:block}
+.film .lead video{object-fit:contain;background:#000}
+.play{position:absolute;left:20px;bottom:20px;display:flex;align-items:center;gap:11px;font-family:var(--sans);font-weight:600;font-size:15.5px;line-height:1;
+  background:var(--hi);color:var(--deep);border:0;padding:13px 17px 13px 15px;cursor:pointer;text-decoration:none}
+.play:hover,.play:focus-visible{background:var(--on-deep)}
+.play:focus-visible{outline-color:var(--on-deep);outline-offset:3px}
+.play svg{width:11px;height:13px}
+.play span{font-weight:400;font-variant-numeric:tabular-nums}
+.film-text{grid-column:10 / span 3;align-self:start}
+.film-text .kicker{font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--hi);margin:0 0 10px}
+.film-text h2{font-family:var(--display);font-size:32px;line-height:1.1;letter-spacing:-.012em;margin-bottom:16px}
+.film-text p{font-size:17px;line-height:1.5;color:var(--on-deep-2)}
+.film-text .gold{color:var(--hi)}
+.film-text .fine{font-family:var(--sans);font-size:13px;line-height:1.45;color:var(--on-deep-mute);margin:16px 0 0}
+.film a:focus-visible{outline-color:var(--hi)}
+.strip{grid-column:1 / -1;display:grid;grid-template-columns:subgrid;list-style:none;margin:36px 0 0;padding:0}
+.strip li{grid-column:span 3}
+.strip img{width:100%;aspect-ratio:720/314;object-fit:cover}
+.strip time{display:block;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--hi);font-variant-numeric:tabular-nums;margin-top:11px}
+.strip q{display:block;font-style:italic;font-size:16.5px;line-height:1.4;margin-top:2px;color:var(--on-deep-2);quotes:"\201C" "\201D"}
+
+/* ---------- Exhibit 4: a ledger on the page grid ---------- */
+.book{grid-column:3 / span 10;display:grid;grid-template-columns:subgrid;margin-top:0;font-family:var(--sans);font-size:15.5px;line-height:1.35}
+.book .ex-head{grid-column:1 / span 7}
+.book .r{grid-column:1 / -1;display:grid;grid-template-columns:subgrid;align-items:baseline;border-bottom:1px solid var(--hair);padding:9px 0 9px}
+.book .r>*{min-width:0}
+.book .r.hd{font-weight:600;font-size:13px;border-bottom:1px solid var(--ink);padding:0 0 7px;align-items:end}
+.book .r .inv{grid-column:1 / span 2}
+.book .r .st{grid-column:8 / span 3;color:var(--pen);font-family:var(--text);font-size:15px;line-height:1.36;display:flex;align-items:center;gap:12px}
+.book .r.hd .st{font-family:var(--sans);font-size:13px;font-weight:600;line-height:inherit}
+.book .r.grp{border-bottom:0;padding:20px 0 4px;font-weight:600}
+.book .r.grp span{grid-column:1 / span 7}
+.book .r.grp em{font-style:normal;font-weight:400;color:var(--ink2)}
+.book .r.tot{font-weight:600;border-top:1px solid var(--ink);border-bottom:0;padding-top:11px;margin-top:-1px;font-size:16.5px}
+.book .r.of{border-bottom:0;padding:3px 0}
+.book .r.of .lab{grid-column:1 / span 6;padding-left:22px;color:var(--ink2)}
+.book .r.tot .lab{grid-column:1 / span 6}
+.book .r.end{border-bottom:3px double var(--ink);padding-bottom:9px}
+.book .r.end .lab{color:var(--ink)}
+.book .dash{color:var(--ink2)}
+
+/* ---------- a list beside a small table ---------- */
+.two{grid-column:3 / span 7;display:grid;grid-template-columns:subgrid;margin-top:8px}
+.two .a{grid-column:1 / span 3}
+.two .b{grid-column:4 / span 4;margin:0}
+.plain{margin:0;padding:0 0 0 1.05em;font-size:18px;line-height:1.5}
+.plain li{margin-bottom:5px;padding-left:2px}
+
+/* ---------- what it doesn't do ---------- */
+.nots p{margin:0 0 .95em}
+.nots b{font-family:var(--display);font-weight:500;font-size:.97em;letter-spacing:-.005em;margin-right:.15em;color:var(--head)}
+
+/* ---------- price and the founder ---------- */
+.terms{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:16px;line-height:1.4;margin-bottom:26px}
+.terms th{font-weight:600;text-align:left;vertical-align:top;white-space:nowrap;padding:10px 26px 10px 0;border-bottom:1px solid var(--hair);width:1%}
+.terms td{padding:10px 0;border-bottom:1px solid var(--hair)}
+.terms tr:first-child th,.terms tr:first-child td{border-top:1px solid var(--ink)}
+.act{display:flex;align-items:center;flex-wrap:wrap;gap:12px 22px;font-family:var(--sans);font-size:15.5px;margin-bottom:44px}
+.letter p{font-size:19.5px;line-height:1.55}
+.sig{font-family:var(--sans);font-size:15.5px;line-height:1.45;margin:26px 0 0}
+.sig b{display:block;font-family:var(--display);font-weight:500;font-size:21px;margin-bottom:2px;color:var(--head)}
+
+/* the contact form: a sheet to fill in */
+.contact{grid-column:3 / span 6;margin-top:56px}
+.contact-form{display:grid;gap:16px;padding:22px 24px 24px;background:var(--sheet);border:1px solid var(--edge);font-family:var(--sans)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}
+.contact-form label{display:block;font-size:14px;font-weight:600;line-height:1.3}
+.contact-form .optional{font-weight:400;color:var(--ink2)}
+.contact-form input,.contact-form select,.contact-form textarea{display:block;width:100%;min-height:44px;margin-top:6px;padding:9px 11px;
+  border:1px solid var(--field);border-radius:0;background:#fff;color:var(--ink);font:400 16px/1.4 var(--sans)}
+.contact-form textarea{min-height:112px;resize:vertical}
+.contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{outline:2px solid var(--pen);outline-offset:0;border-color:var(--pen)}
+.contact-form [aria-invalid="true"]{border-color:var(--pen);box-shadow:inset 3px 0 0 var(--pen)}
+.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.no-script{font-size:17.5px;margin:0}
+html.js .no-script,html:not(.js) .contact-form{display:none}   /* the form posts through contact.js; without scripts, show the address instead */
+.form-foot{display:flex;align-items:center;flex-wrap:wrap;gap:10px 18px}
+.form-note{margin:0;font-size:14px;color:var(--ink2)}
+.form-status{margin:0;font-size:16px;line-height:1.45}
+.form-status:empty{display:none}
+.form-status[data-tone="error"]{color:var(--pen);font-weight:600}
+.form-status[data-tone="success"]{padding:14px 16px;background:var(--margin);border-left:3px solid var(--pen);font-family:var(--text);font-size:18px}
+
+/* ---------- questions ---------- */
+.faq{grid-column:3 / span 6;border-top:1px solid var(--ink)}
+.faq details{border-bottom:1px solid var(--hair)}
+.faq summary{display:flex;justify-content:space-between;align-items:baseline;gap:20px;cursor:pointer;list-style:none;padding:14px 0 13px;
+  font-family:var(--display);font-weight:500;font-size:19.5px;line-height:1.3;letter-spacing:-.005em;color:var(--head)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";flex:none;font-family:var(--sans);font-weight:400;font-size:22px;line-height:1;color:var(--ink2)}
+.faq details[open] summary::after{content:"\2212"}
+.faq details>p,.faq details>ul{margin:0 0 16px;font-size:18px;line-height:1.55;max-width:34em}
+.faq details>ul{padding-left:1.05em}
+.faq li{margin-bottom:4px}
+
+/* ---------- what's new: a dated log ---------- */
+.change-list{grid-column:1 / span 9;display:grid;grid-template-columns:subgrid;list-style:none;margin:0;padding:0}
+.change-list li{grid-column:1 / -1;display:grid;grid-template-columns:subgrid;align-items:baseline;padding:14px 0 4px;border-top:1px solid var(--hair)}
+.change-list li:first-child{border-top:0;padding-top:0}
+.change-list small{grid-column:1 / span 2;font-family:var(--sans);font-size:13.5px;line-height:1.4;color:var(--ink2)}
+.change-list li>div{grid-column:3 / span 6}
+.change-list h3{font-family:var(--sans);font-weight:600;font-size:17px;line-height:1.35;margin-bottom:3px}
+.change-list p{font-size:17.5px;line-height:1.5}
+.sec.last{padding-bottom:88px}
+
+/* ---------- colophon: the back cover ---------- */
+.colophon{background:var(--deep);color:var(--on-deep-mute);padding-top:30px;padding-bottom:38px;
+  margin-inline:calc(50% - 50vw);padding-inline:calc(50vw - 50% + var(--side))}
+.colophon .grid{font-family:var(--sans);font-size:13.5px;line-height:1.55;row-gap:14px}
+.colophon .c1{grid-column:1 / span 2;display:flex;align-items:center;gap:9px;align-self:start;color:var(--on-deep);font-weight:650;font-size:17px;letter-spacing:-.018em;line-height:1.2}
+.colophon .c1 svg{width:22px;height:22px;flex:none}
+.colophon .c1 svg .v{stroke:var(--hi)}
+.colophon .c2{grid-column:3 / span 4}
+.colophon .c3{grid-column:7 / span 3}
+.colophon .c4{grid-column:10 / span 3}
+.colophon nav{display:flex;flex-wrap:wrap;gap:2px 16px;margin-bottom:6px}
+.colophon a{color:var(--on-deep);padding:3px 0}
+.colophon a:focus-visible{outline-color:var(--hi)}
+.colophon p{margin:0}
+
+/* =====================================================================
+   Motion. Text and records never move. Three things do, each once:
+
+   1. The hand. When an exhibit comes into view, MarginGuard's marks are
+      made in reading order: a tick is drawn, the highlighter is pulled
+      across a figure, the pen underlines or circles, a note is written
+      beside it, a stamp is pressed, a total is written out.
+   2. The film. Its opening frame eases in, and four frames follow.
+   3. The index tab at the head of each section slides out.
+
+   With reduced motion (or ?motion=off) none of this is applied and the
+   page is complete and still from the first paint. The class "m" on
+   <html> switches it on; home.js starts each score.
+
+   --d  when a mark is made, in ms from the start of its exhibit
+   --k  pace: 1 on a first visit, shorter afterwards
+   --t  used only to freeze the score at one moment (?t=1500), for stills
+   ===================================================================== */
+@media (prefers-reduced-motion:no-preference){
+  html.m [data-a],html.m .hl::before,html.m .ref::after,html.m .tk path,html.m .ring path,html.m .ch,html.m .stamp,
+  html.m .mark,html.m .mark::before,html.m .callouts li,html.m .callouts li::before,html.m .callouts li::after,
+  html.m .book [data-step] .st,html.m .shown td:last-child::after{
+    animation-duration:.45s;animation-timing-function:var(--ease);animation-fill-mode:both;animation-play-state:paused;
+    animation-delay:calc(var(--d,0ms)*var(--k,1) - var(--t,0ms))}
+  html.m .go [data-a],html.m .go .hl::before,html.m .go .ref::after,html.m .go .tk path,html.m .go .ring path,html.m .go .ch,html.m .go .stamp,
+  html.m .go .mark,html.m .go .mark::before,html.m .go .callouts li,html.m .go .callouts li::before,html.m .go .callouts li::after,
+  html.m .go [data-step] .st,html.m .go .shown td:last-child::after{animation-play-state:running}
+
+  /* 1. the hand */
+  html.m .tk path{animation-name:draw;animation-duration:.28s}                /* a tick */
+  html.m .hl::before{animation-name:sweep;animation-duration:.42s}            /* the highlighter */
+  html.m .hl.glow::before{animation-name:sweep,glow;animation-duration:.42s,.95s;animation-timing-function:var(--ease),ease-in-out;
+    animation-delay:calc(var(--d,0ms)*var(--k,1) - var(--t,0ms)),calc(var(--g,0ms)*var(--k,1) - var(--t,0ms))} /* ...answers once when the total lands */
+  html.m .ref::after{animation-name:sweep;animation-duration:.3s}             /* the pen underlines */
+  html.m .ring path{animation-name:circle;animation-duration:.62s;animation-timing-function:cubic-bezier(.4,.1,.3,1)} /* the pen goes round once */
+  html.m [data-a="fade"],html.m .mark,html.m .callouts li,html.m .book [data-step] .st{animation-name:fade;animation-duration:.4s} /* a note is written */
+  html.m .mark::before,html.m .callouts li::before{animation-name:bead;animation-duration:.32s;
+    animation-delay:calc((var(--d,0ms) + 90ms)*var(--k,1) - var(--t,0ms))}
+  html.m .callouts li::after{animation-name:sweep;animation-duration:.34s}    /* a line is ruled from the picture to its note */
+  html.m .ch{animation-name:fade;animation-duration:.24s;                       /* a total, written figure by figure (kept inline, so the figures keep their spacing) */
+    animation-delay:calc((var(--d,0ms) + var(--i,0)*58ms)*var(--k,1) - var(--t,0ms))}
+  html.m .stamp{animation-name:press;animation-duration:.5s;animation-timing-function:cubic-bezier(.2,.9,.25,1); /* a stamp is pressed */
+    animation-delay:calc((var(--d,0ms) + var(--sd,300ms))*var(--k,1) - var(--t,0ms))}
+  html.m .book [data-step] .st{animation-delay:calc((var(--d,0ms) + 130ms)*var(--k,1) - var(--t,0ms))}
+  html.m .book .stamp{--sd:300ms}
+  html.m .book .tot .hl::before{animation-delay:calc((var(--d,0ms) + 430ms)*var(--k,1) - var(--t,0ms))}
+  html.m .shown td:last-child::after{animation-name:rule;animation-duration:.2s;animation-timing-function:linear} /* the sideline is ruled downwards */
+  html.m .shown:nth-child(1) td:last-child::after{--d:250ms}
+  html.m .shown:nth-child(2) td:last-child::after{--d:450ms}
+  html.m .shown:nth-child(3) td:last-child::after{--d:650ms}
+  html.m .faq .hl::before{animation:none}                                      /* inside a closed answer: simply there when it is opened */
+  /* 2. the film */
+  html.m [data-a="push"]{animation-name:push;animation-duration:1.6s;animation-timing-function:cubic-bezier(.16,.7,.2,1)}
+  html.m [data-a="settle"]{animation-name:settle;animation-duration:.55s}
+  /* 3. the index tab */
+  html.m [data-a="slide"]{animation-name:slide}
+
+  @keyframes draw{from{stroke-dashoffset:15}to{stroke-dashoffset:0}}
+  @keyframes sweep{from{transform:scaleX(0)}to{transform:none}}
+  @keyframes glow{0%,100%{scale:1;filter:none}45%{scale:1.05 1.24;filter:saturate(1.3) brightness(1.03)}}
+  @keyframes circle{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @keyframes bead{from{opacity:0;transform:translateX(-50%) scale(.3)}to{opacity:1;transform:translateX(-50%)}}
+  @keyframes press{0%{opacity:0;transform:rotate(var(--r,-3deg)) scale(1.5)}55%{opacity:1;transform:rotate(var(--r,-3deg)) scale(.96)}100%{opacity:1;transform:rotate(var(--r,-3deg))}}
+  @keyframes rule{from{transform:scaleY(0)}to{transform:none}}
+  @keyframes push{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:none}}
+  @keyframes settle{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+  @keyframes slide{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+
+  /* things that answer the pointer */
+  .btn{transition:background-color .2s var(--ease)}
+  .btn::after{transition:transform .32s var(--ease)}
+  .play{transition:background-color .2s var(--ease)}
+  .mount{transition:border-color .25s var(--ease)}
+  .film .lead img{transition:scale 1.6s cubic-bezier(.16,.7,.2,1)}
+  .mark::before,.callouts li::before{transition:scale .2s var(--ease)}
+  .mark,.book .r{transition:background-color .2s var(--ease)}
+  .ring path{transition:stroke-width .2s var(--ease)}
+}
+@media print{*,*::before,*::after{animation:none !important}.mast{position:static}}
+@media (hover:hover){
+  .shot:hover .mount{border-color:var(--pen)}
+  .film .lead:hover img{scale:1.02}
+  .callouts li:hover::before,.mark:hover::before{scale:1.18}
+  .callouts li:hover::after{height:2px;top:17.5px}
+  /* a note and the figures it is about answer each other */
+  .ex1:has(.mark[data-k="a"]:hover) .row [data-k="a"],.ex1:has(.mark[data-k="b"]:hover) .row [data-k="b"]{outline:1.5px solid var(--pen);outline-offset:3px}
+  .ex1:has(.mark[data-k="c"]:hover) .ring path{stroke-width:3.4}
+  .ex1:has(.row [data-k="a"]:hover) .mark[data-k="a"],.ex1:has(.row [data-k="b"]:hover) .mark[data-k="b"],.ex1:has(.row [data-k="c"]:hover) .mark[data-k="c"]{background:color-mix(in srgb,var(--hi) 34%,transparent)}
+  .book .r[data-step]:hover{background:color-mix(in srgb,var(--hi) 16%,transparent)}
+}
+
+/* =====================================================================
+   1280 and narrower desktops
+   ===================================================================== */
+@media (max-width:1360px){
+  :root{--side:56px}
+  h1{font-size:44px;margin-bottom:38px}
+  .standfirst{font-size:19.5px}
+  .sheet,.invgrid .row{font-size:14px}
+  .mark,.callouts,.book .r .st{font-size:14.5px}
+  .mnote{font-size:15px}
+  .found .amt{font-size:36px}
+  .film-text h2{font-size:28px}
+  .film-text p{font-size:16px}
+  .mast-nav{gap:22px}
+}
+
+/* =====================================================================
+   Below 1100: one column. The margin folds into the text: each note
+   becomes a slip of the margin's paper with a piece of its rule. The
+   masthead's links move behind a Menu button.
+   ===================================================================== */
+@media (max-width:1099px){
+  :root{--side:40px;--gut:20px}
+  .below::before,.below::after{display:none}
+  .page{max-width:820px}
+  .mast{max-width:none}
+  .grid,.shot,.plate,.book,.two,.strip,.invgrid,.steps,.steps li,.change-list,.change-list li{display:block}
+  .mast-row{gap:14px}
+  .menu-button{display:inline-block;font-family:var(--sans);font-weight:600;font-size:14.5px;line-height:1;padding:11px 13px 12px;min-height:40px;
+    background:none;color:var(--ink);border:1px solid var(--ink);border-radius:0;cursor:pointer}
+  html:not(.js) .menu-button{display:none}
+  .mast-nav{display:none;position:absolute;left:calc(var(--side)*-1);right:calc(var(--side)*-1);top:100%;margin-top:2px;padding:6px var(--side) 18px;
+    background:var(--paper);border-bottom:2px solid var(--rule);font-size:16.5px;max-height:calc(100vh - 70px);overflow:auto}
+  .mast-nav.is-open{display:block}
+  .mast-nav a,.mast-nav .in-menu{display:block;padding:12px 0 11px;border-bottom:1px solid var(--hair)}
+  .ex1{display:flex;flex-direction:column}
+  .ex1 .tally{order:2}
+  .ex1 .source{order:3}
+  .mnote{background:var(--margin);border-left:2px solid var(--pen-line);padding:11px 14px 4px;margin:18px 0 22px}
+  .sec .grid>.mnote{padding-top:11px}
+  .mnote.split{display:block}
+  .mnote.split p:first-child{margin-top:0}
+  .checks tr.shown td:last-child::after{display:none}
+  h1{font-size:40px;margin-bottom:26px}
+  .open{padding-top:40px;padding-bottom:72px}
+  .lede{margin-bottom:44px}
+  .toc{display:none}
+  .invgrid{background:var(--sheet);border:1px solid var(--edge)}
+  .invgrid::before{display:none}
+  .invgrid .cap{height:30px}
+  .invgrid .row.hd{height:27px}
+  .invgrid .row.ln{min-height:0;padding-bottom:10px}
+  .mark{margin:0 15px;padding:0 0 12px 30px;border-top:0}
+  .mark::before{left:0;top:0;transform:none}
+  .mark::after{display:none}
+  .ex1 .key{padding:0 0 12px}
+  .tally{margin-top:18px;align-self:stretch;background:var(--margin);border-left:2px solid var(--pen-line);padding:0 14px 12px}
+  .found{border-top:0}
+  .sec{padding-bottom:76px}
+  .sec-head{display:flex;align-items:flex-start;gap:16px;margin-bottom:22px}
+  .sec-head .no i{width:42px;height:42px;font-size:23px}
+  .sec-head h2{padding-top:12px}
+  .sec-head .no:empty{display:none}
+  .steps h3{margin-bottom:4px}
+  .shot,.book{margin-top:22px}
+  .mount{margin-right:14px}
+  .pins{display:block}
+  .pins i{position:absolute;right:-11px;top:calc(var(--y)*1%);transform:translateY(-50%);width:21px;height:21px;border-radius:50%;background:var(--pen);color:#fff;
+    font:700 12px/21px var(--sans);text-align:center;font-style:normal}
+  .callouts{margin-top:14px;font-size:15.5px}
+  .callouts li{position:relative;top:auto;margin:0 0 8px;padding:0 0 0 32px}
+  .callouts li::before{left:0;top:0;transform:none}
+  .callouts li::after{display:none}
+  .film{padding:44px 0 52px;margin-bottom:76px;margin-inline:calc(50% - 50vw);padding-inline:calc(50vw - 50%)}
+  .film-text{margin-top:26px}
+  .strip{display:grid;grid-template-columns:1fr 1fr;gap:26px var(--gut);margin-top:34px}
+  .strip li{grid-column:auto}
+  .book .r{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr 1.2fr;column-gap:10px}
+  .book .r .inv{grid-column:auto}
+  .book .r .st{grid-column:1 / -1;padding-top:5px}
+  .book .r.hd .st{display:none}
+  .book .r.grp span,.book .r .lab,.book .r.tot .lab,.book .r.of .lab{grid-column:1 / span 5}
+  .two .b{margin-top:26px}
+  .contact{margin-top:44px}
+  .change-list small{display:block;margin-bottom:3px}
+  .colophon .grid>div{margin-bottom:12px}
+  /* stacked, the beads sit still, so their little animation must not carry the desktop offset */
+  @keyframes bead{from{opacity:0;scale:.3}to{opacity:1;scale:1}}
+}
+/* phone */
+@media (max-width:700px){
+  :root{--side:18px;--gut:16px}
+  body{font-size:18px}
+  [id]{scroll-margin-top:78px}
+  .mast-row{gap:10px;padding:11px 0 9px}
+  .brand{font-size:20px;gap:8px}
+  .brand svg{width:24px;height:24px}
+  .mast .btn{font-size:14px;padding:12px 12px 13px}
+  .menu-button{font-size:14px;padding:11px 11px 12px}
+  .dateline{font-size:12.5px}
+  .open{padding-top:30px;padding-bottom:60px}
+  h1{font-size:31px;line-height:1.12;letter-spacing:-.012em;margin-bottom:18px}
+  .open .mnote.first{font-size:15.5px;margin:0 0 22px}
+  .standfirst{font-size:18.5px;margin-bottom:22px}
+  .sheet,.invgrid .row{font-size:13.5px}
+  .row{grid-template-columns:16px 1.15fr 1.15fr 1.3fr .6fr .95fr;column-gap:7px;padding-inline:10px}
+  .invgrid .row{padding-inline:10px}
+  .sheet.po .row{grid-template-columns:16px 1.05fr 1.95fr 1.25fr .5fr .8fr}
+  .sheet.grn .row{grid-template-columns:16px 1.15fr 1.15fr 1.3fr .5fr 1.05fr}
+  .sheet .cap,.invgrid .cap{padding-inline:10px}
+  .row.hd::after,.invgrid .row.hd::after,.sheet .row.ln+.row.ln::before,.invgrid .row.ln.sep::before{left:10px;right:10px}
+  .mark{margin:0 10px}
+  .found .amt{font-size:36px}
+  .sec{padding-bottom:60px}
+  .sec-head{gap:13px}
+  .sec-head .no i{width:38px;height:38px;font-size:21px}
+  .sec-head h2{font-size:25px;padding-top:9px}
+  .sec.minor .sec-head h2{font-size:22px}
+  .steps p{font-size:17px}
+  .ledger{font-size:14.5px}
+  .checks thead{display:none}
+  .checks,.checks tbody,.checks tr,.checks td,.checks tbody th{display:block;width:auto !important}
+  .checks tr{border-bottom:1px solid var(--hair);padding:10px 0}
+  .checks tr:first-child{border-top:1px solid var(--ink)}
+  .checks td,.checks tbody th{border:0;padding:0 !important;white-space:normal !important}
+  .checks td:last-child{font-size:13.5px;margin-top:2px}
+  .film{padding:0 0 44px;margin-bottom:60px}
+  .film .wrap{padding-inline:0}
+  .film .lead{aspect-ratio:16/10}
+  .film-text,.strip{padding-inline:var(--side)}
+  .play{left:14px;bottom:14px}
+  .strip{grid-template-columns:1fr 1fr;gap:22px 14px}
+  .strip q{font-size:15.5px}
+  .book{font-size:14px}
+  .book .r .dt{display:none}
+  .book .r{grid-template-columns:1.5fr .9fr .9fr .9fr 1fr;column-gap:6px}
+  .book .r.tot{font-size:15px}
+  .book .r.grp span,.book .r .lab,.book .r.tot .lab,.book .r.of .lab{grid-column:1 / span 4}
+  .book .r.of .lab{padding-left:12px}
+  .book .x{display:none}
+  .book .r.hd{white-space:nowrap}
+  .plain{font-size:17px}
+  .terms,.terms tbody,.terms tr,.terms th,.terms td{display:block;width:auto}
+  .terms th{border:0;padding:10px 0 0}
+  .terms td{padding:2px 0 10px}
+  .terms tr:first-child td{border-top:0}
+  .letter p{font-size:18px}
+  .contact-form{padding:16px 14px 18px}
+  .field-row{grid-template-columns:1fr}
+  .faq summary{font-size:18px}
+  .faq details>p,.faq details>ul{font-size:17px}
+  .change-list p{font-size:17px}
+  .pins i{top:calc(var(--ym,var(--y))*1%)}
+  .wide{display:none}
+  /* a hidden first note still counts, so the numbers under the picture match the pins on it */
+  .callouts li.wide:first-child{display:block;visibility:hidden;height:0;margin:0;padding:0;overflow:hidden}
+}
+/* the narrowest phones: the masthead keeps the name and the menu; the button is just below it on the page */
+@media (max-width:359px){
+  .mast .btn{display:none}
+}
