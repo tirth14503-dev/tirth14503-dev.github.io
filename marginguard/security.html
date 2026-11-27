@@ -12,13 +12,13 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Security and data handling · MarginGuard</title>
   <meta name="description" content="How MarginGuard handles your supplier records: what is stored, encryption in transit, sign-in codes, separate workspaces, backups, AI reading and how to report a security issue.">
-  <link rel="canonical" href="https://tirthalkothari.com/marginguard/security.html">
   <meta property="og:site_name" content="MarginGuard">
   <meta property="og:locale" content="en_US">
-  <meta property="og:type" content="website">
   <meta property="og:title" content="Security and data handling · MarginGuard">
   <meta property="og:description" content="What MarginGuard stores, how it is protected, and how to report a security issue.">
+  <meta property="og:type" content="website">
   <meta property="og:url" content="https://tirthalkothari.com/marginguard/security.html">
+  <link rel="canonical" href="https://tirthalkothari.com/marginguard/security.html">
   <meta property="og:image" content="https://tirthalkothari.com/marginguard/media/og-marginguard.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -29,112 +29,173 @@
   <meta name="twitter:image" content="https://tirthalkothari.com/marginguard/media/og-marginguard.png">
   <meta name="twitter:image:alt" content="MarginGuard: find out what you overpaid suppliers">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="https://fonts.gstatic.com/s/ibmplexsans/v23/zYXzKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1syxeKYY.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="https://fonts.gstatic.com/s/sourceserif4/v15/vEFF2_tTDB4M7-auWDN0ahZJW3IX2iZPwg3BucvUa_ukDXr4.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap">
-  <meta name="theme-color" content="#13233d">
-  <link rel="stylesheet" href="story.css?v=17">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="preload" href="fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/castoro-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/source-sans-3-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="home.css?v=2">
+  <script>
+  /* Before the first paint: note that scripts run, and switch the motion on only where it is wanted.
+     Add ?motion=off to the address to see the still page. If home.js never starts, the motion is switched off again. */
+  (function(){var d=document.documentElement;d.className+=' js';
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches||/[?&]motion=off(&|$)/.test(location.search))return;
+    d.className+=' m';
+    setTimeout(function(){if(!window.mgStarted)d.className=d.className.replace(/(^| )m( |$)/,' ');},4000);
+  })();
+  </script>
   <script src="launch.js?v=4" defer></script>
-  <script src="section-nav.js?v=2" defer></script>
+  <script src="home.js?v=2" defer></script>
 </head>
 <body>
-  <a class="skip" href="#main">Skip to content</a>
-  <header class="header">
-    <div class="wrap header-inner">
-      <a class="brand" href="./" aria-label="MarginGuard home"><svg viewBox="0 0 32 34" aria-hidden="true"><path d="M3 28V6l13 7L29 6v22l-13-7Z"/><path d="M3 6 16 1l13 5M16 13v21"/></svg>MarginGuard</a>
-      <nav aria-label="Main navigation" class="section-nav" id="site-menu"><a href="./#product">Product</a><a href="./#free-scan">Free scan</a><a href="./#freight">Freight</a><a href="security.html" aria-current="page">Security</a><a href="./#pricing">Pricing</a><a class="menu-only" href="./#contact">Talk to the founder</a></nav>
-      <a class="nav-cta" data-launch href="https://app.tirthalkothari.com/">Sign in</a>
-      <a class="nav-sales" href="./#contact">Talk to the founder</a>
-      <button type="button" class="menu-button" aria-expanded="false" aria-controls="site-menu"><span class="menu-icon" aria-hidden="true"></span>Menu</button>
-    </div>
-  </header>
-  <main id="main">
-    <section class="page-hero" aria-labelledby="security-title">
-      <div class="wrap">
-        <p class="kicker">Security</p>
-        <h1 id="security-title">Security and data handling</h1>
-        <p class="lede">What MarginGuard does with your records, in plain terms. Everything on this page describes how MarginGuard works today.</p>
-      </div>
-    </section>
+<a class="skip" href="#main">Skip to content</a>
 
-    <section class="policy" aria-label="Security and data handling details">
-      <div class="wrap policy-inner">
-        <nav class="policy-toc" aria-label="On this page">
-          <p class="policy-toc-title">On this page</p>
-          <ol>
-            <li><a href="#stored">What is stored</a></li>
-            <li><a href="#transit">Encryption in transit</a></li>
-            <li><a href="#sign-in">Signing in</a></li>
-            <li><a href="#workspaces">Separate workspaces</a></li>
-            <li><a href="#backups">Backups</a></li>
-            <li><a href="#ai">AI reading</a></li>
-            <li><a href="#staff">Staff access</a></li>
-            <li><a href="#your-data">Your data, your control</a></li>
-            <li><a href="#report">Report a security issue</a></li>
-          </ol>
-        </nav>
-        <div class="policy-body">
-          <article id="stored">
-            <h2>What is stored</h2>
-            <p><strong>Free scan: nothing.</strong> Files you drop into the free overpayment scan are checked in memory and then discarded. No database rows are written, no files are saved to disk, and file contents are never logged. You see a summary only.</p>
-            <p><strong>Accounts:</strong> records you upload or import into an account are stored in your workspace in the MarginGuard database, on the MarginGuard server, so your audits and findings are there next time you sign in.</p>
-          </article>
-          <article id="transit">
-            <h2>Encryption in transit</h2>
-            <p>Every connection to MarginGuard uses HTTPS (TLS), provided through Cloudflare. Your sign-in cookie is marked HttpOnly and SameSite=Strict, and is only sent over HTTPS, so page scripts can’t read it and other sites can’t send it.</p>
-          </article>
-          <article id="sign-in">
-            <h2>Signing in</h2>
-            <ul>
-              <li>Passwords need at least 12 characters, with at least 5 different characters, and are stored only as scrypt hashes, never as the password itself.</li>
-              <li>Every password sign-in also needs a 6-digit code emailed to you. Codes expire after 10 minutes and allow 5 wrong tries.</li>
-              <li>You can add an authenticator app for two-step verification. With one turned on, a sign-in from a new browser also sends you an alert email.</li>
-              <li>You can sign in with a passkey instead: your fingerprint, face or device PIN. MarginGuard stores only the passkey’s public key.</li>
-            </ul>
-          </article>
-          <article id="workspaces">
-            <h2>Separate workspaces</h2>
-            <p>Each company’s records sit in its own workspace. Only people invited to a workspace can open its audits, findings and files, and their role decides what they can change. Other customers can’t see your workspace. Contract prices you store are private to your workspace and are never used to compare you with anyone else.</p>
-          </article>
-          <article id="backups">
-            <h2>Backups</h2>
-            <p>The database is copied every 6 hours. Each copy is checked for integrity when it is made, and the latest 8 copies are kept, about 2 days. A daily off-site copy also goes to iCloud Drive; it is not encrypted by MarginGuard and is kept for 14 days, plus one a month for up to 12 months.</p>
-            <p>The server watches itself around the clock. If the site stops answering, a backup is late or fails its check, or memory or disk runs low, I get an alert email.</p>
-          </article>
-          <article id="ai">
-            <h2>AI reading</h2>
-            <p>PDFs, scans and photos of invoices are read by fixed rules and text recognition on the MarginGuard server. Each line must add up (quantity × price = amount), and anything uncertain is marked “needs a look” and not counted.</p>
-            <p>No AI model reads your documents unless a workspace owner turns on AI reading and adds the workspace’s own Claude or OpenAI key. It is off by default. When it is on:</p>
-            <ul>
-              <li>the key is stored encrypted and is only ever shown as its last 4 characters;</li>
-              <li>every call is logged with its purpose, file name and outcome, but not its content;</li>
-              <li>every value the model returns must appear in the document itself, or the invoice is held for a look.</li>
-            </ul>
-            <p>The free scan never uses AI.</p>
-          </article>
-          <article id="staff">
-            <h2>Staff access</h2>
-            <p>MarginGuard’s staff tools need two-step verification and lock again after 15 minutes without activity. Sensitive staff actions need a fresh code, and every staff action is written to an activity log that shows if any entry is edited or deleted.</p>
-          </article>
-          <article id="your-data">
-            <h2>Your data, your control</h2>
-            <ul>
-              <li>You can remove uploaded payment, credit-note and contract files yourself, at any time.</li>
-              <li>You can download a full copy of your account’s data at any time.</li>
-              <li>You can delete your account yourself. It asks for your password, a code emailed to you and your company name. Workspaces only you use are deleted with everything in them; a workspace other people use passes to another admin. Deleted data leaves the backups as they age out (about 2 days on this computer, up to 12 months in the iCloud copies).</li>
-              <li>Only upload records you have permission to use.</li>
-            </ul>
-          </article>
-          <article id="report">
-            <h2>Report a security issue</h2>
-            <p>If you think you’ve found a security problem, tell me through the <a class="text-link" href="./#contact">contact form</a> and choose “Something else”. Describe what you found and how to reproduce it, but please don’t include passwords or other people’s data. I read every request and reply by email.</p>
-          </article>
-        </div>
+<div class="page">
+
+<header class="mast">
+  <div class="wrap">
+    <div class="mast-row">
+      <a class="brand" href="./" aria-label="MarginGuard, home">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M12 14v19c0 8.3 7.5 15.7 20 21 12.5-5.3 20-12.7 20-21V14" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="round"/><path d="M20 40V20m24 20V20" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="square"/><path class="v" d="m20 20 12 12 12-12" fill="none" stroke-width="6"/></svg>
+        <span>MarginGuard</span>
+      </a>
+      <nav class="mast-nav" id="site-menu" aria-label="Main">
+        <a class="product-button" id="product-button" href="product.html">Product<span class="caret" aria-hidden="true"></span></a>
+        <a class="in-menu" href="product.html">How it works</a>
+        <a href="./#film">The film</a>
+        <a href="pricing.html">Pricing</a>
+        <a class="in-menu" href="pricing.html#questions">Questions</a>
+        <a href="security.html" aria-current="page">Security</a>
+        <a class="in-menu" href="whats-new.html">What’s new</a>
+        <a class="in-menu" href="./#contact">Talk to the founder</a>
+        <a data-launch href="https://app.tirthalkothari.com/">Sign in</a>
+      </nav>
+      <a class="btn" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan">Run a free scan</a>
+      <button type="button" class="menu-button" aria-expanded="false" aria-controls="site-menu">Menu</button>
+    </div>
+  </div>
+  <!-- The Product menu (wide screens): the same eight things as the grid on the homepage. home.js opens it. -->
+  <div class="mega" id="product-menu" hidden>
+    <div class="wrap">
+      <div class="mega-in">
+        <ul class="mega-list">
+          <li><a href="product.html#find"><b>Find overcharges</b><span>Each invoice line against its order, receipt and agreed price.</span></a></li>
+          <li><a href="product.html#pay-gate"><b>Pay gate</b><span>Every unpaid invoice marked Clear, Hold or Blocked before you pay.</span></a></li>
+          <li><a href="product.html#recovery"><b>Recovery</b><span>Each claim tracked until the credit is back.</span></a></li>
+          <li><a href="product.html#price-trends"><b>Price trends</b><span>Slow creep and sudden jumps, caught while they’re small.</span></a></li>
+          <li><a href="product.html#suppliers"><b>Suppliers</b><span>Who else sells what you buy, if you choose to share.</span></a></li>
+          <li><a href="product.html#freight"><b>Freight</b><span>Carrier invoices checked lane by lane against your agreed rates.</span></a></li>
+          <li><a href="product.html#accountants"><b>Accountants</b><span>One sign-in for all your clients, and who needs attention.</span></a></li>
+          <li><a href="product.html#files"><b>Any file in</b><span>Spreadsheets, PDFs, scans and e-invoices. A file it can’t read is named.</span></a></li>
+        </ul>
+        <p class="mega-foot"><a href="product.html">How it works</a><a href="./#film">The film, 2:22</a><a href="product.html#sample-files">Sample files</a></p>
       </div>
-    </section>
-  </main>
-  <footer><div class="wrap footer-inner"><a class="brand" href="./">MarginGuard</a><nav aria-label="Footer"><a href="./#film">Overview</a><a href="./#checks">Checks</a><a href="security.html" aria-current="page">Security</a><a href="./#faq">Questions</a><a href="/">Tirthal Kothari</a><a href="./#contact">Talk to the founder</a></nav><span>© 2026 MarginGuard</span></div></footer>
+    </div>
+  </div>
+</header>
+
+<div class="below">
+<p class="dateline wrap">Supplier invoice audit for distributors and manufacturers</p>
+
+<main id="main">
+
+<section class="page-head wrap" aria-labelledby="h1">
+  <div class="grid">
+    <h1 id="h1">Security and data handling</h1>
+    <p class="standfirst">What MarginGuard does with your records, in plain terms.</p>
+    <div class="mnote" role="note"><p>Everything on this page describes how MarginGuard works today.</p></div>
+  </div>
+</section>
+
+<section class="sec last wrap" aria-label="Security and data handling details">
+  <div class="grid ruled">
+    <nav class="doc-toc" aria-labelledby="toc-h">
+      <h2 id="toc-h">On this page</h2>
+      <ol>
+        <li><a href="#stored">What is stored</a></li>
+        <li><a href="#transit">Encryption in transit</a></li>
+        <li><a href="#sign-in">Signing in</a></li>
+        <li><a href="#workspaces">Separate workspaces</a></li>
+        <li><a href="#backups">Backups</a></li>
+        <li><a href="#ai">AI reading</a></li>
+        <li><a href="#staff">Staff access</a></li>
+        <li><a href="#your-data">Your data, your control</a></li>
+        <li><a href="#report">Report a security issue</a></li>
+      </ol>
+    </nav>
+    <div class="doc">
+    <article id="stored">
+      <h2>What is stored</h2>
+      <p><strong>Free scan: nothing.</strong> Files you drop into the free overpayment scan are checked in memory and then discarded. No database rows are written, no files are saved to disk, and file contents are never logged. You see a summary only.</p>
+      <p><strong>Accounts:</strong> records you upload or import into an account are stored in your workspace in the MarginGuard database, on the MarginGuard server, so your audits and findings are there next time you sign in.</p>
+    </article>
+    <article id="transit">
+      <h2>Encryption in transit</h2>
+      <p>Every connection to MarginGuard uses HTTPS (TLS), provided through Cloudflare. Your sign-in cookie is marked HttpOnly and SameSite=Strict, and is only sent over HTTPS, so page scripts can’t read it and other sites can’t send it.</p>
+    </article>
+    <article id="sign-in">
+      <h2>Signing in</h2>
+      <ul>
+        <li>Passwords need at least 12 characters, with at least 5 different characters, and are stored only as scrypt hashes, never as the password itself.</li>
+        <li>Every password sign-in also needs a 6-digit code emailed to you. Codes expire after 10 minutes and allow 5 wrong tries.</li>
+        <li>You can add an authenticator app for two-step verification. With one turned on, a sign-in from a new browser also sends you an alert email.</li>
+        <li>You can sign in with a passkey instead: your fingerprint, face or device PIN. MarginGuard stores only the passkey’s public key.</li>
+      </ul>
+    </article>
+    <article id="workspaces">
+      <h2>Separate workspaces</h2>
+      <p>Each company’s records sit in its own workspace. Only people invited to a workspace can open its audits, findings and files, and their role decides what they can change. Other customers can’t see your workspace. Contract prices you store are private to your workspace and are never used to compare you with anyone else.</p>
+    </article>
+    <article id="backups">
+      <h2>Backups</h2>
+      <p>The database is copied every 6 hours. Each copy is checked for integrity when it is made, and the latest 8 copies are kept, about 2 days. A daily off-site copy also goes to iCloud Drive; it is not encrypted by MarginGuard and is kept for 14 days, plus one a month for up to 12 months.</p>
+      <p>The server watches itself around the clock. If the site stops answering, a backup is late or fails its check, or memory or disk runs low, I get an alert email.</p>
+    </article>
+    <article id="ai">
+      <h2>AI reading</h2>
+      <p>PDFs, scans and photos of invoices are read by fixed rules and text recognition on the MarginGuard server. Each line must add up (quantity × price = amount), and anything uncertain is marked “needs a look” and not counted.</p>
+      <p>No AI model reads your documents unless a workspace owner turns on AI reading and adds the workspace’s own Claude or OpenAI key. It is off by default. When it is on:</p>
+      <ul>
+        <li>the key is stored encrypted and is only ever shown as its last 4 characters;</li>
+        <li>every call is logged with its purpose, file name and outcome, but not its content;</li>
+        <li>every value the model returns must appear in the document itself, or the invoice is held for a look.</li>
+      </ul>
+      <p>The free scan never uses AI.</p>
+    </article>
+    <article id="staff">
+      <h2>Staff access</h2>
+      <p>MarginGuard’s staff tools need two-step verification and lock again after 15 minutes without activity. Sensitive staff actions need a fresh code, and every staff action is written to an activity log that shows if any entry is edited or deleted.</p>
+    </article>
+    <article id="your-data">
+      <h2>Your data, your control</h2>
+      <ul>
+        <li>You can remove uploaded payment, credit-note and contract files yourself, at any time.</li>
+        <li>You can download a full copy of your account’s data at any time.</li>
+        <li>You can delete your account yourself. It asks for your password, a code emailed to you and your company name. Workspaces only you use are deleted with everything in them; a workspace other people use passes to another admin. Deleted data leaves the backups as they age out (about 2 days on this computer, up to 12 months in the iCloud copies).</li>
+        <li>Only upload records you have permission to use.</li>
+      </ul>
+    </article>
+    <article id="report">
+      <h2>Report a security issue</h2>
+      <p>If you think you’ve found a security problem, tell me through the <a href="./#contact">contact form</a> and choose “Something else”. Describe what you found and how to reproduce it, but please don’t include passwords or other people’s data. I read every request and reply by email.</p>
+    </article>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+  <div class="grid">
+    <div class="c1"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M12 14v19c0 8.3 7.5 15.7 20 21 12.5-5.3 20-12.7 20-21V14" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="round"/><path d="M20 40V20m24 20V20" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="square"/><path class="v" d="m20 20 12 12 12-12" fill="none" stroke-width="6"/></svg>MarginGuard</div>
+    <div class="c2"><p>Supplier invoice audit for distributors and manufacturers. Every company, person and figure in the pictures and the film is fictional.</p></div>
+    <div class="c3"><p>Set in Besley, Castoro and Source Sans 3, under the SIL Open Font License.</p></div>
+    <div class="c4">
+      <nav aria-label="Footer"><a href="product.html">How it works</a><a href="pricing.html">Pricing</a><a href="security.html">Security</a><a href="whats-new.html">What’s new</a><a href="./#contact">Talk to the founder</a><a data-launch href="https://app.tirthalkothari.com/">Sign in</a><a href="/">Tirthal Kothari</a></nav>
+      <p>© 2026 MarginGuard</p>
+    </div>
+  </div>
+</footer>
+</div>
+</div>
 </body>
 </html>

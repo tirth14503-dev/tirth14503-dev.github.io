@@ -1,9 +1,11 @@
 'use strict';
-/* MarginGuard homepage. Three small jobs:
+/* MarginGuard pages. Small jobs:
    1. start each exhibit's marks when it comes into view (the motion itself is in home.css);
-   2. open the menu on small screens;
-   3. play the film where it stands.
-   The page works without this file: the marks are simply there, and the film link opens the file. */
+   2. open the menu on small screens, and the Product menu on wide ones;
+   3. play the film where it stands;
+   4. open the contact form under "The founder".
+   The pages work without this file: the marks are simply there, the film link opens the file,
+   "Product" goes to the How it works page, and the founder's email address is shown. */
 (function () {
   var root = document.documentElement, q = new URLSearchParams(location.search);
 
@@ -27,6 +29,8 @@
       [].forEach.call(box.children, function (el) {
         if (el.hasAttribute('data-a') || el.hasAttribute('data-step')) { el.style.setProperty('--d', (base + i * step) + 'ms'); i++; }
       });
+      /* in the product grid, the hand goes from one picture to the next */
+      [].forEach.call(box.querySelectorAll('[data-mark]'), function (el, n) { el.style.setProperty('--d', (base + n * step) + 'ms'); });
     });
     /* Notes beside a screen are made one after another, top to bottom. */
     [].forEach.call(document.querySelectorAll('[data-notes] .callouts li'), function (li) {
@@ -48,8 +52,25 @@
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) { if (e.isIntersecting) { go(e.target); io.unobserve(e.target); } });
       }, { rootMargin: '0px 0px -14% 0px', threshold: 0.12 });
+      /* A long jump (a link to a section further down, or a fast fling) can carry a short heading past the
+         viewport between two frames. Anything already above the bottom of the window is started anyway. */
+      var left = seqs.slice(), tick = 0;
+      var sweep = function () {
+        tick = 0;
+        left = left.filter(function (el) {
+          if (el.classList.contains('go')) return false;
+          if (el.getBoundingClientRect().top < innerHeight) { go(el); io.unobserve(el); return false; }
+          return true;
+        });
+        if (!left.length) removeEventListener('scroll', onScroll);
+      };
+      var onScroll = function () { if (!tick) tick = requestAnimationFrame(sweep); };
       var begun = false;
-      var begin = function () { if (begun) return; begun = true; seqs.forEach(function (el) { io.observe(el); }); };
+      var begin = function () {
+        if (begun) return; begun = true;
+        seqs.forEach(function (el) { io.observe(el); });
+        addEventListener('scroll', onScroll, { passive: true });
+      };
       var ready = (document.fonts && document.fonts.ready) || Promise.resolve();
       ready.then(function () { setTimeout(begin, 200); });     /* wait for the type, so nothing is marked on a page still settling */
       setTimeout(begin, 2500);                                  /* ...but not for ever */
@@ -77,6 +98,20 @@
     if (window.matchMedia) window.matchMedia('(min-width: 1100px)').addEventListener('change', function (e) { if (e.matches) close(false); });
   }
 
+  /* the Product menu (wide screens). Without this script the link simply opens the How it works page. */
+  var product = document.getElementById('product-button'), mega = document.getElementById('product-menu');
+  if (product && mega) {
+    var setMega = function (open) { mega.hidden = !open; product.setAttribute('aria-expanded', String(open)); };
+    product.setAttribute('role', 'button');
+    product.setAttribute('aria-controls', 'product-menu');
+    setMega(false);
+    product.addEventListener('click', function (e) { e.preventDefault(); setMega(mega.hidden); });
+    product.addEventListener('keydown', function (e) { if (e.key === ' ') { e.preventDefault(); setMega(mega.hidden); } });
+    mega.addEventListener('click', function (e) { if (e.target.closest('a')) setMega(false); });
+    document.addEventListener('click', function (e) { if (!mega.hidden && !mega.contains(e.target) && !product.contains(e.target)) setMega(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !mega.hidden) { e.preventDefault(); setMega(false); product.focus(); } });
+  }
+
   /* ---------- 3. the film: loaded only when asked, played where it stands, with sound and the browser's controls ---------- */
   var play = document.getElementById('film-play'), frame = document.getElementById('film-frame');
   if (play && frame) play.addEventListener('click', function (e) {
@@ -100,4 +135,19 @@
       new IntersectionObserver(function (entries) { if (!entries[0].isIntersecting && !v.paused) v.pause(); }, { threshold: 0.2 }).observe(v);
     }
   });
+
+  /* ---------- 4. the contact form opens in place; a link to #contact (from the app, or from another page) opens it too ---------- */
+  var opener = document.getElementById('contact-open'), panel = document.getElementById('contact-panel');
+  if (opener && panel) {
+    var setPanel = function (open, focus) {
+      panel.classList.toggle('is-open', open); opener.setAttribute('aria-expanded', String(open));
+      if (open && focus) { var first = panel.querySelector('input'); if (first) first.focus({ preventScroll: true }); }
+    };
+    opener.setAttribute('role', 'button');
+    opener.setAttribute('aria-controls', 'contact-panel');
+    setPanel(false, false);
+    opener.addEventListener('click', function (e) { e.preventDefault(); setPanel(!panel.classList.contains('is-open'), true); });
+    var fromAddress = function () { if (/^#contact(-panel|-form)?$/.test(location.hash)) setPanel(true, false); };
+    fromAddress(); window.addEventListener('hashchange', fromAddress);
+  }
 })();

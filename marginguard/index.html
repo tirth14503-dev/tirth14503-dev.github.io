@@ -34,7 +34,7 @@
   <link rel="preload" href="fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/castoro-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/source-sans-3-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="home.css?v=1">
+  <link rel="stylesheet" href="home.css?v=2">
   <script>
   /* Before the first paint: note that scripts run, and switch the motion on only where it is wanted.
      Add ?motion=off to the address to see the still page. If home.js never starts, the motion is switched off again. */
@@ -46,21 +46,10 @@
   </script>
   <script src="launch.js?v=4" defer></script>
   <script src="contact.js?v=3" defer></script>
-  <script src="home.js?v=1" defer></script>
+  <script src="home.js?v=2" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-
-<!-- ink for the rubber stamps: a little ink is missing, and the edges are not quite straight -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
-  <filter id="ink" x="-8%" y="-18%" width="116%" height="136%" color-interpolation-filters="sRGB">
-    <feTurbulence type="fractalNoise" baseFrequency="1.15" numOctaves="2" seed="11" result="grain"/>
-    <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -9 6.3" result="wear"/>
-    <feComposite in="SourceGraphic" in2="wear" operator="in" result="worn"/>
-    <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="4" result="wobble"/>
-    <feDisplacementMap in="worn" in2="wobble" scale="1.2" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</defs></svg>
 
 <div class="page">
 
@@ -72,197 +61,102 @@
         <span>MarginGuard</span>
       </a>
       <nav class="mast-nav" id="site-menu" aria-label="Main">
-        <a class="in-menu" href="#free-scan">How the free scan works</a>
-        <a class="in-menu" href="#product">What it checks</a>
-        <a class="in-menu" href="#film">The film</a>
-        <a class="in-menu" href="#paygate">Before the money leaves</a>
-        <a class="in-menu" href="#recovery">Getting it back</a>
-        <a class="in-menu" href="#freight">Carrier invoices</a>
-        <a class="in-menu" href="#pricing">Price</a>
-        <a class="in-menu" href="#faq">Questions</a>
+        <a class="product-button" id="product-button" href="product.html">Product<span class="caret" aria-hidden="true"></span></a>
+        <a class="in-menu" href="product.html">How it works</a>
+        <a href="#film">The film</a>
+        <a href="pricing.html">Pricing</a>
+        <a class="in-menu" href="pricing.html#questions">Questions</a>
         <a href="security.html">Security</a>
-        <a href="#contact">Talk to the founder</a>
+        <a class="in-menu" href="whats-new.html">What’s new</a>
+        <a class="in-menu" href="#contact">Talk to the founder</a>
         <a data-launch href="https://app.tirthalkothari.com/">Sign in</a>
       </nav>
       <a class="btn" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan">Run a free scan</a>
       <button type="button" class="menu-button" aria-expanded="false" aria-controls="site-menu">Menu</button>
     </div>
   </div>
+  <!-- The Product menu (wide screens): the same eight things as the grid on the homepage. home.js opens it. -->
+  <div class="mega" id="product-menu" hidden>
+    <div class="wrap">
+      <div class="mega-in">
+        <ul class="mega-list">
+          <li><a href="product.html#find"><b>Find overcharges</b><span>Each invoice line against its order, receipt and agreed price.</span></a></li>
+          <li><a href="product.html#pay-gate"><b>Pay gate</b><span>Every unpaid invoice marked Clear, Hold or Blocked before you pay.</span></a></li>
+          <li><a href="product.html#recovery"><b>Recovery</b><span>Each claim tracked until the credit is back.</span></a></li>
+          <li><a href="product.html#price-trends"><b>Price trends</b><span>Slow creep and sudden jumps, caught while they’re small.</span></a></li>
+          <li><a href="product.html#suppliers"><b>Suppliers</b><span>Who else sells what you buy, if you choose to share.</span></a></li>
+          <li><a href="product.html#freight"><b>Freight</b><span>Carrier invoices checked lane by lane against your agreed rates.</span></a></li>
+          <li><a href="product.html#accountants"><b>Accountants</b><span>One sign-in for all your clients, and who needs attention.</span></a></li>
+          <li><a href="product.html#files"><b>Any file in</b><span>Spreadsheets, PDFs, scans and e-invoices. A file it can’t read is named.</span></a></li>
+        </ul>
+        <p class="mega-foot"><a href="product.html">How it works</a><a href="#film">The film, 2:22</a><a href="product.html#sample-files">Sample files</a></p>
+      </div>
+    </div>
+  </div>
 </header>
-
-<div class="below">
-<p class="dateline wrap">Supplier invoice audit for distributors and manufacturers</p>
 
 <main id="main">
 
-<!-- ================= opening: the claim, and the files that prove it ================= -->
-<section class="open wrap" id="top" aria-labelledby="h1">
+<!-- ================= hero: one line, one sub-line, one button, and the worked example made small ================= -->
+<section class="hero wrap" id="top" aria-labelledby="h1">
   <div class="grid">
-    <h1 id="h1">Most supplier overcharges are small, and nobody has time to look for them.</h1>
-    <div class="mnote first" role="note"><p>Free during early access. No card, and the scan needs no account.</p></div>
+    <h1 id="h1">Nobody has time to check every supplier invoice.</h1>
+    <div class="lede" id="free-scan">
+      <p class="standfirst">MarginGuard checks each one against your orders and receipts, and shows the rows behind every difference.</p>
+      <p class="act"><a class="btn" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan">Run a free scan</a><small>Free during early access. No card. Or <a data-launch="signup" href="https://app.tirthalkothari.com/#/signup">create your account</a>.</small></p>
+    </div>
 
-    <div class="lede">
-      <p class="standfirst">MarginGuard reads each supplier invoice against your purchase orders and receipts, and shows you every difference with the rows behind it. In the three sample files here, that is a valve billed at $14.00 against an order at $12.50, fifty-five pumps billed when forty-eight were kept, and one invoice line sent twice.</p>
-      <a class="btn" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan">Run a free scan</a>
-      <p class="small">Drop in supplier invoices and purchase orders as spreadsheets, CSV exports or e-invoice files. Free-scan files are checked in memory and not stored.</p>
-      <nav class="toc" aria-labelledby="toc-h">
-        <h2 id="toc-h">On this page</h2>
-        <ol>
-          <li><span>1</span><a href="#free-scan">How the free scan works</a></li>
-          <li><span>2</span><a href="#product">What it checks</a></li>
-          <li><span>3</span><a href="#finding">What a finding looks like</a></li>
-          <li><span></span><a href="#film">The film, 2:22</a></li>
-          <li><span>4</span><a href="#paygate">Before the money leaves</a></li>
-          <li><span>5</span><a href="#recovery">Getting it back</a></li>
-          <li><span>6</span><a href="#freight">Carrier invoices</a></li>
-          <li><span>7</span><a href="#costs">Prices over time</a></li>
-          <li><span>8</span><a href="#data">What it doesn’t do</a></li>
-          <li><span>9</span><a href="#pricing">Price, and who you’ll be dealing with</a></li>
-          <li><span></span><a href="#faq">Questions</a></li>
-          <li><span></span><a href="#changes">What’s new</a></li>
+    <!-- The marks are made once, in reading order: line a from 200 ms, line b from 900, line c from 1560, the total from 2260. -->
+    <figure class="proof" id="finding" data-seq aria-label="Three sample invoice lines and the order behind the first, as the free scan marks them">
+      <div class="proof-sheets">
+        <div class="sheet">
+          <div class="cap">supplier-invoices.csv<span>3 lines</span></div>
+          <div role="table" aria-label="supplier-invoices.csv, three lines">
+            <div class="row hd" role="row"><span role="columnheader" aria-label="Row"></span><span role="columnheader">Invoice</span><span role="columnheader">Order</span><span role="columnheader">Item</span><span class="num" role="columnheader">Qty</span><span class="num" role="columnheader">Unit price</span></div>
+            <div class="row ln" role="row"><span class="rn" role="cell">2</span><span role="cell">INV-501</span><span role="cell">PO-1001</span><span role="cell">VALVE-10</span><span class="num" role="cell">100<svg class="tk" viewBox="0 0 12 10" role="img" aria-label="agrees" style="--d:200ms"><path d="M1 5.4l3.3 3.1L11 1"/></svg></span><span class="num" role="cell"><span class="hl" style="--d:340ms">14.00</span><span class="k">a</span></span></div>
+            <div class="row ln" role="row"><span class="rn" role="cell">3</span><span role="cell">INV-502</span><span role="cell">PO-1002</span><span role="cell">PUMP-20</span><span class="num" role="cell"><span class="hl" style="--d:1020ms">55</span><span class="k">b</span></span><span class="num" role="cell">80.00<svg class="tk" viewBox="0 0 12 10" role="img" aria-label="agrees" style="--d:900ms"><path d="M1 5.4l3.3 3.1L11 1"/></svg></span></div>
+            <div class="row ln" role="row"><span class="rn" role="cell">4</span><span role="cell"><span class="ring" style="--d:1560ms">INV-502<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M15 9C29 2 71 1 89 7c13 5 12 22-3 27-20 6-60 6-75-1C-2 26 0 12 16 7c14-4 36-5 49-3"/></svg></span><span class="k">c</span></span><span role="cell">PO-1002</span><span role="cell">PUMP-20</span><span class="num" role="cell">55</span><span class="num" role="cell">80.00</span></div>
+          </div>
+        </div>
+        <div class="sheet po">
+          <div class="cap">purchase-orders.csv<span>the order behind line 2</span></div>
+          <div role="table" aria-label="purchase-orders.csv, the order behind line 2">
+            <div class="row hd" role="row"><span role="columnheader" aria-label="Row"></span><span role="columnheader">Order</span><span role="columnheader">Supplier</span><span role="columnheader">Item</span><span class="num" role="columnheader">Qty</span><span class="num" role="columnheader">Price</span></div>
+            <div class="row ln" role="row"><span class="rn" role="cell">2</span><span role="cell">PO-1001</span><span role="cell">Acme Industrial</span><span role="cell">VALVE-10</span><span class="num" role="cell">100</span><span class="num" role="cell"><span class="ref" style="--d:480ms">12.50</span><span class="k">a</span></span></div>
+          </div>
+        </div>
+        <p class="source">Sample files, as the free scan marks them. The suppliers are fictional.</p>
+      </div>
+      <div class="proof-notes">
+        <ol class="proof-marks">
+          <li data-k="a" style="--d:600ms"><b>Price above the order</b>100 × 1.50 = 150.00</li>
+          <li data-k="b" style="--d:1240ms"><b>Billed, not received</b>48 kept. 7 × 80.00 = 560.00</li>
+          <li data-k="c" style="--d:1860ms"><b>Line billed twice</b>Set aside until you check.</li>
         </ol>
-      </nav>
-    </div>
-
-    <!-- The score for this exhibit, in ms. The three files never move. Line a is checked from 200, line b from
-         1000 and line c from 1880; the total is written from 2740 and highlighted at 3200; a and b answer at 3560. -->
-    <figure class="ex ex1" aria-labelledby="ex1" data-seq>
-      <figcaption class="ex-head" id="ex1"><b>Exhibit 1</b>The three sample files, as the scan marks them</figcaption>
-      <p class="key">Your records are in <b>black</b>. Everything in <b class="c">colour</b> is MarginGuard’s.</p>
-
-      <div class="invgrid">
-        <div class="cap">supplier-invoices.csv<span>3 lines</span></div>
-        <div class="row hd"><span></span><span>Invoice</span><span>Order</span><span>Item</span><span class="num">Qty</span><span class="num">Unit price</span></div>
-
-        <div class="row ln"><span class="rn">2</span><span>INV-501<small>Acme Industrial · 12 Sep 2026</small></span><span>PO-1001</span><span>VALVE-10</span><span class="num">100<svg class="tk" viewBox="0 0 12 10" role="img" aria-label="agrees" style="--d:200ms"><path d="M1 5.4l3.3 3.1L11 1"/></svg></span><span class="num"><span class="hl glow" data-k="a" style="--d:340ms;--g:3560ms">14.00</span><span class="k">a</span></span></div>
-        <div class="mark" data-k="a" style="--d:620ms"><b>Price above the order</b><p>The order says 12.50. <span class="nw">100 × 1.50 = 150.00</span></p></div>
-
-        <div class="row ln sep"><span class="rn">3</span><span>INV-502<small>Northstar Parts · 15 Sep 2026</small></span><span>PO-1002</span><span>PUMP-20</span><span class="num"><span class="hl glow" data-k="b" style="--d:1120ms;--g:3560ms">55</span><span class="k">b</span></span><span class="num">80.00<svg class="tk" viewBox="0 0 12 10" role="img" aria-label="agrees" style="--d:1000ms"><path d="M1 5.4l3.3 3.1L11 1"/></svg></span></div>
-        <div class="mark" data-k="b" style="--d:1480ms"><b>Billed, not received</b><p>50 arrived, 2 went back: 48 kept. <span class="nw">7 × 80.00 = 560.00</span></p></div>
-
-        <div class="row ln sep"><span class="rn">4</span><span><span class="ring" data-k="c" style="--d:1880ms">INV-502<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M15 9C29 2 71 1 89 7c13 5 12 22-3 27-20 6-60 6-75-1C-2 26 0 12 16 7c14-4 36-5 49-3"/></svg></span><span class="k">c</span><small>Northstar Parts · 15 Sep 2026</small></span><span>PO-1002</span><span>PUMP-20</span><span class="num">55</span><span class="num">80.00</span></div>
-        <div class="mark" data-k="c" style="--d:2200ms"><b>Line billed twice</b><p>Row 3 again. Its 4,400.00 waits until you check whether both were paid.</p></div>
-      </div>
-
-      <div class="sheet po">
-        <div class="cap">purchase-orders.csv<span>2 lines</span></div>
-        <div role="table" aria-label="purchase-orders.csv, two lines">
-          <div class="row hd" role="row"><span role="columnheader" aria-label="Row"></span><span role="columnheader">Order</span><span role="columnheader">Supplier</span><span role="columnheader">Item</span><span class="num" role="columnheader">Qty</span><span class="num" role="columnheader">Price</span></div>
-          <div class="row ln" role="row"><span class="rn" role="cell">2</span><span role="cell">PO-1001</span><span role="cell">Acme Industrial</span><span role="cell">VALVE-10</span><span class="num" role="cell">100</span><span class="num" role="cell"><span class="ref" data-k="a" style="--d:480ms">12.50</span><span class="k">a</span></span></div>
-          <div class="row ln" role="row"><span class="rn" role="cell">3</span><span role="cell">PO-1002</span><span role="cell">Northstar Parts</span><span role="cell">PUMP-20</span><span class="num" role="cell">50</span><span class="num" role="cell">80.00</span></div>
-        </div>
-      </div>
-      <div class="tally">
-        <p class="found" data-a="fade" style="--d:2640ms"><span class="lab">Likely overpaid</span><b class="amt"><span class="hl" style="--d:3200ms"><span data-write style="--d:2740ms">$710.00</span></span></b></p>
-        <p class="look" data-a="fade" style="--d:3480ms"><span>Needs a look</span><span class="num">$4,400.00</span></p>
-        <p class="tick-key" data-a="fade" style="--d:3680ms"><svg class="tk" viewBox="0 0 12 10" aria-hidden="true" style="--d:3740ms"><path d="M1 5.4l3.3 3.1L11 1"/></svg>agrees with the order and the receipts</p>
-      </div>
-      <div class="sheet grn">
-        <div class="cap">receipts.csv<span>3 lines</span></div>
-        <div role="table" aria-label="receipts.csv, three lines">
-          <div class="row hd" role="row"><span role="columnheader" aria-label="Row"></span><span role="columnheader">Receipt</span><span role="columnheader">Order</span><span role="columnheader">Item</span><span class="num" role="columnheader">Qty</span><span class="num" role="columnheader" aria-label="Movement"></span></div>
-          <div class="row ln" role="row"><span class="rn" role="cell">2</span><span role="cell">GRN-301</span><span role="cell">PO-1001</span><span role="cell">VALVE-10</span><span class="num" role="cell">100</span><span class="typ" role="cell">received</span></div>
-          <div class="row ln" role="row"><span class="rn" role="cell">3</span><span role="cell">GRN-302</span><span role="cell">PO-1002</span><span role="cell">PUMP-20</span><span class="num" role="cell"><span class="ref" data-k="b" style="--d:1260ms">50</span><span class="k">b</span></span><span class="typ" role="cell">received</span></div>
-          <div class="row ln" role="row"><span class="rn" role="cell">4</span><span role="cell">RTN-303</span><span role="cell">PO-1002</span><span role="cell">PUMP-20</span><span class="num" role="cell"><span class="ref" data-k="b" style="--d:1340ms">2</span><span class="k">b</span></span><span class="typ" role="cell">returned</span></div>
-        </div>
-      </div>
-      <p class="source">Sample files: <a href="templates/purchase-orders.csv" download>purchase orders</a>, <a href="templates/supplier-invoices.csv" download>supplier invoices</a>, <a href="templates/receipts.csv" download>receipts</a> (CSV). Acme Industrial and Northstar Parts are fictional. The marks and both totals are what the free scan returns for these files when the receipts are marked complete.</p>
-    </figure>
-  </div>
-</section>
-
-<!-- ================= 1 ================= -->
-<section class="sec wrap" id="free-scan" aria-labelledby="h-scan">
-  <header class="grid sec-head" data-seq><span class="no" aria-hidden="true" data-a="slide"><i>1</i></span><h2 id="h-scan">How the free scan works</h2></header>
-  <div class="grid">
-    <ol class="steps">
-      <li><h3>Drop your files</h3><p>Supplier invoices and purchase orders as spreadsheets, CSV exports or XML and JSON e-invoices, including exports from Tally, QuickBooks Online and Xero. Add goods receipts if you have them.</p></li>
-      <li><h3>See your total</h3><p>Prices, quantities, items billed but not received and invoices sent twice are checked. You see how much you likely overpaid, a separate amount that needs a look, and counts by type. Nothing is stored unless you create an account.</p></li>
-      <li><h3>Open the evidence</h3><p>Create a free account and your scan is kept: it becomes your first audit, with each invoice, the rows behind every claim and claim letters. New accounts join a short waitlist, and your scan waits for you until yours is open. Accounts also check payments, credit notes and contract prices.</p></li>
-    </ol>
-    <div class="mnote" role="note"><p>The two totals in Exhibit 1 are step two for the sample files.</p></div>
-
-    <div class="text gap">
-      <h3 class="sub">Sample files</h3>
-      <p>See the column layout before you export anything. Each file has a few fictional rows. Your own files can use different column names; you match them when you import.</p>
-    </div>
-    <div class="mnote gap" role="note"><p>The first three are the files in Exhibit 1.</p></div>
-    <div class="text">
-      <table class="ledger files">
-        <thead><tr><th scope="col">File (CSV)</th><th scope="col" class="num">Needed for</th></tr></thead>
-        <tbody>
-          <tr><td><a href="templates/supplier-invoices.csv" download>Supplier invoices</a></td><td>Required</td></tr>
-          <tr><td><a href="templates/purchase-orders.csv" download>Purchase orders</a></td><td>Required</td></tr>
-          <tr><td><a href="templates/receipts.csv" download>Receipts and returns</a></td><td>Optional</td></tr>
-          <tr><td><a href="templates/stock-levels.csv" download>Stock levels</a></td><td>Optional</td></tr>
-          <tr><td><a href="templates/freight-invoices.csv" download>Freight invoices</a></td><td>Freight audit</td></tr>
-          <tr><td><a href="templates/shipment-records.csv" download>Shipment records</a></td><td>Freight, optional</td></tr>
-          <tr><td><a href="templates/agreed-rates.csv" download>Agreed carrier rates</a></td><td>Freight, optional</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<!-- ================= 2 ================= -->
-<section class="sec wrap" id="product" aria-labelledby="h-checks">
-  <header class="grid sec-head" data-seq><span class="no" aria-hidden="true" data-a="slide"><i>2</i></span><h2 id="h-checks">What it checks</h2></header>
-  <div class="grid">
-    <div class="text">
-      <p>Every check is a fixed calculation over your own records. Each one runs when your files have the columns it needs, so adding receipts, payment records or bank details switches more of them on.</p>
-    </div>
-    <div class="main" id="checks" data-seq>
-      <table class="ledger checks">
-        <thead><tr><th scope="col">Check</th><th scope="col">Flags a line when</th><th scope="col">Needs</th></tr></thead>
-        <tbody>
-          <tr class="shown"><th scope="row">Unit price<span class="k">a</span></th><td>The billed price is above the price on the purchase order or contract</td><td>Orders or a price list</td></tr>
-          <tr class="shown"><th scope="row">Quantity<span class="k">b</span></th><td>More units are billed than were received, after returns</td><td>Orders and receipts</td></tr>
-          <tr class="shown"><th scope="row">Duplicate lines<span class="k">c</span></th><td>The same item and amount appear more than once</td><td>Invoices</td></tr>
-          <tr><th scope="row">Tax</th><td>Tax is above the line’s own rate, or above the rate the supplier usually charges</td><td>Tax columns</td></tr>
-          <tr><th scope="row">Freight</th><td>Freight is above the amount on the order, or charged twice for one order</td><td>Freight columns</td></tr>
-          <tr><th scope="row">Bank details</th><td>A supplier’s bank account changes, or two suppliers share one account</td><td>Bank columns</td></tr>
-          <tr><th scope="row">Payment terms</th><td>The due date is at least five days sooner than the supplier’s usual terms</td><td>Invoice history</td></tr>
-          <tr><th scope="row">Payments</th><td>An invoice is paid twice, paid above its amount, or paid while a finding is still open</td><td>Payment records</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="mnote split" role="note"><p>These three are marks a, b and c in Exhibit 1.</p><p>Bank accounts are shown by their last four characters only.</p></div>
-    <div class="text" style="margin-top:26px">
-      <p>It reads spreadsheets, CSV exports, PDFs, scanned invoices and e-invoice files, including exports from Tally, QuickBooks Online, Zoho Books and Xero. You match the columns when you import, so your files don’t need a fixed layout.</p>
-      <p>Also in the workspace: how long stock may last and where you hold more than your target, supplier offers compared on cost and timing, and a record of what you decided, with what happened next.</p>
-    </div>
-    <div class="mnote" role="note" style="margin-top:26px"><p>Anything the reader isn’t sure of is marked “needs a look” and never counted.</p></div>
-  </div>
-</section>
-
-<!-- ================= 3 ================= -->
-<section class="sec wrap" id="finding" aria-labelledby="h-finding">
-  <header class="grid sec-head" data-seq><span class="no" aria-hidden="true" data-a="slide"><i>3</i></span><h2 id="h-finding">What a finding looks like</h2></header>
-  <div class="grid">
-    <div class="text">
-      <p>A finding is not proof. It means two of your records disagree, and there may be a reason: a price rise agreed by email, or a receipt that hasn’t been entered yet. So every finding shows its working, and you check the source rows before you take it to the supplier.</p>
-      <p>From there you can print a review packet for whoever signs off the claim, or start the claim itself.</p>
-    </div>
-    <figure class="ex shot narrow" aria-labelledby="ex2" data-seq data-notes>
-      <figcaption class="ex-head" id="ex2"><b>Exhibit 2</b>Mark a from Exhibit 1, opened in the workspace</figcaption>
-      <div class="plate">
-        <div class="mount">
-          <picture><source type="image/webp" srcset="media/home-finding.webp"><img src="media/home-finding.jpg" width="800" height="862" loading="lazy" decoding="async" alt="A finding titled Unit price exceeds the agreed price. 100 ordered units billed at 14.00 versus 12.50: $150.00, not confirmed recovery. Below it, the purchase order row and the invoice row it came from."></picture>
-          <div class="pins" aria-hidden="true"><i style="--y:24.4">1</i><i style="--y:30.4">2</i><i style="--y:43.4">3</i><i style="--y:79">4</i></div>
-        </div>
-        <ol class="callouts">
-          <li style="--y:24.4">What differs, in one sentence.</li>
-          <li style="--y:30.4">The amount. It isn’t counted as recovered until you say so.</li>
-          <li style="--y:43.4">What to check before you raise it.</li>
-          <li style="--y:79">The order row and the invoice row, as they were imported.</li>
-        </ol>
+        <p class="proof-total" data-a="fade" style="--d:2260ms"><span class="lab">Likely overpaid</span><b class="amt"><span class="hl" style="--d:2800ms"><span data-write style="--d:2360ms">$710.00</span></span></b><span class="also">and $4,400.00 that needs a look</span></p>
       </div>
     </figure>
   </div>
 </section>
 
-<!-- ================= the film ================= -->
-<section class="film" id="film" aria-labelledby="h-film" data-seq>
+<!-- ================= the product, as eight tiles. Each links to its section on product.html. ================= -->
+<section class="sec tight wrap" id="product" aria-labelledby="h-product">
+  <div class="strip-head"><h2 id="h-product">What it does</h2><a class="more" href="product.html">How each one works</a></div>
+  <ul class="tiles" id="checks" data-seq data-stagger="170" data-base="200">
+    <li><a class="tile" href="product.html#find"><span class="tile-shot"><picture><source type="image/webp" srcset="media/tile-find.webp"><img src="media/tile-find.jpg" width="314" height="196" decoding="async" alt="A finding: 100 ordered units billed at 14.00 versus 12.50. $150.00, not confirmed recovery."></picture><span class="mk mk-hl" data-mark style="--mx:3.82;--my:43.88;--mw:36.31;--mh:13.27" aria-hidden="true"></span></span><h3>Find overcharges</h3><span class="line">Each invoice line against its order, receipt and agreed price.</span></a></li>
+    <li id="paygate"><a class="tile" href="product.html#pay-gate"><span class="tile-shot"><picture><source type="image/webp" srcset="media/tile-paygate.webp"><img src="media/tile-paygate.jpg" width="616" height="385" decoding="async" alt="Pay gate: an Acme Industrial invoice on hold, waiting for approval. Billed above the order price, $150.00."></picture><span class="mk mk-hl" data-mark style="--mx:56.33;--my:42.34;--mw:12.99;--mh:5.45" aria-hidden="true"></span></span><h3>Pay gate</h3><span class="line">Every unpaid invoice marked Clear, Hold or Blocked before you pay.</span></a></li>
+    <li id="recovery"><a class="tile" href="product.html#recovery"><span class="tile-shot"><picture><source type="image/webp" srcset="media/tile-recovery.webp"><img src="media/tile-recovery.jpg" width="582" height="364" decoding="async" alt="A claim against Acme Industrial, marked Recovered: $150.00 claimed, $0.00 promised, $150.00 recovered."></picture><span class="mk mk-hl" data-mark style="--mx:67.7;--my:58.52;--mw:29.38;--mh:10.99" aria-hidden="true"></span></span><h3>Recovery</h3><span class="line">Each claim tracked until the credit is back.</span></a></li>
+    <li id="costs"><a class="tile" href="product.html#price-trends"><span class="tile-shot"><picture><source type="image/webp" srcset="media/tile-trends.webp"><img src="media/tile-trends.jpg" width="520" height="325" decoding="async" alt="Price rises: $1,460.00 a year, with one item up 2% or more."></picture><span class="mk mk-hl" data-mark style="--mx:4.23;--my:22.77;--mw:44.23;--mh:9.54" aria-hidden="true"></span></span><h3>Price trends</h3><span class="line">Slow creep and sudden jumps, caught while they’re small.</span></a></li>
+    <li><a class="tile" href="product.html#suppliers"><span class="tile-shot"><picture><source type="image/webp" srcset="media/tile-suppliers.webp"><img src="media/tile-suppliers.jpg" width="540" height="338" loading="lazy" decoding="async" alt="Other suppliers for corrugated boxes: three that businesses like you also buy from."></picture><span class="mk mk-ring" data-mark style="--mx:7.22;--my:47.63;--mw:26.67;--mh:4.73" aria-hidden="true"><svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M15 9C29 2 71 1 89 7c13 5 12 22-3 27-20 6-60 6-75-1C-2 26 0 12 16 7c14-4 36-5 49-3"/></svg></span></span><h3>Suppliers</h3><span class="line">Who else sells what you buy, if you choose to share.</span></a></li>
+    <li id="freight"><a class="tile" href="product.html#freight"><span class="tile-shot"><picture><source type="image/webp" srcset="media/tile-freight.webp"><img src="media/tile-freight.jpg" width="550" height="344" loading="lazy" decoding="async" alt="Freight lanes on a map of the United States, thicker for more spend, red where more was flagged."></picture></span><h3>Freight</h3><span class="line">Carrier invoices checked lane by lane against your agreed rates.</span></a></li>
+    <li><a class="tile" href="product.html#accountants"><span class="tile-shot"><picture><source type="image/webp" srcset="media/tile-accountants.webp"><img src="media/tile-accountants.jpg" width="560" height="350" loading="lazy" decoding="async" alt="An accountant’s list of three clients, with $550.00 at risk across them."></picture><span class="mk mk-hl" data-mark style="--mx:34.82;--my:90.29;--mw:27.14;--mh:5.43" aria-hidden="true"></span></span><h3>Accountants</h3><span class="line">One sign-in for all your clients, and who needs attention.</span></a></li>
+    <li><a class="tile" href="product.html#files"><span class="tile-shot"><picture><source type="image/webp" srcset="media/tile-files.webp"><img src="media/tile-files.jpg" width="640" height="400" loading="lazy" decoding="async" alt="Upload check: 3 of 4 files ready, 1 skipped. The scanned PDF is named, with what to do about it."></picture><span class="mk mk-ring" data-mark style="--mx:6.25;--my:21.75;--mw:37.81;--mh:5.25" aria-hidden="true"><svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M15 9C29 2 71 1 89 7c13 5 12 22-3 27-20 6-60 6-75-1C-2 26 0 12 16 7c14-4 36-5 49-3"/></svg></span></span><h3>Any file in</h3><span class="line">Spreadsheets, PDFs, scans and e-invoices. A file it can’t read is named.</span></a></li>
+  </ul>
+  <p class="source demo">Screens from a demo workspace. The companies and figures in them are fictional. Map © OpenStreetMap contributors.</p>
+</section>
+
+<!-- ================= the film, as one band ================= -->
+<section class="film brief" id="film" aria-labelledby="h-film" data-seq>
   <div class="wrap">
     <div class="grid">
       <figure class="lead" id="film-frame">
@@ -274,239 +168,26 @@
       <div class="film-text">
         <p class="kicker">A film, with sound</p>
         <h2 id="h-film">The Quiet Leak</h2>
-        <p>Dana runs purchasing for a parts distributor: two thousand supplier invoices a month. Somewhere in the pile, a supplier billed $14.00 for a valve when the order said $12.50.</p>
-        <p>It is the <span class="gold">$1.50</span> from Exhibit 1, followed from an 11:48 PM month-end close to a credit note on Monday morning.</p>
+        <p>One overcharge of <span class="gold">$1.50</span> a unit, followed from a month-end close to the credit note.</p>
         <p class="fine">A dramatisation. Dana, Northgate Parts and Acme Industrial are fictional, and the product screens in it come from a demo workspace.</p>
       </div>
-      <ol class="strip" data-stagger="130" data-base="450">
-        <li data-a="settle"><picture><source type="image/webp" srcset="media/home-film-0012.webp"><img src="media/home-film-0012.jpg" width="720" height="314" loading="lazy" decoding="async" alt="A close view of a printed invoice."></picture><time>0:12</time><q>Acme billed $14.00 for a valve, when the order said $12.50.</q></li>
-        <li data-a="settle"><picture><source type="image/webp" srcset="media/home-film-0017.webp"><img src="media/home-film-0017.jpg" width="720" height="314" loading="lazy" decoding="async" alt="A single coin spinning in the dark."></picture><time>0:17</time><q>Nobody notices $1.50.</q></li>
-        <li data-a="settle"><picture><source type="image/webp" srcset="media/home-film-0029.webp"><img src="media/home-film-0029.jpg" width="720" height="314" loading="lazy" decoding="async" alt="A warehouse aisle of boxed stock, with the figure $6,600 a year, at this pace."></picture><time>0:29</time><q>Month after month, it piles up.</q></li>
-        <li data-a="settle"><picture><source type="image/webp" srcset="media/home-film-0211.webp"><img src="media/home-film-0211.jpg" width="720" height="314" loading="lazy" decoding="async" alt="The same desk in morning light. A note on the laptop reads: Acme credited $150.00."></picture><time>2:11</time><q>Acme has already credited the $150.00.</q></li>
-      </ol>
     </div>
   </div>
 </section>
 
-<!-- ================= 4 ================= -->
-<section class="sec wrap" id="paygate" aria-labelledby="h-pay">
-  <header class="grid sec-head" data-seq><span class="no" aria-hidden="true" data-a="slide"><i>4</i></span><h2 id="h-pay">Before the money leaves</h2></header>
-  <div class="grid">
-    <div class="text">
-      <p>Before a payment run, each unpaid invoice is marked Clear, Hold or Blocked, with the reason and the money at stake. Each line is matched to its order and to what arrived, so short or missing deliveries are held too.</p>
-    </div>
-    <div class="mnote" role="note"><p>The payment file for your bank lists only cleared and approved invoices.</p></div>
-    <figure class="ex shot" aria-labelledby="ex3" data-seq data-notes>
-      <figcaption class="ex-head" id="ex3"><b>Exhibit 3</b>The November payment run at Northgate Parts, a fictional distributor in a demo workspace</figcaption>
-      <div class="plate">
-        <div class="mount">
-          <picture>
-            <source media="(max-width:700px)" type="image/webp" srcset="media/home-paygate-m.webp" width="708" height="440">
-            <source media="(max-width:700px)" srcset="media/home-paygate-m.jpg" width="708" height="440">
-            <source type="image/webp" srcset="media/home-paygate.webp">
-            <img src="media/home-paygate.jpg" width="1294" height="936" loading="lazy" decoding="async" alt="A payment run: $1,500.00 ready to pay, $1,878.00 waiting for approval, $360.00 stopped before payment. An invoice from Summit Metals is blocked because the payment records show it is already paid in full. An invoice from Ridgeline Packaging is held: billed above the order price, $128.00.">
-          </picture>
-          <div class="pins" aria-hidden="true"><i style="--y:16.2;--ym:8">1</i><i style="--y:31;--ym:39.5">2</i><i style="--y:51.2;--ym:82.5">3</i><i class="wide" style="--y:70">4</i></div>
-        </div>
-        <ol class="callouts">
-          <li style="--y:16.2">Ready, waiting and stopped, with the money in each.</li>
-          <li style="--y:31">The file for your bank.</li>
-          <li style="--y:51.2"><span class="stamp alt">Blocked</span>The payment records show it was already paid in full.</li>
-          <li class="wide" style="--y:70"><span class="stamp">Held</span>Billed at 1.26 against an order at 1.10. Someone approves or rejects it, with a note.</li>
-        </ol>
-      </div>
-    </figure>
-  </div>
-</section>
-
-<!-- ================= 5 ================= -->
-<section class="sec wrap" id="recovery" aria-labelledby="h-rec">
-  <header class="grid sec-head" data-seq><span class="no" aria-hidden="true" data-a="slide"><i>5</i></span><h2 id="h-rec">Getting it back</h2></header>
-  <div class="grid">
-    <figure class="ex book" aria-labelledby="ex4" data-seq data-stagger="190" data-base="150">
-      <figcaption class="ex-head" id="ex4"><b>Exhibit 4</b>Two items at Northgate Parts, August to November 2026</figcaption>
-      <div class="r hd"><span class="inv">Invoice</span><span class="dt">Date</span><span class="num">Units</span><span class="num">Ordered<span class="x"> at</span></span><span class="num">Billed<span class="x"> at</span></span><span class="num">Above<span class="x"> the<br>order</span>, $</span><span class="st">What happened</span></div>
-
-      <div class="r grp"><span>HX-12, hex bolt <em>· Harbor Fasteners</em></span></div>
-      <div class="r"><span class="inv">INV-0801</span><span class="dt">6 Aug</span><span class="num">2,000</span><span class="num">0.400</span><span class="num">0.400</span><span class="num dash">–</span><span class="st"></span></div>
-      <div class="r" data-step><span class="inv">INV-0901</span><span class="dt">4 Sep</span><span class="num">2,000</span><span class="num">0.400</span><span class="num">0.410</span><span class="num"><span class="hl">20.00</span></span><span class="st">Claim sent. No reply yet.</span></div>
-      <div class="r" data-step><span class="inv">INV-1001</span><span class="dt">5 Oct</span><span class="num">2,000</span><span class="num">0.400</span><span class="num">0.420</span><span class="num"><span class="hl">40.00</span></span><span class="st">Claim sent. Credit promised.</span></div>
-      <div class="r" data-step><span class="inv">INV-1101</span><span class="dt">6 Nov</span><span class="num">2,000</span><span class="num">0.400</span><span class="num">0.435</span><span class="num"><span class="hl">70.00</span></span><span class="st"><span class="stamp">Held</span>before payment, in Exhibit 3.</span></div>
-
-      <div class="r grp"><span>BOX-24, box <em>· Ridgeline Packaging</em></span></div>
-      <div class="r"><span class="inv">INV-0802</span><span class="dt">6 Aug</span><span class="num">800</span><span class="num">1.10</span><span class="num">1.10</span><span class="num dash">–</span><span class="st"></span></div>
-      <div class="r"><span class="inv">INV-0902</span><span class="dt">4 Sep</span><span class="num">800</span><span class="num">1.10</span><span class="num">1.10</span><span class="num dash">–</span><span class="st"></span></div>
-      <div class="r" data-step><span class="inv">INV-1002</span><span class="dt">5 Oct</span><span class="num">800</span><span class="num">1.10</span><span class="num">1.26</span><span class="num"><span class="hl">128.00</span></span><span class="st"><span class="stamp ok">Recovered</span>Credit note CN-4471 came back.</span></div>
-      <div class="r" data-step><span class="inv">INV-1102</span><span class="dt">6 Nov</span><span class="num">800</span><span class="num">1.10</span><span class="num">1.26</span><span class="num"><span class="hl">128.00</span></span><span class="st"><span class="stamp alt">Held</span>before payment, in Exhibit 3.</span></div>
-
-      <div class="r tot" data-step><span class="lab">Billed above the order</span><span class="num"><span class="hl"><span data-write>386.00</span></span></span></div>
-      <div class="r of"><span class="lab">of which, held before payment</span><span class="num">198.00</span></div>
-      <div class="r of"><span class="lab">recovered by credit note</span><span class="num">128.00</span></div>
-      <div class="r of"><span class="lab">credit promised</span><span class="num">40.00</span></div>
-      <div class="r of end"><span class="lab">still to chase</span><span class="num">20.00</span></div>
-    </figure>
-
-    <div class="text" style="margin-top:44px">
-      <p>Start a claim from any finding, check the letter, and send it from your own mailbox or from MarginGuard’s. The supplier’s reply and its credit note are attached to the claim.</p>
-      <p>The audit overview keeps a running total of what was found, what you raised with suppliers, and the credits or refunds you recorded. Each finding is counted once.</p>
-    </div>
-    <div class="mnote" role="note" style="margin-top:44px"><p>Nothing counts as recovered until you confirm it.</p></div>
-    <figure class="ex shot" aria-labelledby="ex5" data-seq data-notes>
-      <figcaption class="ex-head" id="ex5"><b>Exhibit 5</b>The same claims in the workspace</figcaption>
-      <div class="plate">
-        <div class="mount">
-          <picture>
-            <source media="(max-width:700px)" type="image/webp" srcset="media/home-recovery-m.webp" width="728" height="362">
-            <source media="(max-width:700px)" srcset="media/home-recovery-m.jpg" width="728" height="362">
-            <source type="image/webp" srcset="media/home-recovery.webp">
-            <img src="media/home-recovery.jpg" width="1294" height="524" loading="lazy" decoding="async" alt="Money recovered: $188.00 claimed, $40.00 credit promised, $128.00 recovered. Three claims: Harbor Fasteners INV-1001, credit promised; Ridgeline Packaging INV-1002, recovered; Harbor Fasteners INV-0901, sent.">
-          </picture>
-          <div class="pins" aria-hidden="true"><i class="wide" style="--y:14">1</i><i style="--y:72.7;--ym:63">2</i></div>
-        </div>
-        <ol class="callouts">
-          <li class="wide" style="--y:14">Claimed, promised and recovered are kept apart.</li>
-          <li style="--y:72.7">The supplier’s reply and credit note CN-4471 sit with this claim.</li>
-        </ol>
-      </div>
-    </figure>
-  </div>
-</section>
-
-<!-- ================= 6 ================= -->
-<section class="sec wrap" id="freight" aria-labelledby="h-freight">
-  <header class="grid sec-head" data-seq><span class="no" aria-hidden="true" data-a="slide"><i>6</i></span><h2 id="h-freight">Carrier invoices</h2></header>
-  <div class="grid">
-    <div class="text">
-      <p>Freight bills get the same treatment. Upload carrier invoices as CSV; shipment records and agreed rates are optional and unlock more checks.</p>
-    </div>
-    <div class="mnote" role="note"><p>Dispute letters are drafted for each carrier. You copy them and send them yourself.</p></div>
-    <div class="two">
-      <div class="a">
-        <ul class="plain">
-          <li>duplicate shipments and repeated extra charges</li>
-          <li>linehaul and fuel surcharge above the agreed rate</li>
-          <li>billed weight above shipped weight</li>
-          <li>lanes on a map, by spend and share flagged</li>
-          <li>lanes where another carrier you already use cost less</li>
-        </ul>
-      </div>
-      <figure class="ex b" aria-labelledby="ex6" data-seq>
-        <figcaption class="ex-head" id="ex6"><b>Exhibit 6</b>Flagged freight by lane. Example figures.</figcaption>
-        <table class="ledger">
-          <thead><tr><th scope="col">Lane</th><th class="num" scope="col">Loads</th><th class="num" scope="col">Flagged, $</th></tr></thead>
-          <tbody>
-            <tr><td>Chicago, IL to Dallas, TX</td><td class="num">42</td><td class="num">1,180</td></tr>
-            <tr><td>Atlanta, GA to Columbus, OH</td><td class="num">27</td><td class="num">640</td></tr>
-            <tr><td>Reno, NV to Fresno, CA</td><td class="num">15</td><td class="num">0</td></tr>
-            <tr class="total"><td>All lanes</td><td class="num">84</td><td class="num"><span class="hl" style="--d:350ms">1,820</span></td></tr>
-          </tbody>
-        </table>
-      </figure>
-    </div>
-  </div>
-</section>
-
-<!-- ================= 7 ================= -->
-<section class="sec wrap" id="costs" aria-labelledby="h-costs">
-  <header class="grid sec-head" data-seq><span class="no" aria-hidden="true" data-a="slide"><i>7</i></span><h2 id="h-costs">Prices over time</h2></header>
-  <div class="grid">
-    <div class="text">
-      <p>Price trends follows each supplier’s prices over time and flags slow creep, sudden jumps of 10% or more, prices above your contract and contracts that end soon, ranked by what they could cost you over the next 12 months.</p>
-    </div>
-    <div class="mnote" role="note"><p>A draft email to start the conversation is ready to copy. MarginGuard doesn’t send it.</p></div>
-    <figure class="ex shot" aria-labelledby="ex7" data-seq data-notes>
-      <figcaption class="ex-head" id="ex7"><b>Exhibit 7</b>Price alerts at Northgate Parts, in the same demo workspace</figcaption>
-      <div class="plate">
-        <div class="mount">
-          <picture><source type="image/webp" srcset="media/home-trends.webp"><img src="media/home-trends.jpg" width="1294" height="664" loading="lazy" decoding="async" alt="Price alerts: a sudden jump at Ridgeline Packaging, BOX-24 from 1.1 to 1.26, plus 14.5%, $2,031.30 over 12 months; price creep at Harbor Fasteners, HX-12 from 0.4 to 0.435, plus 8.8%, $1,110.87 over 12 months. Contracts ending soon: Summit Metals, ending 31 December 2026. A price trend line for each supplier."></picture>
-          <div class="pins" aria-hidden="true"><i style="--y:30">1</i><i style="--y:59.2">2</i><i style="--y:89.5">3</i></div>
-        </div>
-        <ol class="callouts">
-          <li style="--y:30">The two items in Exhibit 4: the box that jumped and the hex bolt that crept, each with what it could cost over the next 12 months.</li>
-          <li style="--y:59.2">An agreed price list that ends within 60 days.</li>
-          <li style="--y:89.5">Each supplier’s prices over time.</li>
-        </ol>
-      </div>
-    </figure>
-
-    <div class="text gap">
-      <h3 class="sub">Cost insights</h3>
-      <p>Reads the invoice lines you have already saved. Nothing extra to upload.</p>
-    </div>
-    <div class="two">
-      <div class="a">
-        <ul class="plain">
-          <li>why spend moved over 30, 60 or 90 days: price, volume, new and dropped items</li>
-          <li>the items with the largest price changes</li>
-          <li>a 90-day price trend for each item, and sudden price jumps on the latest invoice</li>
-          <li>how much of your spend sits with each supplier</li>
-          <li>items you buy from only one supplier</li>
-        </ul>
-      </div>
-      <figure class="ex b" aria-labelledby="ex8">
-        <figcaption class="ex-head" id="ex8"><b>Exhibit 8</b>Why spend moved over 90 days. Example figures.</figcaption>
-        <table class="ledger">
-          <thead><tr><th scope="col">Cause</th><th class="num" scope="col">Change, $</th></tr></thead>
-          <tbody>
-            <tr><td>Price changes</td><td class="num">+3,420</td></tr>
-            <tr><td>Buying more or less</td><td class="num">−1,150</td></tr>
-            <tr><td>New items</td><td class="num">+880</td></tr>
-            <tr><td>Dropped items</td><td class="num">−410</td></tr>
-            <tr class="total"><td>Total change</td><td class="num">+2,740</td></tr>
-          </tbody>
-        </table>
-      </figure>
-    </div>
-  </div>
-</section>
-
-<!-- ================= 8 ================= -->
-<section class="sec wrap" id="data" aria-labelledby="h-limits">
-  <header class="grid sec-head" data-seq><span class="no" aria-hidden="true" data-a="slide"><i>8</i></span><h2 id="h-limits">What it doesn’t do</h2></header>
-  <div class="grid">
-    <div class="text nots">
-      <p><b>It doesn’t pay anyone.</b> The payment file lists what you cleared. Your bank does the rest.</p>
-      <p><b>It doesn’t write to suppliers on its own.</b> Claim and dispute letters are drafts. Nothing goes out until you send it.</p>
-      <p><b>It doesn’t decide for you.</b> A person approves each decision in the workspace. An optional AI assistant can explain the evidence or find a past review, and it can’t approve anything.</p>
-      <p><b>It doesn’t guess.</b> Findings come from fixed rules you can read in the finding itself. What the document reader can’t make out is marked “needs a look” and left out of the total.</p>
-      <p><b>It doesn’t call a finding proof.</b> A finding means two of your records disagree. You check the originals first.</p>
-      <p><b>It doesn’t keep free-scan files.</b> They are checked in memory and not stored. Files you upload to an account stay in your workspace, which other customers can’t see.</p>
-    </div>
-    <div class="mnote" role="note" style="grid-row:1">
-      <p>Download a copy of all your data, or delete your account and its audits, yourself, at any time.</p>
-      <p>Every sign-in needs a code as well as your password. An authenticator app or a passkey is optional.</p>
-      <p>Only upload records you have permission to use.</p>
-      <p><a href="security.html">How your data is stored and protected</a></p>
-    </div>
-  </div>
-</section>
-
-<!-- ================= 9 ================= -->
-<section class="sec wrap" id="pricing" aria-labelledby="h-price">
-  <header class="grid sec-head" data-seq><span class="no" aria-hidden="true" data-a="slide"><i>9</i></span><h2 id="h-price">Price, and who you’ll be dealing with</h2></header>
-  <div class="grid">
-    <div class="text">
-      <table class="terms" data-seq>
-        <tbody>
-          <tr><th scope="row">Price now</th><td><span class="hl" style="--d:250ms">Free during early access.</span> No card required.</td></tr>
-          <tr><th scope="row">Price later</th><td>Pricing will be announced before anything is charged.</td></tr>
-          <tr><th scope="row">Accounts</th><td>New accounts join a short waitlist. The free scan needs no account.</td></tr>
-        </tbody>
-      </table>
-      <p class="act"><a class="btn" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan">Run a free scan</a><span>or <a data-launch="signup" href="https://app.tirthalkothari.com/#/signup">create your account</a></span></p>
-      <div class="letter">
-        <p>I’m Tirthal Kothari. I build and run MarginGuard myself, and it’s in early access.</p>
-        <p>Tell me about your suppliers and the records you keep. I read every request and reply by email. It suits teams checking more invoices than they can review line by line, or billed by carriers across many lanes.</p>
-        <p>Start with the sample, and upload business records only if you have permission to use them.</p>
-      </div>
-      <p class="sig"><b>Tirthal Kothari</b>Founder, MarginGuard<br><a href="mailto:margingaurd@gmail.com">margingaurd@gmail.com</a></p>
-    </div>
-    <div class="mnote" role="note"><p>It changes most weeks. What changed is logged at the foot of the page.</p></div>
-
-    <div class="contact" id="contact">
-      <h3 class="sub" id="contact-title">Talk to the founder</h3>
-      <p class="no-script">This form needs JavaScript. Without it, please write to <a href="mailto:margingaurd@gmail.com">margingaurd@gmail.com</a>.</p>
-      <form class="contact-form" id="contact-form" data-email="margingaurd@gmail.com" aria-labelledby="contact-title" novalidate>
+<!-- ================= the rest, as short rows. Each leads to a page with the detail. ================= -->
+<section class="sec tight wrap" aria-label="Security, pricing, questions, the founder and what’s new">
+  <div class="rows grid" data-seq>
+    <div class="item" id="data"><h2>Security</h2><p>Free-scan files are checked in memory and not stored. It never pays anyone, and nothing goes to a supplier until you send it.</p><a class="more" href="security.html">How your data is protected</a></div>
+    <div class="item" id="pricing"><h2>Pricing</h2><p><span class="hl">Free during early access.</span> No card. Pricing will be announced before anything is charged.</p><a class="more" href="pricing.html">Pricing in full</a></div>
+    <div class="item" id="faq"><h2>Questions</h2><p>Is a finding proof? No. It means two of your records disagree, and you check the originals first.</p><a class="more" href="pricing.html#questions">All questions</a></div>
+    <div class="item" id="contact">
+      <h2>The founder</h2><p>I’m Tirthal Kothari. I build and run MarginGuard myself, and I reply by email.</p><a class="more" id="contact-open" href="#contact-panel">Talk to the founder</a>
+      <!-- The form opens here. A link to #contact (the app has one) opens it too. Without scripts the email address is shown instead. -->
+      <div class="contact-panel" id="contact-panel">
+        <p>Tell me about your suppliers and the records you keep. I read every request and reply by email. Prefer email? <a href="mailto:margingaurd@gmail.com">margingaurd@gmail.com</a></p>
+        <p class="no-script">This form needs JavaScript. Without it, please write to <a href="mailto:margingaurd@gmail.com">margingaurd@gmail.com</a>.</p>
+      <form class="contact-form" id="contact-form" data-email="margingaurd@gmail.com" aria-label="Talk to the founder" novalidate>
         <div class="field-row">
           <label>Name<input name="name" autocomplete="name" maxlength="120" required></label>
           <label>Work email<input name="email" type="email" autocomplete="email" maxlength="180" required></label>
@@ -527,86 +208,26 @@
         </div>
         <p class="form-status" id="contact-status" role="status" aria-live="polite"></p>
       </form>
+      </div>
     </div>
+    <!-- When you add an entry to whats-new.html, copy its date and heading here. -->
+    <div class="item" id="changes"><h2>What’s new</h2><p>22 Nov. Bigger files, and errors that name the file.</p><a class="more" href="whats-new.html">Everything new</a></div>
   </div>
 </section>
 
-<!-- ================= questions ================= -->
-<section class="sec minor wrap" id="faq" aria-labelledby="h-faq">
-  <header class="grid sec-head"><span class="no"></span><h2 id="h-faq">Questions</h2></header>
-  <div class="grid">
-    <div class="faq">
-      <details>
-        <summary>Who is it for?</summary>
-        <ul>
-          <li>Purchasing managers: confirm suppliers billed the agreed price for what actually arrived, and see which items may run short.</li>
-          <li>Accounts payable teams: hold questionable lines before payment, and catch invoices paid twice or above their amount.</li>
-          <li>Owners of distributors and manufacturers: see where margin is leaking across suppliers, carriers and stock, without a full ERP project.</li>
-        </ul>
-      </details>
-      <details>
-        <summary>What files do I need?</summary>
-        <p>Supplier invoices and purchase orders, as CSV, Excel or PDF. Receipts, stock levels and payment records are optional and add more checks. You match the columns when you import, so the files don’t need a fixed layout.</p>
-      </details>
-      <details>
-        <summary>Does it work with my accounting system?</summary>
-        <p>Export your bills and purchase orders from Tally, QuickBooks Online, Zoho Books or Xero and import the files. E-invoice files are read automatically too: UBL / PEPPOL XML, India GST e-invoice JSON and Tally XML vouchers.</p>
-      </details>
-      <details>
-        <summary>Is a finding proof that the supplier overcharged?</summary>
-        <p>No. A finding means two records disagree. There may be a reason, such as an approved price change or a receipt that hasn’t been entered yet. Check the source rows before you raise it with the supplier.</p>
-      </details>
-      <details>
-        <summary>Can I try it without my own data?</summary>
-        <p>Yes. Every new workspace can open a sample audit built on fictional records, so you can see each check before uploading anything.</p>
-      </details>
-      <details>
-        <summary>Where is my data stored?</summary>
-        <p>Free-scan files are checked in memory and not stored. Files you upload to an account are kept in your workspace, which other customers can’t see. You can remove uploaded payment, credit-note and contract files yourself, download a copy of all your data, and delete your whole account and its audits yourself at any time. Only upload records you have permission to use.</p>
-      </details>
-      <details>
-        <summary>What does it cost?</summary>
-        <p><span class="hl">Free during early access.</span> Pricing will be announced before anything is charged.</p>
-      </details>
-    </div>
-    <p class="text small" style="margin-top:16px">Something else? <a href="#contact">Ask me</a>.</p>
-  </div>
-</section>
-
-<!-- ================= what's new ================= -->
-<!-- To add an entry, copy one <li> to the top of the list: <small>date · topic</small>, then a heading and a paragraph. -->
-<section class="sec minor last wrap" id="changes" aria-labelledby="h-log">
-  <header class="grid sec-head"><span class="no"></span><h2 id="h-log">What’s new</h2></header>
-  <div class="grid">
-    <p class="text" style="margin-bottom:26px">This week’s improvements, newest first.</p>
-    <ol class="change-list">
-      <li><small>22 Nov · Uploads</small><div><h3>Bigger files, and errors that name the file</h3><p>Spreadsheets and CSV exports can now be up to 25 MB and 50,000 rows each, with up to 12 files in one upload. If a file can’t be used, the message names the file and says why, and the audit starts with the rest.</p></div></li>
-      <li><small>22 Nov · Look and feel</small><div><h3>A simpler menu, plainer words</h3><p>The menu now follows the five steps: bring data in, check, decide, get money back and save going forward. Planning, extra checks and analysis are one click away under More tools, or turn on Show all tools. Explanations use plain words, each page has one “How these numbers are worked out” line, and pages move with short, quiet animations that follow your device’s reduce-motion setting.</p></div></li>
-      <li><small>22 Nov · Claims</small><div><h3>Track every claim until the money is back</h3><p>Start a claim from any overcharge, check the letter and send it from your own mailbox or from MarginGuard’s email. Supplier replies and credit notes are attached to the claim, and Money recovered shows what you claimed, what was promised and what came back. Nothing counts as recovered until you confirm it.</p></div></li>
-      <li><small>22 Nov · Payments</small><div><h3>Stop overcharges before you pay them</h3><p>Before a payment run, every unpaid invoice is marked Clear, Hold or Blocked, with the reason and the money at stake. Each line is matched to its order and to what arrived, so short or missing deliveries are held. The payment file for your bank lists only cleared and approved invoices, and MarginGuard never pays anyone.</p></div></li>
-      <li><small>22 Nov · Savings</small><div><h3>See price rises while they’re small</h3><p>Price trends follows each supplier’s prices over time and flags slow creep, sudden jumps of 10% or more, prices above your contract and contracts that end soon, ranked by what they could cost you over the next 12 months. A draft email to start the conversation is ready to copy; MarginGuard doesn’t send it.</p></div></li>
-      <li><small>22 Nov · Savings</small><div><h3>Compare with businesses like you, if you choose to share</h3><p>Turn on sharing to see how your prices for 16 common items, such as flour, diesel and gloves, compare with at least 10 similar businesses, and which suppliers at least 3 businesses like you buy from. No names, invoice numbers or item codes are shared. MarginGuard also shows suppliers that already charged you less on your own invoices, and UK public-contract suppliers, labelled as not checked.</p></div></li>
-      <li><small>22 Nov · Accountants</small><div><h3>One sign-in for all your clients</h3><p>Accountants and bookkeepers set up a firm and get a code. Each client enters it to grant read-only access or “may act” access, and can revoke it at any time. The firm dashboard shows every client’s open findings, money at risk and money recovered, and flags who needs attention.</p></div></li>
-      <li><small>22 Nov · Security</small><div><h3>Authenticator-app sign-in with recovery codes</h3><p>Sign in with a 6-digit code from an authenticator app instead of an emailed one, and keep 10 single-use recovery codes in case you lose your phone. Workspace admins can require an authenticator app for everyone.</p></div></li>
-      <li><small>22 Nov · Documents</small><div><h3>Decimal commas read correctly</h3><p>Prices written with a decimal comma, such as 0,125 or 12,50, are read as decimals in spreadsheets, documents and price lists, so they no longer show up as false overcharges. A number that could be read two ways is left as written and marked for a look.</p></div></li>
-      <li><small>22 Nov · Contracts</small><div><h3>Contract and price-list prices</h3><p>Upload a price list or a contract, confirm each price, and MarginGuard checks your invoices against it, including invoices that have no purchase order.</p></div></li>
-    </ol>
-  </div>
-</section>
 </main>
 
 <footer class="colophon">
   <div class="grid">
     <div class="c1"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M12 14v19c0 8.3 7.5 15.7 20 21 12.5-5.3 20-12.7 20-21V14" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="round"/><path d="M20 40V20m24 20V20" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="square"/><path class="v" d="m20 20 12 12 12-12" fill="none" stroke-width="6"/></svg>MarginGuard</div>
-    <div class="c2"><p>Supplier invoice audit for distributors and manufacturers. Every company, person and figure in the exhibits and the film is fictional.</p></div>
+    <div class="c2"><p>Supplier invoice audit for distributors and manufacturers. Every company, person and figure in the pictures and the film is fictional.</p></div>
     <div class="c3"><p>Set in Besley, Castoro and Source Sans 3, under the SIL Open Font License.</p></div>
     <div class="c4">
-      <nav aria-label="Footer"><a href="security.html">Security</a><a href="#faq">Questions</a><a href="#contact">Talk to the founder</a><a data-launch href="https://app.tirthalkothari.com/">Sign in</a><a href="/">Tirthal Kothari</a></nav>
+      <nav aria-label="Footer"><a href="product.html">How it works</a><a href="pricing.html">Pricing</a><a href="security.html">Security</a><a href="whats-new.html">What’s new</a><a href="#contact">Talk to the founder</a><a data-launch href="https://app.tirthalkothari.com/">Sign in</a><a href="/">Tirthal Kothari</a></nav>
       <p>© 2026 MarginGuard</p>
     </div>
   </div>
 </footer>
-</div>
 </div>
 </body>
 </html>
