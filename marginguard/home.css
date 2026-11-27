@@ -871,13 +871,13 @@ html:not(.js) .show-panel{grid-area:auto;margin-bottom:64px}
   html.m .pc-row{opacity:0;transform:translate3d(-14px,0,0)}
   html.m .pc-finds .pc-row,html.m .pc-total.pc-row{transform:translate3d(0,10px,0)}
   html.m .pcard.go .pc-row{opacity:1;transform:none;transition:opacity .5s var(--ease),transform .65s var(--ease);transition-delay:calc(var(--d,0ms) * var(--k,1))}
-  html.js .story-step{transition:opacity .45s var(--ease)}
-  .story-screen picture{transition:opacity .65s var(--ease)}
-  .story-progress i{transition:background-color .45s var(--ease)}
-  html.js .show-panel{transition:opacity .45s var(--ease),visibility 0s linear .45s}
-  html.js .show-panel.is-on{transition:opacity .5s var(--ease) .06s,visibility 0s}
-  html.js .show-panel .show-shot img{transform:scale(1.015);transition:transform 1.1s var(--ease)}
-  html.js .show-panel.is-on .show-shot img{transform:none}
+  html.m .story-step{transition:opacity .45s var(--ease)}
+  html.m .story-screen picture{transition:opacity .65s var(--ease)}
+  html.m .story-progress i{transition:background-color .45s var(--ease)}
+  html.m .show-panel{transition:opacity .45s var(--ease),visibility 0s linear .45s}
+  html.m .show-panel.is-on{transition:opacity .5s var(--ease) .06s,visibility 0s}
+  html.m .show-panel .show-shot img{transform:scale(1.015);transition:transform 1.1s var(--ease)}
+  html.m .show-panel.is-on .show-shot img{transform:none}
   html.m .cinema-frame img{transform:translate3d(0,var(--py,0px),0);will-change:transform}
   .cinema-disc{transition:transform .35s var(--ease)}
   .show-tabs [role="tab"]{transition:color .2s var(--ease),border-color .25s var(--ease)}
@@ -958,48 +958,51 @@ html:not(.js) .show-panel{grid-area:auto;margin-bottom:64px}
 /* =====================================================================
    MarginGuard for Sellers on the site (27 Nov 2026): the buyers / sellers switch, the Sellers band, sellers.html
    ===================================================================== */
-.audience{display:inline-flex;gap:4px;padding:4px;margin:0 0 26px;border:1px solid var(--edge);background:var(--paper);font-family:var(--sans);font-size:14.5px;font-weight:600;line-height:1}
-.audience a{padding:9px 14px;text-decoration:none;color:var(--ink2)}
-.audience a[aria-current]{background:var(--deep);color:var(--on-deep)}
-.audience a:not([aria-current]):hover{color:var(--ink);background:var(--warm)}
-.audience a:focus-visible{outline:2px solid var(--pen);outline-offset:2px}
 
-.sellers-top,.sellers-pair{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gut);align-items:center}
-.sellers-text{grid-column:1 / span 5}
-.sellers-text h2{font-family:var(--display);font-size:clamp(34px,3.7vw,56px);line-height:1.04;letter-spacing:-.02em;color:var(--head)}
-.sellers-lede{font-size:clamp(19px,1.5vw,22px);line-height:1.45;margin:16px 0 30px}
-.sellers-text .act{margin:0 0 14px}
-.sellers-signin{font-family:var(--sans);font-weight:600}
-.sellers-shot{margin:0;aspect-ratio:3/2;overflow:hidden;background:var(--sheet);border:1px solid var(--edge);box-shadow:0 34px 70px -38px rgba(58,20,28,.3)}
-.sellers-shot img{width:100%;height:100%;object-fit:cover;object-position:0 0}
-.sellers-top .sellers-shot{grid-column:6 / span 7}
-.sellers-pair{margin-top:96px}
-.sellers-pair .sellers-shot{grid-column:1 / span 6;grid-row:1}
-.sellers-pair-text{grid-column:8 / span 5}
-.sellers-pair h3{font-family:var(--display);font-size:clamp(26px,2.3vw,34px);line-height:1.1;letter-spacing:-.012em;color:var(--head);margin:0 0 18px}
-.sellers-pair ul{list-style:none;margin:0;padding:0}
-.sellers-pair li{padding:14px 0 13px;border-top:1px solid var(--edge);font-size:18px;line-height:1.5}
-.sellers-pair li b{display:block;font-family:var(--sans);font-weight:600;font-size:15.5px;color:var(--head);margin-bottom:2px}
-.sellers-pair code,.doc code{font-family:Consolas,"Courier New",monospace;font-size:.86em;padding:1px 5px;background:var(--paper);border:1px solid var(--edge);white-space:nowrap}
-.sellers-list{list-style:none;margin:96px 0 0;padding:28px 0 0;border-top:2px solid var(--rule);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:30px var(--gut)}
-.sellers-list li{font-family:var(--sans);font-size:14.5px;line-height:1.45;color:var(--ink2)}
-.sellers-list b{display:block;font-weight:600;font-size:16px;line-height:1.3;color:var(--head);margin-bottom:5px}
-.sellers-more{margin:36px 0 0}
+.doc code{font-family:Consolas,"Courier New",monospace;font-size:.86em;padding:1px 5px;background:var(--paper);border:1px solid var(--edge);white-space:nowrap}
 
 /* sellers.html */
-.doc-shot{margin:20px 0 6px;border:1px solid var(--edge);background:var(--sheet)}
-.doc-shot img{width:100%;height:auto}
+
 .doc .act{margin:18px 0 6px}
 
+/* =====================================================================
+   Two product lines (27 Nov 2026): the switcher above every masthead, and the MarginGuard for Sellers homepage
+   ===================================================================== */
+.lines{position:relative;font-family:var(--sans);font-size:15px;line-height:1.2}
+.lines::after{content:"";position:absolute;left:calc(50% - 50vw);right:calc(50% - 50vw);bottom:0;height:1px;background:var(--hair)}
+.lines nav{display:flex;gap:32px}
+.lines a{position:relative;display:flex;align-items:baseline;gap:8px;padding:14px 0 12px;text-decoration:none;font-weight:600;color:var(--ink2)}
+.lines a span{font-weight:400;font-size:13.5px}
+.lines a:hover{color:var(--ink)}
+.lines a[aria-current]{color:var(--head)}
+.lines a[aria-current]::after{content:"";position:absolute;z-index:1;left:0;right:0;bottom:0;height:3px;background:var(--pen)}
+.lines a:focus-visible{outline:2px solid var(--pen);outline-offset:2px}
+.brand-sub{margin-left:7px;font-weight:500;font-size:.7em;letter-spacing:0;color:var(--pen)}
+.foot-switch{font-size:14.5px}
+
+/* the Sellers homepage: its screens are 3:2 */
+.story-screen.ratio-32,.show-shot.ratio-32,.story-shot.ratio-32,.pc-win.ratio-32{aspect-ratio:3/2}
+.sl-hero{grid-column:7 / span 6;margin:0}
+.sl-hero .pc-win{overflow:hidden}
+.sl-hero img{width:100%;height:100%;object-fit:cover;object-position:0 0}
+.band-deep .band-head h2{color:var(--on-deep)}
+.band-deep .kicker{color:var(--hi)}
+.with-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px var(--gut)}
+.with-list li{border-top:1px solid rgba(251,247,244,.3);padding-top:22px;font-size:18px;line-height:1.5;color:var(--on-deep-2)}
+.with-list b{display:block;margin-bottom:10px;font-family:var(--display);font-weight:500;font-size:clamp(22px,1.9vw,28px);line-height:1.15;letter-spacing:-.008em;color:var(--on-deep)}
+.with-list code{font-family:Consolas,"Courier New",monospace;font-size:.86em;padding:1px 5px;background:rgba(251,247,244,.1);border:1px solid rgba(251,247,244,.3);color:var(--on-deep);white-space:nowrap}
+.with-note{margin:48px 0 0;max-width:46em;font-family:var(--sans);font-size:15.5px;line-height:1.5;color:var(--on-deep-mute)}
+.with-note a{color:var(--on-deep)}
+
 @media (max-width:1099px){
-  .sellers-top,.sellers-pair{display:block}
-  .sellers-top .sellers-shot{margin-top:40px}
-  .sellers-pair{margin-top:64px}
-  .sellers-pair-text{margin-top:28px}
-  .sellers-list{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:64px}
+  .sl-hero{grid-column:1 / -1;margin-top:40px}
+  .with-list{grid-template-columns:1fr}
 }
 @media (max-width:700px){
-  .audience{margin-bottom:20px}
-  .sellers-pair li{font-size:17px}
-  .sellers-list{grid-template-columns:1fr;gap:20px}
+  .lines nav{gap:20px}
+  .lines a{font-size:13.5px}
+  .lines a span{display:none}
+  .brand-sub{display:none}
+  .mast .btn{white-space:nowrap}
+  .with-list li{font-size:17px}
 }

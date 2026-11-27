@@ -34,7 +34,7 @@
   <link rel="preload" href="fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/castoro-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/source-sans-3-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="home.css?v=4">
+  <link rel="stylesheet" href="home.css?v=5">
   <script>
   /* Before the first paint: note that scripts run, and switch the motion on only where it is wanted.
      Add ?motion=off to the address to see the still page. If home.js never starts, the motion is switched off again. */
@@ -46,12 +46,20 @@
   </script>
   <script src="launch.js?v=4" defer></script>
   <script src="contact.js?v=3" defer></script>
-  <script src="home.js?v=4" defer></script>
+  <script src="home.js?v=5" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
 <div class="page">
+
+<!-- The two product lines. The one you are in is underlined. -->
+<div class="lines">
+  <nav class="wrap" aria-label="Products">
+    <a href="./" aria-current="page">MarginGuard<span>for buyers</span></a>
+    <a href="sellers/">MarginGuard for Sellers<span>for suppliers</span></a>
+  </nav>
+</div>
 
 <header class="mast">
   <div class="wrap">
@@ -66,7 +74,6 @@
         <a href="#film">The film</a>
         <a href="pricing.html">Pricing</a>
         <a class="in-menu" href="pricing.html#questions">Questions</a>
-        <a href="sellers.html">For sellers</a>
         <a href="security.html">Security</a>
         <a class="in-menu" href="whats-new.html">What’s new</a>
         <a class="in-menu" href="#contact">Talk to the founder</a>
@@ -90,7 +97,7 @@
           <li><a href="product.html#accountants"><b>Accountants</b><span>One sign-in for all your clients, and who needs attention.</span></a></li>
           <li><a href="product.html#files"><b>Any file in</b><span>Spreadsheets, PDFs, scans and e-invoices. A file it can’t read is named.</span></a></li>
         </ul>
-        <p class="mega-foot"><a href="product.html">How it works</a><a href="#film">The film, 2:22</a><a href="product.html#sample-files">Sample files</a><a href="sellers.html">MarginGuard for Sellers</a></p>
+        <p class="mega-foot"><a href="product.html">How it works</a><a href="#film">The film, 2:22</a><a href="product.html#sample-files">Sample files</a></p>
       </div>
     </div>
   </div>
@@ -103,7 +110,6 @@
   <div class="wrap">
     <div class="grid">
       <div class="opening-text" id="free-scan">
-        <nav class="audience" aria-label="Who it is for"><a href="#top" aria-current="true">For buyers</a><a href="#sellers">For sellers</a></nav>
         <p class="kicker">Supplier invoice audit for distributors and manufacturers</p>
         <h1 id="h1">Nobody has time to check every supplier invoice.</h1>
         <p class="standfirst">MarginGuard checks each one against your orders and receipts, and shows the rows behind every difference.</p>
@@ -245,47 +251,6 @@
   </div>
 </section>
 
-<!-- ================= MarginGuard for Sellers: the other side of the invoice (facts from its PRODUCT-BRIEF.md) ================= -->
-<section class="band band-warm" id="sellers" aria-labelledby="h-sellers">
-  <div class="wrap">
-    <div class="sellers-top">
-      <div class="sellers-text" data-rise>
-        <p class="kicker">For suppliers · Early access</p>
-        <h2 id="h-sellers">MarginGuard for Sellers</h2>
-        <p class="sellers-lede">For the other side of the invoice. Send invoices that get paid in full the first time, answer customer claims with proof, and see the money you’re missing.</p>
-        <p class="act"><a class="btn" href="https://sellers.tirthalkothari.com/#/signup">Create account</a><a class="sellers-signin" href="https://sellers.tirthalkothari.com/">Sign in</a></p>
-        <p class="small">Early access, free for now; prices aren’t decided. A separate product, with its own account.</p>
-      </div>
-      <figure class="sellers-shot zoom" data-rise><picture><source type="image/webp" srcset="media/sellers-check-800.webp 800w, media/sellers-check.webp 1440w" sizes="(max-width:1099px) 100vw, 56vw"><img src="media/sellers-check.jpg" width="1440" height="960" loading="lazy" decoding="async" alt="Check before you send, for a fictional supplier, Harbor Fasteners: 5 invoices to check, 5 to fix before sending, $813.90 to check on invoices not yet sent, each with what was found."></picture></figure>
-    </div>
-    <div class="sellers-pair">
-      <figure class="sellers-shot zoom" data-rise><picture><source type="image/webp" srcset="media/sellers-claim-800.webp 800w, media/sellers-claim.webp 1440w" sizes="(max-width:1099px) 100vw, 48vw"><img src="media/sellers-claim.jpg" width="1440" height="960" loading="lazy" decoding="async" alt="A customer's claim in the claims desk: billed more than was ordered on invoice INV-2001A. What they wrote beside what the seller's records show: the records agree, $376.00 to check, with the rows it rests on."></picture></figure>
-      <div class="sellers-pair-text" data-rise>
-        <h3>How it works with MarginGuard</h3>
-        <ul>
-          <li><b>Paperwork that fits</b>Its electronic invoices and credit notes are read by MarginGuard without errors.</li>
-          <li><b>Replies that find their claim</b>A reply to a MarginGuard claim letter keeps the <code>[MG-XXXXXX]</code> reference and the email thread, so it is matched to the right claim.</li>
-          <li><b>Two separate products</b>Separate accounts and separate data. Neither can see into the other, and neither side needs the other to use it.</li>
-        </ul>
-      </div>
-    </div>
-    <ul class="sellers-list" data-rise-group>
-      <li data-rise><b>Check before you send</b>Price, quantity, duplicates, freight, order numbers and totals, before the customer sees them.</li>
-      <li data-rise><b>Send</b>PDF and standard electronic invoices. What went out is kept exactly as it was sent.</li>
-      <li data-rise><b>Claims desk</b>Reads a customer’s claim, checks it against your records and prepares the credit note and reply.</li>
-      <li data-rise><b>Get paid</b>Who owes what and how late, and payments that came in short or twice.</li>
-      <li data-rise><b>Money you’re missing</b>Deliveries never invoiced, prices below the agreed price, short payments nobody chased.</li>
-      <li data-rise><b>Sell</b>Orders still to deliver. A quote below your minimum margin needs an owner to sign it off.</li>
-      <li data-rise><b>Profit</b>By customer and by item, from invoices sent, after credit notes.</li>
-      <li data-rise><b>How customers see you</b>Your own scorecard, worked out the way a buyer would.</li>
-      <li data-rise><b>Add data</b>CSV or Excel files. Anything that can’t be read safely is skipped, with the reason.</li>
-      <li data-rise><b>Company and people</b>Six roles, a record of who did what, and every document in one download.</li>
-    </ul>
-    <p class="sellers-more" data-rise><a class="more" href="sellers.html">Everything MarginGuard for Sellers does</a></p>
-    <p class="source">Screens from a fictional supplier, Harbor Fasteners, in MarginGuard for Sellers.</p>
-  </div>
-</section>
-
 <!-- ================= the numbers: each one is in the code or the test results ================= -->
 <section class="band band-deep facts" aria-labelledby="h-facts">
   <div class="wrap">
@@ -377,10 +342,11 @@
       <div class="foot-brand">
         <a class="foot-name" href="#top"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M12 14v19c0 8.3 7.5 15.7 20 21 12.5-5.3 20-12.7 20-21V14" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="round"/><path d="M20 40V20m24 20V20" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="square"/><path class="v" d="m20 20 12 12 12-12" fill="none" stroke-width="6"/></svg>MarginGuard</a>
         <p>Supplier invoice audit for distributors and manufacturers. Built and run by Tirthal Kothari.</p>
+        <p class="foot-switch">Are you a supplier? <a href="sellers/">MarginGuard for Sellers</a></p>
         <p><a class="btn" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan">Run a free scan</a></p>
       </div>
       <nav class="foot-cols" aria-label="Footer">
-        <div><h2 class="foot-h">Product</h2><ul><li><a href="product.html#find">Find overcharges</a></li><li><a href="product.html#pay-gate">Pay gate</a></li><li><a href="product.html#recovery">Recovery</a></li><li><a href="product.html#price-trends">Price trends</a></li><li><a href="product.html#suppliers">Suppliers</a></li><li><a href="product.html#freight">Freight</a></li><li><a href="product.html#accountants">Accountants</a></li><li><a href="product.html#files">Any file in</a></li><li><a href="sellers.html">MarginGuard for Sellers</a></li></ul></div>
+        <div><h2 class="foot-h">Product</h2><ul><li><a href="product.html#find">Find overcharges</a></li><li><a href="product.html#pay-gate">Pay gate</a></li><li><a href="product.html#recovery">Recovery</a></li><li><a href="product.html#price-trends">Price trends</a></li><li><a href="product.html#suppliers">Suppliers</a></li><li><a href="product.html#freight">Freight</a></li><li><a href="product.html#accountants">Accountants</a></li><li><a href="product.html#files">Any file in</a></li></ul></div>
         <div><h2 class="foot-h">Learn</h2><ul><li><a href="product.html">How it works</a></li><li><a href="#film">The film</a></li><li><a href="product.html#sample-files">Sample files</a></li><li><a href="whats-new.html">What’s new</a></li></ul></div>
         <div><h2 class="foot-h">Company</h2><ul><li><a href="pricing.html">Pricing</a></li><li><a href="pricing.html#questions">Questions</a></li><li><a href="security.html">Security and data</a></li><li><a href="/">Tirthal Kothari</a></li></ul></div>
         <div><h2 class="foot-h">Contact</h2><ul><li><a href="#contact">Talk to the founder</a></li><li><a href="mailto:margingaurd@gmail.com">margingaurd@gmail.com</a></li><li><a data-launch href="https://app.tirthalkothari.com/">Sign in</a></li></ul></div>
