@@ -954,3 +954,52 @@ html:not(.js) .show-panel{grid-area:auto;margin-bottom:64px}
   .foot-cols{grid-template-columns:repeat(2,minmax(0,1fr))}
   .foot-base{flex-direction:column;margin-top:40px}
 }
+
+/* =====================================================================
+   MarginGuard for Sellers on the site (27 Nov 2026): the buyers / sellers switch, the Sellers band, sellers.html
+   ===================================================================== */
+.audience{display:inline-flex;gap:4px;padding:4px;margin:0 0 26px;border:1px solid var(--edge);background:var(--paper);font-family:var(--sans);font-size:14.5px;font-weight:600;line-height:1}
+.audience a{padding:9px 14px;text-decoration:none;color:var(--ink2)}
+.audience a[aria-current]{background:var(--deep);color:var(--on-deep)}
+.audience a:not([aria-current]):hover{color:var(--ink);background:var(--warm)}
+.audience a:focus-visible{outline:2px solid var(--pen);outline-offset:2px}
+
+.sellers-top,.sellers-pair{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gut);align-items:center}
+.sellers-text{grid-column:1 / span 5}
+.sellers-text h2{font-family:var(--display);font-size:clamp(34px,3.7vw,56px);line-height:1.04;letter-spacing:-.02em;color:var(--head)}
+.sellers-lede{font-size:clamp(19px,1.5vw,22px);line-height:1.45;margin:16px 0 30px}
+.sellers-text .act{margin:0 0 14px}
+.sellers-signin{font-family:var(--sans);font-weight:600}
+.sellers-shot{margin:0;aspect-ratio:3/2;overflow:hidden;background:var(--sheet);border:1px solid var(--edge);box-shadow:0 34px 70px -38px rgba(58,20,28,.3)}
+.sellers-shot img{width:100%;height:100%;object-fit:cover;object-position:0 0}
+.sellers-top .sellers-shot{grid-column:6 / span 7}
+.sellers-pair{margin-top:96px}
+.sellers-pair .sellers-shot{grid-column:1 / span 6;grid-row:1}
+.sellers-pair-text{grid-column:8 / span 5}
+.sellers-pair h3{font-family:var(--display);font-size:clamp(26px,2.3vw,34px);line-height:1.1;letter-spacing:-.012em;color:var(--head);margin:0 0 18px}
+.sellers-pair ul{list-style:none;margin:0;padding:0}
+.sellers-pair li{padding:14px 0 13px;border-top:1px solid var(--edge);font-size:18px;line-height:1.5}
+.sellers-pair li b{display:block;font-family:var(--sans);font-weight:600;font-size:15.5px;color:var(--head);margin-bottom:2px}
+.sellers-pair code,.doc code{font-family:Consolas,"Courier New",monospace;font-size:.86em;padding:1px 5px;background:var(--paper);border:1px solid var(--edge);white-space:nowrap}
+.sellers-list{list-style:none;margin:96px 0 0;padding:28px 0 0;border-top:2px solid var(--rule);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:30px var(--gut)}
+.sellers-list li{font-family:var(--sans);font-size:14.5px;line-height:1.45;color:var(--ink2)}
+.sellers-list b{display:block;font-weight:600;font-size:16px;line-height:1.3;color:var(--head);margin-bottom:5px}
+.sellers-more{margin:36px 0 0}
+
+/* sellers.html */
+.doc-shot{margin:20px 0 6px;border:1px solid var(--edge);background:var(--sheet)}
+.doc-shot img{width:100%;height:auto}
+.doc .act{margin:18px 0 6px}
+
+@media (max-width:1099px){
+  .sellers-top,.sellers-pair{display:block}
+  .sellers-top .sellers-shot{margin-top:40px}
+  .sellers-pair{margin-top:64px}
+  .sellers-pair-text{margin-top:28px}
+  .sellers-list{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:64px}
+}
+@media (max-width:700px){
+  .audience{margin-bottom:20px}
+  .sellers-pair li{font-size:17px}
+  .sellers-list{grid-template-columns:1fr;gap:20px}
+}
