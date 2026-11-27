@@ -1,0 +1,39 @@
+/* Quick tour dialog. Every colour, size, weight and radius comes from the tokens in story.css (the app's Navy roles). */
+#mg-guide { box-sizing: border-box; width: min(560px, calc(100% - 32px)); max-height: calc(100dvh - 32px); margin: auto; padding: 0; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--surface); color: var(--ink); box-shadow: var(--shadow-dialog); font: var(--fs-14)/1.65 var(--mg-font); overflow: auto; }
+#mg-guide::backdrop { background: var(--scrim); backdrop-filter: blur(4px); }
+#mg-guide * { box-sizing: border-box; }
+#mg-guide button { font: inherit; cursor: pointer; border-radius: var(--radius); }
+#mg-guide button:focus-visible, [data-guide-start]:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+#mg-guide .mg-guide-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 24px; border-bottom: 1px solid var(--line); }
+.mg-guide-brand { color: var(--muted); font-size: var(--fs-12); font-weight: var(--fw-semibold); }
+#mg-guide .mg-guide-close { width: 36px; height: 36px; padding: 0; border: 0; background: var(--surface-3); color: var(--ink-2); font-size: var(--fs-20); line-height: 1; }
+#mg-guide .mg-guide-body { padding: 24px 28px 28px; }
+#mg-guide .mg-guide-label { margin: 0 0 12px; color: var(--accent-text); font-size: var(--fs-12); font-weight: var(--fw-semibold); letter-spacing: .01em; }
+#mg-guide h2 { margin: 0 0 16px; color: var(--ink); font-family: var(--font-serif); font-size: var(--fs-28); font-weight: var(--fw-semibold); line-height: 1.15; letter-spacing: -.01em; }
+#mg-guide #mg-guide-copy { margin: 0; color: var(--muted); font-size: var(--fs-16); line-height: 1.7; }
+#mg-guide .mg-guide-example { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 16px; padding: 0; list-style: none; }
+#mg-guide .mg-guide-example li { padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-2); color: var(--ink); font-size: var(--fs-12); }
+#mg-guide .mg-guide-note { margin: 0; color: var(--muted); font-size: var(--fs-12); line-height: 1.7; }
+#mg-guide .mg-guide-feature { margin-top: 16px; padding: 0; border: 0; background: none; color: var(--accent-text); font-size: var(--fs-14); text-decoration: underline; text-underline-offset: 4px; }
+#mg-guide .mg-guide-foot { display: flex; align-items: center; gap: 16px; padding: 16px 24px; border-top: 1px solid var(--line); background: var(--surface-2); }
+#mg-guide .mg-guide-skip { padding: 6px 0; border: 0; background: none; color: var(--muted); font-size: var(--fs-14); }
+#mg-guide .mg-guide-count { color: var(--muted); font-size: var(--fs-12); white-space: nowrap; }
+.mg-guide-controls { display: flex; gap: 8px; margin-left: auto; }
+#mg-guide .mg-guide-back { padding: 8px 14px; border: 1px solid var(--control-line); background: var(--surface); color: var(--ink); font-size: var(--fs-14); }
+#mg-guide .mg-guide-back:disabled { opacity: .4; cursor: default; }
+#mg-guide .mg-guide-next { padding: 8px 16px; border: 1px solid var(--accent); background: var(--accent); color: var(--on-accent); font-size: var(--fs-14); white-space: nowrap; }
+#mg-guide .mg-guide-next:hover { border-color: var(--accent-strong); background: var(--accent-strong); }
+[data-guide-start] { cursor: pointer; }
+.mg-tour-link { padding: 7px 0; border: 0; border-bottom: 1px solid var(--control-line); background: none; color: inherit; font: inherit; font-size: var(--fs-14); }
+.mg-workspace-tour { padding: 6px 10px; border: 1px solid var(--control-line); border-radius: var(--radius); background: var(--surface); color: var(--ink); font: inherit; font-size: var(--fs-14); white-space: nowrap; }
+@media (max-width: 600px) {
+  #mg-guide .mg-guide-head { padding: 12px 20px; }
+  #mg-guide .mg-guide-body { padding: 20px; }
+  #mg-guide .mg-guide-foot { flex-wrap: wrap; gap: 12px; padding: 16px 20px; }
+  .mg-guide-controls { width: 100%; justify-content: flex-end; }
+  #mg-guide .mg-guide-count { margin-left: auto; }
+  .mg-workspace-tour { padding: 5px 7px; font-size: var(--fs-12); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #mg-guide::backdrop { backdrop-filter: none; }
+}
