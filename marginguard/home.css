@@ -1577,3 +1577,96 @@ html.ask-open{overflow:hidden}
   .tg-terms p,.tg-list li,.tg-foot{font-size:17px}
   .tg-side>p{font-size:18px}
 }
+
+/* =====================================================================
+   First impression (28 Nov 2026): on the buyers homepage the top screen is the drop zone for the free scan, with a
+   trust line under it; the ask box is smaller; three "who it's for" tiles follow the opening; and phones get a slim
+   bar at the bottom of the screen. All of it is plain HTML and CSS first: nothing here waits for a script.
+   ===================================================================== */
+.drop-col h1{font-size:clamp(40px,4.3vw,64px);margin-bottom:14px}
+.hero-sub{margin:0 0 24px;font-family:var(--sans);font-weight:600;font-size:clamp(18px,1.5vw,21px);line-height:1.3;color:var(--pen)}
+
+/* the drop zone: a link to the free scan that also takes files dropped anywhere on the page */
+.drop{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:18px;row-gap:4px;align-items:center;max-width:640px;padding:24px 24px 22px;
+  border:2px dashed var(--pen);background:var(--paper);color:var(--ink);text-decoration:none;cursor:pointer;transition:background-color .2s var(--ease)}
+.drop[hidden]{display:none}
+.drop-ic{grid-row:1 / span 2;width:48px;height:48px;color:var(--deep)}
+.drop-ic-pen{stroke:var(--pen)}
+.drop-h{font-family:var(--display);font-weight:500;font-size:clamp(21px,1.8vw,27px);line-height:1.18;letter-spacing:-.006em;color:var(--head)}
+.drop-sub{font-family:var(--sans);font-size:15px;line-height:1.4;color:var(--ink2)}
+.drop-go{grid-column:1 / -1;justify-self:start;display:inline-flex;align-items:center;gap:9px;margin-top:16px;padding:15px 22px 16px;
+  background:var(--deep);color:var(--on-deep);font:600 17px/1 var(--sans)}
+.drop-go svg,.drop-next .btn svg,.scan-bar svg{flex:none;width:16px;height:16px}
+.drop:hover,.drop.over{background:var(--margin)}
+.drop:hover .drop-go,.drop.over .drop-go{background:var(--deep-2)}
+.drop.over{border-style:solid}
+.drop:focus-visible{outline:2px solid var(--pen);outline-offset:4px}
+.drop-touch{display:none}
+@media (hover:none) and (pointer:coarse){
+  .drop-fine{display:none}
+  .drop-touch{display:inline}
+}
+/* after a drop: the files are named, and the next step says what to do */
+.drop-next{max-width:640px;padding:18px 20px 18px;border-left:3px solid var(--pen);background:var(--margin);font-family:var(--sans);font-size:15.5px;line-height:1.45}
+.drop-next[hidden]{display:none}
+.drop-next p{margin:0 0 10px}
+.drop-next .drop-next-h{font-weight:600;font-size:16.5px;color:var(--head);overflow-wrap:anywhere}
+.drop-next .drop-skip{color:var(--pen)}
+.drop-next .drop-next-act{display:flex;flex-wrap:wrap;align-items:center;gap:12px 22px;margin:16px 0 0}
+.drop-next .btn{display:inline-flex;align-items:center;gap:9px}
+
+/* the trust line: four facts, each one said elsewhere on the site */
+.trust{display:flex;flex-wrap:wrap;gap:6px 20px;max-width:640px;list-style:none;margin:16px 0 0;padding:0;font-family:var(--sans);font-size:14.5px;line-height:1.4;color:var(--ink)}
+.trust li{position:relative;padding-left:19px}
+.trust li::before{content:"";position:absolute;left:1px;top:.36em;width:10px;height:5px;border-left:2px solid var(--pen);border-bottom:2px solid var(--pen);transform:rotate(-45deg)}
+
+/* the ask box, made smaller: it sits under the main action instead of competing with it */
+.ask.ask-sm{max-width:540px;margin:26px 0 0}
+.ask-sm .ask-box{box-shadow:none;border-bottom-width:1px}
+.ask-sm .ask-box input{padding:11px 14px 10px;font-size:16px}
+.ask-sm .ask-go{padding:0 15px;font-size:14.5px}
+.ask-sm .ask-chips{margin-top:10px;gap:6px 8px}
+.ask-sm .ask-chips button{padding:6px 10px 7px;font-size:13.5px}
+.opening .act+.trust{margin-top:-4px}
+.opening .trust+.ask-sm{margin-top:24px}
+
+/* "create account" waits under the proof */
+.proof-acct{margin:14px 0 0;font-family:var(--sans);font-size:15px;line-height:1.45;color:var(--ink2)}
+.proof-acct a{font-weight:600;color:var(--ink)}
+
+/* who it's for: three tiles */
+.who{padding-block:64px 76px}
+.who-head{margin:0 0 22px;font-family:var(--sans);font-size:14px;font-weight:600;color:var(--pen)}
+.who-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gut);list-style:none;margin:0;padding:0}
+.who-tile{padding:22px 24px 20px;border:1px solid var(--edge);border-top:3px solid var(--deep);background:var(--paper)}
+.who-tile .who-k{margin:0 0 8px;font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink2)}
+.who-tile h3{margin:0 0 8px;font-family:var(--display);font-weight:500;font-size:clamp(22px,1.8vw,26px);line-height:1.15;color:var(--head)}
+.who-tile p{margin:0;font-size:17px;line-height:1.45}
+.who-tile .who-eg{margin-top:16px;padding-top:12px;border-top:1px solid var(--hair);font-family:var(--sans);font-size:15px;color:var(--ink2)}
+.who-eg .ring{margin-left:13px;font-weight:700;color:var(--pen)}
+.opening:has(.drop-col){padding-bottom:72px}
+
+/* phones: a slim bar at the bottom of the screen, out of the way while the main action is in view */
+.scan-bar{display:none}
+@media (max-width:900px){
+  .who-tiles{grid-template-columns:1fr}
+}
+@media (max-width:700px){
+  .drop{grid-template-columns:auto minmax(0,1fr);column-gap:14px;padding:18px 16px 16px}
+  .drop-ic{width:40px;height:40px}
+  .drop-go{justify-self:stretch;justify-content:center;margin-top:14px}
+  .trust{gap:6px 16px;font-size:14px}
+  .who{padding-block:48px 56px}
+  .who-tile{padding:18px 18px 16px}
+  .who-tile p{font-size:16.5px}
+  .page:has(.scan-bar){padding-bottom:52px}
+  .scan-bar{position:fixed;z-index:35;left:0;right:0;bottom:0;display:flex;justify-content:center;align-items:center;gap:9px;
+    padding:14px 16px calc(14px + env(safe-area-inset-bottom));background:var(--deep);color:var(--on-deep);font:600 16px/1.2 var(--sans);text-decoration:none;
+    box-shadow:0 -10px 24px -14px rgba(23,12,16,.55)}
+  .scan-bar.off{visibility:hidden;transform:translate3d(0,110%,0)}
+  html:not(.js) .scan-bar.off{visibility:visible;transform:none}  /* starts hidden; without the script it simply stays */
+}
+@media (max-width:700px) and (prefers-reduced-motion:no-preference){
+  .scan-bar{transition:transform .3s var(--ease),visibility 0s linear 0s}
+  .scan-bar.off{transition:transform .3s var(--ease),visibility 0s linear .3s}
+}

@@ -34,7 +34,7 @@
   <link rel="preload" href="fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/castoro-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/source-sans-3-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="home.css?v=7">
+  <link rel="stylesheet" href="home.css?v=8">
   <script>
   /* Before the first paint: note that scripts run, and switch the motion on only where it is wanted.
      Add ?motion=off to the address to see the still page. If home.js never starts, the motion is switched off again. */
@@ -46,7 +46,7 @@
   </script>
   <script src="launch.js?v=4" defer></script>
   <script src="contact.js?v=3" defer></script>
-  <script src="home.js?v=6" defer></script>
+  <script src="home.js?v=7" defer></script>
   <script src="ask-buyers.js?v=1" defer></script>
   <script src="ask.js?v=1" defer></script>
 </head>
@@ -111,16 +111,34 @@
 <section class="opening ruled" id="top" aria-labelledby="h1">
   <div class="wrap rp-host">
     <div class="grid">
-      <div class="opening-text" id="free-scan">
-        <p class="kicker">Supplier invoice audit for distributors and manufacturers</p>
-        <h1 id="h1">Nobody has time to check every supplier invoice.</h1>
-        <p class="standfirst">MarginGuard checks each one against your orders and receipts, and shows the rows behind every difference.</p>
-        <form class="ask" id="ask" role="search" aria-label="Ask MarginGuard">
-          <div class="ask-box"><input id="ask-q" aria-label="Ask MarginGuard anything" name="q" type="text" maxlength="300" autocomplete="off" placeholder="Ask MarginGuard anything…"><button type="submit" class="ask-go">Ask<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div>
+      <div class="opening-text drop-col" id="free-scan">
+        <p class="kicker">Free supplier invoice scan · Early access</p>
+        <h1 id="h1">Find the money your suppliers overbilled you.</h1>
+        <p class="hero-sub">Free. In minutes. No account.</p>
+        <!-- The drop zone. It is a link to the free scan, which runs on MarginGuard's own site; this page can't hand
+             files across to it, so files dropped here are named, not read or sent, and the next step says what to do. -->
+        <a class="drop" id="drop" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan" aria-describedby="drop-help">
+          <svg class="drop-ic" viewBox="0 0 48 48" aria-hidden="true"><path d="M12 5h17l9 9v29H12z" fill="#fff" stroke="currentColor" stroke-width="2"/><path d="M29 5v9h9" fill="none" stroke="currentColor" stroke-width="2"/><path class="drop-ic-pen" d="M17 27l5 5 10-11" fill="none" stroke-width="2.6"/></svg>
+          <span class="drop-h"><span class="drop-fine">Drop your supplier invoices and orders here</span><span class="drop-touch">Scan your supplier invoices and orders</span></span>
+          <span class="drop-sub" id="drop-help"><span class="drop-fine">Or click to open the scan and choose them.</span> CSV, Excel, PDF or e-invoice files.</span>
+          <span class="drop-go">Run a free scan<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
+        </a>
+        <div class="drop-next" id="drop-next" hidden>
+          <p class="drop-next-h" id="drop-files" role="status"></p>
+          <p class="drop-skip" id="drop-skip" hidden></p>
+          <p>One more step. The scan runs on MarginGuard’s own page: open it and drop the same files there. This page doesn’t upload anything.</p>
+          <p class="drop-next-act"><a class="btn btn-big" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan">Open the free scan<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><button type="button" class="rp-reset" id="drop-clear">Choose other files</button></p>
+        </div>
+        <ul class="trust" aria-label="About the free scan">
+          <li>Checked in memory, never stored</li>
+          <li>Nothing is sent to your suppliers</li>
+          <li>No card</li>
+          <li>You decide what to claim</li>
+        </ul>
+        <form class="ask ask-sm" id="ask" role="search" aria-label="Ask MarginGuard">
+          <div class="ask-box"><input id="ask-q" aria-label="Ask MarginGuard anything" name="q" type="text" maxlength="300" autocomplete="off" placeholder="Or ask MarginGuard a question…"><button type="submit" class="ask-go">Ask<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div>
           <div class="ask-chips"><button type="button" data-ask="overpay">Where am I overpaying suppliers?</button><button type="button" data-ask="files">What files do I need?</button><button type="button" data-ask="safe">Is my data safe?</button></div>
         </form>
-        <p class="act"><a class="btn btn-big" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan">Run a free scan</a><span>or <a data-launch="signup" href="https://app.tirthalkothari.com/#/signup">create your account</a></span></p>
-        <p class="small">Free during early access. No card, and the scan needs no account.</p>
       </div>
 
       <!-- The scan runs once, in about three seconds: the lines are checked one by one, the pen circles what is wrong,
@@ -149,11 +167,24 @@
         </div>
         </div>
         <figcaption class="pc-cap" id="pcard-cap">The free scan’s three sample files, as it marks them. The suppliers are fictional. <a href="product.html#sample-files">See the sample files</a></figcaption>
+        <p class="proof-acct">Keep the results and send claims with a free account. <a data-launch="signup" href="https://app.tirthalkothari.com/#/signup">Create your account</a></p>
       </figure>
     </div>
     <span class="rp-note r" data-for="hx-price" data-after="finding" data-d="950" aria-hidden="true"><span>PO said 12.50</span></span>
     <span class="rp-note r" data-for="hx-qty" data-after="finding" data-d="1700" aria-hidden="true"><span>7 units short</span></span>
     <span class="rp-note r" data-for="hx-dup" data-after="finding" data-d="2450" aria-hidden="true"><span>billed twice</span></span>
+  </div>
+</section>
+
+<!-- ================= who it's for: the one overcharge each kind of business sees most ================= -->
+<section class="band who" id="who" aria-labelledby="h-who">
+  <div class="wrap">
+    <h2 class="who-head" id="h-who">Who it’s for</h2>
+    <ul class="who-tiles" data-seq>
+      <li class="who-tile"><p class="who-k">Distributors</p><h3>Prices above the order</h3><p>A unit price that crept up between the purchase order and the invoice.</p><p class="who-eg"><span>Ordered at 12.50, billed at</span> <span class="ring" style="--d:500ms">14.00<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M15 9C29 2 71 1 89 7c13 5 12 22-3 27-20 6-60 6-75-1C-2 26 0 12 16 7c14-4 36-5 49-3"/></svg></span></p></li>
+      <li class="who-tile"><p class="who-k">Manufacturers</p><h3>Billed for more than arrived</h3><p>Materials invoiced in full when your receipts show fewer came in, or some went back.</p><p class="who-eg"><span>Billed 55, received and kept</span> <span class="ring" style="--d:900ms">48<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M15 9C29 2 71 1 89 7c13 5 12 22-3 27-20 6-60 6-75-1C-2 26 0 12 16 7c14-4 36-5 49-3"/></svg></span></p></li>
+      <li class="who-tile"><p class="who-k">Freight</p><h3>Freight charged twice</h3><p>The same order’s freight on two invoices, or a carrier charging above your agreed rate for the lane.</p><p class="who-eg"><span>One order, freight on</span> <span class="ring" style="--d:1300ms">2 invoices<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M15 9C29 2 71 1 89 7c13 5 12 22-3 27-20 6-60 6-75-1C-2 26 0 12 16 7c14-4 36-5 49-3"/></svg></span></p></li>
+    </ul>
   </div>
 </section>
 
@@ -407,6 +438,8 @@
 </section>
 
 </main>
+
+<a class="scan-bar off" id="scan-bar" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan">Scan your invoices free<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a>
 
 <footer class="site-foot">
   <div class="wrap">

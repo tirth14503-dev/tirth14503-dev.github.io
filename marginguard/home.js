@@ -176,7 +176,7 @@
       };
       var ready = (document.fonts && document.fonts.ready) || Promise.resolve();
       ready.then(function () { setTimeout(begin, 60); });      /* the marks wait for the type, so nothing is marked on a page still settling */
-      setTimeout(begin, 1500);                                  /* ...but not for long */
+      setTimeout(begin, 600);                                   /* ...but not for long: the first screen never waits on it */
     };
     start();
   } catch (e) { root.classList.remove('m'); }
@@ -504,4 +504,53 @@
     });
     run();
   });
+
+  /* ---------- 11. the drop zone (buyers homepage). The free scan runs on MarginGuard's own site, and this page can't
+     hand files across to it. So files dropped anywhere on the page are only named here, never read and never sent,
+     and the next step says what to do: open the scan and drop them there. ---------- */
+  var drop = document.getElementById('drop'), dropNext = document.getElementById('drop-next');
+  if (drop && dropNext) {
+    var READS = /\.(csv|tsv|txt|xlsx|xls|ods|pdf|xml|json)$/i, depth = 0;
+    var withFiles = function (e) { return e.dataTransfer && [].indexOf.call(e.dataTransfer.types || [], 'Files') >= 0; };
+    var listNames = function (names) {
+      return names.length <= 4 ? names.join(', ') : names.slice(0, 3).join(', ') + ' and ' + (names.length - 3) + ' more';
+    };
+    var named = function (files) {
+      var names = [].map.call(files, function (f) { return f.name; }),
+          good = names.filter(function (n) { return READS.test(n); }), other = names.filter(function (n) { return !READS.test(n); });
+      document.getElementById('drop-files').textContent = good.length
+        ? (good.length === 1 ? '1 file ready: ' : good.length + ' files ready: ') + listNames(good)
+        : 'The scan doesn’t read ' + (names.length === 1 ? 'this file.' : 'these files.');
+      var skip = document.getElementById('drop-skip');
+      skip.hidden = !other.length || !good.length;
+      skip.textContent = other.length ? 'Not read by the scan: ' + listNames(other) + '. It takes CSV, Excel, PDF and e-invoice files.' : '';
+      drop.hidden = true; dropNext.hidden = false;
+      dropNext.querySelector('.btn').focus({ preventScroll: true });
+      dropNext.scrollIntoView({ block: 'nearest' });
+    };
+    addEventListener('dragenter', function (e) { if (withFiles(e)) { depth++; drop.classList.add('over'); } });
+    addEventListener('dragleave', function (e) { if (withFiles(e) && --depth <= 0) { depth = 0; drop.classList.remove('over'); } });
+    addEventListener('dragover', function (e) { if (withFiles(e)) { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; } });
+    addEventListener('drop', function (e) {
+      if (!withFiles(e)) return;
+      e.preventDefault(); depth = 0; drop.classList.remove('over');
+      if (e.dataTransfer.files && e.dataTransfer.files.length) named(e.dataTransfer.files);
+    });
+    document.getElementById('drop-clear').addEventListener('click', function () { dropNext.hidden = true; drop.hidden = false; drop.focus(); });
+  }
+
+  /* ---------- 12. phones: the slim bar at the bottom steps aside while the page's own main action is in view ---------- */
+  var bar = document.getElementById('scan-bar');
+  if (bar && window.IntersectionObserver) {
+    var mains = [].slice.call(document.querySelectorAll('#drop, #drop-next, .opening .act, .rp-call .act')), inView = [];
+    var bio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var i = inView.indexOf(e.target);
+        if (e.isIntersecting && i < 0) inView.push(e.target);
+        if (!e.isIntersecting && i >= 0) inView.splice(i, 1);
+      });
+      bar.classList.toggle('off', inView.length > 0);
+    });
+    mains.forEach(function (el) { bio.observe(el); });
+  } else if (bar) bar.classList.remove('off');
 })();
