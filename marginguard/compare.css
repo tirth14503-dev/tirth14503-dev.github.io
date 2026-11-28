@@ -39,7 +39,7 @@
 .vs-table td{width:39%;padding:17px 18px 16px;vertical-align:top;border-bottom:1px solid var(--hair)}
 .vs-table td.us{background:var(--margin);border-left:2px solid var(--pen)}
 .vs-table tbody tr:last-child>*{border-bottom:0}
-.vs-table .ring{color:var(--pen);font-weight:600}
+.vs-table .ring{margin:0 .4em;color:var(--pen);font-weight:600}
 .vs-table sup a{font-size:12px;text-decoration:none;color:var(--pen)}
 .vs-mark{display:inline-block;margin-right:8px;font-weight:700}
 .vs-mark.yes{color:var(--pen)}
@@ -62,7 +62,7 @@
 .calc-assume{margin:20px 0 0;padding:14px 16px 15px;border-left:3px solid var(--pen);background:var(--margin);font-family:var(--sans);font-size:15px;line-height:1.5}
 .calc-assume b{color:var(--pen)}
 .calc .rp-in{width:7.2em}
-.calc .rp-in.wide{width:9.4em}
+.calc .rp-in.rp-in-wide{width:9.4em}   /* not .wide: home.css hides .wide on phones */
 .calc .rp-tt td small{display:block;font-size:12.5px;color:var(--ink2);font-weight:400}
 .calc .rp-finds .pc-amt{white-space:nowrap}
 .calc-err{margin:10px 22px 0;font-family:var(--sans);font-size:14px;color:var(--pen)}
@@ -87,7 +87,7 @@
   .vs-stacks{grid-template-columns:1fr}
   .vs-tag{max-width:58%;font-size:12px}
   /* the ledger becomes one block per row; each cell says which side it is */
-  .vs-table,.vs-table tbody,.vs-table tr,.vs-table th,.vs-table td{display:block;width:auto}
+  .vs-table,.vs-table tbody,.vs-table tr,.vs-table th,.vs-table td,.vs-table tbody th{display:block;width:auto}
   .vs-table thead{display:none}
   .vs-table tbody th{padding:16px 16px 6px;border-bottom:0;font-size:19px}
   .vs-table td{padding:6px 16px 12px;border-bottom:0}
@@ -98,3 +98,6 @@
   .vs-table tbody tr:last-child{border-bottom:0}
   .vs-fit-text p{font-size:17.5px}
 }
+
+/* the calculator: a shorter headline, so the assumption note is on the first screen */
+.rp-try-text h1{font-size:clamp(38px,4vw,58px);margin-bottom:20px}

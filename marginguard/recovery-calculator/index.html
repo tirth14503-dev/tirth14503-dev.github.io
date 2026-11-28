@@ -35,7 +35,7 @@
   <link rel="preload" href="../fonts/castoro-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../fonts/source-sans-3-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../home.css?v=8">
-  <link rel="stylesheet" href="../compare.css?v=1">
+  <link rel="stylesheet" href="../compare.css?v=3">
   <script>
   /* Before the first paint: note that scripts run, and switch the motion on only where it is wanted.
      Add ?motion=off to the address to see the still page. If home.js never starts, the motion is switched off again. */
@@ -121,7 +121,7 @@
         <table class="rp-tt">
           <thead><tr><th scope="col">Figure</th><th scope="col" class="num">Yours</th></tr></thead>
           <tbody>
-            <tr><th scope="row">Supplier spend in a year<small>All supplier invoices, in your currency</small></th><td class="num"><input class="rp-in wide" name="spend" inputmode="decimal" autocomplete="off" value="5,000,000" data-def="5,000,000" aria-label="Supplier spend in a year" readonly></td></tr>
+            <tr><th scope="row">Supplier spend in a year<small>All supplier invoices, in your currency</small></th><td class="num"><input class="rp-in rp-in-wide" name="spend" inputmode="decimal" autocomplete="off" value="5,000,000" data-def="5,000,000" aria-label="Supplier spend in a year" readonly></td></tr>
             <tr><th scope="row">Error rate (assumption)<small>Between 0.1% and 0.5%</small></th><td class="num"><input class="rp-in" name="rate" inputmode="decimal" autocomplete="off" value="0.25" data-def="0.25" aria-label="Error rate, percent, between 0.1 and 0.5" readonly> %</td></tr>
             <tr><th scope="row">A recovery-audit firm’s share<small>Commonly 20–30%; 25% is the middle<sup><a href="#src-c">1</a></sup></small></th><td class="num"><input class="rp-in" name="fee" inputmode="decimal" autocomplete="off" value="25" data-def="25" aria-label="Recovery-audit firm's share, percent, between 10 and 40" readonly> %</td></tr>
           </tbody>
