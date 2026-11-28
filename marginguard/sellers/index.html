@@ -34,7 +34,7 @@
   <link rel="preload" href="../fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../fonts/castoro-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../fonts/source-sans-3-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="../home.css?v=5">
+  <link rel="stylesheet" href="../home.css?v=6">
   <script>
   /* Before the first paint: note that scripts run, and switch the motion on only where it is wanted.
      Add ?motion=off to the address to see the still page. If home.js never starts, the motion is switched off again. */
@@ -45,7 +45,7 @@
   })();
   </script>
   <script src="../launch.js?v=4" defer></script>
-  <script src="../home.js?v=5" defer></script>
+  <script src="../home.js?v=6" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -83,8 +83,8 @@
 <main id="main">
 
 <!-- ================= opening ================= -->
-<section class="opening" id="top" aria-labelledby="h1">
-  <div class="wrap">
+<section class="opening ruled" id="top" aria-labelledby="h1">
+  <div class="wrap rp-host">
     <div class="grid">
       <div class="opening-text">
         <p class="kicker">Invoices, claims and getting paid · Early access</p>
@@ -93,59 +93,133 @@
         <p class="act"><a class="btn btn-big" href="https://sellers.tirthalkothari.com/#/signup">Create account</a><span>or <a href="https://sellers.tirthalkothari.com/">sign in</a></span></p>
         <p class="small">Free during early access. Pricing will be announced before anything is charged.</p>
       </div>
-      <figure class="sl-hero" data-rise>
-        <div class="pc-win ratio-32"><picture><source type="image/webp" srcset="../media/sl-check-800.webp 800w, ../media/sl-check.webp 1440w" sizes="(max-width:1099px) 100vw, 50vw"><img src="../media/sl-check.jpg" width="1440" height="960" decoding="async" alt="Check before you send: 5 invoices to check, 5 to fix before sending, $813.90 to check on invoices not yet sent, and for each invoice what was found."></picture></div>
-        <figcaption class="pc-cap">A fictional supplier, Harbor Fasteners, before five invoices go out.</figcaption>
+      <!-- A customer's claim, checked against the seller's own records in about three seconds: the pen marks the proof. -->
+      <figure class="pcard" id="finding" data-seq aria-labelledby="pcard-cap">
+        <div class="pc-win">
+        <div class="pc-bar"><b>Claim from Northgate Parts</b><span><span class="vh">3 claim lines</span><span aria-hidden="true" data-status="Reading the claim@0|Checking line 1 of 3@450|Checking line 2 of 3@1250|Checking line 3 of 3@2050|3 lines checked against your records@2900">3 lines checked against your records</span></span></div>
+        <div class="pc-body">
+          <div class="pc-table" role="table" aria-label="The customer’s claim, three lines">
+            <div class="pc-row pc-hd" role="row" style="--d:60ms"><span role="columnheader">They say</span><span role="columnheader">Invoice</span><span role="columnheader">Item</span><span class="num" role="columnheader">Qty</span><span class="num" role="columnheader">Claimed</span></div>
+            <div class="pc-row scan" role="row" style="--d:140ms;--scan:450ms"><span role="cell">Short</span><span role="cell">INV-2041</span><span role="cell">HEX-BOLT-M8</span><span class="num" role="cell"><span class="ring" style="--d:780ms">500<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M15 9C29 2 71 1 89 7c13 5 12 22-3 27-20 6-60 6-75-1C-2 26 0 12 16 7c14-4 36-5 49-3"/></svg></span></span><span class="num" role="cell" id="hx-1">400.00</span></div>
+            <div class="pc-row scan" role="row" style="--d:220ms;--scan:1250ms"><span role="cell">Over order</span><span role="cell">INV-2041</span><span role="cell">LOCK-NUT-M8</span><span class="num" role="cell">3,000</span><span class="num" role="cell"><span class="ring" id="hx-2" style="--d:1550ms">150.00<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M15 9C29 2 71 1 89 7c13 5 12 22-3 27-20 6-60 6-75-1C-2 26 0 12 16 7c14-4 36-5 49-3"/></svg></span></span></div>
+            <div class="pc-row scan" role="row" style="--d:300ms;--scan:2050ms"><span role="cell">Over agreed</span><span role="cell">INV-2043</span><span role="cell">WASHER-M8</span><span class="num" role="cell">2,000</span><span class="num" role="cell" id="hx-3">60.00<svg class="tk" viewBox="0 0 12 10" aria-hidden="true" style="--d:2350ms"><path d="M1 5.4l3.3 3.1L11 1"/></svg></span></div>
+          </div>
+          <p class="pc-ref pc-row" style="--d:420ms"><span>Shipment SHP-318: all 5,000 delivered, <span class="ref" style="--d:950ms">signed for</span></span><span>Credit note CN-0412: <span class="ref" style="--d:1700ms">$150.00</span>, sent 14 Nov</span></p>
+          <ul class="pc-finds">
+            <li class="pc-row" style="--d:1050ms"><div><p class="finding-title">Delivered in full</p><p class="pc-why">SHP-318: 5,000 delivered and signed for</p></div><b class="pc-amt">$400.00</b></li>
+            <li class="pc-row" style="--d:1800ms"><div><p class="finding-title">Credit note already given</p><p class="pc-why">CN-0412 covers this line in full</p></div><b class="pc-amt">$150.00</b></li>
+            <li class="pc-row" style="--d:2500ms"><div><p class="finding-title">They’re right</p><p class="pc-why">Agreed 0.12, billed 0.15: 2,000 × 0.03. Credit note ready</p></div><b class="pc-amt pc-look">$60.00</b></li>
+          </ul>
+          <div class="pc-total pc-row" style="--d:420ms">
+            <span class="lab">Not owed, with proof</span>
+            <b class="amt"><span class="hl" style="--d:2900ms"><span class="count" data-count="550" data-decimals="2" data-prefix="$" data-steps="400@1050,550@1800">$550.00</span></span></b>
+            <span class="also">and $60.00 you agree to credit</span>
+          </div>
+        </div>
+        </div>
+        <figcaption class="pc-cap" id="pcard-cap">A customer’s claim, checked against the seller’s own records. Harbor Fasteners and its customers are fictional.</figcaption>
       </figure>
     </div>
+    <span class="rp-note r" data-for="hx-1" data-after="finding" data-d="950" aria-hidden="true"><span>signed for 5,000</span></span>
+    <span class="rp-note r" data-for="hx-2" data-after="finding" data-d="1700" aria-hidden="true"><span>already credited</span></span>
+    <span class="rp-note r" data-for="hx-3" data-after="finding" data-d="2450" aria-hidden="true"><span>they’re right</span></span>
   </div>
 </section>
 
-<!-- ================= how it works: the screen stays while the four steps go by (a plain stack on phones) ================= -->
-<section class="band band-warm" id="how" aria-labelledby="h-how">
+<!-- ================= how it works: one scene. The screen stays while the four steps change (on phones it stays at the top) ================= -->
+<section class="band band-warm ruled" id="how" aria-labelledby="h-how">
   <div class="wrap">
     <header class="band-head" data-rise>
       <p class="kicker">How it works</p>
       <h2 id="h-how">From the spreadsheets you have to an invoice nobody disputes.</h2>
     </header>
-    <div class="story-grid">
-      <ol class="story-steps">
-        <li class="story-step is-on" data-story="0">
-          <span class="story-no" aria-hidden="true">1</span>
-          <h3>Add your records</h3>
-          <p>Upload the spreadsheets you already have, as CSV or Excel: customers, items, agreed prices, orders, shipments, invoices and payments. Anything that can’t be read safely is skipped with the reason, never guessed.</p>
-          <figure class="story-shot ratio-32"><picture><source type="image/webp" srcset="../media/sl-add-800.webp 800w, ../media/sl-add.webp 1440w" sizes="(max-width:700px) 100vw, 90vw"><img src="../media/sl-add.jpg" width="1440" height="960" loading="lazy" decoding="async" alt="Import data for a fictional supplier, Harbor Fasteners: customer orders, invoices, shipments, payments, agreed prices, customers and items, each with a template to download and an upload button."></picture></figure>
-        </li>
-        <li class="story-step" data-story="1">
-          <span class="story-no" aria-hidden="true">2</span>
-          <h3>Check before you send</h3>
-          <p>Every invoice is compared with what was agreed, ordered and shipped, the way your customer will check it. Each finding says what is wrong in one plain sentence and shows the rows it rests on.</p>
-          <figure class="story-shot ratio-32"><picture><source type="image/webp" srcset="../media/sl-check-800.webp 800w, ../media/sl-check.webp 1440w" sizes="(max-width:700px) 100vw, 90vw"><img src="../media/sl-check.jpg" width="1440" height="960" loading="lazy" decoding="async" alt="Check before you send: 5 invoices to check, 5 to fix before sending, $813.90 to check on invoices not yet sent, and for each invoice what was found."></picture></figure>
-        </li>
-        <li class="story-step" data-story="2">
-          <span class="story-no" aria-hidden="true">3</span>
-          <h3>Send it right</h3>
-          <p>Download the invoice as a PDF and as a standard electronic invoice, and send it yourself. Once it is marked sent it can’t be edited: what went out is kept exactly as it was.</p>
-          <figure class="story-shot ratio-32"><picture><source type="image/webp" srcset="../media/sl-sent-800.webp 800w, ../media/sl-sent.webp 1440w" sizes="(max-width:700px) 100vw, 90vw"><img src="../media/sl-sent.jpg" width="1440" height="960" loading="lazy" decoding="async" alt="Sent invoices: each with the customer order, the total, when it was marked sent, and its electronic file and PDF copy."></picture></figure>
-        </li>
-        <li class="story-step" data-story="3">
-          <span class="story-no" aria-hidden="true">4</span>
-          <h3>Answer claims with proof</h3>
-          <p>Paste or upload a customer’s claim. You see their letter beside what your own records show, whether you agree, and one click prepares the credit note and the reply.</p>
-          <figure class="story-shot ratio-32"><picture><source type="image/webp" srcset="../media/sl-claim-800.webp 800w, ../media/sl-claim.webp 1440w" sizes="(max-width:700px) 100vw, 90vw"><img src="../media/sl-claim.jpg" width="1440" height="960" loading="lazy" decoding="async" alt="One customer claim: billed more than was ordered on invoice INV-2001A. What they wrote beside what the seller's records show: the records agree, $376.00 to check, with the rows it rests on."></picture></figure>
-        </li>
-      </ol>
-      <div class="story-stage">
-        <div class="story-screen ratio-32 zoom">
-          <picture class="is-on"><source type="image/webp" srcset="../media/sl-add.webp"><img src="../media/sl-add.jpg" width="1440" height="960" loading="lazy" decoding="async" alt="Import data for a fictional supplier, Harbor Fasteners: customer orders, invoices, shipments, payments, agreed prices, customers and items, each with a template to download and an upload button."></picture>
-          <picture><source type="image/webp" srcset="../media/sl-check.webp"><img src="../media/sl-check.jpg" width="1440" height="960" loading="lazy" decoding="async" alt="Check before you send: 5 invoices to check, 5 to fix before sending, $813.90 to check on invoices not yet sent, and for each invoice what was found."></picture>
-          <picture><source type="image/webp" srcset="../media/sl-sent.webp"><img src="../media/sl-sent.jpg" width="1440" height="960" loading="lazy" decoding="async" alt="Sent invoices: each with the customer order, the total, when it was marked sent, and its electronic file and PDF copy."></picture>
-          <picture><source type="image/webp" srcset="../media/sl-claim.webp"><img src="../media/sl-claim.jpg" width="1440" height="960" loading="lazy" decoding="async" alt="One customer claim: billed more than was ordered on invoice INV-2001A. What they wrote beside what the seller's records show: the records agree, $376.00 to check, with the rows it rests on."></picture>
+  </div>
+  <div class="rp-scene" id="scene">
+    <div class="rp-pin wrap rp-host">
+      <div class="rp-grid">
+        <div class="rp-text">
+          <ol class="rp-steps">
+            <li class="rp-step is-on"><span class="rp-no" aria-hidden="true">1</span><h3 id="st-1">Add your records</h3><p>Upload the spreadsheets you already have, as CSV or Excel: customers, items, agreed prices, orders, shipments, invoices and payments. Anything that can’t be read safely is skipped with the reason, never guessed.</p></li>
+            <li class="rp-step"><span class="rp-no" aria-hidden="true">2</span><h3 id="st-2">Check before you send</h3><p>Every invoice is compared with what was agreed, ordered and shipped, the way your customer will check it. Each finding says what is wrong in one plain sentence and shows the rows it rests on.</p></li>
+            <li class="rp-step"><span class="rp-no" aria-hidden="true">3</span><h3 id="st-3">Send it right</h3><p>Download the invoice as a PDF and as a standard electronic invoice, and send it yourself. Once it is marked sent it can’t be edited: what went out is kept exactly as it was.</p></li>
+            <li class="rp-step"><span class="rp-no" aria-hidden="true">4</span><h3 id="st-4">Answer claims with proof</h3><p>Paste or upload a customer’s claim. You see their letter beside what your own records show, whether you agree, and one click prepares the credit note and the reply.</p></li>
+          </ol>
+          <div class="rp-progress" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
         </div>
-        <div class="story-progress" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-        <p class="source">Screens from a fictional supplier, Harbor Fasteners.</p>
+        <figure class="rp-stage">
+          <div class="rp-screen" role="img" aria-label="The seller’s screen with three files sorted into orders, shipments and invoices, each invoice joined to its order and shipment. Marked in the pen: draft INV-2053 billed 2,200 against 2,000 shipped, corrected to 2,000 before it is sent. When the customer later claims 200 short, the signed shipment SHP-333 is circled: not owed, with proof.">
+            <div class="rp-bar"><b>Harbor Fasteners</b><span>Northgate Parts · 3 files</span></div>
+            <div class="rp-board">
+              <p class="rp-drop" data-at="1">Drop your files here</p>
+              <div class="rp-chip x1" data-at="1" style="--i:1;--fx:calc(200% + 2 * var(--lk))"><span>customer-orders.csv</span></div>
+              <div class="rp-chip x2" data-at="1" style="--i:0;--fx:calc(-100% - var(--lk))"><span>shipments.xlsx</span></div>
+              <div class="rp-chip x3" data-at="1" style="--i:2;--fx:calc(-100% - var(--lk))"><span>invoices.csv</span></div>
+              <p class="rp-th x1">Orders</p><p class="rp-th x2">Shipments</p><p class="rp-th x3">Invoices</p>
+              <div class="rp-cell x1 y1" data-at="1" style="--i:0"><b>SO-781</b><span class="rp-i">HEX-BOLT-M8</span><span class="rp-v">5,000<span class="rp-px"> × 0.80</span></span></div>
+              <div class="rp-cell x2 y1" data-at="1" style="--i:1"><b>SHP-331</b><span class="rp-i">Signed for</span><span class="rp-v">5,000</span></div>
+              <div class="rp-cell x3 y1" data-at="1" style="--i:2"><b>INV-2051</b><span class="rp-i">Ready</span><span class="rp-v">5,000<span class="rp-px"> × 0.80</span></span></div>
+              <div class="rp-cell x1 y2" data-at="1" style="--i:3"><b>SO-782</b><span class="rp-i">LOCK-NUT-M8</span><span class="rp-v">3,000<span class="rp-px"> × 0.40</span></span></div>
+              <div class="rp-cell x2 y2" data-at="1" style="--i:4"><b>SHP-332</b><span class="rp-i">Signed for</span><span class="rp-v">3,000</span></div>
+              <div class="rp-cell x3 y2" data-at="1" style="--i:5"><b>INV-2052</b><span class="rp-i">Ready</span><span class="rp-v">3,000<span class="rp-px"> × 0.40</span></span></div>
+              <div class="rp-cell x1 y3" data-at="1" style="--i:6"><b>SO-783</b><span class="rp-i">WASHER-M8</span><span class="rp-v">2,000<span class="rp-px"> × 0.12</span></span></div>
+              <div class="rp-cell x2 y3" data-at="1" style="--i:7"><b>SHP-333</b><span class="rp-i">Signed for</span><span class="rp-v"><em class="ring" data-at="4">2,000<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M15 9C29 2 71 1 89 7c13 5 12 22-3 27-20 6-60 6-75-1C-2 26 0 12 16 7c14-4 36-5 49-3"/></svg></em></span><i class="rp-flag" data-at="4"></i></div>
+              <div class="rp-cell x3 y3" data-at="1" style="--i:8" id="sc-inv3"><b>INV-2053</b><span class="rp-i">Draft</span><span class="rp-v"><em class="bad" data-at="2"><s data-at="3">2,200</s></em><ins data-at="3">2,000</ins><span class="rp-px"> × 0.12</span></span><i class="rp-flag" data-at="2" data-to="2"></i></div>
+              <i class="rp-link xa y1" data-at="2" style="--i:0"></i>
+              <i class="rp-link xb y1" data-at="2" style="--i:1"></i>
+              <i class="rp-link xa y2" data-at="2" style="--i:2"></i>
+              <i class="rp-link xb y2" data-at="2" style="--i:3"></i>
+              <i class="rp-link xa y3" data-at="2" style="--i:4"></i>
+              <i class="rp-link xb y3" data-at="2" style="--i:5"></i>
+            </div>
+            <div class="rp-cards">
+              <p class="rp-empty is-on">Findings appear here</p>
+              <div class="rp-card" data-card="2"><p class="rp-card-k">Check before you send · INV-2053, draft</p><h4>Billed for more than you shipped</h4><p class="rp-card-why">2,200 billed, 2,000 shipped on SHP-333: 200 × 0.12</p><p class="rp-card-amt">$24.00</p><p class="rp-card-act"><span class="rp-stamp held">Fix first</span><span>Your customer would dispute this</span></p></div>
+              <div class="rp-card" data-card="3"><p class="rp-card-k">INV-2053 · corrected to 2,000</p><h4>Ready to send</h4><p class="rp-card-why">Matches the order, the shipment and the agreed price</p><p class="rp-card-amt">$240.00</p><p class="rp-card-act"><span class="rp-stamp">Sent</span><span>PDF and electronic invoice, kept exactly as they went out</span></p></div>
+              <div class="rp-card last" data-card="4"><p class="rp-card-k">Claim from Northgate Parts · INV-2053</p><h4>Not owed, with proof</h4><p class="rp-card-why">They say 200 short. SHP-333: 2,000 delivered and signed for, 2,000 billed</p><p class="rp-card-amt" id="sc-amt4">$24.00</p><p class="rp-card-act"><span class="rp-stamp">Proof</span><span>Reply ready for you to send</span></p></div>
+            </div>
+          </div>
+          <figcaption class="source">A fictional supplier, Harbor Fasteners, and a fictional customer.</figcaption>
+        </figure>
       </div>
+      <span class="rp-note l" data-for="st-1" data-at="1" data-to="1" aria-hidden="true"><span>CSV or Excel</span></span>
+      <span class="rp-note l" data-for="st-2" data-at="2" data-to="2" aria-hidden="true"><span>matched on the order number</span></span>
+      <span class="rp-note r" data-for="sc-inv3" data-at="2" data-to="2" aria-hidden="true"><span>200 more than shipped</span></span>
+      <span class="rp-note r" data-for="sc-inv3" data-at="3" data-to="3" aria-hidden="true"><span>fixed before it went</span></span>
+      <span class="rp-note r" data-for="sc-amt4" data-at="4" aria-hidden="true"><span>signed for 2,000</span></span>
     </div>
+  </div>
+</section>
+
+<!-- ================= try it: the check before sending, on one fictional order; it runs in the page and sends nothing ================= -->
+<section class="band ruled" id="try" aria-labelledby="h-try">
+  <div class="wrap rp-host">
+    <div class="grid rp-try">
+      <div class="rp-try-text" data-rise>
+        <p class="kicker">Try it</p>
+        <h2 id="h-try">Check an invoice before it goes out.</h2>
+        <p>This is the check MarginGuard for Sellers runs on every invoice, on one fictional order. Change what you shipped or what your invoice says, and see what your customer would query and what you would miss. It all happens in this page: nothing you type is sent anywhere.</p>
+      </div>
+      <form class="rp-sheet" data-try="seller" data-rise aria-label="Try the check before sending, on one fictional order" novalidate>
+        <div class="rp-sheet-bar"><b>Before you send</b><span>Northgate Parts · HEX-BOLT-M8</span></div>
+        <table class="rp-tt">
+          <thead><tr><th scope="col">Record</th><th scope="col" class="num">Quantity</th><th scope="col" class="num">Unit price</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Order SO-781<small>What they ordered, at the agreed price</small></th><td class="num"><span class="fixed">5,000</span></td><td class="num"><input class="rp-in" name="agreed" inputmode="decimal" autocomplete="off" value="0.80" data-def="0.80" aria-label="Order SO-781, agreed unit price" readonly></td></tr>
+            <tr><th scope="row">Shipment SHP-331<small>What you shipped</small></th><td class="num"><input class="rp-in flagged" name="shipped" inputmode="numeric" autocomplete="off" value="5,000" data-def="5,000" aria-label="Shipment SHP-331, quantity shipped" readonly></td><td class="num"><span class="fixed">–</span></td></tr>
+            <tr id="try-inv"><th scope="row">Your invoice INV-2051<small>Draft, not yet sent</small></th><td class="num"><input class="rp-in flagged" name="billed" inputmode="numeric" autocomplete="off" value="5,200" data-def="5,200" aria-label="Invoice INV-2051, quantity billed" readonly></td><td class="num"><input class="rp-in" name="price" inputmode="decimal" autocomplete="off" value="0.80" data-def="0.80" aria-label="Invoice INV-2051, unit price" readonly></td></tr>
+          </tbody>
+        </table>
+        <div class="rp-out">
+          <ul class="rp-finds" data-out="finds">
+            <li><div><p class="finding-title">Billed for more than you shipped</p><p class="pc-why">5,200 billed, 5,000 shipped: 200 × 0.80</p></div><b class="pc-amt">$160.00</b></li>
+          </ul>
+          <p class="rp-tot"><span>Your customer would dispute<span class="also" data-out="also">and $0.00 you’d miss</span></span><b data-out="total">$160.00</b></p>
+          <p class="vh" aria-live="polite" data-out="said"></p>
+        </div>
+        <p class="rp-try-foot"><span class="js-only">Try 5,000 on the invoice, or 0.75 as its price.</span><button type="button" class="rp-reset">Put the figures back</button></p>
+      </form>
+    </div>
+    <span class="rp-note r" data-for="try-inv" data-d="500" aria-hidden="true"><span>try 5,000</span></span>
   </div>
 </section>
 
@@ -166,7 +240,7 @@
       <button type="button" role="tab" id="tab-sl-scorecard" aria-controls="sl-scorecard" aria-selected="false" tabindex="-1">How customers see you</button>
       <button type="button" role="tab" id="tab-sl-download" aria-controls="sl-download" aria-selected="false" tabindex="-1">Download everything</button>
     </div>
-    <div class="show-panels" data-rise>
+    <div class="show-panels" data-rise data-grow>
       <div class="show-panel is-on" role="tabpanel" id="sl-today" aria-labelledby="tab-sl-today" tabindex="0">
         <figure class="show-shot ratio-32 zoom"><picture><source type="image/webp" srcset="../media/sl-today-800.webp 800w, ../media/sl-today.webp 1440w" sizes="(max-width:1099px) 100vw, 64vw"><img src="../media/sl-today.jpg" width="1440" height="960" decoding="async" alt="Today: 8 invoices, 7 customer orders and 7 shipments, with what to check before sending, who to chase and $765.00 of money you are missing."></picture></figure>
         <div class="show-copy"><h3>Today</h3><p>What needs you today, in one place: invoices to check before sending, who to chase, and the money you’re missing.</p></div>
@@ -223,22 +297,42 @@
 <section class="band band-warm" aria-labelledby="h-straight">
   <div class="wrap">
     <h2 class="vh" id="h-straight">Straight answers</h2>
-    <div class="rows grid" data-rise-group>
-      <div class="item" id="price" data-rise><h2>Price</h2><p>Free during early access. Pricing will be announced before anything is charged.</p></div>
-      <div class="item" id="limits" data-rise><h2>What it doesn’t do</h2><p>It sends nothing to your customers and sends no email: you download the files and send them. It doesn’t connect to a bank or an accounting system; your data comes in as CSV or Excel files.</p></div>
-      <div class="item" id="checks" data-rise><h2>How it decides</h2><p>Every finding comes from fixed checks on your own records, with the rows it rests on. Anything it can’t read safely is skipped with the reason.</p></div>
-      <div class="item" id="trust" data-rise><h2>Security</h2><p>One company never sees another’s records. Two-step sign-in, a recovery code, and sessions that end after 30 minutes unused. Its limits today: no outside penetration test yet, and the database file is not encrypted on disk.</p></div>
-      <div class="item" id="founder" data-rise><h2>Who makes it</h2><p>Tirthal Kothari, who also builds MarginGuard. Questions and requests by email.</p><a class="more" href="mailto:margingaurd@gmail.com">Write to me</a></div>
+    <div class="rows grid" data-rise>
+      <div class="item" id="price"><h2>Price</h2><p>Free during early access. Pricing will be announced before anything is charged.</p></div>
+      <div class="item" id="limits"><h2>What it doesn’t do</h2><p>It sends nothing to your customers and sends no email: you download the files and send them. It doesn’t connect to a bank or an accounting system; your data comes in as CSV or Excel files.</p></div>
+      <div class="item" id="checks"><h2>How it decides</h2><p>Every finding comes from fixed checks on your own records, with the rows it rests on. Anything it can’t read safely is skipped with the reason.</p></div>
+      <div class="item" id="trust"><h2>Security</h2><p>One company never sees another’s records. Two-step sign-in, a recovery code, and sessions that end after 30 minutes unused. Its limits today: no outside penetration test yet, and the database file is not encrypted on disk.</p></div>
+      <div class="item" id="founder"><h2>Who makes it</h2><p>Tirthal Kothari, who also builds MarginGuard. Questions and requests by email.</p><a class="more" href="mailto:margingaurd@gmail.com">Write to me</a></div>
     </div>
   </div>
 </section>
 
-<!-- ================= the last word ================= -->
-<section class="band closing" aria-labelledby="h-closing">
-  <div class="wrap" data-rise>
-    <h2 id="h-closing">Send your next invoice right.</h2>
-    <p>Create a free early-access account, and load the fictional example company first if you’d like to look around.</p>
-    <p class="act"><a class="btn btn-big" href="https://sellers.tirthalkothari.com/#/signup">Create account</a><span>or <a href="https://sellers.tirthalkothari.com/">sign in</a></span></p>
+<!-- ================= the last word: the claim's receipt is printed, then the account ================= -->
+<section class="band closing ruled" aria-labelledby="h-closing">
+  <div class="wrap">
+    <div class="rp-close">
+      <div class="rp-slip" data-seq>
+        <div class="rp-slot" aria-hidden="true"></div>
+        <div class="rp-feed">
+          <div class="rp-paper" role="group" aria-label="Receipt for the claim from Northgate Parts, checked">
+            <p class="rp-r-h"><b>For Sellers</b>Claim from Northgate Parts</p>
+            <dl>
+              <div><dt>Claim lines checked</dt><dd>3</dd></div>
+              <div><dt>Shown with proof</dt><dd>2</dd></div>
+              <div><dt>You agree</dt><dd>1</dd></div>
+              <div><dt>Credit note ready</dt><dd>$60.00</dd></div>
+            </dl>
+            <p class="rp-r-tot"><span>Not owed</span><b><span class="hl" style="--d:1500ms">$550.00</span></b></p>
+            <p class="rp-r-foot">Every answer shows the rows it rests on. The companies and figures are fictional.</p>
+          </div>
+        </div>
+      </div>
+      <div class="rp-call" data-rise>
+        <h2 id="h-closing">Send your next invoice right.</h2>
+        <p>Create a free early-access account, and load the fictional example company first if you’d like to look around.</p>
+        <p class="act"><a class="btn btn-big" href="https://sellers.tirthalkothari.com/#/signup">Create account</a><span>or <a href="https://sellers.tirthalkothari.com/">sign in</a></span></p>
+      </div>
+    </div>
   </div>
 </section>
 

@@ -38,7 +38,50 @@
       li.style.setProperty('--d', (160 + i * 260) + 'ms');
     });
 
-    var go = function (el) { el.classList.add('go'); };
+    var pace = function () { return parseFloat(getComputedStyle(root).getPropertyValue('--k')) || 1; };
+    var later = function (el, cls) { setTimeout(function () { el.classList.add(cls); }, (+(el.getAttribute('data-d') || 0)) * pace()); };
+
+    /* A running total counts from nought through each step ("150@1050,710@1800": $150 at 1,050 ms, then $710), as a scan finds things. */
+    var stepCount = function (el) {
+      if (el.getAttribute('data-done') || !window.requestAnimationFrame) return;
+      el.setAttribute('data-done', '1');
+      var dec = +(el.getAttribute('data-decimals') || 0), pre = el.getAttribute('data-prefix') || '', text = el.textContent, k = pace(), now = 0;
+      var width = el.getBoundingClientRect().width, said = document.createElement('span'), shown = document.createElement('span');
+      said.className = 'vh'; said.textContent = text; shown.setAttribute('aria-hidden', 'true');
+      var fmt = function (v) { return pre + v.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec }); };
+      shown.textContent = fmt(0); el.textContent = ''; el.appendChild(said); el.appendChild(shown);
+      el.style.minWidth = Math.ceil(width) + 'px';
+      var parts = el.getAttribute('data-steps').split(','), end = +parts[parts.length - 1].split('@')[1];
+      setTimeout(function () { shown.textContent = text; }, (end + 900) * k);      /* lands on the real figure, whatever the frames did */
+      parts.forEach(function (part) {
+        var p = part.split('@'), to = +p[0];
+        setTimeout(function () {
+          var from = now, t0 = 0; now = to;
+          var frame = function (t) {
+            if (!t0) t0 = t;
+            var q = Math.min(1, (t - t0) / (520 * k));
+            shown.textContent = q < 1 ? fmt(from + (to - from) * (1 - Math.pow(1 - q, 3))) : fmt(to);
+            if (q < 1) requestAnimationFrame(frame);
+          };
+          requestAnimationFrame(frame);
+        }, +p[1] * k);
+      });
+    };
+    /* The scan's status line: "Checking line 1 of 3@450|...". Read out once, whole, by the hidden text beside it. */
+    var status = function (el) {
+      var k = pace();
+      el.getAttribute('data-status').split('|').forEach(function (part) {
+        var p = part.split('@');
+        setTimeout(function () { el.textContent = p[0]; }, +p[1] * k);
+      });
+    };
+    var go = function (el) {
+      if (el.classList.contains('go')) return;
+      el.classList.add('go');
+      [].forEach.call(el.querySelectorAll('.count[data-steps]'), stepCount);
+      [].forEach.call(el.querySelectorAll('[data-status]'), status);
+      if (el.id) [].forEach.call(document.querySelectorAll('.rp-note[data-after="' + el.id + '"]'), function (n) { later(n, 'on'); });
+    };
 
     /* A number counts up once from nought, then stays. Read out whole; its width is held so nothing beside it moves. */
     var countUp = function (el) {
@@ -66,36 +109,48 @@
       [].forEach.call(document.querySelectorAll('[data-rise-group]'), function (g) {
         [].forEach.call(g.querySelectorAll('[data-rise]'), function (el, i) { el.style.setProperty('--i', i); });
       });
-      var items = [].slice.call(document.querySelectorAll('[data-rise], .count'));
+      /* Nothing may wait in view: a section starts to rise a little before it enters the window, and anything
+         already in the window, or above it after a long jump, is shown at once. Counts start once they are in view. */
+      var items = [].slice.call(document.querySelectorAll('[data-rise], .count:not([data-steps])'));
       if (!items.length) return;
       var show = function (el) { if (el.classList.contains('count')) countUp(el); else el.classList.add('in'); };
-      var rio = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) { if (e.isIntersecting) { show(e.target); rio.unobserve(e.target); } });
-      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.1 });
-      items.forEach(function (el) { rio.observe(el); });
-      var pending = items.slice(), queued = 0;                  /* a long jump: anything above the window's foot is shown */
+      var watch = function (margin) {
+        return new IntersectionObserver(function (entries, o) {
+          entries.forEach(function (e) { if (e.isIntersecting) { show(e.target); o.unobserve(e.target); } });
+        }, { rootMargin: margin, threshold: 0 });
+      };
+      var early = watch('0px 0px 12% 0px'), onview = watch('0px 0px -6% 0px');
+      items.forEach(function (el) { (el.classList.contains('count') ? onview : early).observe(el); });
+      var pending = items.slice(), queued = 0;
       var check = function () {
         queued = 0;
         pending = pending.filter(function (el) {
           if (el.classList.contains('in') || el.getAttribute('data-done')) return false;
-          if (el.getBoundingClientRect().top < innerHeight) { show(el); rio.unobserve(el); return false; }
+          if (el.getBoundingClientRect().top < innerHeight * (el.classList.contains('count') ? .94 : 1.05)) { show(el); early.unobserve(el); onview.unobserve(el); return false; }
           return true;
         });
-        if (!pending.length) removeEventListener('scroll', onJump);
+        if (!pending.length) { removeEventListener('scroll', onJump); removeEventListener('resize', onJump); }
       };
       var onJump = function () { if (!queued) queued = requestAnimationFrame(check); };
       addEventListener('scroll', onJump, { passive: true });
+      addEventListener('resize', onJump);
+      check();
     };
     var start = function () {
       window.mgStarted = true;
       if (!root.classList.contains('m')) return;
       if (q.get('t') !== null) {            /* ?t=1500 freezes every score at that moment, for stills */
-        root.style.setProperty('--t', (+q.get('t') || 0) + 'ms'); return;
+        root.style.setProperty('--t', (+q.get('t') || 0) + 'ms');
+        [].forEach.call(document.querySelectorAll('[data-rise]'), function (el) { el.classList.add('in'); });
+        return;
       }
       var seen = false;
       try { seen = !!localStorage.getItem('mg-seen'); localStorage.setItem('mg-seen', '1'); } catch (e) {}
       root.style.setProperty('--k', seen && !q.get('first') ? '.45' : '1');   /* quicker on later visits */
-      if (!('IntersectionObserver' in window)) { seqs.forEach(go); return; }
+      if (!('IntersectionObserver' in window)) {
+        seqs.forEach(go); [].forEach.call(document.querySelectorAll('[data-rise]'), function (el) { el.classList.add('in'); }); return;
+      }
+      reveal();                                                 /* sections: at once, without waiting for the type */
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) { if (e.isIntersecting) { go(e.target); io.unobserve(e.target); } });
       }, { rootMargin: '0px 0px -14% 0px', threshold: 0.12 });
@@ -117,11 +172,11 @@
         if (begun) return; begun = true;
         seqs.forEach(function (el) { io.observe(el); });
         addEventListener('scroll', onScroll, { passive: true });
-        reveal();
+        sweep();
       };
       var ready = (document.fonts && document.fonts.ready) || Promise.resolve();
-      ready.then(function () { setTimeout(begin, 200); });     /* wait for the type, so nothing is marked on a page still settling */
-      setTimeout(begin, 2500);                                  /* ...but not for ever */
+      ready.then(function () { setTimeout(begin, 60); });      /* the marks wait for the type, so nothing is marked on a page still settling */
+      setTimeout(begin, 1500);                                  /* ...but not for long */
     };
     start();
   } catch (e) { root.classList.remove('m'); }
@@ -199,20 +254,62 @@
     fromAddress(); window.addEventListener('hashchange', fromAddress);
   }
 
-  /* ---------- 5. the homepage's story: on wide screens the screen stays and shows the step being read ---------- */
-  var steps = [].slice.call(document.querySelectorAll('.story-step')), stage = document.querySelector('.story-screen');
-  if (steps.length && stage && 'IntersectionObserver' in window) {
-    var shots = [].slice.call(stage.children), bars = [].slice.call(document.querySelectorAll('.story-progress i'));
-    var setStep = function (n) {
-      steps.forEach(function (s, i) { s.classList.toggle('is-on', i === n); });
-      shots.forEach(function (p, i) { p.classList.toggle('is-on', i === n); });
-      bars.forEach(function (b, i) { b.classList.toggle('is-on', i <= n); });
+  /* the masthead's height, for anything that is pinned under it */
+  var mast = document.querySelector('.mast');
+  var mastH = function () { return mast ? mast.offsetHeight : 0; };
+  var setMast = function () { root.style.setProperty('--mast-h', mastH() + 'px'); };
+  setMast();
+
+  /* ---------- 5. how it works: one scene. Wide screens pin it and the scroll moves it on a step at a time;
+     narrower ones keep the screen at the top while the steps go by. Elements with data-at="n" are marked (.at) from
+     step n (to data-to, if given); the finding cards take turns. Without motion the scene is shown finished. ---------- */
+  var scene = document.querySelector('.rp-scene'), placeNotes = function () {};
+  if (scene) {
+    var sSteps = [].slice.call(scene.querySelectorAll('.rp-step')), sBars = [].slice.call(scene.querySelectorAll('.rp-progress i')),
+        sAts = [].slice.call(scene.querySelectorAll('[data-at]')), sCards = [].slice.call(scene.querySelectorAll('[data-card]')),
+        sEmpty = scene.querySelector('.rp-empty'), sNow = -1, live = false, sTick = 0;
+    var pinMq = matchMedia('(min-width:1100px) and (min-height:600px)'), stackMq = matchMedia('(max-width:1099px) and (min-height:640px)'),
+        calm = matchMedia('(prefers-reduced-motion: reduce)');
+    [].forEach.call(scene.querySelectorAll('.rp-link'), function (l, i) { l.style.setProperty('--i', i); });
+    var setScene = function (n) {
+      if (n === sNow) return; sNow = n;
+      scene.setAttribute('data-step', n);
+      sSteps.forEach(function (s, i) { s.classList.toggle('is-on', i === Math.max(0, n - 1)); });
+      sBars.forEach(function (b, i) { b.classList.toggle('is-on', i < n); });
+      sAts.forEach(function (el) {
+        var a = +el.getAttribute('data-at'), z = +(el.getAttribute('data-to') || 9);
+        el.classList.toggle('at', n >= a && n <= z);
+      });
+      var card = null;
+      sCards.forEach(function (c) { if (+c.getAttribute('data-card') <= n) card = c; });
+      sCards.forEach(function (c) { c.classList.toggle('is-on', c === card); });
+      if (sEmpty) sEmpty.classList.toggle('is-on', !card);
     };
-    var sio = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { if (e.isIntersecting) setStep(+e.target.getAttribute('data-story')); });
-    }, { rootMargin: '-45% 0px -45% 0px' });
-    steps.forEach(function (s) { sio.observe(s); });
-    setStep(0);
+    var sRead = function () {
+      sTick = 0;
+      if (!live) return;
+      var r = scene.getBoundingClientRect(), h = innerHeight, n = r.top < h * .8 ? 1 : 0;
+      if (pinMq.matches) {
+        var mh = mastH(), run = r.height - (h - mh), p = run > 0 ? (mh - r.top) / run : 0;
+        if (p > 0) n = 1 + Math.min(3, Math.floor(p * 4));
+      } else {
+        /* the reading line: halfway down the part of the window the pinned screen leaves free */
+        var stage = scene.querySelector('.rp-stage'), free = Math.max(mastH(), Math.min(h * .7, stage.getBoundingClientRect().bottom)), lineY = free + (h - free) * .45;
+        sSteps.forEach(function (s, i) { if (i && s.getBoundingClientRect().top < lineY) n = i + 1; });
+      }
+      setScene(n);
+    };
+    var sMode = function () {
+      var was = live;
+      live = root.classList.contains('m') && !calm.matches && (pinMq.matches || stackMq.matches);
+      scene.classList.toggle('live', live);
+      if (live !== was) { sNow = -1; if (live) sRead(); else setScene(9); }
+      placeNotes();
+    };
+    addEventListener('scroll', function () { if (!sTick) sTick = requestAnimationFrame(sRead); }, { passive: true });
+    setScene(9);
+    sMode();
+    [pinMq, stackMq].forEach(function (m) { if (m.addEventListener) m.addEventListener('change', sMode); });
   }
 
   /* ---------- 6. the product tabs (ARIA tabs: arrow keys, Home and End; an address like #paygate opens its tab) ---------- */
@@ -256,4 +353,151 @@
     addEventListener('scroll', function () { if (!drifting) drifting = requestAnimationFrame(place); }, { passive: true });
     place();
   }
+
+  /* ---------- 8. product pictures grow into place as they come up the window (motion on only) ---------- */
+  var growers = [].slice.call(document.querySelectorAll('[data-grow]'));
+  if (growers.length && root.classList.contains('m') && window.requestAnimationFrame) {
+    var growing = 0;
+    var grow = function () {
+      growing = 0;
+      growers.forEach(function (el) {
+        var r = el.getBoundingClientRect(), h = innerHeight;
+        if (r.bottom < 0 || r.top > h) return;
+        var g = Math.max(0, Math.min(1, (h - r.top) / (h * .55)));
+        el.style.setProperty('--g', g.toFixed(3));
+      });
+    };
+    addEventListener('scroll', function () { if (!growing) growing = requestAnimationFrame(grow); }, { passive: true });
+    grow();
+  }
+
+  /* ---------- 9. notes in the margin. Only wide windows show them (home.css); each is placed level with the figure it is
+     about, beside the page, with a hairline back to it. They are written when their figure comes into view, when the
+     opening's scan reaches them (data-after), or at their step of the scene (data-at). ---------- */
+  var notes = [].slice.call(document.querySelectorAll('.rp-note'));
+  if (notes.length) {
+    var page = document.querySelector('.page') || document.body;
+    placeNotes = function () {
+      var spare = (document.documentElement.clientWidth - page.offsetWidth) / 2;
+      notes.forEach(function (n) {
+        var host = n.offsetParent, a = document.getElementById(n.getAttribute('data-for'));
+        if (!host || !a) return;
+        var x = 0, y = 0, el = a;
+        while (el && el !== host) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; }
+        if (el !== host) return;
+        var side = parseFloat(getComputedStyle(host).paddingLeft) || 0, w = Math.max(96, Math.min(200, spare + side - 28 - 18)), edge;
+        if (n.classList.contains('l')) {
+          edge = side - 46;                                   /* clear of the ledger's red rule */
+          n.style.left = (edge - w) + 'px';
+          n.style.setProperty('--reach', Math.max(0, x - edge - 12) + 'px');
+        } else {
+          edge = host.offsetWidth - side + 28;
+          n.style.left = edge + 'px';
+          n.style.setProperty('--reach', Math.max(0, edge - 12 - (x + a.offsetWidth)) + 'px');
+        }
+        n.style.top = Math.round(y + a.offsetHeight / 2 - 11) + 'px';
+        n.style.setProperty('--nw', w + 'px');
+      });
+    };
+    placeNotes();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeNotes);
+    var placing = 0;
+    addEventListener('resize', function () {
+      if (placing) return;
+      placing = requestAnimationFrame(function () { placing = 0; setMast(); placeNotes(); });
+    });
+    var plain = notes.filter(function (n) { return !n.hasAttribute('data-after') && !n.hasAttribute('data-at'); });
+    if (plain.length && root.classList.contains('m') && 'IntersectionObserver' in window) {
+      var nio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          plain.forEach(function (n) { if (n.getAttribute('data-for') === e.target.id) later(n, 'on'); });
+          nio.unobserve(e.target);
+        });
+      }, { rootMargin: '0px 0px -18% 0px' });
+      plain.forEach(function (n) { var a = document.getElementById(n.getAttribute('data-for')); if (a) nio.observe(a); });
+    }
+  }
+
+  /* ---------- 10. try it: the check on one fictional order, worked out in the page as the figures are typed ---------- */
+  var money = function (v) { return '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+  var fig = function (v, d) { return v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); };
+  var qty = function (v) { return fig(v, v % 1 ? 2 : 0); };
+  [].forEach.call(document.querySelectorAll('[data-try]'), function (form) {
+    var kind = form.getAttribute('data-try'), ins = {},
+        finds = form.querySelector('[data-out="finds"]'), total = form.querySelector('[data-out="total"]'),
+        also = form.querySelector('[data-out="also"]'), said = form.querySelector('[data-out="said"]'), sayLater = 0;
+    [].forEach.call(form.querySelectorAll('.rp-in'), function (i) { ins[i.name] = i; i.readOnly = false; });
+    form.addEventListener('submit', function (e) { e.preventDefault(); });
+    var read = function (name) {
+      var i = ins[name], s = i.value.replace(/[,\s$]/g, ''), ok = /^\d{1,7}(\.\d{1,4})?$/.test(s);
+      i.setAttribute('aria-invalid', String(!ok));
+      return ok ? parseFloat(s) : null;
+    };
+    var line = function (kindOf, title, why, amount) {
+      var li = document.createElement('li'), div = document.createElement('div'), t = document.createElement('p'), w = document.createElement('p');
+      t.className = kindOf; t.textContent = title; w.className = 'pc-why'; w.textContent = why;
+      div.appendChild(t); div.appendChild(w); li.appendChild(div);
+      if (amount !== null) { var b = document.createElement('b'); b.className = 'pc-amt'; b.textContent = money(amount); li.appendChild(b); }
+      return li;
+    };
+    var before = total.textContent;
+    var run = function () {
+      var out = [], flags = [], main = 0, other = 0, a, v = {}, bad = false;
+      Object.keys(ins).forEach(function (n) { v[n] = read(n); if (v[n] === null) bad = true; });
+      if (bad) {
+        out.push(['info-title', 'Check the figure', 'Type a number, like 12.50', null]);
+      } else if (kind === 'buyer') {
+        if (v.price > v.po_price) {
+          a = v.billed * (v.price - v.po_price); main += a; flags.push('price', 'po_price');
+          out.push(['finding-title', 'Unit price differs', 'Ordered at ' + fig(v.po_price, 2) + ', billed at ' + fig(v.price, 2) + ': ' + qty(v.billed) + ' × ' + fig(v.price - v.po_price, 2), a]);
+        }
+        if (v.billed > v.received) {
+          a = (v.billed - v.received) * v.po_price; main += a; flags.push('billed', 'received');
+          out.push(['finding-title', 'Billed, not received', qty(v.billed) + ' billed, ' + qty(v.received) + ' kept: ' + qty(v.billed - v.received) + ' × ' + fig(v.po_price, 2), a]);
+        }
+        if (v.price < v.po_price) out.push(['info-title', 'Billed below the order price', 'Nothing to claim on the price', null]);
+        if (!out.length) out.push(['ok-title', 'No difference', 'The invoice agrees with the order and the receipt', null]);
+      } else {
+        var both = Math.min(v.billed, v.shipped);
+        if (v.billed > v.shipped) {
+          a = (v.billed - v.shipped) * v.price; main += a; flags.push('billed', 'shipped');
+          out.push(['finding-title', 'Billed for more than you shipped', qty(v.billed) + ' billed, ' + qty(v.shipped) + ' shipped: ' + qty(v.billed - v.shipped) + ' × ' + fig(v.price, 2), a]);
+        }
+        if (v.price > v.agreed) {
+          a = both * (v.price - v.agreed); main += a; flags.push('price', 'agreed');
+          out.push(['finding-title', 'Priced above the agreed price', 'Agreed ' + fig(v.agreed, 2) + ', invoiced at ' + fig(v.price, 2) + ': ' + qty(both) + ' × ' + fig(v.price - v.agreed, 2), a]);
+        }
+        if (v.shipped > v.billed) {
+          a = (v.shipped - v.billed) * v.agreed; other += a; flags.push('billed', 'shipped');
+          out.push(['finding-title', 'Shipped, not invoiced', qty(v.shipped) + ' shipped, ' + qty(v.billed) + ' billed: ' + qty(v.shipped - v.billed) + ' × ' + fig(v.agreed, 2) + ' you’d miss', a]);
+        }
+        if (v.price < v.agreed) {
+          a = both * (v.agreed - v.price); other += a; flags.push('price', 'agreed');
+          out.push(['finding-title', 'Priced below the agreed price', 'Agreed ' + fig(v.agreed, 2) + ', invoiced at ' + fig(v.price, 2) + ': ' + qty(both) + ' × ' + fig(v.agreed - v.price, 2) + ' you’d miss', a]);
+        }
+        if (!out.length) out.push(['ok-title', 'Ready to send', 'It matches the order, the shipment and the agreed price', null]);
+      }
+      Object.keys(ins).forEach(function (n) { ins[n].classList.toggle('flagged', flags.indexOf(n) >= 0); });
+      finds.textContent = '';
+      out.forEach(function (o) { finds.appendChild(line(o[0], o[1], o[2], o[3])); });
+      var now = bad ? '–' : money(main);
+      if (now !== before) {
+        total.textContent = now; before = now;
+        total.classList.remove('bump'); void total.offsetWidth; total.classList.add('bump');
+      }
+      if (also) also.textContent = bad ? '' : 'and ' + money(other) + ' you’d miss';
+      clearTimeout(sayLater);
+      sayLater = setTimeout(function () {
+        said.textContent = out.map(function (o) { return o[1] + (o[3] !== null ? ', ' + money(o[3]) : ''); }).join('. ') + '. Total ' + now + '.';
+      }, 700);
+    };
+    Object.keys(ins).forEach(function (n) { ins[n].addEventListener('input', run); });
+    var reset = form.querySelector('.rp-reset');
+    if (reset) reset.addEventListener('click', function () {
+      Object.keys(ins).forEach(function (n) { ins[n].value = ins[n].getAttribute('data-def'); });
+      run();
+    });
+    run();
+  });
 })();

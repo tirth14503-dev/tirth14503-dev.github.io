@@ -34,7 +34,7 @@
   <link rel="preload" href="fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/castoro-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/source-sans-3-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="home.css?v=5">
+  <link rel="stylesheet" href="home.css?v=6">
   <script>
   /* Before the first paint: note that scripts run, and switch the motion on only where it is wanted.
      Add ?motion=off to the address to see the still page. If home.js never starts, the motion is switched off again. */
@@ -46,7 +46,7 @@
   </script>
   <script src="launch.js?v=4" defer></script>
   <script src="contact.js?v=3" defer></script>
-  <script src="home.js?v=5" defer></script>
+  <script src="home.js?v=6" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -106,8 +106,8 @@
 <main id="main">
 
 <!-- ================= opening: the claim, and the free scan's sample files assembling into a finding ================= -->
-<section class="opening" id="top" aria-labelledby="h1">
-  <div class="wrap">
+<section class="opening ruled" id="top" aria-labelledby="h1">
+  <div class="wrap rp-host">
     <div class="grid">
       <div class="opening-text" id="free-scan">
         <p class="kicker">Supplier invoice audit for distributors and manufacturers</p>
@@ -117,27 +117,27 @@
         <p class="small">Free during early access. No card, and the scan needs no account.</p>
       </div>
 
-      <!-- The card assembles once: the rows come in from 120 ms, the marks are made from 900 ms, the findings follow,
-           and the total counts up from 1,900 ms. With reduced motion it is simply there. -->
+      <!-- The scan runs once, in about three seconds: the lines are checked one by one, the pen circles what is wrong,
+           the findings follow and the total counts up from $0.00. With reduced motion it is simply there, marked. -->
       <figure class="pcard" id="finding" data-seq aria-labelledby="pcard-cap">
         <div class="pc-win">
-        <div class="pc-bar"><b>Free scan</b><span>3 sample files</span></div>
+        <div class="pc-bar"><b>Free scan</b><span><span class="vh">3 sample files</span><span aria-hidden="true" data-status="Reading 3 sample files@0|Checking line 1 of 3@450|Checking line 2 of 3@1250|Checking line 3 of 3@2050|3 lines checked, 3 findings@2900">3 lines checked, 3 findings</span></span></div>
         <div class="pc-body">
           <div class="pc-table" role="table" aria-label="supplier-invoices.csv, three lines">
             <div class="pc-row pc-hd" role="row" style="--d:60ms"><span role="columnheader">Invoice</span><span role="columnheader">Order</span><span role="columnheader">Item</span><span class="num" role="columnheader">Qty</span><span class="num" role="columnheader">Unit price</span></div>
-            <div class="pc-row" role="row" style="--d:140ms"><span role="cell">INV-501</span><span role="cell">PO-1001</span><span role="cell">VALVE-10</span><span class="num" role="cell">100</span><span class="num" role="cell"><span class="hl" style="--d:900ms">14.00</span></span></div>
-            <div class="pc-row" role="row" style="--d:220ms"><span role="cell">INV-502</span><span role="cell">PO-1002</span><span role="cell">PUMP-20</span><span class="num" role="cell"><span class="hl" style="--d:1150ms">55</span></span><span class="num" role="cell">80.00</span></div>
-            <div class="pc-row" role="row" style="--d:300ms"><span role="cell"><span class="ring" style="--d:1400ms">INV-502<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M15 9C29 2 71 1 89 7c13 5 12 22-3 27-20 6-60 6-75-1C-2 26 0 12 16 7c14-4 36-5 49-3"/></svg></span></span><span role="cell">PO-1002</span><span role="cell">PUMP-20</span><span class="num" role="cell">55</span><span class="num" role="cell">80.00</span></div>
+            <div class="pc-row scan" role="row" style="--d:140ms;--scan:450ms"><span role="cell">INV-501</span><span role="cell">PO-1001</span><span role="cell">VALVE-10</span><span class="num" role="cell">100</span><span class="num" role="cell"><span class="ring" id="hx-price" style="--d:780ms">14.00<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M15 9C29 2 71 1 89 7c13 5 12 22-3 27-20 6-60 6-75-1C-2 26 0 12 16 7c14-4 36-5 49-3"/></svg></span></span></div>
+            <div class="pc-row scan" role="row" style="--d:220ms;--scan:1250ms"><span role="cell">INV-502</span><span role="cell">PO-1002</span><span role="cell">PUMP-20</span><span class="num" role="cell"><span class="ref" style="--d:1550ms">55</span></span><span class="num" role="cell" id="hx-qty">80.00</span></div>
+            <div class="pc-row scan" role="row" style="--d:300ms;--scan:2050ms"><span role="cell"><span class="ring" style="--d:2300ms">INV-502<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M15 9C29 2 71 1 89 7c13 5 12 22-3 27-20 6-60 6-75-1C-2 26 0 12 16 7c14-4 36-5 49-3"/></svg></span></span><span role="cell">PO-1002</span><span role="cell">PUMP-20</span><span class="num" role="cell">55</span><span class="num" role="cell" id="hx-dup">80.00</span></div>
           </div>
-          <p class="pc-ref pc-row" style="--d:420ms"><span>Order PO-1001, Acme Industrial: 100 VALVE-10 at <span class="ref" style="--d:1000ms">12.50</span></span><span>Receipts for PO-1002: 50 in, 2 returned</span></p>
+          <p class="pc-ref pc-row" style="--d:420ms"><span>Order PO-1001, Acme Industrial: 100 VALVE-10 at <span class="ref" style="--d:950ms">12.50</span></span><span>Receipts for PO-1002: 50 in, 2 returned</span></p>
           <ul class="pc-finds">
-            <li class="pc-row" style="--d:1000ms"><div><p class="finding-title">Unit price differs</p><p class="pc-why">Ordered at 12.50, billed at 14.00: 100 × 1.50</p></div><b class="pc-amt">$150.00</b></li>
-            <li class="pc-row" style="--d:1250ms"><div><p class="finding-title">Billed, not received</p><p class="pc-why">55 billed, 48 kept: 7 × 80.00</p></div><b class="pc-amt">$560.00</b></li>
-            <li class="pc-row" style="--d:1500ms"><div><p class="finding-title">Line billed twice</p><p class="pc-why">Set aside until you check whether both were paid</p></div><b class="pc-amt pc-look">$4,400.00</b></li>
+            <li class="pc-row" style="--d:1050ms"><div><p class="finding-title">Unit price differs</p><p class="pc-why">Ordered at 12.50, billed at 14.00: 100 × 1.50</p></div><b class="pc-amt">$150.00</b></li>
+            <li class="pc-row" style="--d:1800ms"><div><p class="finding-title">Billed, not received</p><p class="pc-why">55 billed, 48 kept: 7 × 80.00</p></div><b class="pc-amt">$560.00</b></li>
+            <li class="pc-row" style="--d:2500ms"><div><p class="finding-title">Line billed twice</p><p class="pc-why">Set aside until you check whether both were paid</p></div><b class="pc-amt pc-look">$4,400.00</b></li>
           </ul>
-          <div class="pc-total pc-row" style="--d:1750ms">
+          <div class="pc-total pc-row" style="--d:420ms">
             <span class="lab">Likely overpaid</span>
-            <b class="amt"><span class="hl" style="--d:2600ms"><span class="count" data-count="710" data-decimals="2" data-prefix="$" data-delay="1900">$710.00</span></span></b>
+            <b class="amt"><span class="hl" style="--d:2900ms"><span class="count" data-count="710" data-decimals="2" data-prefix="$" data-steps="150@1050,710@1800">$710.00</span></span></b>
             <span class="also">and $4,400.00 that needs a look</span>
           </div>
         </div>
@@ -145,55 +145,101 @@
         <figcaption class="pc-cap" id="pcard-cap">The free scan’s three sample files, as it marks them. The suppliers are fictional. <a href="product.html#sample-files">See the sample files</a></figcaption>
       </figure>
     </div>
+    <span class="rp-note r" data-for="hx-price" data-after="finding" data-d="950" aria-hidden="true"><span>PO said 12.50</span></span>
+    <span class="rp-note r" data-for="hx-qty" data-after="finding" data-d="1700" aria-hidden="true"><span>7 units short</span></span>
+    <span class="rp-note r" data-for="hx-dup" data-after="finding" data-d="2450" aria-hidden="true"><span>billed twice</span></span>
   </div>
 </section>
 
-<!-- ================= how it works: the screen stays while the four steps go by (a plain stack on phones) ================= -->
-<section class="band band-warm" id="how" aria-labelledby="h-how">
+<!-- ================= how it works: one scene. The screen stays while the four steps change (on phones it stays at the top) ================= -->
+<section class="band band-warm ruled" id="how" aria-labelledby="h-how">
   <div class="wrap">
     <header class="band-head" data-rise>
       <p class="kicker">How it works</p>
       <h2 id="h-how">From a pile of invoices to money back, in four steps.</h2>
     </header>
-    <div class="story-grid">
-      <ol class="story-steps">
-        <li class="story-step is-on" data-story="0">
-          <span class="story-no" aria-hidden="true">1</span>
-          <h3>Drop your files</h3>
-          <p>Invoices, orders and receipts, as spreadsheets, exports, PDFs or scans, up to 12 files at once. MarginGuard works out which is which, and a file it can’t read is named, never guessed.</p>
-          <figure class="story-shot"><picture><source type="image/webp" srcset="media/story-files-800.webp 800w, media/story-files.webp 1440w" sizes="(max-width:700px) 100vw, 90vw"><img src="media/story-files-800.jpg" width="800" height="500" loading="lazy" decoding="async" alt="Upload audit records: choose files or drag them here. 3 of 4 files ready, 1 skipped: acme-invoice-scan.pdf could not be read safely, with what to do about it."></picture></figure>
-        </li>
-        <li class="story-step" data-story="1">
-          <span class="story-no" aria-hidden="true">2</span>
-          <h3>It matches every line</h3>
-          <p>Each invoice line is matched to its purchase order and to what arrived, after returns. Fixed rules you can read: price, quantity, duplicates, tax, freight, bank details and payments.</p>
-          <figure class="story-shot"><picture><source type="image/webp" srcset="media/story-match-800.webp 800w, media/story-match.webp 1600w" sizes="(max-width:700px) 100vw, 90vw"><img src="media/story-match-800.jpg" width="800" height="500" loading="lazy" decoding="async" alt="An audit overview in an example workspace: 5 findings need action, $550.00 of invoice variances."></picture></figure>
-        </li>
-        <li class="story-step" data-story="2">
-          <span class="story-no" aria-hidden="true">3</span>
-          <h3>You see the proof</h3>
-          <p>Every finding shows the rows behind it and the arithmetic. A finding is not proof on its own: you check the originals before you raise it, and nothing counts as recovered until you say so.</p>
-          <figure class="story-shot"><picture><source type="image/webp" srcset="media/story-proof-800.webp 800w, media/story-proof.webp 1280w" sizes="(max-width:700px) 100vw, 90vw"><img src="media/story-proof-800.jpg" width="800" height="500" loading="lazy" decoding="async" alt="Investigate F001, unit price exceeds the agreed price: $150.00, under review. Why it was flagged: 100 ordered units billed at 14.00 versus 12.50."></picture></figure>
-        </li>
-        <li class="story-step" data-story="3">
-          <span class="story-no" aria-hidden="true">4</span>
-          <h3>You get the money back</h3>
-          <p>Start a claim from any finding, check the letter and send it from your own mailbox. The supplier’s reply and credit note stay with the claim until the money is back.</p>
-          <figure class="story-shot"><picture><source type="image/webp" srcset="media/story-back-800.webp 800w, media/story-back.webp 1360w" sizes="(max-width:700px) 100vw, 90vw"><img src="media/story-back-800.jpg" width="800" height="500" loading="lazy" decoding="async" alt="A claim against Acme Industrial, marked Recovered: $150.00 claimed, $0.00 promised, $150.00 recovered."></picture></figure>
-        </li>
-      </ol>
-      <!-- wide screens: one screen that stays in place and changes with the step being read -->
-      <div class="story-stage">
-        <div class="story-screen zoom">
-          <picture class="is-on"><source type="image/webp" srcset="media/story-files.webp"><img src="media/story-files.jpg" width="1440" height="900" loading="lazy" decoding="async" alt="Upload audit records: choose files or drag them here. 3 of 4 files ready, 1 skipped: acme-invoice-scan.pdf could not be read safely, with what to do about it."></picture>
-          <picture><source type="image/webp" srcset="media/story-match.webp"><img src="media/story-match.jpg" width="1600" height="1000" loading="lazy" decoding="async" alt="An audit overview in an example workspace: 5 findings need action, $550.00 of invoice variances."></picture>
-          <picture><source type="image/webp" srcset="media/story-proof.webp"><img src="media/story-proof.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="Investigate F001, unit price exceeds the agreed price: $150.00, under review. Why it was flagged: 100 ordered units billed at 14.00 versus 12.50."></picture>
-          <picture><source type="image/webp" srcset="media/story-back.webp"><img src="media/story-back.jpg" width="1360" height="850" loading="lazy" decoding="async" alt="A claim against Acme Industrial, marked Recovered: $150.00 claimed, $0.00 promised, $150.00 recovered."></picture>
+  </div>
+  <div class="rp-scene" id="scene">
+    <div class="rp-pin wrap rp-host">
+      <div class="rp-grid">
+        <div class="rp-text">
+          <ol class="rp-steps">
+            <li class="rp-step is-on"><span class="rp-no" aria-hidden="true">1</span><h3 id="st-1">Drop your files</h3><p>Invoices, orders and receipts, as spreadsheets, exports, PDFs or scans, up to 12 files at once. MarginGuard works out which is which, and a file it can’t read is named, never guessed.</p></li>
+            <li class="rp-step"><span class="rp-no" aria-hidden="true">2</span><h3 id="st-2">It matches every line</h3><p>Each invoice line is matched to its purchase order and to what arrived, after returns. Fixed rules you can read: price, quantity, duplicates, tax, freight, bank details and payments.</p></li>
+            <li class="rp-step"><span class="rp-no" aria-hidden="true">3</span><h3 id="st-3">You see the proof</h3><p>Every finding shows the rows behind it and the arithmetic. A finding is not proof on its own: you check the originals before you raise it, and nothing counts as recovered until you say so.</p></li>
+            <li class="rp-step"><span class="rp-no" aria-hidden="true">4</span><h3 id="st-4">You get the money back</h3><p>Start a claim from any finding, check the letter and send it from your own mailbox. The supplier’s reply and credit note stay with the claim until the money is back.</p></li>
+          </ol>
+          <div class="rp-progress" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
         </div>
-        <div class="story-progress" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-        <p class="source">Screens from a demo workspace. The companies and figures in them are fictional.</p>
+        <figure class="rp-stage">
+          <div class="rp-screen" role="img" aria-label="The audit screen with three files sorted into invoices, orders and receipts. Each invoice line is joined to its order and receipt. Marked in the pen: INV-501 billed at 14.00 against 12.50 ordered, INV-502 billed for 55 with 48 kept, and INV-502 billed a second time. The finding, unit price differs, $150.00, ends as a claim marked Recovered.">
+            <div class="rp-bar"><b>New audit</b><span>Acme Industrial · 3 files</span></div>
+            <div class="rp-board">
+              <p class="rp-drop" data-at="1">Drop your files here</p>
+              <div class="rp-chip x1" data-at="1" style="--i:1;--fx:calc(200% + 2 * var(--lk))"><span>supplier-invoices.csv</span></div>
+              <div class="rp-chip x2" data-at="1" style="--i:0;--fx:calc(-100% - var(--lk))"><span>purchase-orders.xlsx</span></div>
+              <div class="rp-chip x3" data-at="1" style="--i:2;--fx:calc(-100% - var(--lk))"><span>receipts.pdf</span></div>
+              <p class="rp-th x1">Invoices</p><p class="rp-th x2">Orders</p><p class="rp-th x3">Receipts</p>
+              <div class="rp-cell x1 y1" data-at="1" style="--i:0"><b>INV-501</b><span class="rp-i">VALVE-10</span><span class="rp-v"><span class="rp-px">100 × </span><em class="bad ring" data-at="3">14.00<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M15 9C29 2 71 1 89 7c13 5 12 22-3 27-20 6-60 6-75-1C-2 26 0 12 16 7c14-4 36-5 49-3"/></svg></em></span><i class="rp-flag" data-at="3"></i></div>
+              <div class="rp-cell x2 y1" data-at="1" style="--i:1"><b>PO-1001</b><span class="rp-i">VALVE-10</span><span class="rp-v"><span class="rp-px">100 × </span>12.50</span></div>
+              <div class="rp-cell x3 y1" data-at="1" style="--i:2"><b>PO-1001</b><span class="rp-i">Received</span><span class="rp-v">100 kept</span></div>
+              <div class="rp-cell x1 y2" data-at="1" style="--i:3"><b>INV-502</b><span class="rp-i">PUMP-20</span><span class="rp-v"><em class="bad" data-at="3">55</em><span class="rp-px"> × 80.00</span></span><i class="rp-flag" data-at="3"></i></div>
+              <div class="rp-cell x2 y2" data-at="1" style="--i:4"><b>PO-1002</b><span class="rp-i">PUMP-20</span><span class="rp-v">55<span class="rp-px"> × 80.00</span></span></div>
+              <div class="rp-cell x3 y2" data-at="1" style="--i:5" id="sc-rc2"><b>PO-1002</b><span class="rp-i">50 in, 2 back</span><span class="rp-v"><em class="bad" data-at="3">48 kept</em></span></div>
+              <div class="rp-cell x1 y3" data-at="1" style="--i:6"><b>INV-502</b><span class="rp-i">Again</span><span class="rp-v"><em class="bad" data-at="3">55</em><span class="rp-px"> × 80.00</span></span><i class="rp-flag" data-at="3"></i></div>
+              <i class="rp-link xa y1" data-at="2" style="--i:0"></i>
+              <i class="rp-link xb y1" data-at="2" style="--i:1"></i>
+              <i class="rp-link xa y2" data-at="2" style="--i:2"></i>
+              <i class="rp-link xb y2" data-at="2" style="--i:3"></i>
+              <i class="rp-dup" data-at="3"></i>
+            </div>
+            <div class="rp-cards">
+              <p class="rp-empty is-on">Findings appear here</p>
+              <div class="rp-card" data-card="3"><p class="rp-card-k">Finding F001 · INV-501 against PO-1001</p><h4>Unit price differs</h4><p class="rp-card-why">Ordered at 12.50, billed at 14.00: 100 × 1.50</p><p class="rp-card-amt" id="sc-amt3">$150.00</p><p class="rp-card-act"><span class="rp-btn">Start a claim</span><span>The rows behind it: PO-1001 and INV-501</span></p></div>
+              <div class="rp-card last" data-card="4"><p class="rp-card-k">Claim to Acme Industrial · from finding F001</p><h4>Credit note received</h4><p class="rp-card-why">Letter sent from your own mailbox, credit note matched to the claim</p><p class="rp-card-amt" id="sc-amt4">$150.00</p><p class="rp-card-act"><span class="rp-stamp">Recovered</span><span>Confirmed by you</span></p></div>
+            </div>
+          </div>
+          <figcaption class="source">Drawn from the free scan’s sample files. The suppliers and figures are fictional.</figcaption>
+        </figure>
       </div>
+      <span class="rp-note l" data-for="st-1" data-at="1" data-to="1" aria-hidden="true"><span>up to 12 at once</span></span>
+      <span class="rp-note l" data-for="st-2" data-at="2" data-to="2" aria-hidden="true"><span>matched on the PO number</span></span>
+      <span class="rp-note r" data-for="sc-amt3" data-at="3" data-to="3" aria-hidden="true"><span>check the original</span></span>
+      <span class="rp-note r" data-for="sc-amt4" data-at="4" aria-hidden="true"><span>credit note in</span></span>
     </div>
+  </div>
+</section>
+
+<!-- ================= try it: the check on one fictional order; it runs in the page and sends nothing ================= -->
+<section class="band ruled" id="try" aria-labelledby="h-try">
+  <div class="wrap rp-host">
+    <div class="grid rp-try">
+      <div class="rp-try-text" data-rise>
+        <p class="kicker">Try it</p>
+        <h2 id="h-try">Change a figure. The finding follows.</h2>
+        <p>This is the check MarginGuard runs on every invoice line, on one fictional order. Type a different price or quantity and the finding and the amount change as you type. It all happens in this page: nothing you type is sent anywhere.</p>
+      </div>
+      <form class="rp-sheet" data-try="buyer" data-rise aria-label="Try the check on one fictional order" novalidate>
+        <div class="rp-sheet-bar"><b>One order, checked</b><span>Acme Industrial · VALVE-10</span></div>
+        <table class="rp-tt">
+          <thead><tr><th scope="col">Record</th><th scope="col" class="num">Quantity</th><th scope="col" class="num">Unit price</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Order PO-1001<small>What you agreed</small></th><td class="num"><span class="fixed">100</span></td><td class="num"><input class="rp-in" name="po_price" inputmode="decimal" autocomplete="off" value="12.50" data-def="12.50" aria-label="Order PO-1001, agreed unit price" readonly></td></tr>
+            <tr><th scope="row">Receipt<small>What arrived and was kept</small></th><td class="num"><input class="rp-in" name="received" inputmode="numeric" autocomplete="off" value="100" data-def="100" aria-label="Receipt, quantity kept" readonly></td><td class="num"><span class="fixed">–</span></td></tr>
+            <tr id="try-inv"><th scope="row">Invoice INV-501<small>What the supplier billed</small></th><td class="num"><input class="rp-in" name="billed" inputmode="numeric" autocomplete="off" value="100" data-def="100" aria-label="Invoice INV-501, quantity billed" readonly></td><td class="num"><input class="rp-in flagged" name="price" inputmode="decimal" autocomplete="off" value="14.00" data-def="14.00" aria-label="Invoice INV-501, billed unit price" readonly></td></tr>
+          </tbody>
+        </table>
+        <div class="rp-out">
+          <ul class="rp-finds" data-out="finds">
+            <li><div><p class="finding-title">Unit price differs</p><p class="pc-why">Ordered at 12.50, billed at 14.00: 100 × 1.50</p></div><b class="pc-amt">$150.00</b></li>
+          </ul>
+          <p class="rp-tot"><span>Likely overpaid</span><b data-out="total">$150.00</b></p>
+          <p class="vh" aria-live="polite" data-out="said"></p>
+        </div>
+        <p class="rp-try-foot"><span class="js-only">Try 12.50 as the billed price, or 90 received.</span><button type="button" class="rp-reset">Put the figures back</button></p>
+      </form>
+    </div>
+    <span class="rp-note r" data-for="try-inv" data-d="500" aria-hidden="true"><span>try 12.50</span></span>
   </div>
 </section>
 
@@ -214,7 +260,7 @@
       <button type="button" role="tab" id="tab-accountants" aria-controls="show-accountants" aria-selected="false" tabindex="-1">Accountants</button>
       <button type="button" role="tab" id="tab-files" aria-controls="show-files" aria-selected="false" tabindex="-1">Any file in</button>
     </div>
-    <div class="show-panels" data-rise>
+    <div class="show-panels" data-rise data-grow>
       <div class="show-panel is-on" role="tabpanel" id="show-find" aria-labelledby="tab-find" tabindex="0">
         <figure class="show-shot zoom"><picture><source type="image/webp" srcset="media/show-find-800.webp 800w, media/show-find.webp 1600w" sizes="(max-width:1099px) 100vw, 64vw"><img src="media/show-find.jpg" width="1600" height="1000" decoding="async" alt="A finding in the workspace: unit price exceeds the agreed price. 100 ordered units billed at 14.00 versus 12.50: $150.00, not confirmed recovery. Below it, the order row and the invoice row it came from."></picture></figure>
         <div class="show-copy"><h3>Find overcharges</h3><p>Each invoice line is checked against its order, its receipt and the agreed price. Every finding shows the rows and the arithmetic behind it.</p><a class="more" href="product.html#find">How it works</a></div>
@@ -286,11 +332,11 @@
 <section class="band band-warm" aria-labelledby="h-more">
   <div class="wrap">
     <h2 class="vh" id="h-more">Security, pricing, questions, the founder and what’s new</h2>
-    <div class="rows grid" data-seq data-rise-group>
-      <div class="item" id="data" data-rise><h2>Security</h2><p>Free-scan files are checked in memory and not stored. It never pays anyone, and nothing goes to a supplier until you send it.</p><a class="more" href="security.html">How your data is protected</a></div>
-      <div class="item" id="pricing" data-rise><h2>Pricing</h2><p><span class="hl">Free during early access.</span> No card. Pricing will be announced before anything is charged.</p><a class="more" href="pricing.html">Pricing in full</a></div>
-      <div class="item" id="faq" data-rise><h2>Questions</h2><p>Is a finding proof? No. It means two of your records disagree, and you check the originals first.</p><a class="more" href="pricing.html#questions">All questions</a></div>
-      <div class="item" id="contact" data-rise>
+    <div class="rows grid" data-seq data-rise>
+      <div class="item" id="data"><h2>Security</h2><p>Free-scan files are checked in memory and not stored. It never pays anyone, and nothing goes to a supplier until you send it.</p><a class="more" href="security.html">How your data is protected</a></div>
+      <div class="item" id="pricing"><h2>Pricing</h2><p><span class="hl">Free during early access.</span> No card. Pricing will be announced before anything is charged.</p><a class="more" href="pricing.html">Pricing in full</a></div>
+      <div class="item" id="faq"><h2>Questions</h2><p>Is a finding proof? No. It means two of your records disagree, and you check the originals first.</p><a class="more" href="pricing.html#questions">All questions</a></div>
+      <div class="item" id="contact">
         <h2>The founder</h2><p>I’m Tirthal Kothari. I build and run MarginGuard myself, and I reply by email.</p><a class="more" id="contact-open" href="#contact-panel">Talk to the founder</a>
       <!-- The form opens here. A link to #contact (the app has one) opens it too. Without scripts the email address is shown instead. -->
       <div class="contact-panel" id="contact-panel">
@@ -320,17 +366,37 @@
       </div>
       </div>
       <!-- When you add an entry to whats-new.html, copy its date and heading here. -->
-      <div class="item" id="changes" data-rise><h2>What’s new</h2><p>22 Nov. Bigger files, and errors that name the file.</p><a class="more" href="whats-new.html">Everything new</a></div>
+      <div class="item" id="changes"><h2>What’s new</h2><p>22 Nov. Bigger files, and errors that name the file.</p><a class="more" href="whats-new.html">Everything new</a></div>
     </div>
   </div>
 </section>
 
-<!-- ================= the last word: the free scan ================= -->
-<section class="band closing" aria-labelledby="h-closing">
-  <div class="wrap" data-rise>
-    <h2 id="h-closing">See what you overpaid last month.</h2>
-    <p>Drop in supplier invoices and purchase orders. The free scan needs no account, and the files aren’t stored.</p>
-    <p class="act"><a class="btn btn-big" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan">Run a free scan</a><span>or <a data-launch="signup" href="https://app.tirthalkothari.com/#/signup">create your account</a></span></p>
+<!-- ================= the last word: the scan's receipt is printed, then the free scan ================= -->
+<section class="band closing ruled" aria-labelledby="h-closing">
+  <div class="wrap">
+    <div class="rp-close">
+      <div class="rp-slip" data-seq>
+        <div class="rp-slot" aria-hidden="true"></div>
+        <div class="rp-feed">
+          <div class="rp-paper" role="group" aria-label="Receipt for the free scan of the three sample files">
+            <p class="rp-r-h"><b>MarginGuard</b>Free scan · 3 sample files</p>
+            <dl>
+              <div><dt>Files checked</dt><dd>3</dd></div>
+              <div><dt>Lines checked</dt><dd>3</dd></div>
+              <div><dt>Problems found</dt><dd>2</dd></div>
+              <div><dt>Set aside to check</dt><dd>1</dd></div>
+            </dl>
+            <p class="rp-r-tot"><span>To recover</span><b><span class="hl" style="--d:1500ms">$710.00</span></b></p>
+            <p class="rp-r-foot">Check the originals before you raise a claim. The suppliers and figures are fictional.</p>
+          </div>
+        </div>
+      </div>
+      <div class="rp-call" data-rise>
+        <h2 id="h-closing">See what you overpaid last month.</h2>
+        <p>Drop in supplier invoices and purchase orders. The free scan needs no account, and the files aren’t stored.</p>
+        <p class="act"><a class="btn btn-big" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan">Run a free scan</a><span>or <a data-launch="signup" href="https://app.tirthalkothari.com/#/signup">create your account</a></span></p>
+      </div>
+    </div>
   </div>
 </section>
 
