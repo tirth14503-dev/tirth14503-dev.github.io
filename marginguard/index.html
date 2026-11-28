@@ -34,7 +34,7 @@
   <link rel="preload" href="fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/castoro-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/source-sans-3-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="home.css?v=8">
+  <link rel="stylesheet" href="home.css?v=9">
   <script>
   /* Before the first paint: note that scripts run, and switch the motion on only where it is wanted.
      Add ?motion=off to the address to see the still page. If home.js never starts, the motion is switched off again. */
@@ -46,7 +46,7 @@
   </script>
   <script src="launch.js?v=4" defer></script>
   <script src="contact.js?v=3" defer></script>
-  <script src="home.js?v=7" defer></script>
+  <script src="home.js?v=8" defer></script>
   <script src="ask-buyers.js?v=1" defer></script>
   <script src="ask.js?v=1" defer></script>
 </head>
@@ -115,8 +115,9 @@
         <p class="kicker">Free supplier invoice scan · Early access</p>
         <h1 id="h1">Find the money your suppliers overbilled you.</h1>
         <p class="hero-sub">Free. In minutes. No account.</p>
-        <!-- The drop zone. It is a link to the free scan, which runs on MarginGuard's own site; this page can't hand
-             files across to it, so files dropped here are named, not read or sent, and the next step says what to do. -->
+        <!-- The drop zone. It is a link to the free scan, which runs on MarginGuard's own site. Files dropped here are handed
+             to that page in a new tab (home.js, section 11); this page never reads or uploads them. If the tab can't be
+             opened or doesn't answer, the next step says honestly what to do. -->
         <a class="drop" id="drop" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan" aria-describedby="drop-help">
           <svg class="drop-ic" viewBox="0 0 48 48" aria-hidden="true"><path d="M12 5h17l9 9v29H12z" fill="#fff" stroke="currentColor" stroke-width="2"/><path d="M29 5v9h9" fill="none" stroke="currentColor" stroke-width="2"/><path class="drop-ic-pen" d="M17 27l5 5 10-11" fill="none" stroke-width="2.6"/></svg>
           <span class="drop-h"><span class="drop-fine">Drop your supplier invoices and orders here</span><span class="drop-touch">Scan your supplier invoices and orders</span></span>
@@ -124,10 +125,10 @@
           <span class="drop-go">Run a free scan<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
         </a>
         <div class="drop-next" id="drop-next" hidden>
-          <p class="drop-next-h" id="drop-files" role="status"></p>
+          <p class="drop-next-h" id="drop-files"></p>
           <p class="drop-skip" id="drop-skip" hidden></p>
-          <p>One more step. The scan runs on MarginGuard’s own page: open it and drop the same files there. This page doesn’t upload anything.</p>
-          <p class="drop-next-act"><a class="btn btn-big" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan">Open the free scan<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><button type="button" class="rp-reset" id="drop-clear">Choose other files</button></p>
+          <p id="drop-say" role="status">One more step. The scan runs on MarginGuard’s own page: open it and drop the same files there. This page doesn’t upload anything.</p>
+          <p class="drop-next-act"><button type="button" class="btn btn-big" id="drop-send" hidden>Scan these files<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button><a class="btn btn-big" id="drop-open" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan">Open the free scan<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></a><button type="button" class="rp-reset" id="drop-clear">Choose other files</button></p>
         </div>
         <ul class="trust" aria-label="About the free scan">
           <li>Checked in memory, never stored</li>

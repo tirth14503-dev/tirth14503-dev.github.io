@@ -1614,6 +1614,7 @@ html.ask-open{overflow:hidden}
 .drop-next .drop-skip{color:var(--pen)}
 .drop-next .drop-next-act{display:flex;flex-wrap:wrap;align-items:center;gap:12px 22px;margin:16px 0 0}
 .drop-next .btn{display:inline-flex;align-items:center;gap:9px}
+.drop-next [hidden]{display:none}
 
 /* the trust line: four facts, each one said elsewhere on the site */
 .trust{display:flex;flex-wrap:wrap;gap:6px 20px;max-width:640px;list-style:none;margin:16px 0 0;padding:0;font-family:var(--sans);font-size:14.5px;line-height:1.4;color:var(--ink)}

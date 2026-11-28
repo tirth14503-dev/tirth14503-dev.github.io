@@ -505,28 +505,80 @@
     run();
   });
 
-  /* ---------- 11. the drop zone (buyers homepage). The free scan runs on MarginGuard's own site, and this page can't
-     hand files across to it. So files dropped anywhere on the page are only named here, never read and never sent,
-     and the next step says what to do: open the scan and drop them there. ---------- */
+  /* ---------- 11. the drop zone (buyers homepage). One drop: the files go to the free scan, which runs on MarginGuard's
+     own site. This page opens the scan in a new tab at /free-scan?handoff=1; the scan says "ready", and the files are
+     handed over as File objects with postMessage, to that tab and that origin only. This page never reads or uploads
+     them; the scan page checks them with its own limits and starts the scan at once. A browser that blocks a tab opened by
+     a drop gets one button that opens it (a click may open a tab). The scan tab has 25 s to say "ready" (the whole app
+     loads first, slowly on a phone) and then 5 s to say "received"; otherwise the honest next step shows. ---------- */
   var drop = document.getElementById('drop'), dropNext = document.getElementById('drop-next');
   if (drop && dropNext) {
-    var READS = /\.(csv|tsv|txt|xlsx|xls|ods|pdf|xml|json)$/i, depth = 0;
+    var READS = /\.(csv|tsv|txt|xlsx|xls|ods|pdf|xml|json)$/i, depth = 0, held = [], handing = null;
+    var READY_MS = 25000, RECEIVED_MS = 5000;   /* the scan tab itself waits 30 s for the files */
+    var sayNode = document.getElementById('drop-say'), sendBtn = document.getElementById('drop-send'), openLink = document.getElementById('drop-open');
+    var SAY = {
+      opening: 'Opening the free scan in a new tab. The scan starts as soon as it opens.',
+      blocked: 'Your browser stopped the scan from opening by itself. Press Scan these files and they go straight to it: no second drop.',
+      sent: 'Your files are in the free scan in the new tab, and the scan started as soon as it opened. It checks them in memory and doesn’t store them.',
+      quiet: 'The scan tab didn’t answer, so the files couldn’t be passed to it. Drop the same files there, or choose them. This page doesn’t upload anything.',
+      manual: 'One more step. The scan runs on MarginGuard’s own page: open it and drop the same files there. This page doesn’t upload anything.'
+    };
+    var show = function (state) {
+      sayNode.textContent = SAY[state];
+      sendBtn.hidden = state !== 'blocked';
+      openLink.hidden = !(state === 'quiet' || state === 'manual');
+      var first = state === 'blocked' ? sendBtn : (openLink.hidden ? document.getElementById('drop-clear') : openLink);
+      if (state !== 'opening' && state !== 'sent') first.focus({ preventScroll: true });
+    };
     var withFiles = function (e) { return e.dataTransfer && [].indexOf.call(e.dataTransfer.types || [], 'Files') >= 0; };
     var listNames = function (names) {
       return names.length <= 4 ? names.join(', ') : names.slice(0, 3).join(', ') + ' and ' + (names.length - 3) + ' more';
     };
+    /* the scan's address, from the drop zone's own link (launch.js may have pointed it at the current app address) */
+    var scanAddress = function () {
+      try { var u = new URL(drop.href); return u.origin + '/free-scan?handoff=1'; } catch (e) { return null; }
+    };
+    var handOver = function (files, byClick) {
+      if (handing) handing.stop();
+      var address = scanAddress(), tab = null;
+      /* The scan trusts only https://tirthalkothari.com. On plain http (or anywhere but a local preview) it would never
+         answer, so say the honest next step at once instead of making the visitor wait. */
+      var local = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+      if (!address || (location.protocol !== 'https:' && !local)) return show('manual');
+      try { tab = window.open(address, '_blank'); } catch (e) { tab = null; }
+      if (!tab) return show(byClick ? 'manual' : 'blocked');
+      var origin = new URL(address).origin, sent = false, over = false, wait;
+      var stop = function (state) {
+        if (over) return; over = true;
+        removeEventListener('message', heard); clearTimeout(wait); handing = null;
+        if (state) show(state);
+      };
+      var heard = function (e) {
+        if (e.origin !== origin || e.source !== tab || !e.data || typeof e.data !== 'object') return;
+        if (e.data.type === 'mg-scan-ready' && !sent) {
+          sent = true; clearTimeout(wait);
+          try { tab.postMessage({ type: 'mg-scan-files', files: files }, origin); } catch (err) { return stop('quiet'); }
+          wait = setTimeout(function () { stop('quiet'); }, RECEIVED_MS);
+        } else if (e.data.type === 'mg-scan-received' && sent) stop('sent');
+      };
+      addEventListener('message', heard);
+      wait = setTimeout(function () { stop('quiet'); }, READY_MS);
+      handing = { stop: function () { stop(null); } };
+      show('opening');
+    };
     var named = function (files) {
-      var names = [].map.call(files, function (f) { return f.name; }),
-          good = names.filter(function (n) { return READS.test(n); }), other = names.filter(function (n) { return !READS.test(n); });
+      var all = [].slice.call(files), good = all.filter(function (f) { return READS.test(f.name); }),
+          other = all.filter(function (f) { return !READS.test(f.name); }).map(function (f) { return f.name; });
       document.getElementById('drop-files').textContent = good.length
-        ? (good.length === 1 ? '1 file ready: ' : good.length + ' files ready: ') + listNames(good)
-        : 'The scan doesn’t read ' + (names.length === 1 ? 'this file.' : 'these files.');
+        ? (good.length === 1 ? '1 file ready: ' : good.length + ' files ready: ') + listNames(good.map(function (f) { return f.name; }))
+        : 'The scan doesn’t read ' + (all.length === 1 ? 'this file.' : 'these files.');
       var skip = document.getElementById('drop-skip');
       skip.hidden = !other.length || !good.length;
       skip.textContent = other.length ? 'Not read by the scan: ' + listNames(other) + '. It takes CSV, Excel, PDF and e-invoice files.' : '';
       drop.hidden = true; dropNext.hidden = false;
-      dropNext.querySelector('.btn').focus({ preventScroll: true });
+      held = good;
       dropNext.scrollIntoView({ block: 'nearest' });
+      if (good.length) handOver(good, false); else show('manual');
     };
     addEventListener('dragenter', function (e) { if (withFiles(e)) { depth++; drop.classList.add('over'); } });
     addEventListener('dragleave', function (e) { if (withFiles(e) && --depth <= 0) { depth = 0; drop.classList.remove('over'); } });
@@ -536,7 +588,11 @@
       e.preventDefault(); depth = 0; drop.classList.remove('over');
       if (e.dataTransfer.files && e.dataTransfer.files.length) named(e.dataTransfer.files);
     });
-    document.getElementById('drop-clear').addEventListener('click', function () { dropNext.hidden = true; drop.hidden = false; drop.focus(); });
+    sendBtn.addEventListener('click', function () { if (held.length) handOver(held, true); });
+    document.getElementById('drop-clear').addEventListener('click', function () {
+      if (handing) handing.stop();
+      held = []; dropNext.hidden = true; drop.hidden = false; drop.focus();
+    });
   }
 
   /* ---------- 12. phones: the slim bar at the bottom steps aside while the page's own main action is in view ---------- */
