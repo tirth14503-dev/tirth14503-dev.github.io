@@ -34,7 +34,7 @@
   <link rel="preload" href="fonts/besley-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/castoro-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/source-sans-3-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="home.css?v=6">
+  <link rel="stylesheet" href="home.css?v=7">
   <script>
   /* Before the first paint: note that scripts run, and switch the motion on only where it is wanted.
      Add ?motion=off to the address to see the still page. If home.js never starts, the motion is switched off again. */
@@ -47,6 +47,8 @@
   <script src="launch.js?v=4" defer></script>
   <script src="contact.js?v=3" defer></script>
   <script src="home.js?v=6" defer></script>
+  <script src="ask-buyers.js?v=1" defer></script>
+  <script src="ask.js?v=1" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -113,6 +115,10 @@
         <p class="kicker">Supplier invoice audit for distributors and manufacturers</p>
         <h1 id="h1">Nobody has time to check every supplier invoice.</h1>
         <p class="standfirst">MarginGuard checks each one against your orders and receipts, and shows the rows behind every difference.</p>
+        <form class="ask" id="ask" role="search" aria-label="Ask MarginGuard">
+          <div class="ask-box"><input id="ask-q" aria-label="Ask MarginGuard anything" name="q" type="text" maxlength="300" autocomplete="off" placeholder="Ask MarginGuard anything…"><button type="submit" class="ask-go">Ask<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button></div>
+          <div class="ask-chips"><button type="button" data-ask="overpay">Where am I overpaying suppliers?</button><button type="button" data-ask="files">What files do I need?</button><button type="button" data-ask="safe">Is my data safe?</button></div>
+        </form>
         <p class="act"><a class="btn btn-big" data-launch="free-scan" href="https://app.tirthalkothari.com/#/free-scan">Run a free scan</a><span>or <a data-launch="signup" href="https://app.tirthalkothari.com/#/signup">create your account</a></span></p>
         <p class="small">Free during early access. No card, and the scan needs no account.</p>
       </div>
