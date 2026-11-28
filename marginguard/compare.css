@@ -1,0 +1,100 @@
+/* =====================================================================
+   Comparison pages (28 Nov 2026): MarginGuard against a recovery-audit firm, against AP automation software, and the
+   recovery calculator. Loaded after home.css on those three pages only. Categories, never company names.
+   ===================================================================== */
+
+/* the opening's figure: two tracks over time, or two stacks */
+.vs-fig{grid-column:7 / span 6;margin:0;padding:22px 24px 20px;background:var(--sheet);border:1px solid var(--edge);font-family:var(--sans);
+  box-shadow:0 34px 70px -38px rgba(58,20,28,.34),0 2px 8px rgba(58,20,28,.05)}
+.vs-fig-cap{margin:16px 0 0;font-size:13px;line-height:1.45;color:var(--ink2)}
+.vs-ruler{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0;padding:0 0 6px;border-bottom:1px solid var(--ink);list-style:none;font-size:12.5px;font-weight:600;color:var(--ink2)}
+.vs-ruler li{padding-left:6px;border-left:1px solid var(--edge)}
+.vs-track{position:relative;margin:0;padding:18px 0 0;height:104px;border-bottom:1px solid var(--hair)}
+.vs-track:last-of-type{border-bottom:0}
+.vs-track-h{margin:0;font-weight:600;font-size:14.5px;color:var(--head)}
+.vs-line{position:absolute;top:62px;height:2px;background:var(--pen-line);transform-origin:0 50%}
+.vs-dot{position:absolute;top:57px;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:var(--ink)}
+.vs-hit{position:absolute;top:51px;width:24px;height:24px;margin-left:-12px;border:2px solid var(--pen);border-radius:50%}
+.vs-tag{position:absolute;top:80px;max-width:46%;margin:0;font-size:12.5px;line-height:1.3;color:var(--ink2)}
+.vs-tag.r{text-align:right}
+.vs-tag b{display:block;color:var(--pen);font-weight:600}
+
+/* the stacks (AP software): what each asks you to change */
+.vs-stacks{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.vs-stack .vs-stack-h{margin:0 0 10px;font-size:14.5px;font-weight:600;color:var(--head)}
+.vs-stack ol{list-style:none;margin:0;padding:0}
+.vs-stack li{position:relative;margin:0 0 8px;padding:9px 12px 8px;border:1px solid var(--edge);background:var(--paper);font-size:14px;line-height:1.35}
+.vs-stack li.new{border-style:dashed;border-color:var(--field)}
+.vs-stack li.new::after{content:"new";position:absolute;right:8px;top:9px;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+.vs-stack li.kept{border-left:3px solid var(--ink2)}
+.vs-stack li.adds{border-left:3px solid var(--pen);color:var(--ink)}
+.vs-stack li.adds b{color:var(--pen)}
+
+/* side by side: a ledger of differences, MarginGuard's column in the margin colour */
+.vs-table{width:100%;border-collapse:collapse;background:var(--sheet);border:1px solid var(--edge);font-family:var(--sans);font-size:16px;line-height:1.45;
+  box-shadow:0 34px 70px -38px rgba(58,20,28,.24),0 2px 8px rgba(58,20,28,.04)}
+.vs-table thead th{padding:14px 18px 12px;text-align:left;font-size:13.5px;font-weight:600;color:var(--ink2);border-bottom:2px solid var(--rule)}
+.vs-table thead th.us{color:var(--pen)}
+.vs-table tbody th{width:22%;padding:17px 18px 16px;text-align:left;vertical-align:top;font-family:var(--display);font-weight:500;font-size:18px;line-height:1.25;color:var(--head);border-bottom:1px solid var(--hair)}
+.vs-table td{width:39%;padding:17px 18px 16px;vertical-align:top;border-bottom:1px solid var(--hair)}
+.vs-table td.us{background:var(--margin);border-left:2px solid var(--pen)}
+.vs-table tbody tr:last-child>*{border-bottom:0}
+.vs-table .ring{color:var(--pen);font-weight:600}
+.vs-table sup a{font-size:12px;text-decoration:none;color:var(--pen)}
+.vs-mark{display:inline-block;margin-right:8px;font-weight:700}
+.vs-mark.yes{color:var(--pen)}
+.vs-mark.no{color:var(--ink2)}
+
+/* the honest part: when the other choice is the better one */
+.vs-fit{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gut)}
+.vs-fit-text{grid-column:1 / span 7}
+.vs-fit-text h2{font-family:var(--display);font-size:clamp(28px,3vw,42px);line-height:1.08;letter-spacing:-.016em;color:var(--head);margin:0 0 18px;text-wrap:balance}
+.vs-fit-text p{font-size:19px;line-height:1.5;max-width:34em}
+.vs-both{grid-column:9 / span 4;align-self:start;margin:6px 0 0;padding:16px 18px 18px;border-left:3px solid var(--pen);background:var(--margin);font-family:var(--sans);font-size:15.5px;line-height:1.45}
+.vs-both b{display:block;margin-bottom:6px;color:var(--pen)}
+
+/* sources */
+.vs-src{max-width:52em;margin:28px 0 0;padding-top:12px;border-top:1px solid var(--hair);font-family:var(--sans);font-size:13.5px;line-height:1.5;color:var(--ink2)}
+.vs-src ol{margin:0;padding-left:1.2em}
+.vs-next{margin:26px 0 0;font-family:var(--sans);font-size:16px}
+
+/* the calculator: the try-it sheet, with the assumption beside it */
+.calc-assume{margin:20px 0 0;padding:14px 16px 15px;border-left:3px solid var(--pen);background:var(--margin);font-family:var(--sans);font-size:15px;line-height:1.5}
+.calc-assume b{color:var(--pen)}
+.calc .rp-in{width:7.2em}
+.calc .rp-in.wide{width:9.4em}
+.calc .rp-tt td small{display:block;font-size:12.5px;color:var(--ink2);font-weight:400}
+.calc .rp-finds .pc-amt{white-space:nowrap}
+.calc-err{margin:10px 22px 0;font-family:var(--sans);font-size:14px;color:var(--pen)}
+.calc-err:empty{display:none}
+
+@media (prefers-reduced-motion:no-preference){
+  html.m .vs-fig .vs-line{transform:scaleX(0);transition:transform 1.1s var(--ease) calc(var(--d,0ms) * var(--k,1))}
+  html.m .vs-fig .vs-hit{opacity:0;scale:1.6;transition:opacity .3s var(--ease) calc(var(--d,0ms) * var(--k,1) + 900ms),scale .45s cubic-bezier(.2,.9,.25,1) calc(var(--d,0ms) * var(--k,1) + 900ms)}
+  html.m .vs-fig .vs-tag{opacity:0;transition:opacity .4s var(--ease) calc(var(--d,0ms) * var(--k,1) + 1100ms)}
+  html.m .vs-fig.go .vs-line{transform:none}
+  html.m .vs-fig.go .vs-hit{opacity:1;scale:1}
+  html.m .vs-fig.go .vs-tag{opacity:1}
+}
+
+@media (max-width:1099px){
+  .vs-fig{grid-column:1 / -1;margin-top:40px}
+  .vs-fit-text,.vs-both{grid-column:1 / -1}
+  .vs-both{margin-top:24px;max-width:560px}
+}
+@media (max-width:700px){
+  .vs-fig{padding:16px 14px 14px}
+  .vs-stacks{grid-template-columns:1fr}
+  .vs-tag{max-width:58%;font-size:12px}
+  /* the ledger becomes one block per row; each cell says which side it is */
+  .vs-table,.vs-table tbody,.vs-table tr,.vs-table th,.vs-table td{display:block;width:auto}
+  .vs-table thead{display:none}
+  .vs-table tbody th{padding:16px 16px 6px;border-bottom:0;font-size:19px}
+  .vs-table td{padding:6px 16px 12px;border-bottom:0}
+  .vs-table td.us{margin:0 12px 14px;padding:10px 12px 12px}
+  .vs-table td::before{content:attr(data-side);display:block;margin-bottom:3px;font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink2)}
+  .vs-table td.us::before{color:var(--pen)}
+  .vs-table tbody tr{border-bottom:1px solid var(--hair)}
+  .vs-table tbody tr:last-child{border-bottom:0}
+  .vs-fit-text p{font-size:17.5px}
+}
