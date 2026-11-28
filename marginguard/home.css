@@ -1401,3 +1401,179 @@ html.ask-open{overflow:hidden}
   .ask-more{margin:0 18px}
   .ask-note{margin:8px 18px 12px}
 }
+
+/* =====================================================================
+   How buyers and sellers work together (28 Nov 2026): the partner-link page, /together/. Its scene is the homepage
+   scene with six steps and two ledgers side by side; a pen line between them carries the claim across and the
+   answer and the credit note back. Without html.m the scene shows its last state: both books, matching.
+   ===================================================================== */
+.tg-soon{max-width:34em;margin:0 0 22px;padding:12px 16px 13px;border-left:3px solid var(--pen);background:var(--margin);
+  font-family:var(--sans);font-size:15.5px;line-height:1.45;color:var(--ink)}
+.tg-soon b{font-weight:700;color:var(--pen)}
+.tg-jump{margin:0}
+
+/* the opening: what crosses the link for one claim, as three arrows between the two businesses */
+.tg-pipe{grid-column:7 / span 6;margin:0;padding:22px 22px 18px;background:var(--sheet);border:1px solid var(--edge);font-family:var(--sans);
+  box-shadow:0 34px 70px -38px rgba(58,20,28,.34),0 2px 8px rgba(58,20,28,.05)}
+.tg-ends{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.tg-end{margin:0;padding:12px 12px 11px;border:1px solid var(--edge);border-top:2px solid var(--deep);background:var(--paper);text-align:center;line-height:1.25}
+.tg-end small{display:block;font-size:12.5px;font-weight:600;color:var(--pen)}
+.tg-end b{display:block;margin-top:4px;font-family:var(--display);font-weight:500;font-size:22px;color:var(--head)}
+.tg-end span{display:block;margin-top:2px;font-size:13px;color:var(--ink2)}
+.tg-msgs{--life:calc((100% - 24px) / 4);position:relative;list-style:none;margin:0;padding:4px 0 10px}
+.tg-msgs::before,.tg-msgs::after{content:"";position:absolute;top:0;bottom:0;left:var(--life);border-left:1px dashed var(--field)}
+.tg-msgs::after{left:auto;right:var(--life)}
+.tg-msgs li{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;align-items:center;margin:0 var(--life);padding:22px 16px 12px;line-height:1.3}
+.tg-msgs b{grid-column:1;font-weight:600;font-size:14.5px;color:var(--pen)}
+.tg-msgs span{grid-column:1;font-size:13.5px;color:var(--ink2)}
+.tg-msgs em{grid-column:2;grid-row:1 / span 2;font-style:normal;font-family:var(--display);font-size:23px;color:var(--pen);font-variant-numeric:tabular-nums lining-nums}
+.tg-msgs li::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.5px;background:var(--pen)}
+.tg-msgs li::before{content:"";position:absolute;bottom:-3.6px;width:7px;height:7px;border-top:1.5px solid var(--pen);border-right:1.5px solid var(--pen)}
+.tg-msgs .to-s::before{right:1px;transform:rotate(45deg)}
+.tg-msgs .to-b::before{left:1px;transform:rotate(-135deg)}
+.tg-pipe-cap{margin:16px 0 0;font-size:13px;line-height:1.45;color:var(--ink2)}
+@media (prefers-reduced-motion:no-preference){
+  html.m .tg-pipe li::after{transform:scaleX(0);transition:transform .8s var(--ease) calc(var(--d,0ms) * var(--k,1))}
+  html.m .tg-pipe .to-s::after{transform-origin:0 50%}
+  html.m .tg-pipe .to-b::after{transform-origin:100% 50%}
+  html.m .tg-pipe li>*,html.m .tg-pipe li::before{opacity:0;transition:opacity .45s var(--ease) calc(var(--d,0ms) * var(--k,1) + 550ms)}
+  html.m .tg-pipe.go li::after{transform:none}
+  html.m .tg-pipe.go li>*,html.m .tg-pipe.go li::before{opacity:1}
+}
+
+/* the scene: two ledgers, the buyer's on the left and the seller's on the right, and the link between them */
+.tg-scene .rp-text{grid-column:1 / span 4}
+.tg-scene .rp-stage{grid-column:5 / span 8}
+.tg-books{--wire:56px;position:relative;display:grid;grid-template-columns:minmax(0,1fr) var(--wire) minmax(0,1fr);grid-template-rows:repeat(4,auto);
+  font-family:var(--sans);color:var(--ink)}
+.tg-book{grid-column:1;grid-row:1 / 4;display:grid;grid-template-rows:subgrid;min-width:0;background:var(--sheet);border:1px solid var(--edge);
+  box-shadow:0 34px 70px -38px rgba(58,20,28,.32),0 2px 8px rgba(58,20,28,.05)}
+.tg-books>.tg-book:last-of-type{grid-column:3}
+.tg-book .rp-bar{padding:12px 16px 11px}
+.tg-lines{padding:10px 16px 2px}
+.tg-th{display:flex;justify-content:space-between;gap:12px;margin:0;padding-bottom:6px;border-bottom:1px solid var(--ink);font-size:12.5px;font-weight:600;color:var(--ink2)}
+.tg-row{position:relative;display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0;padding:9px 8px 8px;border-bottom:1px solid var(--hair);
+  font-size:13.5px;line-height:1.3}
+.tg-row>span:first-child{min-width:0}
+.tg-row b{font-weight:600;margin-right:8px}
+.tg-d{font-size:12.5px;color:var(--ink2);white-space:nowrap}
+.tg-d .ring{margin-left:5px;color:var(--ink)}
+.tg-n{flex:none;font-weight:600;font-variant-numeric:tabular-nums lining-nums}
+.tg-net{border-top:1px solid var(--ink);border-bottom:0;margin-top:-1px}
+.tg-net .tg-n{color:var(--pen)}
+.tg-was{display:none}
+.tg-was.at{display:inline}
+.tg-book .rp-cards{margin:12px 14px 14px}
+.tg-book .rp-empty{min-height:112px;padding:0 12px;text-align:center}
+.tg-book .rp-card{column-gap:14px}
+.tg-book .rp-card-amt{font-size:28px}
+.tg-wire{grid-column:2;grid-row:3;position:relative}
+.tg-wire::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1.5px dashed var(--pen-line)}
+.tg-carry{position:absolute;left:0;right:0;top:calc(50% - .75px);height:1.5px;background:var(--pen);opacity:0}
+.tg-carry.to-s{transform-origin:0 50%}
+.tg-carry.to-b{transform-origin:100% 50%}
+.tg-slip{display:none;grid-column:1 / -1;grid-row:3;align-self:center;justify-self:start;position:relative;z-index:4;width:50%;margin:0;text-align:center;pointer-events:none}
+.tg-slip span{display:inline-block;padding:7px 11px 6px;border:1px solid var(--pen);border-left-width:3px;background:var(--paper);
+  font-size:12.5px;font-weight:700;line-height:1.2;color:var(--pen);white-space:nowrap;box-shadow:0 10px 18px -10px rgba(58,20,28,.45)}
+.tg-match{grid-column:1 / -1;grid-row:4;justify-self:center;position:relative;z-index:3;margin:-17px 0 0}
+.tg-match .rp-stamp{padding:8px 12px 7px 13px;background:var(--paper);font-size:15px}
+.tg-scene:not(.live) .rp-flag{display:none}
+@media (prefers-reduced-motion:no-preference){
+  html.m .rp-scene.tg-scene.live .tg-now:not(.at){display:none}
+  html.m .rp-scene.live .tg-row[data-at]{transition:opacity .45s var(--ease) .35s,transform .5s var(--ease) .35s}
+  html.m .rp-scene.live .tg-row.late[data-at]{transition-delay:1.5s}
+  html.m .rp-scene.live .tg-row[data-at]:not(.at){opacity:0;transform:translate3d(0,6px,0)}
+  html.m .rp-scene.live .rp-card.recv.is-on{transition-delay:1.45s}
+  html.m .rp-scene.live .rp-card.recv.is-on .rp-stamp{transition-delay:2s}
+  html.m .tg-books .ring path{animation:none;stroke-dashoffset:0}
+  html.m .rp-scene.live .rp-card .ring path{transition-delay:1.15s}
+  html.m .rp-scene.live .tg-carry{opacity:1;transform:scaleX(0);transition:transform .9s var(--ease) .1s}
+  html.m .rp-scene.live .tg-carry.at{transform:none}
+  html.m .rp-scene.live .tg-slip.at{display:block;animation:tgfly 1.5s cubic-bezier(.45,.05,.3,1) .15s both}
+  html.m .rp-scene.live .tg-slip.to-b.at{animation-name:tgback}
+  @keyframes tgfly{0%{opacity:0;transform:translate3d(0,6px,0)}14%{opacity:1;transform:none}84%{opacity:1;transform:translate3d(100%,0,0)}100%{opacity:0;transform:translate3d(100%,0,0)}}
+  @keyframes tgback{0%{opacity:0;transform:translate3d(100%,6px,0)}14%{opacity:1;transform:translate3d(100%,0,0)}84%{opacity:1;transform:none}100%{opacity:0;transform:none}}
+  html.m .rp-scene.live .tg-match{transition:opacity .25s var(--ease) .6s,scale .5s cubic-bezier(.2,.9,.25,1) .6s}
+  html.m .rp-scene.live .tg-match:not(.at){opacity:0;scale:1.5}
+}
+@media (min-width:1100px) and (min-height:600px) and (prefers-reduced-motion:no-preference){
+  html.m .rp-scene.tg-scene.live{height:calc(100svh - var(--mast-h) + 380vh)}
+}
+
+/* what travels, and what never does */
+.tg-two{row-gap:44px}
+.tg-two>*{grid-column:span 6}
+.tg-col h3,.tg-side h3{font-family:var(--display);font-weight:500;font-size:clamp(24px,2.2vw,32px);line-height:1.15;letter-spacing:-.01em;color:var(--head);margin:0 0 16px}
+.tg-list{list-style:none;margin:0;padding:0;border-top:2px solid var(--rule)}
+.tg-list li{position:relative;padding:14px 0 13px 34px;border-bottom:1px solid var(--hair);font-size:18px;line-height:1.45}
+.tg-list li::before{content:"";position:absolute;left:3px;top:22px}
+.tg-list.yes li::before{width:12px;height:6px;margin-top:-3px;border-left:2px solid var(--pen);border-bottom:2px solid var(--pen);transform:rotate(-45deg)}
+.tg-list.no li::before{width:13px;height:2px;margin-top:-1px;background:var(--ink2)}
+.tg-foot{max-width:44em;margin:36px 0 0;font-size:18px;line-height:1.5;color:var(--ink2)}
+
+/* consent and control, on the deep band */
+.tg-consent{align-items:start;row-gap:44px}
+.tg-terms{grid-column:1 / span 7;list-style:none;margin:0;padding:0;counter-reset:tg}
+.tg-terms li{counter-increment:tg;position:relative;padding:22px 0 22px 62px;border-top:1px solid rgba(251,247,244,.3)}
+.tg-terms li::before{content:counter(tg);position:absolute;left:0;top:22px;display:grid;place-items:center;width:40px;height:40px;border:1.5px solid var(--on-deep-mute);
+  font-family:var(--display);font-size:21px;line-height:1;color:var(--on-deep)}
+.tg-terms h3{margin:0 0 8px;font-family:var(--display);font-weight:500;font-size:clamp(22px,1.9vw,27px);line-height:1.18;color:var(--on-deep)}
+.tg-terms p{margin:0;font-size:18px;line-height:1.5;color:var(--on-deep-2)}
+.tg-safety{grid-column:9 / span 4;margin:0;padding:20px 20px 18px;border-top:3px solid var(--pen);background:var(--paper);color:var(--ink);font-family:var(--sans)}
+.tg-sf+.tg-sf{margin-top:16px;padding-top:16px;border-top:1px dashed var(--field)}
+.tg-sf p{margin:0}
+.tg-sf .tg-sf-k{margin-bottom:7px;font-size:13px;font-weight:600;color:var(--ink2)}
+.tg-sf-n{font-family:var(--display);font-size:40px;line-height:1;letter-spacing:.04em;color:var(--head);font-variant-numeric:tabular-nums lining-nums}
+.tg-sf-in{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 12px 8px;border:1px solid var(--field);
+  font-weight:600;font-size:22px;line-height:1.2;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.tg-sf-ok{font-size:13px;letter-spacing:0;color:var(--ok)}
+.tg-sf .tg-sf-act{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:12px;font-size:13.5px;color:var(--ink2)}
+.tg-sf-cap{margin:16px 0 0;font-size:12.5px;line-height:1.45;color:var(--ink2)}
+
+/* what it means for each side, and a door into each product */
+.tg-close{text-align:left}
+.tg-side{display:flex;flex-direction:column;align-items:flex-start;padding-top:22px;border-top:2px solid var(--rule)}
+.tg-side .tg-side-k{margin:0 0 10px;font-family:var(--sans);font-size:14px;font-weight:600;color:var(--pen)}
+.tg-side>p{max-width:30em;margin:0 0 28px;font-size:19px;line-height:1.5;color:var(--ink2)}
+.tg-close .tg-side .act{justify-content:flex-start;margin:auto 0 0}
+.tg-close>.wrap>.tg-soon{max-width:40em;margin:56px 0 0;font-size:15.5px;color:var(--ink)}
+
+@media (max-width:1099px){
+  .tg-pipe{grid-column:1 / -1;margin-top:40px}
+  .tg-terms,.tg-safety{grid-column:1 / -1}
+  .tg-safety{max-width:420px}
+}
+@media (max-width:700px){
+  .tg-two>*{grid-column:1 / -1}
+  .tg-pipe{padding:16px 14px 14px}
+  .tg-ends{gap:12px}
+  .tg-end b{font-size:18px}
+  .tg-msgs{--life:7%}
+  .tg-msgs li{padding:20px 10px 10px}
+  .tg-msgs em{font-size:20px}
+  .tg-books{--wire:18px}
+  .tg-book .rp-bar{display:block;padding:8px 10px 7px;font-size:11.5px;line-height:1.3}
+  .tg-book .rp-bar>*{display:block}
+  .tg-lines{padding:6px 8px 0}
+  .tg-th{font-size:11px;padding-bottom:4px}
+  .tg-th span:last-child{display:none}
+  .tg-row{gap:6px;padding:6px 2px 5px;font-size:12.5px}
+  .tg-row>span:first-child{flex:1 1 auto}
+  .tg-row b{margin-right:0}
+  .tg-d{display:block;font-size:11px;white-space:normal}
+  .tg-book .rp-cards{margin:8px}
+  .tg-book .rp-card{display:block;padding:9px 10px 10px}
+  .tg-book .rp-card-k,.tg-book .rp-card-why{display:none}
+  .tg-book .rp-card h4{font-size:13px}
+  .tg-book .rp-card-amt{margin-top:4px;font-size:22px}
+  .tg-book .rp-card-act{margin-top:8px}
+  .tg-book .rp-card-act span:not([class]){display:none}
+  .tg-book .rp-empty{min-height:92px;font-size:12px}
+  .tg-slip span{padding:5px 7px 4px;font-size:11px}
+  .tg-match{margin-top:-14px}
+  .tg-match .rp-stamp{font-size:12.5px}
+  .tg-terms li{padding-left:54px}
+  .tg-terms li::before{width:36px;height:36px;font-size:19px}
+  .tg-terms p,.tg-list li,.tg-foot{font-size:17px}
+  .tg-side>p{font-size:18px}
+}

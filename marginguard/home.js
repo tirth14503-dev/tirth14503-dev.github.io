@@ -262,12 +262,13 @@
 
   /* ---------- 5. how it works: one scene. Wide screens pin it and the scroll moves it on a step at a time;
      narrower ones keep the screen at the top while the steps go by. Elements with data-at="n" are marked (.at) from
-     step n (to data-to, if given); the finding cards take turns. Without motion the scene is shown finished. ---------- */
+     step n (to data-to, if given); in each stack of cards (.rp-cards) the cards take turns. The scroll is shared out
+     over however many steps there are. Without motion the scene is shown finished. ---------- */
   var scene = document.querySelector('.rp-scene'), placeNotes = function () {};
   if (scene) {
     var sSteps = [].slice.call(scene.querySelectorAll('.rp-step')), sBars = [].slice.call(scene.querySelectorAll('.rp-progress i')),
-        sAts = [].slice.call(scene.querySelectorAll('[data-at]')), sCards = [].slice.call(scene.querySelectorAll('[data-card]')),
-        sEmpty = scene.querySelector('.rp-empty'), sNow = -1, live = false, sTick = 0;
+        sAts = [].slice.call(scene.querySelectorAll('[data-at]')), sBoxes = [].slice.call(scene.querySelectorAll('.rp-cards')),
+        sN = sSteps.length, sNow = -1, live = false, sTick = 0;
     var pinMq = matchMedia('(min-width:1100px) and (min-height:600px)'), stackMq = matchMedia('(max-width:1099px) and (min-height:640px)'),
         calm = matchMedia('(prefers-reduced-motion: reduce)');
     [].forEach.call(scene.querySelectorAll('.rp-link'), function (l, i) { l.style.setProperty('--i', i); });
@@ -280,10 +281,13 @@
         var a = +el.getAttribute('data-at'), z = +(el.getAttribute('data-to') || 9);
         el.classList.toggle('at', n >= a && n <= z);
       });
-      var card = null;
-      sCards.forEach(function (c) { if (+c.getAttribute('data-card') <= n) card = c; });
-      sCards.forEach(function (c) { c.classList.toggle('is-on', c === card); });
-      if (sEmpty) sEmpty.classList.toggle('is-on', !card);
+      sBoxes.forEach(function (box) {      /* each stack of cards shows its latest card; one with none shows its empty note */
+        var card = null, cards = [].filter.call(box.children, function (c) { return c.hasAttribute('data-card'); });
+        cards.forEach(function (c) { if (+c.getAttribute('data-card') <= n) card = c; });
+        cards.forEach(function (c) { c.classList.toggle('is-on', c === card); });
+        var empty = box.querySelector(':scope > .rp-empty');
+        if (empty) empty.classList.toggle('is-on', !card);
+      });
     };
     var sRead = function () {
       sTick = 0;
@@ -291,7 +295,7 @@
       var r = scene.getBoundingClientRect(), h = innerHeight, n = r.top < h * .8 ? 1 : 0;
       if (pinMq.matches) {
         var mh = mastH(), run = r.height - (h - mh), p = run > 0 ? (mh - r.top) / run : 0;
-        if (p > 0) n = 1 + Math.min(3, Math.floor(p * 4));
+        if (p > 0) n = 1 + Math.min(sN - 1, Math.floor(p * sN));
       } else {
         /* the reading line: halfway down the part of the window the pinned screen leaves free */
         var stage = scene.querySelector('.rp-stage'), free = Math.max(mastH(), Math.min(h * .7, stage.getBoundingClientRect().bottom)), lineY = free + (h - free) * .45;
